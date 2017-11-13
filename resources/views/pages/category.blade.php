@@ -1,0 +1,523 @@
+@if(false)<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">@endif
+@extends('layout')
+
+@section('content')
+    <article>
+
+        {{--<div id="links">--}}
+            {{--@foreach($model->categoryProducts as $categoryProduct)--}}
+                {{--<a href="javascript:void(0);" data-toggle="modal" data-target="#prod-preview-test"--}}
+                   {{--v-on:click="changeId({{ $categoryProduct->id }})">Link {{ $categoryProduct->id }}</a>--}}
+            {{--@endforeach--}}
+        {{--</div>--}}
+
+        <div id="ids">
+            <section class="modal fade  popups-wrap popups-light" id="prod-preview-test"
+                     tabindex="-1"
+                     role="dialog"
+                     aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content" v-for="product in products">
+                        <button aria-label="Close"
+                                data-dismiss="modal"
+                                class="close close-btn popup-cls"
+                                type="button">
+                            <i class="fa-times fa"></i>
+                        </button>
+                        <div class="block-inline  product-modal">
+                            <!-- Single Products Slider Starts -->
+                            <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
+                                <div class="owl-carousel sync1 pb-25">
+                                    {{--@foreach($product->images as $image)--}}
+                                        <div class="item" v-for="image in product.images">
+                                            <img v-bind:src="image.big">
+                                            <a v-bind:href="image.original"
+                                               v-bind:rel="rel"
+                                               v-bind:title="product.name"
+                                               {{--data-pretty-photo-show="{{ $product->id }}"--}}
+                                               class="caption-link meta-icon">
+                                                <i class="fa fa-arrows-alt"></i>
+                                            </a>
+                                        </div>
+                                    {{--@endforeach--}}
+                                </div>
+
+                                <div class="owl-carousel single-prod-thumb sync2 nav-2">
+{{--                                    @foreach($product->images as $image)--}}
+                                        <div class="item" v-for="image in product.images">
+                                            <img v-bind:src="image.small" >
+                                            <span class="transparent">
+                                                <img src="/img/template/icons/plus.png" alt="view">
+                                            </span>
+                                        </div>
+                                    {{--@endforeach--}}
+                                </div>
+                            </div>
+                            <!-- Single Products Slider Ends -->
+                            <div class="ptb-40 clearfix visible-sm visible-xs"></div>
+                            <!-- Products Description Starts -->
+                            <div class="col-md-7 col-sm-12">
+                                <div class="prod-details">
+                                    <div class="prod-title">@{{ products[0].name }}</div>
+                                    <div class="block-inline">
+                                        <div class="rating pull-right">
+                                            <span v-for="i in 5" v-if="i <= products[0].rating" class="star active"></span>
+                                            <span v-else class="star"></span>
+                                        </div>
+                                        <div class="prod-price font-2 pull-left fsz-16">
+                                            <ins>@{{ products[0].price[0].price }} грн</ins>
+                                        </div>
+                                    </div>
+                                    <div class="discriptions pt-20">
+                                        <ul>
+                                            <li>Наличие: </li>
+                                            <li>Материал: Полиэстер с водоотталкивающей и полиуретановой
+                                                пропиткой для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>
+                                            <li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>
+                                            <li>Металлические нержавеющие молнии;</li>
+                                            <li>Два боковых, один внутренний, один карман на молнии на плече;</li>
+                                            <li>Сверху и снизу расположена трикотажная резинка с компонентом эластана,
+                                                что позволяет резинке не терять с временем форму и не закатываться;</li>
+                                            <li>На бомбере расположены три вышитых патча;</li>
+                                            <li>Весенний / Летний сезон.</li>
+                                            <li>Артикул: @{{ products[0].vendor_code }}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="prod-attributes">
+                                        <ul class="choose-clr list-inline border-hover">
+                                            <li v-for="relatedProduct in product.product_group.products">
+                                                {{--<a v-bind:href="related_product.color.slug" class="black-bg"></a>--}}
+                                                <a v-if="relatedProduct.color.id === product.color.id"
+                                                   class="active"
+                                                   :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
+                                                   v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
+                                                <a v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
+                                                   v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
+                                            </li>
+                                        </ul>
+                                        <ul class="choose-size list-inline border-hover">
+                                            <li v-for="(size, index) in product.sizes">
+                                                <a :class="{ 'active': index === 0 }" href="javascript:void(0);">
+                                                    @{{ size.name }}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul class="prod-btns prod-meta">
+                                            <li>
+                                                <div class="quantity">
+                                                    <button class="btn minus">-</button>
+                                                    <input type="number" class="form-control qty" name="quantity" value="1" title="Qty">
+                                                    <button class="btn plus">+</button>
+                                                </div>
+                                            </li>
+                                            <li> <a class="theme-btn btn-black small-btn" href="#"> Добавить в корзину </a> </li>
+                                            <li> <a class="fa fa-heart meta-icon" href="#"></a> </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Products Description Ends -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {{--<img v-bind:src="path" alt="">--}}
+        </div>
+
+
+
+
+
+        <!--Breadcrumb Section Start-->
+        <section class="breadcrumb-bg">
+            <div class="theme-container container ">
+                <div class="site-breadcumb white-clr">
+                    <h2 class="section-title wht fsz-36">
+                        {{ $model->currentCategory->name }} {{ $model->countCategoryProducts }}
+                    </h2>
+                </div>
+            </div>
+        </section>
+        <!--Breadcrumb Section End-->
+
+        <!-- Page Starts-->
+        <div class="container theme-container ptb-70">
+            <div class="row">
+
+                <!-- Sidebar Starts -->
+                <aside class="col-md-3 col-sm-4 sidebar">
+                    <div class="widget-wrap">
+                        <div class="dropdown-div-btn">
+                            <h2 class="widget-title"> Тип  <span class="plus-icon"> - </span> </h2>
+                        </div>
+                        <div class="dropdown-div-content">
+                            <div class="widget-box">
+                                <ul>
+                                    {{--TODO FILTERS......--}}
+                                    @foreach($model->categories as $category)
+                                        <li>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" value="">
+                                                <span class="square-box"></span>
+                                            <span>
+                                                {{ $category->name }}
+                                            </span>
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                    {{--<li>--}}
+                                        {{--<label class="checkbox-inline">--}}
+                                            {{--<input type="checkbox" value="" checked="checked">--}}
+                                            {{--<span class="square-box"></span>--}}
+                                            {{--<span class="checkactive">--}}
+                                                {{--Верхняя одежда--}}
+                                            {{--</span>--}}
+                                        {{--</label>--}}
+                                    {{--</li>--}}
+                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span>Свитшоты & Толстовки</span> </label> </li>--}}
+                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> Штаны</span> </label> </li>--}}
+                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span>Шорты</span> </label> </li>--}}
+                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> Аксессуары</span> </label> </li>--}}
+
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-div-btn">
+                            <h2 class="widget-title"> Сезон  <span class="plus-icon"> - </span> </h2>
+                        </div>
+                        <div class="dropdown-div-content">
+                            <div class="widget-box">
+                                <ul>
+                                    <li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span>  Зима</span> </label> </li>
+                                    <li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span>Весна</span> </label> </li>
+                                    <li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> Лето</span> </label> </li>
+                                    <li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> Осень</span> </label> </li>
+
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-div-btn">
+                            <h2 class="widget-title"> Размер  <span class="plus-icon"> - </span> </h2>
+                        </div>
+                        <div class="dropdown-div-content">
+                            <div class="widget-box">
+                                <ul>
+                                    <li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span>  XXS</span> </label> </li>
+                                    <li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> XS</span> </label> </li>
+                                    <li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> S</span> </label> </li>
+                                    <li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> M</span> </label> </li>
+                                    <li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> L</span> </label> </li>
+                                    <li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> XL</span> </label> </li>
+                                    <li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> XXL</span> </label> </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-div-btn">
+                            <h2 class="widget-title"> Ціна  <span class="plus-icon"> - </span> </h2>
+                        </div>
+                        <div class="dropdown-div-content">
+                            <div class="widget-box">
+
+                                <div class="widget-content pb-35">
+                                    <div id="price-range"></div>
+                                    <div class="block-inline range-wrap">
+                                        <span id="price-min"></span> - <span id="price-max"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-div-btn">
+                            <h2 class="widget-title"> Цвет  <span class="plus-icon"> - </span> </h2>
+                        </div>
+                        <div class="dropdown-div-content">
+                            <div class="widget-box">
+                                <ul class="choose-clr list-inline border-hover">
+                                    <li> <a class="black-bg" href="#"></a> </li>
+                                    <li> <a class="gray-bg" href="#"></a> </li>
+                                    <li> <a class="red-bg" href="#"></a> </li>
+                                    <li> <a class="yellow-bg active" href="#"></a> </li>
+                                    <li> <a class="green1-bg" href="#"></a> </li>
+                                    <li> <a class="blue1-bg" href="#"></a> </li>
+                                    <li> <a class="blue2-bg" href="#"></a> </li>
+                                    <li> <a class="violate-bg" href="#"></a> </li>
+                                    <li> <a class="pink-bg" href="#"></a> </li>
+                                    <li> <a class="green2-bg" href="#"></a> </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                <!-- Sidebar Ends -->
+
+                <div class="visible-xs pt-70"></div>
+
+                <!-- Product Details Starts-->
+                <aside class="col-md-9 col-sm-8">
+                    <div class="sorter-bar block-inline">
+                        <div class="col-md-6 col-sm-7 no-padding sorter-date">
+
+
+                            <div class="site-breadcumb white-clr">
+                                <ol class="breadcrumb breadcrumb-menubar">
+                                    <li>
+                                        <a href="{{ url_home($model->language) }}">
+                                            Главная
+                                        </a>
+                                        {{ $model->currentCategory->name }}
+                                    </li>
+                                </ol>
+                            </div>
+
+
+                        </div>
+
+                        <div class="col-md-6 col-sm-5 show-result no-padding">
+                            <form action="#" class="form-sorter">
+                                <label> Сортировать </label>
+                                <div class="search-selectpicker selectpicker-wrapper">
+                                    <select class="selectpicker input-price" data-width="100%" data-toggle="tooltip">
+                                        <option>По популярности
+                                        <option>По новизне
+                                        <option>Цены: по возрастанию
+                                        <option> Цены: по убыванию
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="tab-content">
+
+                        <!-- Product Grid View Starts -->
+                        <div id="grid-view" class="tab-pane fade active in" role="tabpanel">
+                            <div class="row">
+
+                                {{--@foreach($model->categoryProducts as $categoryProduct)--}}
+                                    {{--<div class="col-lg-4 col-sm-6 prod-wrap-cont">--}}
+
+                                        {{--<div class="product_item prod-wrap">--}}
+                                            {{--<div class="product_img">--}}
+                                                {{--<div class="prod-img">--}}
+                                                    {{--<a class="img-hover"--}}
+                                                       {{--href="{{ url_product($categoryProduct->slug, $model->language) }}">--}}
+                                                        {{--<img alt="product"--}}
+                                                             {{--src="{{ $categoryProduct->images[0]->medium }}"></a>--}}
+                                                    {{--<a class="caption-link meta-icon"--}}
+                                                       {{--data-toggle="modal"--}}
+                                                       {{--data-product-preview-show="{{ $categoryProduct->id }}"--}}
+                                                       {{--href="javascript:void(0);"--}}
+                                                       {{--href="#prod-preview-{{ $categoryProduct->id }}"--}}
+                                                       {{-->--}}
+                                                        {{--<span class="fa fa-eye"></span>--}}
+                                                    {{--</a>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="product_info">--}}
+                                                {{--<h2 class="prod-title">--}}
+                                                    {{--<a href="{{ url_product($categoryProduct->slug, $model->language) }}">--}}
+                                                        {{--{{ $categoryProduct->name }}--}}
+                                                    {{--</a>--}}
+                                                {{--</h2>--}}
+                                                {{--<div class="block-inline">--}}
+                                                    {{--<div class="prod-price font-2">--}}
+                                                        {{--<ins>180.00 грн</ins> <del>360.00 грн</del>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="rating">--}}
+                                                        {{--@for($i = 1; $i <= 5; $i++)--}}
+                                                            {{--@if($categoryProduct->rating != null)--}}
+                                                                {{--@if($i <= $categoryProduct->rating)--}}
+                                                                    {{--<span class="star active"></span>--}}
+                                                                {{--@else--}}
+                                                                    {{--<span class="star"></span>--}}
+                                                                {{--@endif--}}
+                                                            {{--@else--}}
+                                                                {{--<span class="star active"></span>--}}
+                                                            {{--@endif--}}
+                                                        {{--@endfor--}}
+                                                    {{--</div>--}}
+
+                                                {{--</div>--}}
+                                                {{--<div class="block-inline">--}}
+                                                    {{--<ul class="prod-meta">--}}
+                                                        {{--<li>--}}
+                                                            {{--<a class="theme-btn btn-black" href="javascript:void(0);">--}}
+                                                                {{--Добавить в корзину--}}
+                                                            {{--</a>--}}
+                                                        {{--</li>--}}
+                                                        {{--<li>--}}
+                                                            {{--<a class="fa fa-heart meta-icon" href="javascript:void(0);"></a>--}}
+                                                        {{--</li>--}}
+                                                    {{--</ul>--}}
+                                                {{--</div>--}}
+                                                {{--<div class="testProd">--}}
+                                                    {{--<div class="prod-attributes absolute-pror-attr">--}}
+                                                        {{--<ul class="choose-clr list-inline border-hover">--}}
+                                                            {{--<li> <a class="black-bg" href="#"></a> </li>--}}
+                                                            {{--<li> <a class="gray-bg" href="#"></a> </li>--}}
+                                                            {{--<li> <a class="red-bg" href="#"></a> </li>--}}
+                                                            {{--<li> <a class="yellow-bg active" href="#"></a> </li>--}}
+                                                            {{--<li> <a class="green1-bg" href="#"></a> </li>--}}
+                                                        {{--</ul>--}}
+                                                        {{--<ul class="choose-size list-inline border-hover">--}}
+                                                            {{--<li> <a href="#"> S </a> </li>--}}
+                                                            {{--<li> <a href="#" class="active"> M </a> </li>--}}
+
+                                                        {{--</ul>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+
+                                    {{--</div>--}}
+                                {{--@endforeach--}}
+
+                                @foreach($model->categoryProducts as $categoryProduct)
+
+                                    @php($relatedProducts = $categoryProduct->product_group->products)
+
+                                    <div class="col-lg-4 col-sm-6 prod-wrap-cont">
+
+                                        <div class="product_item prod-wrap">
+                                            <div class="product_img">
+                                                <div class="prod-img">
+                                                    <a class="img-hover"
+                                                       href="{{ url_product($categoryProduct->slug, $model->language) }}">
+                                                        <img alt="product"
+                                                             src="{{ $categoryProduct->images[0]->medium }}"></a>
+                                                    <a class="caption-link meta-icon"
+                                                       data-toggle="modal"
+                                                       data-target="#prod-preview-test"
+                                                       href="javascript:void(0);"
+                                                       v-on:click="changeId({{ $categoryProduct->id }})"
+                                                            {{--href="#prod-preview-{{ $categoryProduct->id }}"--}}
+                                                    >
+                                                        <span class="fa fa-eye"></span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="product_info">
+                                                <h2 class="prod-title">
+                                                    <a href="{{ url_product($categoryProduct->slug, $model->language) }}">
+                                                        {{ $categoryProduct->name }}
+                                                    </a>
+                                                </h2>
+                                                <div class="block-inline">
+                                                    <div class="prod-price font-2">
+                                                        <ins>{{ $categoryProduct->price[0]->price }} грн</ins> {{--<del>360.00 грн</del>--}}
+                                                    </div>
+                                                    <div class="rating">
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            @if($categoryProduct->rating != null)
+                                                                @if($i <= $categoryProduct->rating)
+                                                                    <span class="star active"></span>
+                                                                @else
+                                                                    <span class="star"></span>
+                                                                @endif
+                                                            @else
+                                                                <span class="star active"></span>
+                                                            @endif
+                                                        @endfor
+                                                    </div>
+
+                                                </div>
+                                                <div class="block-inline">
+                                                    <ul class="prod-meta">
+                                                        <li>
+                                                            <a class="theme-btn btn-black" href="javascript:void(0);">
+                                                                Добавить в корзину
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="fa fa-heart meta-icon" href="javascript:void(0);"></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="testProd">
+                                                    <div class="prod-attributes absolute-pror-attr">
+                                                        <ul class="choose-clr list-inline border-hover">
+                                                            @foreach($relatedProducts as $relatedProduct)
+                                                                <li>
+                                                                    @if($categoryProduct->color->id == $relatedProduct->color->id)
+                                                                        <a class="active" href="{{ url_product($relatedProduct->slug, $model->language) }}" style="background-color: {{ $relatedProduct->color->html_code }}"></a>
+                                                                    @else
+                                                                        <a href="{{ url_product($relatedProduct->slug, $model->language) }}" style="background-color: {{ $relatedProduct->color->html_code }}"></a>
+                                                                    @endif
+                                                                </li>
+                                                            @endforeach
+
+
+                                                            {{--<li> <a class="black-bg" href="#"></a> </li>--}}
+                                                            {{--<li> <a class="gray-bg" href="#"></a> </li>--}}
+                                                            {{--<li> <a class="red-bg" href="#"></a> </li>--}}
+                                                            {{--<li> <a class="yellow-bg active" href="#"></a> </li>--}}
+                                                            {{--<li> <a class="green1-bg" href="#"></a> </li>--}}
+                                                        </ul>
+                                                        <ul class="choose-size list-inline border-hover">
+                                                            @php($counterSize = 0)
+                                                            @foreach($categoryProduct->sizes as $size)
+                                                                <li>
+                                                                    @if($counterSize == 0)
+                                                                        <a class="active" href="javascript:void(0);">
+                                                                            {{ $size->name }}
+                                                                        </a>
+                                                                    @else
+                                                                        <a href="javascript:void(0);">
+                                                                            {{ $size->name }}
+                                                                        </a>
+                                                                    @endif
+                                                                </li>
+                                                                @php($counterSize++)
+                                                            @endforeach
+                                                            {{--<li> <a href="#" class="active"> M </a> </li>--}}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                @endforeach
+
+                                <!-- Pagination Starts -->
+                                @include('partial.category-page.pagination')
+                                <!-- Pagination Ends -->
+                            </div>
+                        </div>
+                        <!-- Product Grid View Ends -->
+                    </div>
+                </aside>
+                <!-- Product Details Ends -->
+
+            </div>
+        </div>
+        <!-- / Page Ends -->
+
+
+{{--        @foreach($model->categoryProducts as $categoryProduct)--}}
+            {{--@include('modals.category-product-preview')--}}
+        {{--@endforeach--}}
+
+        <section class="modal fade  popups-wrap popups-light" id="prod-preview-{{ $categoryProduct->id }}"
+                 tabindex="-1"
+                 role="dialog"
+                 {{--data-product-preview-container="{{ $categoryProduct->id }}"--}}
+                 data-product-preview-container
+                 data-loaded-id
+                 data-is-product-preview-loaded="false"
+                 aria-hidden="true">
+
+        </section>
+
+    </article>
+@endsection
+
+@push('js')
+<script defer src="/template/js/main.js"></script>
+<script defer src="/template/plugins/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+{{--<script defer src="/js/category/product-preview-ajax.js"></script>--}}
+@endpush
