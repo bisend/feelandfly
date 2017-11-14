@@ -53,13 +53,13 @@
                         <div class="col-md-2 flex-item">
                             <div class="big-cart_count">
                                 <div class="quantity">
-                                    <button class="btn minus">-</button>
+                                    <button class="btn minus" v-on:click="decrement(cartItem.productId, cartItem.sizeId)">-</button>
                                     <input type="number"
                                            v-model.number="cartItem.count"
-                                           v-on:change="toInteger(cartItem.count)"
+                                           v-on:change="toInteger(cartItem.productId, cartItem.sizeId, cartItem.count)"
                                            name="quantity"
                                            title="Количество" class="form-control qty">
-                                    <button class="btn plus">+</button>
+                                    <button class="btn plus" v-on:click="increment(cartItem.productId, cartItem.sizeId)">+</button>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                             Всього: <span>@{{ totalCount }}</span>
                         </div>
                         <a data-dismiss="modal" class="theme-btn btn-white small-btn">
-                            Продовжити покупки
+                            Продолжить покупки
                         </a>
                     </div>
                     <div class="col-md-6 footer-right">
@@ -97,7 +97,7 @@
                             Сумма: <span>@{{ totalAmount.toFixed(2) }} грн</span>
                         </div>
                         <a href="#" class="theme-btn btn-white small-btn">
-                            Оформити замовлення
+                            Оформить заказ
                         </a>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-<!-- Header 2 -->
+{{--Header 2--}}
 <header class="header-2">
     <section class="header-topbar">
         <div class="container theme-container">
@@ -200,10 +200,10 @@
                                     </form>
                                 </div>
                             </li>
-                            <li class="cart-hover">
+                            <li id="mini-cart" class="cart-hover">
                                 <a href="#" class="cart-icon">
-                                        <span class="items-count font-1">
-                                            2
+                                        <span v-cloak class="items-count font-1">
+                                            @{{ totalCount }}
                                         </span>
                                 </a>
                                 <div class="pop-up-box cart-style-1">
@@ -212,120 +212,58 @@
                                             Корзина
                                         </h2>
                                         <span class="fa fa-shopping-cart"></span>
-                                        <i class="items-count font-1">
-                                            2
+                                        <i v-cloak class="items-count font-1">
+                                            @{{ totalCount }}
                                         </i>
                                     </div>
                                     <div class="cart-item">
-                                        <div class="cart-list">
+                                        <div class="cart-list" v-for="cartItem in cartItems">
                                             <div class="cart-img">
-                                                <img src="/img/template/product/cart-img-1.jpg" alt="">
+                                                <img v-bind:src="cartItem.product.images[0].small" alt="">
                                             </div>
                                             <div class="cart-detail">
-                                                <a class="smoll-cart-delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                <a class="prod-title block-inline" href="#">
-                                                    БОМБЕР FEEL&FLY NASA NAVY
+                                                <a class="smoll-cart-delete"
+                                                   href="javascript:void(0);"
+                                                   v-on:click="deleteFromCart(cartItem.productId, cartItem.sizeId)">
+                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                </a>
+                                                <a class="prod-title block-inline"
+                                                   v-bind:href="'/product/' + cartItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+                                                    @{{ cartItem.product.name }}
                                                 </a>
                                                 <p class="fsz-13 font-2 no-margin">
                                                         <span class="fw-300 gray-clr">
-                                                            2
+                                                            @{{ cartItem.count }}
                                                             <sub>X</sub>
                                                         </span>
-                                                    250.00 грн
+                                                    @{{ cartItem.product.price[0].price }} грн
                                                 </p>
                                                 <p class="fsz-16 font-2 no-margin smoll-cart-totl-prod">
 
-                                                   Сумма:<span>500.00 грн</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="cart-list">
-                                            <div class="cart-img">
-                                                <img src="/img/template/product/cart-img-1.jpg" alt="">
-                                            </div>
-                                            <div class="cart-detail">
-                                                <a class="smoll-cart-delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                <a class="prod-title block-inline" href="#">
-                                                    БОМБЕР FEEL&FLY NASA NAVY
-                                                </a>
-                                                <p class="fsz-13 font-2 no-margin">
-                                                        <span class="fw-300 gray-clr">
-                                                            2
-                                                            <sub>X</sub>
-                                                        </span>
-
-                                                    350.00 грн
-                                                </p>
-                                                <p class="fsz-16 font-2 no-margin smoll-cart-totl-prod">
-
-                                                    Сумма:<span>700.00 грн</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="cart-list">
-                                            <div class="cart-img">
-                                                <img src="/img/template/product/cart-img-1.jpg" alt="">
-                                            </div>
-                                            <div class="cart-detail">
-                                                <a class="smoll-cart-delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                <a class="prod-title block-inline" href="#">
-                                                    БОМБЕР FEEL&FLY NASA NAVY
-                                                </a>
-                                                <p class="fsz-13 font-2 no-margin">
-                                                        <span class="fw-300 gray-clr">
-                                                            2
-                                                            <sub>X</sub>
-                                                        </span>
-
-                                                    350.00 грн
-                                                </p>
-                                                <p class="fsz-16 font-2 no-margin smoll-cart-totl-prod">
-
-                                                    Сумма:<span>700.00 грн</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="cart-list">
-                                            <div class="cart-img">
-                                                <img src="/img/template/product/cart-img-1.jpg" alt="">
-                                            </div>
-                                            <div class="cart-detail">
-                                                <a class="smoll-cart-delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                <a class="prod-title block-inline" href="#">
-                                                    БОМБЕР FEEL&FLY NASA NAVY
-                                                </a>
-                                                <p class="fsz-13 font-2 no-margin">
-                                                        <span class="fw-300 gray-clr">
-                                                            2
-                                                            <sub>X</sub>
-                                                        </span>
-
-                                                    350.00 грн
-                                                </p>
-                                                <p class="fsz-16 font-2 no-margin smoll-cart-totl-prod">
-
-                                                    Сумма:<span>700.00 грн</span>
+                                                   Сумма:<span>@{{ (cartItem.product.price[0].price * cartItem.count).toFixed(2) }} грн</span>
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="font-2 fsz-16 cart-total clearfix">
                                         <div class="col-sm-12 col-xs-12">
-                                            ВСЕГО: 750.00 грн
+                                            ВСЕГО: @{{ totalAmount.toFixed(2) }} грн
                                         </div>
                                     </div>
                                     <div class="block-inline cart-btns">
                                         <ul class="prod-meta">
                                             <li class="cart_btn">
-                                                <a class="theme-btn btn-black" href="#">
+                                                <a class="theme-btn btn-black" href="javascript:void(0);">
                                                     Оформить заказ
                                                 </a>
                                             </li>
                                         </ul>
                                         <ul class="prod-meta">
                                             <li class="cart_btn">
-                                                <a class="theme-btn btn-black" href="#">
-                                                    Перейти в корзину
+                                                <a class="theme-btn btn-black"
+                                                   href="javascript:void(0);"
+                                                   data-toggle="modal" data-target=".big-cart">
+                                                    Открыть корзину
                                                 </a>
                                             </li>
                                         </ul>
@@ -339,4 +277,4 @@
         </div>
     </section>
 </header>
-<!-- /Header 2 -->
+{{--/Header 2--}}

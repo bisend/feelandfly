@@ -11,36 +11,60 @@ namespace App\Services;
 use App\Repositories\ProductRepository;
 use Session;
 
+/**
+ * Class CartService
+ * @package App\Services
+ */
 class CartService
 {
+    /**
+     * @var ProductRepository
+     */
     protected $productRepository;
 
+    /**
+     * @var string
+     */
     protected $sessionKey = 'cart';
 
+    /**
+     * @var array
+     */
     public $cart = [];
 
-    public $cartProducts = [];
-
+    /**
+     * @var int
+     */
     public $totalCount = 0;
 
+    /**
+     * @var int
+     */
     public $totalAmount = 0;
 
+    /**
+     * CartService constructor.
+     * @param ProductRepository $productRepository
+     */
     public function __construct(ProductRepository $productRepository)
     {
         $this->productRepository = $productRepository;
     }
-    
+
+    /**
+     * @param $language
+     * @param $userTypeId
+     */
     public function fill($language, $userTypeId)
     {
         $this->fillCart();
         
         $this->fillCartProducts($language, $userTypeId);
-
-//        $this->fillTotalCount();
-        
-//        $this->filltotalAmount();
     }
 
+    /**
+     * 
+     */
     public function fillCart()
     {
         if (Session::has($this->sessionKey))
@@ -49,65 +73,14 @@ class CartService
         }
     }
 
-    public function fillTotalCount()
-    {
-        if (Session::has($this->sessionKey))
-        {
-            $cart = Session::get($this->sessionKey);
-
-            foreach ($cart as $cartItem)
-            {
-                $this->totalCount += $cartItem['count'];
-            }
-        }
-    }
-    
+    /**
+     * @param $language
+     * @param $userTypeId
+     */
     public function fillCartProducts($language, $userTypeId)
     {
         if (Session::has('cart'))
         {
-//            $cart = Session::get('cart');
-
-//            $productIds = [];
-//
-//            foreach ($cart as $cartItem)
-//            {
-//                $productIds[] = $cartItem['productId'];
-//            }
-//
-//            $cartProducts = $this->productRepository->getCartProducts($productIds, $language, $userTypeId);
-//
-//            foreach ($cart as $cartItem)
-//            {
-//                foreach ($cartProducts as $cartProduct)
-//                {
-//                    if ($cartItem['productId'] == $cartProduct->id)
-//                    {
-//                        $newCartProduct = $cartProduct;
-//                        $newCartProduct->count = $cartItem['count'];
-//                        $newCartProduct->sizeId = $cartItem['sizeId'];
-//                        $this->cartProducts[] = $newCartProduct;
-//
-//                        $this->totalCount += $cartItem['count'];
-//                        $this->totalAmount += ($newCartProduct->price[0]->price * $cartItem['count']);
-//                    }
-//                }
-//            }
-
-
-
-//            foreach ($cart as $cartItem)
-//            {
-//                $product = $this->productRepository->getProductById($cartItem['productId'], $language, $userTypeId);
-//                $product->sizeId = $cartItem['sizeId'];
-//                $product->count = $cartItem['count'];
-//                $this->cartProducts[] = $product;
-//
-//                $this->totalCount += $cartItem['count'];
-//                $this->totalAmount += ($product->price[0]->price * $cartItem['count']);
-//            }
-
-
             $productIds = [];
 
             foreach ($this->cart as $cartItem)
@@ -134,9 +107,13 @@ class CartService
             }
             $this->cart = $newCart;
         }
-        \Debugbar::info($this->cart);
     }
 
+    /**
+     * @param $productId
+     * @param $sizeId
+     * @param $count
+     */
     public function addToCart($productId, $sizeId, $count)
     {
         $cart = Session::pull($this->sessionKey);
@@ -170,6 +147,11 @@ class CartService
         $this->cart = Session::get($this->sessionKey);
     }
 
+    /**
+     * @param $productId
+     * @param $sizeId
+     * @param $count
+     */
     public function updateCart($productId, $sizeId, $count)
     {
         $cart = Session::pull($this->sessionKey);
@@ -192,7 +174,6 @@ class CartService
                 }
                 $newCart[] = $cartItem;
             }
-            \Debugbar::info($cart, $newCart);
         }
 
         Session::put($this->sessionKey, $newCart);
@@ -200,29 +181,29 @@ class CartService
         $this->cart = Session::get($this->sessionKey);
     }
 
+    /**
+     * @param $productId
+     * @param $sizeId
+     * @param $language
+     * @param $userTypeId
+     */
     public function deleteFromCart($productId, $sizeId, $language, $userTypeId)
     {
         $sessionCart = Session::pull($this->sessionKey);
 
         $newSessionCart = [];
 
-        \Debugbar::info($sessionCart);
-
         foreach ($sessionCart as $sessionCartItem)
         {
-            \Debugbar::info($sessionCartItem['productId'], $sessionCartItem['sizeId']);
             if ($sessionCartItem['productId'] == $productId && $sessionCartItem['sizeId'] == $sizeId)
             {
 
             }
             else
             {
-                \Debugbar::info($sessionCartItem);
                 $newSessionCart[] = $sessionCartItem;
             }
         }
-
-        \Debugbar::info($newSessionCart);
 
         Session::put($this->sessionKey, $newSessionCart);
 

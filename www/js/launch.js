@@ -20,7 +20,13 @@ var GLOBAL_DATA = {
         count: 1
     },
     cartItems: [],
-    cartProducts: [],
+    categoryProducts: [],
+    categoryProductPreview: {
+        product: [],
+        currentSizeId: '',
+        count: '',
+        rel: ''
+    },
     totalCount: 0,
     totalAmount: 0,
     INIT_CART_ENDED: false,
@@ -52,7 +58,6 @@ function initCart() {
                 GLOBAL_DATA.IS_DATA_PROCESSING = false;
                 GLOBAL_DATA.INIT_CART_ENDED = true;
                 GLOBAL_DATA.cartItems = data.cart;
-                GLOBAL_DATA.cartProducts = data.cartProducts;
                 GLOBAL_DATA.totalCount = data.totalCount;
                 GLOBAL_DATA.totalAmount = data.totalAmount;
             },

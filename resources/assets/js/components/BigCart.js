@@ -2,6 +2,38 @@ new Vue({
     el: '#big-cart',
     data: GLOBAL_DATA,
     methods: {
+        findWhere: function (list, props) {
+            var idx = 0;
+            var len = list.length;
+            var match = false;
+            var item, item_k, item_v, prop_k, prop_val;
+            for (; idx<len; idx++) {
+                item = list[idx];
+                for (prop_k in props) {
+                    // If props doesn't own the property, skip it.
+                    if (!props.hasOwnProperty(prop_k)) continue;
+                    // If item doesn't have the property, no match;
+                    if (!item.hasOwnProperty(prop_k)) {
+                        match = false;
+                        break;
+                    }
+                    if (props[prop_k] === item[prop_k]) {
+                        // We have a match…so far.
+                        match = true;
+                    } else {
+                        // No match.
+                        match = false;
+                        // Don't compare more properties.
+                        break;
+                    }
+                }
+                // We've iterated all of props' properties, and we still match!
+                // Return that item!
+                if (match) return item;
+            }
+            // No matches
+            return null;
+        },
         //method handles onChange count input
         toInteger: function (productId, sizeId, count) {
             var _this = this;
@@ -14,6 +46,14 @@ new Vue({
             if (count > 99)
             {
                 count = 99;
+            }
+            //check if current page single product
+            if (document.getElementById('product-details'))
+            {
+                if (GLOBAL_DATA.singleProduct.productId == productId && GLOBAL_DATA.singleProduct.sizeId == sizeId)
+                {
+                    GLOBAL_DATA.singleProduct.count = count;
+                }
             }
             
             //then update cart
@@ -91,6 +131,7 @@ new Vue({
                     userTypeId: GLOBAL_DATA.userTypeId
                 },
                 success: function (data) {
+                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
                     hideLoader();
                     GLOBAL_DATA.cartItems = data.cart;
                     GLOBAL_DATA.totalCount = data.totalCount;
@@ -102,33 +143,53 @@ new Vue({
                     }
                 },
                 error: function (error) {
+                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
                     hideLoader();
                     console.log(error);
                 }
             });
         },
         //method handles + button incrementing value
-        increment: function () {
+        increment: function (productId, sizeId) {
             var searchObj = {
-                    productId: GLOBAL_DATA.singleProduct.productId,
-                    sizeId: GLOBAL_DATA.singleProduct.sizeId
+                    productId: productId,
+                    sizeId: sizeId
                 },
                 _this = this;
 
-            var oldCount = GLOBAL_DATA.singleProduct.count;
+            var oldCount;
+            var newCount = 1;
 
-            GLOBAL_DATA.singleProduct.count++;
+            GLOBAL_DATA.cartItems.forEach(function (item) {
+                if (item.productId == productId && item.sizeId == sizeId)
+                {
+                    oldCount = item.count;
 
-            if (GLOBAL_DATA.singleProduct.count > 99)
+                    item.count++;
+
+                    if (item.count > 99)
+                    {
+                        item.count = 99;
+                    }
+
+                    newCount = item.count;
+                }
+            });
+
+            //check if current page single product
+            if (document.getElementById('product-details'))
             {
-                GLOBAL_DATA.singleProduct.count = 99;
+                if (GLOBAL_DATA.singleProduct.productId == productId && GLOBAL_DATA.singleProduct.sizeId == sizeId)
+                {
+                    GLOBAL_DATA.singleProduct.count = newCount;
+                }
             }
 
             //check if size id in cart
-            if (this.findWhere(GLOBAL_DATA.cartItems, searchObj))
+            if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj))
             {
                 //check if old count != new count
-                if (oldCount != GLOBAL_DATA.singleProduct.count)
+                if (oldCount != newCount)
                 {
                     //then send update ajax
                     if (_this.timer) {
@@ -137,44 +198,61 @@ new Vue({
                     }
                     _this.timer = setTimeout(function () {
 
-                        _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.singleProduct.count);
+                        _this.updateCart(searchObj.productId, searchObj.sizeId, newCount);
 
                     }, 400);
                 }
             }
         },
         //method handles - button decrementing value
-        decrement: function () {
+        decrement: function (productId, sizeId) {
             var searchObj = {
-                    productId: GLOBAL_DATA.singleProduct.productId,
-                    sizeId: GLOBAL_DATA.singleProduct.sizeId
+                    productId: productId,
+                    sizeId: sizeId
                 },
                 _this = this;
+            var oldCount;
+            var newCount = 1;
 
-            var oldCount = GLOBAL_DATA.singleProduct.count;
+            GLOBAL_DATA.cartItems.forEach(function (item) {
+                if (item.productId == productId && item.sizeId == sizeId)
+                {
+                    oldCount = item.count;
 
-            GLOBAL_DATA.singleProduct.count--;
+                    item.count--;
 
-            if (GLOBAL_DATA.singleProduct.count < 1)
+                    if (item.count < 1)
+                    {
+                        item.count = 1;
+                    }
+
+                    newCount = item.count;
+                }
+            });
+
+            //check if current page single product
+            if (document.getElementById('product-details'))
             {
-                GLOBAL_DATA.singleProduct.count = 1;
+                if (GLOBAL_DATA.singleProduct.productId == productId && GLOBAL_DATA.singleProduct.sizeId == sizeId)
+                {
+                    GLOBAL_DATA.singleProduct.count = newCount;
+                }
             }
 
             //check if size id in cart
-            if (this.findWhere(GLOBAL_DATA.cartItems, searchObj))
+            if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj))
             {
                 //check if old count != new count
-                if (oldCount != GLOBAL_DATA.singleProduct.count)
+                if (oldCount != newCount)
                 {
                     //then send update ajax
-                    if (_this.timer)
-                    {
+                    if (_this.timer) {
                         clearTimeout(_this.timer);
                         _this.timer = undefined;
                     }
                     _this.timer = setTimeout(function () {
 
-                        _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.singleProduct.count);
+                        _this.updateCart(searchObj.productId, searchObj.sizeId, newCount);
 
                     }, 400);
                 }

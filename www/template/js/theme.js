@@ -2,9 +2,9 @@
 
 $(window).load(function () {
     // Loader
-    setTimeout(function () {
-        $("#loading").fadeOut(300);
-    }, 3100);
+    // setTimeout(function () {
+    //     $("#loading").fadeOut(300);
+    // }, 3100);
 
     //Custom Scroll Style
     if ($(window).width() < 767) {
@@ -65,20 +65,20 @@ $(window).load(function () {
 $(document).ready(function () {
 
     /*------------------- Page Loader Starts  -------------------*/
-    var counter = 0;
+    // var counter = 0;
 
 // Start the changing images
-    setInterval(function () {
-        if (counter === 9) {
-            counter = 0;
-        }
-
-        changeImage(counter);
-        counter++;
-    }, 3000);
+//     setInterval(function () {
+//         if (counter === 9) {
+//             counter = 0;
+//         }
+//
+//         changeImage(counter);
+//         counter++;
+//     }, 3000);
 
 // Set the percentage off
-    loading();
+//     loading();
     /*------------------- Page Loader Ends  -------------------*/
 
     /*------------------- Menu JS Starts  -------------------*/
@@ -416,6 +416,7 @@ $(document).ready(function () {
             ]
         });
     }
+
     function syncPosition(el) {
         var current = this._current;
         $(".sync2")
@@ -473,20 +474,20 @@ $(document).ready(function () {
     });
 
     /*------------------- Deal Of the Day -------------------*/
-    if ($('.deal-cntdwn').length > 0) {
-        $('#cntdwn-1').countdown({since: new Date(2015, 12 - 1, 59)});
-        $('#cntdwn-2').countdown({since: new Date(2015, 12 - 1, 54)});
-        $('#cntdwn-3').countdown({since: new Date(2015, 12 - 1, 58)});
-        $('#cntdwn-4').countdown({since: new Date(2015, 12 - 1, 47)});
-        $('#cntdwn-5').countdown({since: new Date(2015, 12 - 1, 54)});
-        $('#cntdwn-6').countdown({since: new Date(2015, 12 - 1, 58)});
-    }
+    // if ($('.deal-cntdwn').length > 0) {
+    //     $('#cntdwn-1').countdown({since: new Date(2015, 12 - 1, 59)});
+    //     $('#cntdwn-2').countdown({since: new Date(2015, 12 - 1, 54)});
+    //     $('#cntdwn-3').countdown({since: new Date(2015, 12 - 1, 58)});
+    //     $('#cntdwn-4').countdown({since: new Date(2015, 12 - 1, 47)});
+    //     $('#cntdwn-5').countdown({since: new Date(2015, 12 - 1, 54)});
+    //     $('#cntdwn-6').countdown({since: new Date(2015, 12 - 1, 58)});
+    // }
 
 
     /*------------------- Counter -------------------*/
-    if ($('.count-to').length > 0) {
-        $('.count-to').countTo();
-    }
+    // if ($('.count-to').length > 0) {
+    //     $('.count-to').countTo();
+    // }
 
     /*------------------- Sidebar Filter Range -------------------*/
     var priceSliderRange = $('#price-range');
@@ -510,13 +511,13 @@ $(document).ready(function () {
 
     // Comingsoon
     // --------------------------------------------------------------------------------------- 
-    if ($('.countdown-wrapper').length > 0) {
-        if ($().countdown) {
-            var newYear = new Date();
-            newYear = new Date(newYear.getFullYear() + 1, 1 - 1, 1);
-            $('#defaultCountdown').countdown({until: newYear});
-        }
-    }
+    // if ($('.countdown-wrapper').length > 0) {
+    //     if ($().countdown) {
+    //         var newYear = new Date();
+    //         newYear = new Date(newYear.getFullYear() + 1, 1 - 1, 1);
+    //         $('#defaultCountdown').countdown({until: newYear});
+    //     }
+    // }
 
     // prettyPhoto
     // ---------------------------------------------------------------------------------------    
@@ -542,72 +543,72 @@ $(document).ready(function () {
     // Contact Map
     // ---------------------------------------------------------------------------------------    
 
-    if (typeof google === 'object' && typeof google.maps === 'object') {
-        if ($('#map-canvas2').length) {
-
-            var map;
-            var marker;
-            var infowindow;
-            var mapIWcontent = '' +
-                    '' +
-                    '<div class="map-info-window">' +
-                    '<div class="map-location">' +
-                    '<div class="loctn-img">' +
-                    '<a class="media-link" href="/">' +
-                    '<img class="img-responsive" src="/img/template/logo/logo-black.png" alt=""/>' +
-                    '</a>' +
-                    '</div>' +
-                    '<div class="loctn-info">' +
-                    '<h4 class="title-2"> Location </h4>' +
-                    '<p> 79 Orchard St,New York <br>NY 10002, USA </p>' +
-                    '<p> (0096) 8645 234 438 </p>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '';
-            var contentString = '' +
-                    '' +
-                    '<div class="iw-container">' +
-                    '<div class="iw-content">' +
-                    '' + mapIWcontent +
-                    '</div>' +
-                    '<div class="iw-bottom-gradient"></div>' +
-                    '</div>' +
-                    '' +
-                    '';
-            var image = 'assets/img/logo/logo-black.png'; // marker icon
-            google.maps.event.addDomListener(window, 'load', function () {
-                var mapOptions = {
-                    scrollwheel: false,
-                    zoom: 10,
-                    styles: [{"featureType": "water", "elementType": "geometry", "stylers": [{"color": "#e9e9e9"}, {"lightness": 17}]},
-                        {"featureType": "landscape", "elementType": "geometry", "stylers": [{"color": "#f5f5f5"}, {"lightness": 20}]},
-                        {"featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{"color": "#ffffff"}, {"lightness": 17}]},
-                        {"featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{"color": "#ffffff"}, {"lightness": 29},
-                                {"weight": 0.2}]}, {"featureType": "road.arterial", "elementType": "geometry", "stylers": [{"color": "#ffffff"}, {"lightness": 18}]},
-                        {"featureType": "road.local", "elementType": "geometry", "stylers": [{"color": "#ffffff"}, {"lightness": 16}]},
-                        {"featureType": "poi", "elementType": "geometry", "stylers": [{"color": "#f5f5f5"}, {"lightness": 21}]},
-                        {"featureType": "poi.park", "elementType": "geometry", "stylers": [{"color": "#dedede"}, {"lightness": 21}]},
-                        {"elementType": "labels.text.stroke", "stylers": [{"visibility": "on"}, {"color": "#ffffff"}, {"lightness": 16}]},
-                        {"elementType": "labels.text.fill", "stylers": [{"saturation": 36}, {"color": "#333333"}, {"lightness": 40}]},
-                        {"elementType": "labels.icon", "stylers": [{"visibility": "off"}]},
-                        {"featureType": "transit", "elementType": "geometry", "stylers": [{"color": "#f2f2f2"}, {"lightness": 19}]},
-                        {"featureType": "administrative", "elementType": "geometry.fill", "stylers": [{"color": "#fefefe"}, {"lightness": 20}]},
-                        {"featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{"color": "#fefefe"}, {"lightness": 17}, {"weight": 1.2}]}],
-                    center: new google.maps.LatLng(40.6700, -73.9400) // map coordinates
-                };
-
-                map = new google.maps.Map(document.getElementById('map-canvas2'),
-                        mapOptions);
-                marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(40.6700, -73.9400), // marker coordinates
-                    map: map,
-                    icon: image,
-                    title: 'Hello World!'
-                });
-            });
-        }
-    }
+    // if (typeof google === 'object' && typeof google.maps === 'object') {
+    //     if ($('#map-canvas2').length) {
+    //
+    //         var map;
+    //         var marker;
+    //         var infowindow;
+    //         var mapIWcontent = '' +
+    //                 '' +
+    //                 '<div class="map-info-window">' +
+    //                 '<div class="map-location">' +
+    //                 '<div class="loctn-img">' +
+    //                 '<a class="media-link" href="/">' +
+    //                 '<img class="img-responsive" src="/img/template/logo/logo-black.png" alt=""/>' +
+    //                 '</a>' +
+    //                 '</div>' +
+    //                 '<div class="loctn-info">' +
+    //                 '<h4 class="title-2"> Location </h4>' +
+    //                 '<p> 79 Orchard St,New York <br>NY 10002, USA </p>' +
+    //                 '<p> (0096) 8645 234 438 </p>' +
+    //                 '</div>' +
+    //                 '</div>' +
+    //                 '</div>' +
+    //                 '';
+    //         var contentString = '' +
+    //                 '' +
+    //                 '<div class="iw-container">' +
+    //                 '<div class="iw-content">' +
+    //                 '' + mapIWcontent +
+    //                 '</div>' +
+    //                 '<div class="iw-bottom-gradient"></div>' +
+    //                 '</div>' +
+    //                 '' +
+    //                 '';
+    //         var image = 'assets/img/logo/logo-black.png'; // marker icon
+    //         google.maps.event.addDomListener(window, 'load', function () {
+    //             var mapOptions = {
+    //                 scrollwheel: false,
+    //                 zoom: 10,
+    //                 styles: [{"featureType": "water", "elementType": "geometry", "stylers": [{"color": "#e9e9e9"}, {"lightness": 17}]},
+    //                     {"featureType": "landscape", "elementType": "geometry", "stylers": [{"color": "#f5f5f5"}, {"lightness": 20}]},
+    //                     {"featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{"color": "#ffffff"}, {"lightness": 17}]},
+    //                     {"featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{"color": "#ffffff"}, {"lightness": 29},
+    //                             {"weight": 0.2}]}, {"featureType": "road.arterial", "elementType": "geometry", "stylers": [{"color": "#ffffff"}, {"lightness": 18}]},
+    //                     {"featureType": "road.local", "elementType": "geometry", "stylers": [{"color": "#ffffff"}, {"lightness": 16}]},
+    //                     {"featureType": "poi", "elementType": "geometry", "stylers": [{"color": "#f5f5f5"}, {"lightness": 21}]},
+    //                     {"featureType": "poi.park", "elementType": "geometry", "stylers": [{"color": "#dedede"}, {"lightness": 21}]},
+    //                     {"elementType": "labels.text.stroke", "stylers": [{"visibility": "on"}, {"color": "#ffffff"}, {"lightness": 16}]},
+    //                     {"elementType": "labels.text.fill", "stylers": [{"saturation": 36}, {"color": "#333333"}, {"lightness": 40}]},
+    //                     {"elementType": "labels.icon", "stylers": [{"visibility": "off"}]},
+    //                     {"featureType": "transit", "elementType": "geometry", "stylers": [{"color": "#f2f2f2"}, {"lightness": 19}]},
+    //                     {"featureType": "administrative", "elementType": "geometry.fill", "stylers": [{"color": "#fefefe"}, {"lightness": 20}]},
+    //                     {"featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{"color": "#fefefe"}, {"lightness": 17}, {"weight": 1.2}]}],
+    //                 center: new google.maps.LatLng(40.6700, -73.9400) // map coordinates
+    //             };
+    //
+    //             map = new google.maps.Map(document.getElementById('map-canvas2'),
+    //                     mapOptions);
+    //             marker = new google.maps.Marker({
+    //                 position: new google.maps.LatLng(40.6700, -73.9400), // marker coordinates
+    //                 map: map,
+    //                 icon: image,
+    //                 title: 'Hello World!'
+    //             });
+    //         });
+    //     }
+    // }
 
 });
 
@@ -635,38 +636,38 @@ $(window).scroll(function () {
 
 
 /*------------------- Page Loader Starts  -------------------*/
-function changeImage(counter) {
-    var images = [
-        '<i class="fa fa-fighter-jet"></i>',
-        '<i class="fa fa-gamepad"></i>',
-        '<i class="fa fa-headphones"></i>',
-        '<i class="fa fa-cubes"></i>',
-        '<i class="fa fa-paw"></i>',
-        '<i class="fa fa-rocket"></i>',
-        '<i class="fa fa-ticket"></i>',
-        '<i class="fa fa-pie-chart"></i>',
-        '<i class="fa fa-codepen"></i>'
-    ];
-
-    $(".loader .image").html("" + images[counter] + "");
-}
-
-function loading() {
-    var num = 0;
-
-    for (var i = 0; i <= 100; i++) {
-        setTimeout(function () {
-            $('.loader span').html(num + '%');
-
-            if (num === 100) {
-                loading();
-            }
-            num++;
-        }, i * 500);
-    }
-    ;
-
-}
+// function changeImage(counter) {
+//     var images = [
+//         '<i class="fa fa-fighter-jet"></i>',
+//         '<i class="fa fa-gamepad"></i>',
+//         '<i class="fa fa-headphones"></i>',
+//         '<i class="fa fa-cubes"></i>',
+//         '<i class="fa fa-paw"></i>',
+//         '<i class="fa fa-rocket"></i>',
+//         '<i class="fa fa-ticket"></i>',
+//         '<i class="fa fa-pie-chart"></i>',
+//         '<i class="fa fa-codepen"></i>'
+//     ];
+//
+//     $(".loader .image").html("" + images[counter] + "");
+// }
+//
+// function loading() {
+//     var num = 0;
+//
+//     for (var i = 0; i <= 100; i++) {
+//         setTimeout(function () {
+//             $('.loader span').html(num + '%');
+//
+//             if (num === 100) {
+//                 loading();
+//             }
+//             num++;
+//         }, i * 500);
+//     }
+//     ;
+//
+// }
 /*------------------- Page Loader Ends  -------------------*/
 
 

@@ -21,10 +21,10 @@ window.Vue = require('vue');
 
 // require ('./components/example');
 
-require('./components/ProductPreview');
+require('./components/CategoryProduct');
 
 require('./components/ProductDetail');
 
 require('./components/BigCart');
 
-// require('./components/CategoryProducts');
+require('./components/MiniCart');

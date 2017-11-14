@@ -13,13 +13,23 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 class CartController extends LayoutController
 {
+    /**
+     * @var CartService
+     */
     protected $cartService;
-    
+
+    /**
+     * CartController constructor.
+     * @param CartService $cartService
+     */
     public function __construct(CartService $cartService)
     {
         $this->cartService = $cartService;
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function initCart()
     {
         if(!request()->ajax())
@@ -38,12 +48,14 @@ class CartController extends LayoutController
         return response()->json([
             'status' => 'success',
             'cart' => $this->cartService->cart,
-            'cartProducts' => $this->cartService->cartProducts,
             'totalCount' => $this->cartService->totalCount,
             'totalAmount' => $this->cartService->totalAmount
         ]);
     }
-    
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function addToCart()
     {
         if(!request()->ajax())
@@ -70,12 +82,14 @@ class CartController extends LayoutController
         return response()->json([
             'status' => 'success',
             'cart' => $this->cartService->cart,
-            'cartProducts' => $this->cartService->cartProducts,
             'totalCount' => $this->cartService->totalCount,
             'totalAmount' => $this->cartService->totalAmount
         ]);
     }
-    
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateCart()
     {
         if(!request()->ajax())
@@ -102,12 +116,14 @@ class CartController extends LayoutController
         return response()->json([
             'status' => 'success',
             'cart' => $this->cartService->cart,
-            'cartProducts' => $this->cartService->cartProducts,
             'totalCount' => $this->cartService->totalCount,
             'totalAmount' => $this->cartService->totalAmount
         ]);
     }
-    
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function deleteFromCart()
     {
         if(!request()->ajax())
@@ -128,7 +144,6 @@ class CartController extends LayoutController
         return response()->json([
             'status' => 'success',
             'cart' => $this->cartService->cart,
-            'cartProducts' => $this->cartService->cartProducts,
             'totalCount' => $this->cartService->totalCount,
             'totalAmount' => $this->cartService->totalAmount
         ]);

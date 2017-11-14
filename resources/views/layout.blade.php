@@ -42,7 +42,7 @@
     @include('modals.loader')
     {{--/LOADER--}}
     {{--Product Preview Popup--}}
-    @include('modals.product-preview')
+{{--    @include('modals.product-preview')--}}
     {{--/Product Preview Popup--}}
 
     {{--Popup: Login-Dark--}}

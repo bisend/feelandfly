@@ -1,23 +1,16 @@
-@if(false)<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">@endif
 @extends('layout')
 
 @section('content')
     <article>
 
-        {{--<div id="links">--}}
-            {{--@foreach($model->categoryProducts as $categoryProduct)--}}
-                {{--<a href="javascript:void(0);" data-toggle="modal" data-target="#prod-preview-test"--}}
-                   {{--v-on:click="changeId({{ $categoryProduct->id }})">Link {{ $categoryProduct->id }}</a>--}}
-            {{--@endforeach--}}
-        {{--</div>--}}
-
-        <div id="ids">
+        {{--CATEGORY PRODUCT PREVIEW--}}
+        <div id="category-product-preview">
             <section class="modal fade  popups-wrap popups-light" id="prod-preview-test"
                      tabindex="-1"
                      role="dialog"
                      aria-hidden="true">
                 <div class="modal-dialog modal-lg">
-                    <div class="modal-content" v-for="product in products">
+                    <div class="modal-content">
                         <button aria-label="Close"
                                 data-dismiss="modal"
                                 class="close close-btn popup-cls"
@@ -28,29 +21,24 @@
                             <!-- Single Products Slider Starts -->
                             <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
                                 <div class="owl-carousel sync1 pb-25">
-                                    {{--@foreach($product->images as $image)--}}
-                                        <div class="item" v-for="image in product.images">
-                                            <img v-bind:src="image.big">
-                                            <a v-bind:href="image.original"
-                                               v-bind:rel="rel"
-                                               v-bind:title="product.name"
-                                               {{--data-pretty-photo-show="{{ $product->id }}"--}}
-                                               class="caption-link meta-icon">
-                                                <i class="fa fa-arrows-alt"></i>
-                                            </a>
-                                        </div>
-                                    {{--@endforeach--}}
+                                    <div class="item" v-for="image in categoryProductPreview.product.images">
+                                        <img v-bind:src="image.big">
+                                        <a v-bind:href="image.original"
+                                           v-bind:rel="categoryProductPreview.rel"
+                                           v-bind:title="categoryProductPreview.product.name"
+                                           class="caption-link meta-icon">
+                                            <i class="fa fa-arrows-alt"></i>
+                                        </a>
+                                    </div>
                                 </div>
 
                                 <div class="owl-carousel single-prod-thumb sync2 nav-2">
-{{--                                    @foreach($product->images as $image)--}}
-                                        <div class="item" v-for="image in product.images">
-                                            <img v-bind:src="image.small" >
-                                            <span class="transparent">
-                                                <img src="/img/template/icons/plus.png" alt="view">
-                                            </span>
-                                        </div>
-                                    {{--@endforeach--}}
+                                    <div class="item" v-for="image in categoryProductPreview.product.images">
+                                        <img v-bind:src="image.small">
+                                        <span class="transparent">
+                                            <img src="/img/template/icons/plus.png" alt="view">
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Single Products Slider Ends -->
@@ -58,14 +46,14 @@
                             <!-- Products Description Starts -->
                             <div class="col-md-7 col-sm-12">
                                 <div class="prod-details">
-                                    <div class="prod-title">@{{ products[0].name }}</div>
+                                    <div class="prod-title">@{{ categoryProductPreview.product.name }}</div>
                                     <div class="block-inline">
                                         <div class="rating pull-right">
-                                            <span v-for="i in 5" v-if="i <= products[0].rating" class="star active"></span>
+                                            <span v-for="i in 5" v-if="i <= categoryProductPreview.product.rating" class="star active"></span>
                                             <span v-else class="star"></span>
                                         </div>
                                         <div class="prod-price font-2 pull-left fsz-16">
-                                            <ins>@{{ products[0].price[0].price }} грн</ins>
+                                            <ins>@{{ categoryProductPreview.product.price[0].price }} грн</ins>
                                         </div>
                                     </div>
                                     <div class="discriptions pt-20">
@@ -80,14 +68,14 @@
                                                 что позволяет резинке не терять с временем форму и не закатываться;</li>
                                             <li>На бомбере расположены три вышитых патча;</li>
                                             <li>Весенний / Летний сезон.</li>
-                                            <li>Артикул: @{{ products[0].vendor_code }}</li>
+                                            <li>Артикул: @{{ categoryProductPreview.product.vendor_code }}</li>
                                         </ul>
                                     </div>
                                     <div class="prod-attributes">
                                         <ul class="choose-clr list-inline border-hover">
-                                            <li v-for="relatedProduct in product.product_group.products">
+                                            <li v-for="relatedProduct in categoryProductPreview.product.product_group.products">
                                                 {{--<a v-bind:href="related_product.color.slug" class="black-bg"></a>--}}
-                                                <a v-if="relatedProduct.color.id === product.color.id"
+                                                <a v-if="relatedProduct.color.id === categoryProductPreview.product.color.id"
                                                    class="active"
                                                    :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                    v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
@@ -96,8 +84,11 @@
                                             </li>
                                         </ul>
                                         <ul class="choose-size list-inline border-hover">
-                                            <li v-for="(size, index) in product.sizes">
-                                                <a :class="{ 'active': index === 0 }" href="javascript:void(0);">
+                                            <li v-for="(size, index) in categoryProductPreview.product.sizes">
+                                                <a
+                                                   v-on:click="changeCurrentSizeId(size.id)"
+                                                   :class="{active : categoryProductPreview.currentSizeId == size.id}"
+                                                   href="javascript:void(0);">
                                                     @{{ size.name }}
                                                 </a>
                                             </li>
@@ -105,12 +96,29 @@
                                         <ul class="prod-btns prod-meta">
                                             <li>
                                                 <div class="quantity">
-                                                    <button class="btn minus">-</button>
-                                                    <input type="number" class="form-control qty" name="quantity" value="1" title="Qty">
-                                                    <button class="btn plus">+</button>
+                                                    <button class="btn minus" v-on:click="decrement()">-</button>
+                                                    <input type="number"
+                                                           name="product-preview-quantity"
+                                                           v-model.number="categoryProductPreview.count"
+                                                           v-on:change="toInteger(categoryProductPreview.count)"
+                                                           class="form-control qty"
+                                                           title="Количество">
+                                                    <button class="btn plus" v-on:click="increment()">+</button>
                                                 </div>
                                             </li>
-                                            <li> <a class="theme-btn btn-black small-btn" href="#"> Добавить в корзину </a> </li>
+                                            <li>
+                                                <a class="theme-btn btn-black small-btn"
+                                                   v-on:click="addToCart(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, categoryProductPreview.count)"
+                                                   href="javascript:void(0);">
+                                                    <span v-cloak
+                                                          v-if="!findWhere(cartItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})">
+                                                        Добавить в корзину
+                                                    </span>
+                                                    <span v-cloak v-else>
+                                                        В корзине
+                                                    </span>
+                                                </a>
+                                            </li>
                                             <li> <a class="fa fa-heart meta-icon" href="#"></a> </li>
 
                                         </ul>
@@ -375,7 +383,7 @@
 
                                     {{--</div>--}}
                                 {{--@endforeach--}}
-
+                                @php($counter = 0)
                                 @foreach($model->categoryProducts as $categoryProduct)
 
                                     @php($relatedProducts = $categoryProduct->product_group->products)
@@ -390,12 +398,10 @@
                                                         <img alt="product"
                                                              src="{{ $categoryProduct->images[0]->medium }}"></a>
                                                     <a class="caption-link meta-icon"
-                                                       data-toggle="modal"
-                                                       data-target="#prod-preview-test"
+                                                       {{--data-toggle="modal"--}}
+                                                       {{--data-target="#prod-preview-test"--}}
                                                        href="javascript:void(0);"
-                                                       v-on:click="changeId({{ $categoryProduct->id }})"
-                                                            {{--href="#prod-preview-{{ $categoryProduct->id }}"--}}
-                                                    >
+                                                       v-on:click="changeCategoryProductPreview({{$counter}})">
                                                         <span class="fa fa-eye"></span>
                                                     </a>
                                                 </div>
@@ -428,8 +434,16 @@
                                                 <div class="block-inline">
                                                     <ul class="prod-meta">
                                                         <li>
-                                                            <a class="theme-btn btn-black" href="javascript:void(0);">
-                                                                Добавить в корзину
+                                                            <a class="theme-btn btn-black"
+                                                               v-on:click="addToCart({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, 1)"
+                                                               href="javascript:void(0);">
+                                                                <span v-cloak
+                                                                      v-if="!findWhere(cartItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})">
+                                                                    Добавить в корзину
+                                                                </span>
+                                                                <span v-cloak v-else>
+                                                                    В корзине
+                                                                </span>
                                                             </a>
                                                         </li>
                                                         <li>
@@ -443,9 +457,11 @@
                                                             @foreach($relatedProducts as $relatedProduct)
                                                                 <li>
                                                                     @if($categoryProduct->color->id == $relatedProduct->color->id)
-                                                                        <a class="active" href="{{ url_product($relatedProduct->slug, $model->language) }}" style="background-color: {{ $relatedProduct->color->html_code }}"></a>
+                                                                        <a class="active" href="{{ url_product($relatedProduct->slug, $model->language) }}"
+                                                                           style="background-color: {{ $relatedProduct->color->html_code }}"></a>
                                                                     @else
-                                                                        <a href="{{ url_product($relatedProduct->slug, $model->language) }}" style="background-color: {{ $relatedProduct->color->html_code }}"></a>
+                                                                        <a href="{{ url_product($relatedProduct->slug, $model->language) }}"
+                                                                           style="background-color: {{ $relatedProduct->color->html_code }}"></a>
                                                                     @endif
                                                                 </li>
                                                             @endforeach
@@ -462,11 +478,16 @@
                                                             @foreach($categoryProduct->sizes as $size)
                                                                 <li>
                                                                     @if($counterSize == 0)
-                                                                        <a class="active" href="javascript:void(0);">
+                                                                        <a
+                                                                           v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                           :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
+                                                                           href="javascript:void(0);">
                                                                             {{ $size->name }}
                                                                         </a>
                                                                     @else
-                                                                        <a href="javascript:void(0);">
+                                                                        <a href="javascript:void(0);"
+                                                                           v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                           :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}">
                                                                             {{ $size->name }}
                                                                         </a>
                                                                     @endif
@@ -479,10 +500,9 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
+                                @php($counter++)
                                 @endforeach
-
                                 <!-- Pagination Starts -->
                                 @include('partial.category-page.pagination')
                                 <!-- Pagination Ends -->
@@ -496,28 +516,10 @@
             </div>
         </div>
         <!-- / Page Ends -->
-
-
-{{--        @foreach($model->categoryProducts as $categoryProduct)--}}
-            {{--@include('modals.category-product-preview')--}}
-        {{--@endforeach--}}
-
-        <section class="modal fade  popups-wrap popups-light" id="prod-preview-{{ $categoryProduct->id }}"
-                 tabindex="-1"
-                 role="dialog"
-                 {{--data-product-preview-container="{{ $categoryProduct->id }}"--}}
-                 data-product-preview-container
-                 data-loaded-id
-                 data-is-product-preview-loaded="false"
-                 aria-hidden="true">
-
-        </section>
-
     </article>
 @endsection
 
 @push('js')
 <script defer src="/template/js/main.js"></script>
 <script defer src="/template/plugins/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
-{{--<script defer src="/js/category/product-preview-ajax.js"></script>--}}
 @endpush
