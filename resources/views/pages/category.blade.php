@@ -20,7 +20,7 @@
                         <div class="block-inline  product-modal">
                             <!-- Single Products Slider Starts -->
                             <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
-                                <div class="owl-carousel sync1 pb-25">
+                                <div class="owl-carousel sync1 pb-25 product-preview-images-big">
                                     <div class="item" v-for="image in categoryProductPreview.product.images">
                                         <img v-bind:src="image.big">
                                         <a v-bind:href="image.original"
@@ -32,7 +32,7 @@
                                     </div>
                                 </div>
 
-                                <div class="owl-carousel single-prod-thumb sync2 nav-2">
+                                <div class="owl-carousel single-prod-thumb sync2 nav-2 product-preview-images-small">
                                     <div class="item" v-for="image in categoryProductPreview.product.images">
                                         <img v-bind:src="image.small">
                                         <span class="transparent">

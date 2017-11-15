@@ -1,3 +1,139 @@
+var initProductPreviewImagesSliderInited = false,
+    sync1, sync2, sliderthumb, homethumb;
+
+function initProductPreviewImagesSlider () {
+    //Resize carousels in modal
+    if ($('.sync2.product-preview-images-small').length > 0) {
+        $(document).on('shown.bs.modal', function () {
+            $(this).find('.sync1.product-preview-images-big, .sync2.product-preview-images-small').each(function () {
+                $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
+            });
+        });
+
+        var navSpeedThumbs = 500;
+
+        if (!initProductPreviewImagesSliderInited === true) {
+            sync1 = $(".sync1.product-preview-images-big");
+            sync2 = $(".sync2.product-preview-images-small");
+            sliderthumb = $(".single-prod-thumb");
+            homethumb = $(".home-slide-thumb");
+        }
+
+        sliderthumb.owlCarousel({
+            rtl: false,
+            items: 3,
+            //loop: true,
+            nav: true,
+            margin: 20,
+            navSpeed: navSpeedThumbs,
+            responsive: {
+                992: {items: 3},
+                767: {items: 4},
+                480: {items: 3},
+                320: {items: 2}
+            },
+            responsiveRefreshRate: 200,
+            navText: [
+                "<i class='fa fa-angle-left'></i>",
+                "<i class='fa fa-angle-right'></i>"
+            ]
+        });
+
+        sync1.owlCarousel({
+            rtl: false,
+            items: 1,
+            navSpeed: 1000,
+            nav: false,
+            onChanged: syncPosition,
+            responsiveRefreshRate: 200
+
+        });
+
+        homethumb.owlCarousel({
+            rtl: false,
+            items: 5,
+            nav: true,
+            //loop: true,
+            navSpeed: navSpeedThumbs,
+            responsive: {
+                1500: {items: 5},
+                1024: {items: 4},
+                768: {items: 3},
+                600: {items: 4},
+                480: {items: 3},
+                320: {items: 2,
+                    nav: false
+                }
+            },
+            responsiveRefreshRate: 200,
+            navText: [
+                "<i class='fa fa-long-arrow-left'></i>",
+                "<i class='fa fa-long-arrow-right'></i>"
+            ]
+        });
+
+        if (!initProductPreviewImagesSliderInited) {
+            initProductPreviewImagesSliderInited = true;
+        }
+    }
+
+    function syncPosition(el) {
+        var current = this._current;
+        $(".sync2.product-preview-images-small")
+            .find(".owl-item")
+            .removeClass("synced")
+            .eq(current)
+            .addClass("synced");
+        center(current);
+    }
+
+    $(".sync2.product-preview-images-small").on("click", ".owl-item", function (e) {
+        e.preventDefault();
+        var number = $(this).index();
+        sync1.trigger("to.owl.carousel", [number, 1000]);
+        return false;
+    });
+
+    function center(num) {
+
+        var sync2visible = sync2.find('.owl-item.active').map(function () {
+            return $(this).index();
+        });
+
+        if ($.inArray(num, sync2visible) === -1) {
+            if (num > sync2visible[sync2visible.length - 1]) {
+                sync2.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
+            } else {
+                sync2.trigger("to.owl.carousel", Math.max(0, num - 1));
+            }
+        } else if (num === sync2visible[sync2visible.length - 1]) {
+            sync2.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
+        } else if (num === sync2visible[0]) {
+            sync2.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
+        }
+    }
+}
+
+function destroyProductPreviewImagesSlider () {
+    if (initProductPreviewImagesSliderInited === true) {
+        sync1.trigger('destroy.owl.carousel');
+        sliderthumb.trigger('destroy.owl.carousel');
+        homethumb.trigger('destroy.owl.carousel');
+
+        sync1.find('.owl-stage-outer').children().unwrap();
+        sync1.removeClass("owl-center owl-loaded owl-text-select-on");
+
+        sync2.find('.owl-stage-outer').children().unwrap();
+        sync2.removeClass("owl-center owl-loaded owl-text-select-on");
+
+        sliderthumb.find('.owl-stage-outer').children().unwrap();
+        sliderthumb.removeClass("owl-center owl-loaded owl-text-select-on");
+
+        homethumb.find('.owl-stage-outer').children().unwrap();
+        homethumb.removeClass("owl-center owl-loaded owl-text-select-on");
+    }
+}
+
 if (document.getElementById('grid-view'))
 {
     //init category products
@@ -10,7 +146,7 @@ if (document.getElementById('grid-view'))
     
     //init category product preview (first product) from categoryProducts
     GLOBAL_DATA.categoryProductPreview.product = GLOBAL_DATA.categoryProducts[0];
-    
+
     //init category product preview rel for pretty photo
     GLOBAL_DATA.categoryProductPreview.rel = 'prettyPhoto[category-' + GLOBAL_DATA.categoryProducts[0].id + ']';
     
@@ -19,6 +155,8 @@ if (document.getElementById('grid-view'))
     
     //init category product preview count
     GLOBAL_DATA.categoryProductPreview.count = 1;
+
+    // var imagesCount = 0;
 
     var gridView = new Vue({
         el: '#grid-view',
@@ -119,6 +257,14 @@ if (document.getElementById('grid-view'))
             },
             //changing category product preview
             changeCategoryProductPreview: function (counter) {
+                destroyProductPreviewImagesSlider();
+
+                // for (var i = 0; i < imagesCount; i++) {
+                //     GLOBAL_DATA.categoryProducts[counter].images.pop();
+                // }
+                //
+                // imagesCount++;
+
                 GLOBAL_DATA.categoryProductPreview.product = GLOBAL_DATA.categoryProducts[counter];
 
                 GLOBAL_DATA.categoryProductPreview.rel = 'prettyPhoto[category-' + GLOBAL_DATA.categoryProductPreview.product.id + ']';
@@ -168,6 +314,10 @@ if (document.getElementById('grid-view'))
                 });
 
                 $container.modal();
+
+                setTimeout(function () {
+                    initProductPreviewImagesSlider();
+                }, 400);
             }
         }
     });

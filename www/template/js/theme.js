@@ -350,7 +350,7 @@ $(document).ready(function () {
     }
 
     //Resize carousels in modal
-    if ($('.sync2').length > 0) {
+    if ($('.sync2:not(.product-preview-images-small)').length > 0) {
         $(document).on('shown.bs.modal', function () {
             $(this).find('.sync1, .sync2').each(function () {
                 $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
@@ -427,7 +427,7 @@ $(document).ready(function () {
         center(current);
     }
 
-    $(".sync2").on("click", ".owl-item", function (e) {
+    $(".sync2:not(.product-preview-images-small)").on("click", ".owl-item", function (e) {
         e.preventDefault();
         var number = $(this).index();
         sync1.trigger("to.owl.carousel", [number, 1000]);
