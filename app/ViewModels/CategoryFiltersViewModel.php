@@ -3,10 +3,10 @@
 namespace App\ViewModels;
 
 /**
- * Class CategoryViewModel
+ * Class CategoryFiltersViewModel
  * @package App\ViewModels
  */
-class CategoryViewModel extends LayoutViewModel
+class CategoryFiltersViewModel extends LayoutViewModel
 {
     /**
      * @var string|null Should contain category slug
@@ -46,6 +46,11 @@ class CategoryViewModel extends LayoutViewModel
     /**
      * @var array
      */
+    public $parsedFilters = [];
+
+    /**
+     * @var array
+     */
     public $filters = [];
 
     /**
@@ -55,7 +60,7 @@ class CategoryViewModel extends LayoutViewModel
      * @param string|null $slug
      * @param int $page
      */
-    public function __construct($view, $language, $slug, $page)
+    public function __construct($view, $language, $slug, $page, $filters)
     {
         parent::__construct($view, $language);
 
@@ -64,5 +69,19 @@ class CategoryViewModel extends LayoutViewModel
         $this->page = $page;
 
         $this->categoryProductsOffset = ($this->page - 1) * $this->categoryProductsLimit;
+
+        $nameWithValues = explode(';', $filters);
+
+        $parsedFilters = [];
+
+        foreach ($nameWithValues as $item)
+        {
+            $pairNameValues = explode('=', $item);
+            $parsedFilters[$pairNameValues[0]] = explode(',', $pairNameValues[1]);
+        }
+
+        \Debugbar::info($parsedFilters);
+
+        $this->parsedFilters = $parsedFilters;
     }
 }

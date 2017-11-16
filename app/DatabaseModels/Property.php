@@ -28,4 +28,14 @@ use Illuminate\Database\Eloquent\Model;
 class Property extends Model
 {
     protected $table = 'properties';
+
+    public function property_names()
+    {
+        return $this->hasMany(PropertyName::class, 'id', 'property_name_id');
+    }
+
+    public function property_values()
+    {
+        return $this->hasMany(PropertyValue::class, 'id', 'property_value_id');
+    }
 }

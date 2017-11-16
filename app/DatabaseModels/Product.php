@@ -82,4 +82,9 @@ class Product extends Model
     {
         return $this->hasMany(ProductSize::class, 'product_id', 'id');
     }
+
+    public function properties()
+    {
+        return $this->hasMany(Property::class, 'product_id', 'id');
+    }
 }

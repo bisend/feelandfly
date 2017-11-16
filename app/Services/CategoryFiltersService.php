@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: vlad_
- * Date: 11.10.2017
- * Time: 14:54
+ * Date: 16.11.2017
+ * Time: 11:22
  */
 
 namespace App\Services;
@@ -13,11 +13,7 @@ use App\Repositories\CategoryRepository;
 use App\Repositories\FilterRepository;
 use App\Repositories\ProductRepository;
 
-/**
- * Class CategoryService
- * @package App\Services
- */
-class CategoryService extends LayoutService
+class CategoryFiltersService extends LayoutService
 {
     /**
      * @var CategoryRepository
@@ -83,25 +79,26 @@ class CategoryService extends LayoutService
         {
             $userTypeId = 1;
         }
-        
-        $model->categoryProducts = $this->productRepository->getAllProductsForCategory(
+
+        $model->categoryProducts = $this->productRepository->getAllProductsForFiltersCategory(
             $model->currentCategory,
             $model->categoryProductsLimit,
             $model->categoryProductsOffset,
             $model->language,
-            $userTypeId
+            $userTypeId,
+            $model
         );
     }
 
     private function fillCountCategoryProducts($model)
     {
-        $model->countCategoryProducts = $this->productRepository->getCountProductsCategory($model->currentCategory);
+        $model->countCategoryProducts = $this->productRepository->getCountProductsFiltersCategory($model);
     }
-    
+
     private function fillFilters($model)
     {
 
-        $filtersArray = $this->filterRepository->initFilters($model);
+        $filtersArray = $this->filterRepository->initActiveFilters($model);
 
         $filters = [];
 
@@ -111,9 +108,10 @@ class CategoryService extends LayoutService
 
             $filters[$filterName][] = $item;
         }
-
-        $model->filters = collect($filters);
+        \Debugbar::info($model->filters);
         
+        $model->filters = collect($filters);
+
         \Debugbar::info($model->filters);
     }
 }

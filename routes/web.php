@@ -28,6 +28,9 @@ Route::get('/product/{slug}/{language?}', 'ProductController@index')
  */
 Route::group(['prefix' => 'category'], function ()
 {
+    /**
+     * Category
+     */
     Route::get('/{slug}/{language?}', 'CategoryController@index')
         ->where([
             'slug' => '^[a-z0-9-]+$',
@@ -55,7 +58,25 @@ Route::group(['prefix' => 'category'], function ()
 //            'page' => '^[2-9]{1}|[1-9]{1}[0-9]+$',
 //            'language' => '^(uk|ru)?$'
 //        ]);
-    
+
+    /**
+     * Category Filters
+     */
+    Route::get('/{slug}/{filters}/{language?}', 'CategoryFiltersController@index')
+        ->where([
+            'slug' => '^[a-z0-9-]+$',
+            'filters' => '^[a-z0-9=,;-]+$',
+            'language' => '^(uk|ru)?$'
+        ]);
+
+    Route::get('/{slug}/{filters}/{page}/{language?}', 'CategoryFiltersController@indexPagination')
+        ->where([
+            'slug' => '^[a-z0-9-]+$',
+            'filters' => '^[a-z0-9=,;-]+$',
+            'page' => '^[2-9]{1}|[1-9]{1}[0-9]+$',
+            'language' => '^(uk|ru)?$'
+        ]);
+
 });
 
 Route::post('/getAjaxProductPreview', 'CategoryController@getAjaxProductPreview')->where([

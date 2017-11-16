@@ -66,19 +66,19 @@ class CategoryController extends LayoutController
         return view('pages.category', compact('model'));
     }
 
-    public function getAjaxProductPreview()
-    {
-        $productId = request('productId');
-
-        $language = request('language');
-
-        $product = $this->productRepository->getProductById($productId, $language);
-
-        $view = view('partial.category-page.product-preview-ajax', compact('product', 'language'))->render();
-
-        return response()->json([
-            'status' => 'success',
-            'view' => $view
-        ]);
-    }
+//    public function getAjaxProductPreview()
+//    {
+//        $productId = request('productId');
+//
+//        $language = request('language');
+//
+//        $product = $this->productRepository->getProductById($productId, $language);
+//
+//        $view = view('partial.category-page.product-preview-ajax', compact('product', 'language'))->render();
+//
+//        return response()->json([
+//            'status' => 'success',
+//            'view' => $view
+//        ]);
+//    }
 }

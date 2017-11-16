@@ -292,4 +292,123 @@ class ProductRepository
                 'number_of_views'
             ]);
     }
+    
+    public function getAllProductsForFiltersCategory(
+        $currentCategory,
+        $categoryProductsLimit,
+        $categoryProductsOffset,
+        $language,
+        $userTypeId,
+        $model
+    )
+    {
+        $query = Product::query();
+
+        $query->with([
+            'images',
+            'color',
+            'product_group.products.color' => function ($query) use ($language) {
+                $query->select([
+                    'id',
+                    "name_$language",
+                    'slug',
+                    'html_code'
+                ]);
+            },
+            'sizes' => function ($query) use ($language) {
+                $query->select([
+                    'sizes.id',
+                    "sizes.name_$language as name",
+                    'sizes.slug'
+                ]);
+            },
+            'price' => function ($query) use ($language, $userTypeId) {
+                $query->select([
+                    'product_prices.id',
+                    'product_prices.product_id',
+                    'product_prices.user_type_id',
+                    'product_prices.price'
+                ])->whereUserTypeId($userTypeId);
+            }
+        ]);
+
+        foreach ($model->parsedFilters as $name => $values) {
+            $query->whereHas('properties', function ($query) use ($name, $values) {
+                $query->whereHas('property_names', function ($query) use ($name) {
+                    $query->whereIn('slug', [$name]);
+                })->whereHas('property_values', function ($query) use ($values) {
+                    $query->whereIn('slug', $values);
+                });
+            });
+        }
+
+        $query->whereCategoryId($currentCategory->id)
+            ->offset($categoryProductsOffset)
+            ->limit($categoryProductsLimit);
+
+
+        return $query->get([
+            'id',
+            "name_$language as name",
+            'slug',
+            'color_id',
+            'group_id',
+            'category_id',
+            'breadcrumb_category_id',
+            "description_$language as description",
+            'priority',
+            'vendor_code',
+            'rating',
+            'number_of_views'
+        ]);
+    }
+
+    public function getCountProductsFiltersCategory($model)
+    {
+        $query = Product::query();
+
+//        $query->with([
+//            'images',
+//            'color',
+//            'product_group.products.color' => function ($query) use ($language) {
+//                $query->select([
+//                    'id',
+//                    "name_$language",
+//                    'slug',
+//                    'html_code'
+//                ]);
+//            },
+//            'sizes' => function ($query) use ($language) {
+//                $query->select([
+//                    'sizes.id',
+//                    "sizes.name_$language as name",
+//                    'sizes.slug'
+//                ]);
+//            },
+//            'price' => function ($query) use ($language, $userTypeId) {
+//                $query->select([
+//                    'product_prices.id',
+//                    'product_prices.product_id',
+//                    'product_prices.user_type_id',
+//                    'product_prices.price'
+//                ])->whereUserTypeId($userTypeId);
+//            }
+//        ]);
+
+        foreach ($model->parsedFilters as $name => $values) {
+            $query->whereHas('properties', function ($query) use ($name, $values) {
+                $query->whereHas('property_names', function ($query) use ($name) {
+                    $query->whereIn('slug', [$name]);
+                })->whereHas('property_values', function ($query) use ($values) {
+                    $query->whereIn('slug', $values);
+                });
+            });
+        }
+
+        $query->whereCategoryId($model->currentCategory->id);
+
+
+        return $query->count();
+//        return Product::whereCategoryId($currentCategory->id)->count();
+    }
 }
