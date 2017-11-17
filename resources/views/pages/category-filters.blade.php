@@ -203,7 +203,11 @@
                                         @foreach($filterValues as $filterValue)
                                             <li>
                                                 <label class="checkbox-inline">
-                                                    <input type="checkbox" value="">
+                                                    @if($filterValue->isChecked)
+                                                        <input type="checkbox" value="" checked>
+                                                    @else
+                                                        <input type="checkbox" value="" >
+                                                    @endif
                                                     <span class="square-box"></span>
                                                     <span>{{ $filterValue->filter_value_title }}</span>
                                                     <span>{{ $filterValue->filter_products_count }}</span>

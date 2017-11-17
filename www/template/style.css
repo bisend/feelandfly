@@ -3358,7 +3358,8 @@ table {
 .widget-box li {
     line-height: 0;
     margin-bottom: 10px;
-    vertical-align: middle; 
+    vertical-align: middle;
+    position: relative;
 }
 
 .with-border > li {
@@ -4540,5 +4541,36 @@ float: right;
 }
 
 
+.apply-filters-btn {
+    width: 100%;
+}
 
+.slide-enter-active {
+    transition: all .3s ease;
+}
+.slide-leave-active {
+    /*transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);*/
+    transition: all .3s cubic-bezier(0.63, 0.01, 0.38, 0.98);
+}
+.slide-enter, .slide-leave-to
+    /* .slide-fade-leave-active до версии 2.1.8 */ {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+.filter-count-to-right {
+    position: absolute;
+    top: 15px;
+    right: 5px;
+    color: #a3a3a3;
+}
+
+.filter-count-to-right.checkactive {
+    color: #000;
+}
+
+.filter-value-link {
+    margin-left: 0px !important;
+    margin-top: 8px !important;
+}
 

@@ -36,7 +36,9 @@ class CategoryFiltersService extends LayoutService
      * @param ProductRepository $productRepository
      * @param FilterRepository $filterRepository
      */
-    public function __construct(CategoryRepository $categoryRepository, ProductRepository $productRepository, FilterRepository $filterRepository)
+    public function __construct(CategoryRepository $categoryRepository, 
+                                ProductRepository $productRepository, 
+                                FilterRepository $filterRepository)
     {
         parent::__construct($categoryRepository);
 
@@ -108,10 +110,23 @@ class CategoryFiltersService extends LayoutService
 
             $filters[$filterName][] = $item;
         }
-        \Debugbar::info($model->filters);
-        
+
         $model->filters = collect($filters);
 
-        \Debugbar::info($model->filters);
+        foreach ($model->filters as $filterName => $filterValues)
+        {
+            foreach ($filterValues as $filterValue)
+            {
+                $filterValue->isChecked = false;
+
+                foreach ($model->parsedFilters as $parsedFilterName => $parsedFilterValues)
+                {
+                    if (in_array($filterValue->filter_value_slug, $parsedFilterValues))
+                    {
+                        $filterValue->isChecked = true;
+                    }
+                }
+            }
+        }
     }
 }

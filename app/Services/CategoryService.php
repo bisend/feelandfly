@@ -109,6 +109,8 @@ class CategoryService extends LayoutService
         {
             $filterName = $item->filter_name_title;
 
+            $item->isChecked = false;
+
             $filters[$filterName][] = $item;
         }
 
