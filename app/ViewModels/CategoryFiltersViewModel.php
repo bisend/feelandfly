@@ -54,6 +54,11 @@ class CategoryFiltersViewModel extends LayoutViewModel
     public $filters = [];
 
     /**
+     * @var string
+     */
+    public $filtersParam = '';
+
+    /**
      * CategoryViewModel constructor.
      * @param string $view
      * @param string $language
@@ -70,6 +75,8 @@ class CategoryFiltersViewModel extends LayoutViewModel
 
         $this->categoryProductsOffset = ($this->page - 1) * $this->categoryProductsLimit;
 
+        $this->filtersParam = $filters;
+
         $nameWithValues = explode(';', $filters);
 
         $parsedFilters = [];
@@ -79,8 +86,6 @@ class CategoryFiltersViewModel extends LayoutViewModel
             $pairNameValues = explode('=', $item);
             $parsedFilters[$pairNameValues[0]] = explode(',', $pairNameValues[1]);
         }
-
-        \Debugbar::info($parsedFilters);
 
         $this->parsedFilters = $parsedFilters;
     }

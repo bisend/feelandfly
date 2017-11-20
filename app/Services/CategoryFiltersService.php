@@ -126,6 +126,7 @@ class CategoryFiltersService extends LayoutService
                         $filterValue->isChecked = true;
                     }
                 }
+                $filterValue->initialState = $filterValue->isChecked;
             }
         }
     }

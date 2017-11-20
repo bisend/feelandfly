@@ -30,3 +30,5 @@ require('./components/BigCart');
 require('./components/MiniCart');
 
 require('./components/Filters');
+
+require('./components/SelectedFilters');

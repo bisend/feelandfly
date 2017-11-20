@@ -1,4 +1,4 @@
-if (document.getElementById('sidebar-filters'))
+if (document.getElementById('sidebar-selected-filters'))
 {
     var FILTERS = window.FFShop.filters;
 
@@ -10,7 +10,7 @@ if (document.getElementById('sidebar-filters'))
     }
 
     new Vue({
-        el: '#sidebar-filters',
+        el: '#sidebar-selected-filters',
         data: {
             filters: FILTERS,
             isStateChanged: false,
@@ -32,7 +32,7 @@ if (document.getElementById('sidebar-filters'))
                 {
                     FILTERS[fName].forEach(function (fValue) {
 
-                        if (fValue.isChecked)
+                        if (fValue.isChecked != fValue.initialState)
                         {
                             _this.isStateChanged = true;
                             SHOW_APPLY_BTN[[fName]] = true;
@@ -47,7 +47,7 @@ if (document.getElementById('sidebar-filters'))
             },
             buildSelectedFiltersArray: function () {
                 var _this = this;
-                var url = '/category/' + _this.categorySlug + '/';
+                var url = '/category/' + _this.categorySlug;
                 var arrayOfPairs = [];
 
                 for (var fName in FILTERS)
@@ -74,7 +74,10 @@ if (document.getElementById('sidebar-filters'))
                     }
                 }
 
-                url += arrayOfPairs.join(';');
+                if (arrayOfPairs.length > 0)
+                {
+                    url += '/' + arrayOfPairs.join(';');
+                }
 
                 if (LANGUAGE != DEFAULT_LANGUAGE)
                 {

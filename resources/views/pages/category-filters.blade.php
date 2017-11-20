@@ -154,7 +154,7 @@
             <div class="row">
 
                 <!-- Sidebar Starts -->
-                <aside class="col-md-3 col-sm-4 sidebar">
+                <aside class="col-md-3 col-sm-4 sidebar" id="sidebar-selected-filters">
                     <div class="widget-wrap">
 
                         {{--<div class="dropdown-div-btn">--}}
@@ -200,20 +200,35 @@
                             <div class="dropdown-div-content">
                                 <div class="widget-box">
                                     <ul>
+                                        @php($valueCounter = 0)
                                         @foreach($filterValues as $filterValue)
                                             <li>
-                                                <label class="checkbox-inline">
-                                                    @if($filterValue->isChecked)
-                                                        <input type="checkbox" value="" checked>
-                                                    @else
-                                                        <input type="checkbox" value="" >
-                                                    @endif
+                                                <label class="checkbox-inline"
+                                                       v-on:click.prevent="setCheck('{{ $filterName }}', '{{ $valueCounter }}')">
+                                                    <input type="checkbox"
+                                                           v-model="filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked">
                                                     <span class="square-box"></span>
-                                                    <span>{{ $filterValue->filter_value_title }}</span>
-                                                    <span>{{ $filterValue->filter_products_count }}</span>
                                                 </label>
+                                                <a class="checkbox-inline filter-value-link"
+                                                   href="{{ url_category_filters($model->currentCategory->slug, null, $filterValue->filter_name_slug, $filterValue->filter_value_slug, $model->language)  }}">
+                                                    <span class="" :class="{checkactive: filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked}">
+                                                        {{ $filterValue->filter_value_title }}
+                                                    </span>
+                                                </a>
+                                                <span class="filter-count-to-right"
+                                                      :class="{checkactive: filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked}">
+                                                    {{ $filterValue->filter_products_count }}
+                                                </span>
                                             </li>
+                                            @php($valueCounter++)
                                         @endforeach
+                                        <transition name="slide">
+                                            <a v-cloak class="theme-btn btn-black apply-filters-btn"
+                                               v-if="isCheckSelected('{{$filterName}}')"
+                                               v-bind:href="filterUrl">
+                                                Применить
+                                            </a>
+                                        </transition>
                                     </ul>
                                 </div>
                             </div>

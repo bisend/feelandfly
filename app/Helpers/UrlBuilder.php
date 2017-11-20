@@ -591,6 +591,267 @@ class UrlBuilder
 
     // -----------------------------------------------------------------------------------------------------------------
     /**
+     * Build error page url
+     *
+     * @param null $code
+     * @param string $language
+     *
+     * @return null|string
+     */
+    public static function error($code = null, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        if (!$code) {
+            $code = self::UNDEFINED_ERROR_URL;
+        }
+
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::ERROR_PAGE,
+            $code
+        ]);
+
+        return self::localize($url, $language);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Category filters
+     */
+
+    /**
+     * Build category filters page url
+     *
+     * @param null|string $slug
+     * @param null|string $filtersParam
+     * @param null|string $filterName
+     * @param $filterValue
+     * @param string $language
+     *
+     * @return string
+     */
+    public static function categoryFilters(
+        $slug = null,
+        $filtersParam = null,
+        $filterName = null,
+        $filterValue = null,
+        $language = Languages::DEFAULT_LANGUAGE)
+    {
+        if (!$slug || !$filterName || !$filterValue) {
+            return self::UNDEFINED_URL;
+        }
+
+        if (!$filtersParam) {
+            $param = self::stringPairToParam($filterName, $filterValue);
+        } else {
+            $filtersParam = trim(trim($filtersParam, self::PARAMS_SEPARATOR));
+            if (str_contains($filtersParam, $filterName) && str_contains($filtersParam, $filterValue)) {
+                $param = $filtersParam;
+            } else {
+                $param = self::concatParamsWithStringPair($filtersParam, $filterName, $filterValue);
+                $param = self::paramsToPairs($param);
+                $param = self::pairsToParams($param);
+            }
+        }
+
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::CATEGORY_PAGE,
+            $slug,
+            $param
+        ]);
+
+        return self::localize($url, $language);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Build category filters page per page url
+     *
+     * @param null|string $slug
+     * @param null|string $filtersParam
+     * @param int $page
+     * @param string $language
+     *
+     * @return string
+     */
+    public static function categoryFiltersPerPage(
+        $slug = null,
+        $filtersParam = null,
+        $page = 1,
+        $language = Languages::DEFAULT_LANGUAGE)
+    {
+        if (!$slug || !$filtersParam) {
+            return self::UNDEFINED_URL;
+        }
+
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::CATEGORY_PAGE,
+            $slug,
+            $filtersParam
+        ]);
+
+        if ($page > 1) {
+            $url = self::concatParts([$url, $page]);
+        }
+
+        return self::localize($url, $language);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Helpers
+     */
+
+    /**
+     * Convert url query string series to the string
+     *
+     * @param null|string $series
+     *
+     * @return string
+     */
+    public static function seriesToString($series = null)
+    {
+        if (!$series) {
+            return self::UNDEFINED_URL_PART;
+        }
+
+        $separator = '\\' . self::SERIES_SEPARATOR;
+
+        return preg_replace("/$separator+/i", ' ', $series);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Convert string key/value to the url param string
+     *
+     * @param null|string $key
+     * @param null|string $value
+     * @param bool $isLastParam
+     *
+     * @return string
+     */
+    public static function stringPairToParam($key = null, $value = null, $isLastParam = true)
+    {
+        if (!$key || !$value) {
+            return self::UNDEFINED_URL_PART;
+        }
+
+        $paramValue = $key . self::PARAM_VALUES_PAIR_SEPARATOR . $value;
+
+        if (!$isLastParam) {
+            $paramValue .= self::PARAMS_SEPARATOR;
+        }
+
+        return $paramValue;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Convert url param string to string array pair
+     *
+     * @param null|string $param
+     *
+     * @return array|string
+     */
+    public static function paramToPair($param = null)
+    {
+        $pair = [];
+
+        if (!$param) {
+            return $pair;
+        }
+
+        $param = trim($param);
+
+        $keys = explode(self::PARAM_VALUES_PAIR_SEPARATOR, $param);
+        if (!$keys || count($keys) <= 1) {
+            return $pair;
+        }
+
+        $values = explode(self::PARAM_VALUES_SEPARATOR, $keys[1]);
+        if (!$values || ($valuesCount = count($values)) == 0) {
+            return $pair;
+        }
+
+        for ($i = 0; $i < 1; $i++) {
+            for ($j = 0; $j < $valuesCount; $j++) {
+                $pair[$keys[$i]][$values[$j]] = $values[$j];
+            }
+        }
+
+        return $pair;
+    }
+
+    /**
+     * Convert url params string to string array pairs
+     *
+     * @param null|string $params
+     *
+     * @return array|string
+     */
+    public static function paramsToPairs($params = null)
+    {
+        $pairs = [];
+
+        if (!$params) {
+            return $pairs;
+        }
+
+        $params = trim(trim($params, self::PARAMS_SEPARATOR));
+        if (!$params) {
+            return $pairs;
+        }
+
+        $params = explode(self::PARAMS_SEPARATOR, $params);
+        if (!$params || count($params) == 0) {
+            return $pairs;
+        }
+
+        foreach ($params as $param) {
+            $pair = self::paramToPair($param);
+            if (!$pair) {
+                continue;
+            }
+
+            $pairs = array_merge_recursive($pairs, $pair);
+        }
+
+        return array_sort_recursive($pairs);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static function pairsToParams($pairs = null)
+    {
+        $params = '';
+
+        if (!$pairs) {
+            return self::UNDEFINED_URL;
+        }
+
+        foreach ($pairs as $key => $values) {
+            $paramName = $key . self::PARAM_VALUES_PAIR_SEPARATOR;
+            $paramValue = '';
+            foreach ($values as $value) {
+                $paramValue .= $value . self::PARAM_VALUES_SEPARATOR;
+            }
+            $paramValue = trim(trim($paramValue, self::PARAM_VALUES_SEPARATOR));
+            $paramName .= $paramValue . self::PARAMS_SEPARATOR;
+
+            $params .= $paramName;
+        }
+
+        $params = trim(trim($params, self::PARAMS_SEPARATOR));
+
+        if (!$params) {
+            return self::UNDEFINED_URL;
+        }
+
+        return $params;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
      * Concat url parts
      *
      * @param null|array $parts
@@ -617,28 +878,32 @@ class UrlBuilder
         return $result;
     }
 
-
     // -----------------------------------------------------------------------------------------------------------------
     /**
-     * Build error page url
+     * Concat url params with a string pair
      *
-     * @param null $code
-     * @param string $language
+     * @param null|string $params
+     * @param null|string $pairName
+     * @param null|string $pairValue
+     * @param string $separator
+     * @param bool $isLastParam
      *
-     * @return null|string
+     * @return string
      */
-    public static function error($code = null, $language = Languages::DEFAULT_LANGUAGE)
+    public static function concatParamsWithStringPair(
+        $params = null,
+        $pairName = null,
+        $pairValue = null,
+        $separator = self::PARAMS_SEPARATOR,
+        $isLastParam = true)
     {
-        if (!$code) {
-            $code = self::UNDEFINED_ERROR_URL;
+        if (!$params || !$pairName || !$pairValue || !$separator) {
+            return self::UNDEFINED_URL_PART;
         }
 
-        $url = self::concatParts([
-            url(self::URL_ROOT),
-            self::ERROR_PAGE,
-            $code
-        ]);
+        $result = $params . $separator . self::stringPairToParam($pairName, $pairValue, $isLastParam);
 
-        return self::localize($url, $language);
+        return $result;
     }
+
 }

@@ -205,11 +205,13 @@
                                             <li>
                                                 <label class="checkbox-inline"
                                                        v-on:click.prevent="setCheck('{{ $filterName }}', '{{ $valueCounter }}')">
-                                                       {{--v-on:click.prevent="buildFilterArray('{{$filterValue->filter_name_slug}}', '{{$filterValue->filter_value_slug}}')">--}}
-                                                    <input type="checkbox" v-model="filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked">
+                                                    <input type="checkbox"
+                                                           v-model="filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked">
                                                     <span class="square-box"></span>
                                                 </label>
-                                                <a class="checkbox-inline filter-value-link" href="{{ url_current($model->language) }}/{{ $filterValue->filter_name_slug }}={{ $filterValue->filter_value_slug }}">
+                                                {{--<a class="checkbox-inline filter-value-link" href="{{ url_current($model->language) }}/{{ $filterValue->filter_name_slug }}={{ $filterValue->filter_value_slug }}">--}}
+                                                <a class="checkbox-inline filter-value-link"
+                                                   href="{{ url_category_filters($model->currentCategory->slug, null, $filterValue->filter_name_slug, $filterValue->filter_value_slug, $model->language)  }}">
                                                     <span class="" :class="{checkactive: filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked}">
                                                         {{ $filterValue->filter_value_title }}
                                                     </span>
@@ -222,10 +224,11 @@
                                             @php($valueCounter++)
                                         @endforeach
                                         <transition name="slide">
-                                            <button v-cloak class="theme-btn btn-black apply-filters-btn"
-                                                    v-if="isCheckSelected('{{$filterName}}')">
+                                            <a v-cloak class="theme-btn btn-black apply-filters-btn"
+                                                    v-if="isCheckSelected('{{$filterName}}')"
+                                                    v-bind:href="filterUrl">
                                                 Применить
-                                            </button>
+                                            </a>
                                         </transition>
                                     </ul>
                                 </div>

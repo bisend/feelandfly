@@ -46,7 +46,8 @@ class CategoryController extends LayoutController
 
         JavaScript::put([
             'products' => $model->categoryProducts,
-            'filters' => $model->filters
+            'filters' => $model->filters,
+            'categorySlug' => $model->currentCategory->slug
         ]);
 
         return view('pages.category', compact('model'));
@@ -62,7 +63,8 @@ class CategoryController extends LayoutController
 
         JavaScript::put([
             'products' => $model->categoryProducts,
-            'filters' => $model->filters
+            'filters' => $model->filters,
+            'categorySlug' => $model->currentCategory->slug
         ]);
 
         return view('pages.category', compact('model'));

@@ -108,6 +108,61 @@ if (!function_exists('url_category_per_page')) {
 
 // ---------------------------------------------------------------------------------------------------------------------
 /**
+ * url_category_filters
+ */
+if (!function_exists('url_category_filters')) {
+
+    /**
+     * Get the category filters page url
+     *
+     * @param null|string $slug
+     * @param null|string $filtersParam
+     * @param null|string $filterName
+     * @param null|string $filterValue
+     * @param string $language
+     *
+     * @return string
+     */
+    function url_category_filters(
+        $slug = null,
+        $filtersParam = null,
+        $filterName = null,
+        $filterValue = null,
+        $language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::categoryFilters($slug, $filtersParam, $filterName, $filterValue, $language);
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+/**
+ * url_category_filters
+ */
+if (!function_exists('url_category_filters_per_page')) {
+
+    /**
+     * Get the category filters page per page url
+     *
+     * @param null|string $slug
+     * @param null|string $filtersParam
+     * @param int $page
+     * @param string $language
+     *
+     * @return string
+     */
+    function url_category_filters_per_page(
+        $slug = null,
+        $filtersParam = null,
+        $page = 1,
+        $language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::categoryFiltersPerPage($slug, $filtersParam, $page, $language);
+    }
+}
+
+
+// ---------------------------------------------------------------------------------------------------------------------
+/**
  * url_product
  */
 if (!function_exists('url_product')) {

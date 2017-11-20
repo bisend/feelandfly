@@ -47,7 +47,9 @@ class CategoryFiltersController extends LayoutController
         \Debugbar::info($model);
 
         JavaScript::put([
-            'products' => $model->categoryProducts
+            'products' => $model->categoryProducts,
+            'filters' => $model->filters,
+            'categorySlug' => $model->currentCategory->slug
         ]);
 
         return view('pages.category-filters', compact('model'));
@@ -55,14 +57,16 @@ class CategoryFiltersController extends LayoutController
 
     public function indexPagination($slug = null, $filters = null, $page, $language = Languages::DEFAULT_LANGUAGE)
     {
-        $model = new CategoryFiltersViewModel('category', $language, $slug, $page, $filters);
+        $model = new CategoryFiltersViewModel('category-filters', $language, $slug, $page, $filters);
 
         $this->categoryFiltersService->fill($model);
 
         \Debugbar::info($model);
 
         JavaScript::put([
-            'products' => $model->categoryProducts
+            'products' => $model->categoryProducts,
+            'filters' => $model->filters,
+            'categorySlug' => $model->currentCategory->slug
         ]);
 
         return view('pages.category-filters', compact('model'));
