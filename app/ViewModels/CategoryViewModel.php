@@ -48,6 +48,10 @@ class CategoryViewModel extends LayoutViewModel
      */
     public $filters = [];
 
+    public $priceMin;
+
+    public $priceMax;
+
     /**
      * CategoryViewModel constructor.
      * @param string $view

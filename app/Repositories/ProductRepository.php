@@ -332,6 +332,14 @@ class ProductRepository
             }
         ]);
 
+        if ($model->priceMin && $model->priceMax)
+        {
+            $query->whereHas('price', function ($q) use ($model) {
+                $q->whereUserTypeId($model->userTypeId);
+                $q->whereBetween('price', [$model->priceMin, $model->priceMax]);
+            });
+        }
+
         foreach ($model->parsedFilters as $name => $values) {
             $query->whereHas('properties', function ($query) use ($name, $values) {
                 $query->whereHas('property_names', function ($query) use ($name) {
@@ -395,6 +403,14 @@ class ProductRepository
 //            }
 //        ]);
 
+        if ($model->priceMin && $model->priceMax)
+        {
+            $query->whereHas('price', function ($q) use ($model) {
+                $q->whereUserTypeId($model->userTypeId);
+                $q->whereBetween('price', [$model->priceMin, $model->priceMax]);
+            });
+        }
+
         foreach ($model->parsedFilters as $name => $values) {
             $query->whereHas('properties', function ($query) use ($name, $values) {
                 $query->whereHas('property_names', function ($query) use ($name) {
@@ -410,5 +426,76 @@ class ProductRepository
 
         return $query->count();
 //        return Product::whereCategoryId($currentCategory->id)->count();
+    }
+    
+    public function getPriceMinForCategoryProducts($model)
+    {
+        return Product::join('product_prices', function ($join) use($model) {
+            $join->on('products.id', '=', 'product_prices.product_id')
+                ->where('product_prices.user_type_id', '=', $model->userTypeId);
+        })->whereCategoryId($model->currentCategory->id)->min('price');
+    }
+    
+    public function getPriceMaxForCategoryProducts($model)
+    {
+        return Product::join('product_prices', function ($join) use($model) {
+            $join->on('products.id', '=', 'product_prices.product_id')
+                ->where('product_prices.user_type_id', '=', $model->userTypeId);
+        })->whereCategoryId($model->currentCategory->id)->max('price');
+    }
+    
+    public function getPriceMinForFiltersCategoryProducts($model)
+    {
+        $query = Product::query();
+
+        $query->join('product_prices', function ($join) use($model) {
+            $join->on('products.id', '=', 'product_prices.product_id')
+                ->where('product_prices.user_type_id', '=', $model->userTypeId);
+        })->whereCategoryId($model->currentCategory->id)->min('price');
+
+        if (count($model->parsedFilters) > 0)
+        {
+            foreach ($model->parsedFilters as $name => $values) {
+                $query->whereHas('properties', function ($query) use ($name, $values) {
+                    $query->whereHas('property_names', function ($query) use ($name) {
+                        $query->whereIn('slug', [$name]);
+                    })->whereHas('property_values', function ($query) use ($values) {
+                        $query->whereIn('slug', $values);
+                    });
+                });
+            }
+        }
+
+        return $query->min('price');
+    }
+
+    public function getPriceMaxForFiltersCategoryProducts($model)
+    {
+        $query = Product::query();
+
+        $query->join('product_prices', function ($join) use($model) {
+            $join->on('products.id', '=', 'product_prices.product_id')
+                ->where('product_prices.user_type_id', '=', $model->userTypeId);
+        })->whereCategoryId($model->currentCategory->id)->max('price');
+
+        if (count($model->parsedFilters) > 0)
+        {
+            foreach ($model->parsedFilters as $name => $values) {
+                $query->whereHas('properties', function ($query) use ($name, $values) {
+                    $query->whereHas('property_names', function ($query) use ($name) {
+                        $query->whereIn('slug', [$name]);
+                    })->whereHas('property_values', function ($query) use ($values) {
+                        $query->whereIn('slug', $values);
+                    });
+                });
+            }
+        }
+
+        return $query->max('price');
+
+//        return Product::join('product_prices', function ($join) use($model) {
+//            $join->on('products.id', '=', 'product_prices.product_id')
+//                ->where('product_prices.user_type_id', '=', $model->userTypeId);
+//        })->whereCategoryId($model->currentCategory->id)->max('price');
     }
 }

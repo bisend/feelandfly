@@ -489,25 +489,26 @@ $(document).ready(function () {
     //     $('.count-to').countTo();
     // }
 
-    /*------------------- Sidebar Filter Range -------------------*/
-    var priceSliderRange = $('#price-range');
-    if ($.ui) {
-        if ($(priceSliderRange).length) {
-            $(priceSliderRange).slider({
-                range: true,
-                min: 0,
-                max: 1000,
-                values: [120, 540],
-                slide: function (event, ui) {
-                    //$("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
-                    $("#price-min").html(ui.values[0] + " грн");
-                    $("#price-max").html(ui.values[1]+ " грн" );
-                }
-            });
-            $("#price-min").html($("#price-range").slider("values", 0) + " грн");
-            $("#price-max").html($("#price-range").slider("values", 1) + " грн");
-        }
-    }
+    // /*------------------- Sidebar Filter Range -------------------*/
+    // var priceSliderRange = $('#price-range');
+    // if ($.ui) {
+    //     if ($(priceSliderRange).length) {
+    //         $(priceSliderRange).slider({
+    //             range: true,
+    //             min: 0,
+    //             max: 1000,
+    //             values: [120, 540],
+    //             slide: function (event, ui) {
+    //                 //$("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+    //                 $("#price-min").html(ui.values[0] + " грн");
+    //                 $("#price-max").html(ui.values[1]+ " грн" );
+    //                 console.log(ui);
+    //             }
+    //         });
+    //         $("#price-min").html($("#price-range").slider("values", 0) + " грн");
+    //         $("#price-max").html($("#price-range").slider("values", 1) + " грн");
+    //     }
+    // }
 
     // Comingsoon
     // --------------------------------------------------------------------------------------- 

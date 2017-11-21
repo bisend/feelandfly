@@ -252,20 +252,27 @@
                             {{--</div>--}}
                         {{--</div>--}}
 
-                        {{--<div class="dropdown-div-btn">--}}
-                            {{--<h2 class="widget-title"> Ціна  <span class="plus-icon"> - </span> </h2>--}}
-                        {{--</div>--}}
-                        {{--<div class="dropdown-div-content">--}}
-                            {{--<div class="widget-box">--}}
+                        <div class="dropdown-div-btn">
+                            <h2 class="widget-title"> Цена  <span class="plus-icon"> - </span> </h2>
+                        </div>
+                        <div class="dropdown-div-content">
+                            <div class="widget-box">
 
-                                {{--<div class="widget-content pb-35">--}}
-                                    {{--<div id="price-range"></div>--}}
-                                    {{--<div class="block-inline range-wrap">--}}
-                                        {{--<span id="price-min"></span> - <span id="price-max"></span>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
+                                <div class="widget-content pb-35">
+                                    <div id="price-range"></div>
+                                    <div class="block-inline range-wrap">
+                                        <span id="price-min"></span> - <span id="price-max"></span>
+                                    </div>
+                                </div>
+                                <transition name="slide">
+                                    <a v-cloak class="theme-btn btn-black apply-filters-btn"
+                                       v-if="initialPriceMin != priceMin || initialPriceMax != priceMax"
+                                       v-bind:href="filterUrl">
+                                        Применить
+                                    </a>
+                                </transition>
+                            </div>
+                        </div>
 
                         {{--<div class="dropdown-div-btn">--}}
                             {{--<h2 class="widget-title"> Цвет  <span class="plus-icon"> - </span> </h2>--}}

@@ -65,6 +65,10 @@ class CategoryService extends LayoutService
         $this->fillCountCategoryProducts($model);
 
         $this->fillFilters($model);
+
+        $this->fillPriceMin($model);
+
+        $this->fillPriceMax($model);
     }
 
     /**
@@ -117,5 +121,15 @@ class CategoryService extends LayoutService
         $model->filters = collect($filters);
         
         \Debugbar::info($model->filters);
+    }
+
+    private function fillPriceMin($model)
+    {
+        $model->priceMin = $this->productRepository->getPriceMinForCategoryProducts($model);
+    }
+
+    private function fillPriceMax($model)
+    {
+        $model->priceMax = $this->productRepository->getPriceMaxForCategoryProducts($model);
     }
 }

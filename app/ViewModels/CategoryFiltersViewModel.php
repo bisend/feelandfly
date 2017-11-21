@@ -58,6 +58,14 @@ class CategoryFiltersViewModel extends LayoutViewModel
      */
     public $filtersParam = '';
 
+    public $initialPriceMin;
+
+    public $initialPriceMax;
+
+    public $priceMin;
+
+    public $priceMax;
+
     /**
      * CategoryViewModel constructor.
      * @param string $view
@@ -84,9 +92,19 @@ class CategoryFiltersViewModel extends LayoutViewModel
         foreach ($nameWithValues as $item)
         {
             $pairNameValues = explode('=', $item);
-            $parsedFilters[$pairNameValues[0]] = explode(',', $pairNameValues[1]);
+            
+            if (str_contains('price-range', $pairNameValues[0]))
+            {
+                $priceValues = explode(',', $pairNameValues[1]);
+                $this->priceMin = $priceValues[0];
+                $this->priceMax = $priceValues[1];
+            }
+            else
+            {
+                $parsedFilters[$pairNameValues[0]] = explode(',', $pairNameValues[1]);
+            }
         }
-
+        
         $this->parsedFilters = $parsedFilters;
     }
 }

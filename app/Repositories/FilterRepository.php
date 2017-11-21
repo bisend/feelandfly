@@ -79,6 +79,17 @@ class FilterRepository
                            property_values.slug IN ($filterValues))) ";
         }
 
+        $priceQuery = '';
+
+        if ($model->priceMin && $model->priceMax)
+        {
+            $priceQuery = "
+                          JOIN product_prices
+                            ON product_prices.product_id = products.id 
+                            AND product_prices.user_type_id = 1 AND product_prices.price between ". $model->priceMin . " and " . $model->priceMax . "
+                          ";
+        }
+
         $query = "SELECT
                       property_names.id          AS filter_name_id,
                       property_values.id         AS filter_value_id,
@@ -100,6 +111,7 @@ class FilterRepository
                           ON property_values.id = properties.property_value_id
                         JOIN products
                           ON properties.product_id = products.id
+                        " . $priceQuery . "
                         WHERE products.category_id = " . $model->currentCategory->id . "
                         " . $activeFiltersQuery . "
                         GROUP BY properties.property_name_id, properties.property_value_id

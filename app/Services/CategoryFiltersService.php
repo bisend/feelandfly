@@ -63,6 +63,10 @@ class CategoryFiltersService extends LayoutService
         $this->fillCountCategoryProducts($model);
 
         $this->fillFilters($model);
+
+        $this->fillInitialPriceMin($model);
+
+        $this->fillInitialPriceMax($model);
     }
 
     /**
@@ -129,5 +133,15 @@ class CategoryFiltersService extends LayoutService
                 $filterValue->initialState = $filterValue->isChecked;
             }
         }
+    }
+
+    private function fillInitialPriceMin($model)
+    {
+        $model->initialPriceMin = $this->productRepository->getPriceMinForFiltersCategoryProducts($model);
+    }
+
+    private function fillInitialPriceMax($model)
+    {
+        $model->initialPriceMax = $this->productRepository->getPriceMaxForFiltersCategoryProducts($model);
     }
 }
