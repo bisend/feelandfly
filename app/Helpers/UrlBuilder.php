@@ -662,6 +662,73 @@ class UrlBuilder
 
         return self::localize($url, $language);
     }
+    
+    public static function categoryFiltersWithoutParam(
+        $slug = null,
+        $filtersParam = null,
+        $filterName = null,
+        $filterValue = null,
+        $priceMin = null,
+        $priceMax = null,
+        $language = Languages::DEFAULT_LANGUAGE)
+    {
+        $param = '';
+
+        $nameWithValues = explode(';', $filtersParam);
+
+        $parsedFilters = [];
+
+        foreach ($nameWithValues as $item)
+        {
+            $pairNameValues = explode('=', $item);
+                $parsedFilters[$pairNameValues[0]] = explode(',', $pairNameValues[1]);
+        }
+
+        $newParsedFilters = [];
+
+        foreach ($parsedFilters as $key => $value)
+        {
+            foreach ($value as $fValue)
+            {
+                if ($fValue != $filterValue)
+                {
+                    $newParsedFilters[$key][] = $fValue;
+                }
+            }
+        }
+
+
+        $pairs = [];
+
+        foreach ($newParsedFilters as $name => $values)
+        {
+            if ($priceMin && $priceMax)
+            {
+                $str = $name . '=' . implode(',', $values);
+                if (!str_contains($str, 'price-range'))
+                {
+                    $pairs[] = $str;
+                }
+            }
+            else
+            {
+                $str = $name . '=' . implode(',', $values);
+                $pairs[] = $str;
+            }
+
+        }
+
+        $param = implode(';', $pairs);
+
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::CATEGORY_PAGE,
+            $slug,
+            $param
+        ]);
+        
+        return self::localize($url, $language);
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     /**

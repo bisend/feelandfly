@@ -160,6 +160,34 @@ if (!function_exists('url_category_filters_per_page')) {
     }
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+/**
+ * url_category_filters without param
+ */
+if (!function_exists('url_category_filters_without_param')) {
+
+    /**
+     * @param null $slug
+     * @param null $filtersParam
+     * @param $filterName
+     * @param $filterValue
+     * @param $priceMin
+     * @param $priceMax
+     * @param string $language
+     * @return string
+     */
+    function url_category_filters_without_param(
+        $slug = null,
+        $filtersParam = null,
+        $filterName,
+        $filterValue,
+        $priceMin,
+        $priceMax,
+        $language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::categoryFiltersWithoutParam($slug, $filtersParam, $filterName, $filterValue, $priceMin, $priceMax, $language);
+    }
+}
 
 // ---------------------------------------------------------------------------------------------------------------------
 /**

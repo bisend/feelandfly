@@ -334,6 +334,46 @@
                             </div>
                         </div>
 
+                        <div class="sorter-bar selected-filters-bar">
+
+                            @php($filterCounter = 0)
+                            @foreach($model->filters as $filterName => $filterValue)
+                                @foreach($filterValue as $filter)
+                                    @if($filter->isChecked)
+                                        <div class="selected-filter-container">
+                                            <div class="filter-span-container">
+                                                <b>{{ $filter->filter_name_title }}:</b>
+                                                <span>{{ $filter->filter_value_title }}</span>
+                                            </div>
+                                            <a href="{{ url_category_filters_without_param($model->currentCategory->slug, $model->filtersParam, $filter->filter_name_slug, $filter->filter_value_slug, null, null, $model->language) }}" class="filter-close">&times;</a>
+                                        </div>
+                                        @php($filterCounter++)
+                                    @endif
+                                @endforeach
+                            @endforeach
+
+                            @if($model->priceMin && $model->priceMax)
+                                <div class="selected-filter-container">
+                                    <div class="filter-span-container">
+                                         <b>Цена:</b>
+                                        <span>{{ $model->priceMin }} - {{ $model->priceMax }}</span>
+                                    </div>
+                                    <a href="{{ url_category_filters_without_param($model->currentCategory->slug, $model->filtersParam, $filter->filter_name_slug, $filter->filter_value_slug, $model->priceMin, $model->priceMax, $model->language) }}" class="filter-close">&times;</a>
+                                </div>
+                                @php($filterCounter++)
+                            @endif
+
+                            @if($filterCounter > 1)
+                                <div class="selected-filter-container">
+                                    <div class="filter-span-container">
+                                        <span>Сбросить фильтры</span>
+                                    </div>
+                                    <a href="{{ url_category($model->currentCategory->slug, $model->language) }}"
+                                       class="filter-close"><i class="fa fa-refresh"></i></a>
+                                </div>
+                            @endif
+                        </div>
+
                         <div class="tab-content">
 
                             <!-- Product Grid View Starts -->
