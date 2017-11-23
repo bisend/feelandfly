@@ -93,7 +93,8 @@ class CategoryService extends LayoutService
             $model->categoryProductsLimit,
             $model->categoryProductsOffset,
             $model->language,
-            $userTypeId
+            $userTypeId,
+            $model->sort
         );
     }
 

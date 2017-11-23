@@ -151,6 +151,7 @@ class ProductRepository
      * @param $categoryProductsOffset
      * @param $language
      * @param $userTypeId
+     * @param $sort
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function getAllProductsForCategory(
@@ -158,9 +159,29 @@ class ProductRepository
         $categoryProductsLimit,
         $categoryProductsOffset,
         $language,
-        $userTypeId
+        $userTypeId,
+        $sort
     )
     {
+        $orderByRaw = 'name';
+
+        if ($sort == 'popularity')
+        {
+            $orderByRaw = 'rating desc, name';
+        }
+        elseif ($sort == 'new')
+        {
+            $orderByRaw = 'created_at desc, name';
+        }
+        elseif ($sort == 'price-asc')
+        {
+            $orderByRaw = 'price asc, name';
+        }
+        elseif ($sort == 'price-desc')
+        {
+            $orderByRaw = 'price desc, name';
+        }
+        
         return Product::with([
             'images',
             'color',
@@ -187,12 +208,16 @@ class ProductRepository
                     'product_prices.price'
                 ])->whereUserTypeId($userTypeId);
             }
-        ])
+        ])->join('product_prices', function ($join) use ($userTypeId) {
+            $join->on('products.id', '=', 'product_prices.product_id')
+                ->where('product_prices.user_type_id', '=', $userTypeId);
+        })
             ->whereCategoryId($currentCategory->id)
+            ->orderByRaw($orderByRaw)
             ->offset($categoryProductsOffset)
             ->limit($categoryProductsLimit)
             ->get([
-                'id',
+                'products.id',
                 "name_$language as name",
                 'slug',
                 'color_id',
@@ -200,10 +225,11 @@ class ProductRepository
                 'category_id',
                 'breadcrumb_category_id',
                 "description_$language as description",
-                'priority',
+                'products.priority',
                 'vendor_code',
                 'rating',
-                'number_of_views'
+                'number_of_views',
+                'products.created_at'
             ]);
     }
 
@@ -302,6 +328,25 @@ class ProductRepository
         $model
     )
     {
+        $orderByRaw = 'name';
+
+        if ($model->sort == 'popularity')
+        {
+            $orderByRaw = 'rating desc, name';
+        }
+        elseif ($model->sort == 'new')
+        {
+            $orderByRaw = 'created_at desc, name';
+        }
+        elseif ($model->sort == 'price-asc')
+        {
+            $orderByRaw = 'price asc, name';
+        }
+        elseif ($model->sort == 'price-desc')
+        {
+            $orderByRaw = 'price desc, name';
+        }
+
         $query = Product::query();
 
         $query->with([
@@ -350,13 +395,19 @@ class ProductRepository
             });
         }
 
-        $query->whereCategoryId($currentCategory->id)
+        $query->join('product_prices', function ($join) use ($userTypeId) {
+            $join->on('products.id', '=', 'product_prices.product_id')
+                ->where('product_prices.user_type_id', '=', $userTypeId);
+        });
+
+        $query->orderByRaw($orderByRaw)
+            ->whereCategoryId($currentCategory->id)
             ->offset($categoryProductsOffset)
             ->limit($categoryProductsLimit);
 
 
         return $query->get([
-            'id',
+            'products.id',
             "name_$language as name",
             'slug',
             'color_id',
@@ -364,10 +415,11 @@ class ProductRepository
             'category_id',
             'breadcrumb_category_id',
             "description_$language as description",
-            'priority',
+            'products.priority',
             'vendor_code',
             'rating',
-            'number_of_views'
+            'number_of_views',
+            'products.created_at'
         ]);
     }
 

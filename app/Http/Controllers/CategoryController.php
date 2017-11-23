@@ -38,7 +38,7 @@ class CategoryController extends LayoutController
      */
     public function index($slug = null, $language = Languages::DEFAULT_LANGUAGE)
     {
-        $model = new CategoryViewModel('category', $language, $slug, 1);
+        $model = new CategoryViewModel('category', $language, $slug, 1, 'default');
 
         $this->categoryService->fill($model);
 
@@ -62,7 +62,55 @@ class CategoryController extends LayoutController
 
     public function indexPagination($slug = null, $page, $language = Languages::DEFAULT_LANGUAGE)
     {
-        $model = new CategoryViewModel('category', $language, $slug, $page);
+        $model = new CategoryViewModel('category', $language, $slug, $page, 'default');
+
+        $this->categoryService->fill($model);
+
+        \Debugbar::info($model);
+
+        if ($model->categoryProducts->count() < 1)
+        {
+            abort(404);
+        }
+
+        JavaScript::put([
+            'products' => $model->categoryProducts,
+            'filters' => $model->filters,
+            'categorySlug' => $model->currentCategory->slug,
+            'priceMin' => $model->priceMin,
+            'priceMax' => $model->priceMax
+        ]);
+
+        return view('pages.category', compact('model'));
+    }
+
+    public function indexSort($slug = null, $sort = 'default', $language = Languages::DEFAULT_LANGUAGE)
+    {
+        $model = new CategoryViewModel('category', $language, $slug, 1, $sort);
+
+        $this->categoryService->fill($model);
+
+        \Debugbar::info($model);
+
+        if ($model->categoryProducts->count() < 1)
+        {
+            abort(404);
+        }
+
+        JavaScript::put([
+            'products' => $model->categoryProducts,
+            'filters' => $model->filters,
+            'categorySlug' => $model->currentCategory->slug,
+            'priceMin' => $model->priceMin,
+            'priceMax' => $model->priceMax
+        ]);
+
+        return view('pages.category', compact('model'));
+    }
+
+    public function indexPaginationSort($slug = null, $sort = 'default', $page, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        $model = new CategoryViewModel('category', $language, $slug, $page, $sort);
 
         $this->categoryService->fill($model);
 

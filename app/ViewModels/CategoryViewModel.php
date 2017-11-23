@@ -1,6 +1,7 @@
 <?php
 
 namespace App\ViewModels;
+use App\Helpers\ProductsSort;
 
 /**
  * Class CategoryViewModel
@@ -53,19 +54,34 @@ class CategoryViewModel extends LayoutViewModel
     public $priceMax;
 
     /**
+     * @var string
+     */
+    public $sort;
+
+    /**
+     * @var 
+     */
+    public $sortItems;
+
+    /**
      * CategoryViewModel constructor.
      * @param string $view
      * @param string $language
      * @param string|null $slug
      * @param int $page
+     * @param string $sort
      */
-    public function __construct($view, $language, $slug, $page)
+    public function __construct($view, $language, $slug, $page, $sort)
     {
         parent::__construct($view, $language);
 
         $this->slug = $slug;
 
         $this->page = $page;
+        
+        $this->sort = $sort;
+
+        $this->sortItems = new ProductsSort($slug, null, $page, $language, $this->sort);
 
         $this->categoryProductsOffset = ($this->page - 1) * $this->categoryProductsLimit;
     }

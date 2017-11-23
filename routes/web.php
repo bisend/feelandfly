@@ -44,20 +44,20 @@ Route::group(['prefix' => 'category'], function ()
             'language' => '^(uk|ru)?$'
         ]);
 
-//    Route::get('/{slug}/{sort}/{language?}', 'CategoryController@indexSort')
-//        ->where([
-//            'slug' => '^[a-z0-9-]+$',
-//            'sort' => '^(price-asc|price-desc)$',
-//            'language' => '^(uk|ru)?$'
-//        ]);
+    Route::get('/{slug}/{sort}/{language?}', 'CategoryController@indexSort')
+        ->where([
+            'slug' => '^[a-z0-9-]+$',
+            'sort' => '^(popularity|new|price-asc|price-desc)$',
+            'language' => '^(uk|ru)?$'
+        ]);
 
-//    Route::get('/{slug}/{sort}/{page}/{language?}', 'CategoryController@indexPaginationSort')
-//        ->where([
-//            'slug' => '^[a-z0-9-]+$',
-//            'sort' => '^(price-asc|price-desc)$',
-//            'page' => '^[2-9]{1}|[1-9]{1}[0-9]+$',
-//            'language' => '^(uk|ru)?$'
-//        ]);
+    Route::get('/{slug}/{sort}/{page}/{language?}', 'CategoryController@indexPaginationSort')
+        ->where([
+            'slug' => '^[a-z0-9-]+$',
+            'sort' => '^(popularity|new|price-asc|price-desc)$',
+            'page' => '^[2-9]{1}|[1-9]{1}[0-9]+$',
+            'language' => '^(uk|ru)?$'
+        ]);
 
     /**
      * Category Filters
@@ -77,6 +77,22 @@ Route::group(['prefix' => 'category'], function ()
             'language' => '^(uk|ru)?$'
         ]);
 
+    Route::get('/{slug}/{filters}/{sort}/{language?}', 'CategoryFiltersController@indexSort')
+        ->where([
+            'slug' => '^[a-z0-9-]+$',
+            'filters' => '^[a-z0-9=,;-]+$',
+            'sort' => '^(popularity|new|price-asc|price-desc)$',
+            'language' => '^(uk|ru)?$'
+        ]);
+
+    Route::get('/{slug}/{filters}/{sort}/{page}/{language?}', 'CategoryFiltersController@indexPaginationSort')
+        ->where([
+            'slug' => '^[a-z0-9-]+$',
+            'filters' => '^[a-z0-9=,;-]+$',
+            'sort' => '^(popularity|new|price-asc|price-desc)$',
+            'page' => '^[2-9]{1}|[1-9]{1}[0-9]+$',
+            'language' => '^(uk|ru)?$'
+        ]);
 });
 
 Route::post('/getAjaxProductPreview', 'CategoryController@getAjaxProductPreview')->where([

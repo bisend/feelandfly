@@ -320,17 +320,26 @@
                         </div>
 
                         <div class="col-md-6 col-sm-5 show-result no-padding">
-                            <form action="#" class="form-sorter">
-                                <label> Сортировать </label>
+                            {{--<form action="#" class="form-sorter">--}}
+                                <label>{{ trans('layout.sort') }}</label>
                                 <div class="search-selectpicker selectpicker-wrapper">
-                                    <select class="selectpicker input-price" data-width="100%" data-toggle="tooltip">
-                                        <option>По популярности
-                                        <option>По новизне
-                                        <option>Цены: по возрастанию
-                                        <option> Цены: по убыванию
+                                    @php($selectedSortItem = 'default')
+                                        @foreach($model->sortItems->items as $sortItem)
+                                            @if ($sortItem->isSelected)
+                                                @php($selectedSortItem = $sortItem->name)
+                                            @endif
+                                        @endforeach
+                                    <select id="sort-select" class="selectpicker input-price"
+                                            data-width="100%" data-toggle="tooltip"
+                                            title="{{ $model->sort == 'default' ? trans('layout.how_to_sort') : $selectedSortItem }}">
+                                        @foreach($model->sortItems->items as $sortItem)
+                                            <option data-url="{{ $sortItem->url }}" {{$sortItem->isSelected ? 'disabled' : ''}}>
+                                                {{ $sortItem->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
-                            </form>
+                            {{--</form>--}}
                         </div>
                     </div>
 

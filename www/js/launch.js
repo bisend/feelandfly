@@ -108,6 +108,11 @@ function hideLoader() {
     // $('body').removeClass('modal-open').css('padding-right', 0);
 }
 
+$('#sort-select').on('changed.bs.select', function (e, clickedIndex) {
+    // do something...
+    window.location.href = $(e.currentTarget[clickedIndex]).attr('data-url');
+});
+
 $(window).load(function () {
     // showLoader();
 
