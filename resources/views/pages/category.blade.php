@@ -434,53 +434,54 @@
 
                                     <div class="col-lg-4 col-sm-6 prod-wrap-cont">
 
-                                        <div class="product_item prod-wrap">
-                                            <div class="product_img">
-                                                <div class="prod-img">
-                                                    <a class="img-hover"
-                                                       href="{{ url_product($categoryProduct->slug, $model->language) }}">
-                                                        <img alt="product"
-                                                             src="{{ $categoryProduct->images[0]->medium }}"></a>
-                                                    <a class="caption-link meta-icon"
-                                                       {{--data-toggle="modal"--}}
-                                                       {{--data-target="#prod-preview-test"--}}
-                                                       href="javascript:void(0);"
-                                                       v-on:click="changeCategoryProductPreview({{$counter}})">
-                                                        <span class="fa fa-eye"></span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="product_info">
-                                                <h2 class="prod-title">
-                                                    <a href="{{ url_product($categoryProduct->slug, $model->language) }}">
-                                                        {{ $categoryProduct->name }}
-                                                    </a>
-                                                </h2>
-                                                <div class="block-inline">
-                                                    <div class="prod-price font-2">
-                                                        <ins>{{ $categoryProduct->price[0]->price }} грн</ins> {{--<del>360.00 грн</del>--}}
+                                        <div class="prod-wrap-absolute clearfix">
+                                            <div class="product_item prod-wrap">
+                                                <div class="product_img">
+                                                    <div class="prod-img">
+                                                        <a class="img-hover"
+                                                           href="{{ url_product($categoryProduct->slug, $model->language) }}">
+                                                            <img alt="product"
+                                                                 src="{{ $categoryProduct->images[0]->medium }}"></a>
+                                                        <a class="caption-link meta-icon"
+                                                           {{--data-toggle="modal"--}}
+                                                           {{--data-target="#prod-preview-test"--}}
+                                                           href="javascript:void(0);"
+                                                           v-on:click="changeCategoryProductPreview({{$counter}})">
+                                                            <span class="fa fa-eye"></span>
+                                                        </a>
                                                     </div>
-                                                    <div class="rating">
-                                                        @for($i = 1; $i <= 5; $i++)
-                                                            @if($categoryProduct->rating != null)
-                                                                @if($i <= $categoryProduct->rating)
-                                                                    <span class="star active"></span>
+                                                </div>
+                                                <div class="product_info">
+                                                    <h2 class="prod-title">
+                                                        <a href="{{ url_product($categoryProduct->slug, $model->language) }}">
+                                                            {{ $categoryProduct->name }}
+                                                        </a>
+                                                    </h2>
+                                                    <div class="block-inline">
+                                                        <div class="prod-price font-2">
+                                                            <ins>{{ $categoryProduct->price[0]->price }} грн</ins> {{--<del>360.00 грн</del>--}}
+                                                        </div>
+                                                        <div class="rating">
+                                                            @for($i = 1; $i <= 5; $i++)
+                                                                @if($categoryProduct->rating != null)
+                                                                    @if($i <= $categoryProduct->rating)
+                                                                        <span class="star active"></span>
+                                                                    @else
+                                                                        <span class="star"></span>
+                                                                    @endif
                                                                 @else
-                                                                    <span class="star"></span>
+                                                                    <span class="star active"></span>
                                                                 @endif
-                                                            @else
-                                                                <span class="star active"></span>
-                                                            @endif
-                                                        @endfor
-                                                    </div>
+                                                            @endfor
+                                                        </div>
 
-                                                </div>
-                                                <div class="block-inline">
-                                                    <ul class="prod-meta">
-                                                        <li>
-                                                            <a class="theme-btn btn-black"
-                                                               v-on:click="addToCart({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, 1)"
-                                                               href="javascript:void(0);">
+                                                    </div>
+                                                    <div class="block-inline">
+                                                        <ul class="prod-meta">
+                                                            <li>
+                                                                <a class="theme-btn btn-black"
+                                                                   v-on:click="addToCart({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, 1)"
+                                                                   href="javascript:void(0);">
                                                                 <span v-cloak
                                                                       v-if="!findWhere(cartItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})">
                                                                     Добавить в корзину
@@ -488,58 +489,59 @@
                                                                 <span v-cloak v-else>
                                                                     В корзине
                                                                 </span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="fa fa-heart meta-icon" href="javascript:void(0);"></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="testProd">
-                                                    <div class="prod-attributes absolute-pror-attr">
-                                                        <ul class="choose-clr list-inline border-hover">
-                                                            @foreach($relatedProducts as $relatedProduct)
-                                                                <li>
-                                                                    @if($categoryProduct->color->id == $relatedProduct->color->id)
-                                                                        <a class="active" href="{{ url_product($relatedProduct->slug, $model->language) }}"
-                                                                           style="background-color: {{ $relatedProduct->color->html_code }}"></a>
-                                                                    @else
-                                                                        <a href="{{ url_product($relatedProduct->slug, $model->language) }}"
-                                                                           style="background-color: {{ $relatedProduct->color->html_code }}"></a>
-                                                                    @endif
-                                                                </li>
-                                                            @endforeach
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="fa fa-heart meta-icon" href="javascript:void(0);"></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="testProd">
+                                                        <div class="prod-attributes absolute-pror-attr">
+                                                            <ul class="choose-clr list-inline border-hover">
+                                                                @foreach($relatedProducts as $relatedProduct)
+                                                                    <li>
+                                                                        @if($categoryProduct->color->id == $relatedProduct->color->id)
+                                                                            <a class="active" href="{{ url_product($relatedProduct->slug, $model->language) }}"
+                                                                               style="background-color: {{ $relatedProduct->color->html_code }}"></a>
+                                                                        @else
+                                                                            <a href="{{ url_product($relatedProduct->slug, $model->language) }}"
+                                                                               style="background-color: {{ $relatedProduct->color->html_code }}"></a>
+                                                                        @endif
+                                                                    </li>
+                                                                @endforeach
 
 
-                                                            {{--<li> <a class="black-bg" href="#"></a> </li>--}}
-                                                            {{--<li> <a class="gray-bg" href="#"></a> </li>--}}
-                                                            {{--<li> <a class="red-bg" href="#"></a> </li>--}}
-                                                            {{--<li> <a class="yellow-bg active" href="#"></a> </li>--}}
-                                                            {{--<li> <a class="green1-bg" href="#"></a> </li>--}}
-                                                        </ul>
-                                                        <ul class="choose-size list-inline border-hover">
-                                                            @php($counterSize = 0)
-                                                            @foreach($categoryProduct->sizes as $size)
-                                                                <li>
-                                                                    @if($counterSize == 0)
-                                                                        <a
-                                                                           v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
-                                                                           :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
-                                                                           href="javascript:void(0);">
-                                                                            {{ $size->name }}
-                                                                        </a>
-                                                                    @else
-                                                                        <a href="javascript:void(0);"
-                                                                           v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
-                                                                           :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}">
-                                                                            {{ $size->name }}
-                                                                        </a>
-                                                                    @endif
-                                                                </li>
-                                                                @php($counterSize++)
-                                                            @endforeach
-                                                            {{--<li> <a href="#" class="active"> M </a> </li>--}}
-                                                        </ul>
+                                                                {{--<li> <a class="black-bg" href="#"></a> </li>--}}
+                                                                {{--<li> <a class="gray-bg" href="#"></a> </li>--}}
+                                                                {{--<li> <a class="red-bg" href="#"></a> </li>--}}
+                                                                {{--<li> <a class="yellow-bg active" href="#"></a> </li>--}}
+                                                                {{--<li> <a class="green1-bg" href="#"></a> </li>--}}
+                                                            </ul>
+                                                            <ul class="choose-size list-inline border-hover">
+                                                                @php($counterSize = 0)
+                                                                @foreach($categoryProduct->sizes as $size)
+                                                                    <li>
+                                                                        @if($counterSize == 0)
+                                                                            <a
+                                                                                    v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                                    :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
+                                                                                    href="javascript:void(0);">
+                                                                                {{ $size->name }}
+                                                                            </a>
+                                                                        @else
+                                                                            <a href="javascript:void(0);"
+                                                                               v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                               :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}">
+                                                                                {{ $size->name }}
+                                                                            </a>
+                                                                        @endif
+                                                                    </li>
+                                                                    @php($counterSize++)
+                                                                @endforeach
+                                                                {{--<li> <a href="#" class="active"> M </a> </li>--}}
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
