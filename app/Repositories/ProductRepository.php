@@ -247,6 +247,22 @@ class ProductRepository
     {
         return Product::with([
             'images',
+            'color',
+            'product_group.products.color' => function ($query) use ($language) {
+                $query->select([
+                    'id',
+                    "name_$language",
+                    'slug',
+                    'html_code'
+                ]);
+            },
+            'sizes' => function ($query) use ($language) {
+                $query->select([
+                    'sizes.id',
+                    "sizes.name_$language as name",
+                    'sizes.slug'
+                ]);
+            },
             'price' => function ($query) use ($language, $userTypeId) {
                 $query->select([
                     'product_prices.id',
@@ -260,16 +276,31 @@ class ProductRepository
             ->whereNotIn('id', [$productId])
             ->limit(8)
             ->get([
-                'id',
+                'products.id',
                 "name_$language as name",
                 'slug',
+                'color_id',
+                'group_id',
                 'category_id',
                 'breadcrumb_category_id',
                 "description_$language as description",
-                'priority',
+                'products.priority',
                 'vendor_code',
                 'rating',
-                'number_of_views'
+                'number_of_views',
+                'products.created_at'
+//                'id',
+//                "name_$language as name",
+//                'slug',
+//                'color_id',
+//                'group_id',
+//                'category_id',
+//                'breadcrumb_category_id',
+//                "description_$language as description",
+//                'priority',
+//                'vendor_code',
+//                'rating',
+//                'number_of_views'
             ]);
     }
     

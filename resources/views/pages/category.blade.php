@@ -132,7 +132,7 @@
             </section>
             {{--<img v-bind:src="path" alt="">--}}
         </div>
-
+        {{--CATEGORY PRODUCT PREVIEW--}}
 
 
 
@@ -157,42 +157,6 @@
                 <aside class="col-md-3 col-sm-4 sidebar" id="sidebar-filters">
                     <div class="widget-wrap">
 
-                        {{--<div class="dropdown-div-btn">--}}
-                            {{--<h2 class="widget-title"> Тип  <span class="plus-icon"> - </span> </h2>--}}
-                        {{--</div>--}}
-                        {{--<div class="dropdown-div-content">--}}
-                            {{--<div class="widget-box">--}}
-                                {{--<ul>--}}
-                                    {{--TODO FILTERS......--}}
-                                    {{--@foreach($model->categories as $category)--}}
-                                        {{--<li>--}}
-                                            {{--<label class="checkbox-inline">--}}
-                                                {{--<input type="checkbox" value="">--}}
-                                                {{--<span class="square-box"></span>--}}
-                                            {{--<span>--}}
-                                                {{--{{ $category->name }}--}}
-                                            {{--</span>--}}
-                                            {{--</label>--}}
-                                        {{--</li>--}}
-                                    {{--@endforeach--}}
-                                    {{--<li>--}}
-                                        {{--<label class="checkbox-inline">--}}
-                                            {{--<input type="checkbox" value="" checked="checked">--}}
-                                            {{--<span class="square-box"></span>--}}
-                                            {{--<span class="checkactive">--}}
-                                                {{--Верхняя одежда--}}
-                                            {{--</span>--}}
-                                        {{--</label>--}}
-                                    {{--</li>--}}
-                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span>Свитшоты & Толстовки</span> </label> </li>--}}
-                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> Штаны</span> </label> </li>--}}
-                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span>Шорты</span> </label> </li>--}}
-                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> Аксессуары</span> </label> </li>--}}
-
-                                {{--</ul>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-
                         @foreach($model->filters as $filterName => $filterValues)
                             <div class="dropdown-div-btn">
                                 <h2 class="widget-title">{{ $filterName }}<span class="plus-icon"> - </span> </h2>
@@ -209,7 +173,6 @@
                                                            v-model="filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked">
                                                     <span class="square-box"></span>
                                                 </label>
-                                                {{--<a class="checkbox-inline filter-value-link" href="{{ url_current($model->language) }}/{{ $filterValue->filter_name_slug }}={{ $filterValue->filter_value_slug }}">--}}
                                                 <a class="checkbox-inline filter-value-link"
                                                    href="{{ url_category_filters($model->currentCategory->slug, null, $filterValue->filter_name_slug, $filterValue->filter_value_slug, $model->language)  }}">
                                                     <span class="" :class="{checkactive: filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked}">
@@ -348,85 +311,6 @@
                         <!-- Product Grid View Starts -->
                         <div id="grid-view" class="tab-pane fade active in" role="tabpanel">
                             <div class="row">
-
-                                {{--@foreach($model->categoryProducts as $categoryProduct)--}}
-                                    {{--<div class="col-lg-4 col-sm-6 prod-wrap-cont">--}}
-
-                                        {{--<div class="product_item prod-wrap">--}}
-                                            {{--<div class="product_img">--}}
-                                                {{--<div class="prod-img">--}}
-                                                    {{--<a class="img-hover"--}}
-                                                       {{--href="{{ url_product($categoryProduct->slug, $model->language) }}">--}}
-                                                        {{--<img alt="product"--}}
-                                                             {{--src="{{ $categoryProduct->images[0]->medium }}"></a>--}}
-                                                    {{--<a class="caption-link meta-icon"--}}
-                                                       {{--data-toggle="modal"--}}
-                                                       {{--data-product-preview-show="{{ $categoryProduct->id }}"--}}
-                                                       {{--href="javascript:void(0);"--}}
-                                                       {{--href="#prod-preview-{{ $categoryProduct->id }}"--}}
-                                                       {{-->--}}
-                                                        {{--<span class="fa fa-eye"></span>--}}
-                                                    {{--</a>--}}
-                                                {{--</div>--}}
-                                            {{--</div>--}}
-                                            {{--<div class="product_info">--}}
-                                                {{--<h2 class="prod-title">--}}
-                                                    {{--<a href="{{ url_product($categoryProduct->slug, $model->language) }}">--}}
-                                                        {{--{{ $categoryProduct->name }}--}}
-                                                    {{--</a>--}}
-                                                {{--</h2>--}}
-                                                {{--<div class="block-inline">--}}
-                                                    {{--<div class="prod-price font-2">--}}
-                                                        {{--<ins>180.00 грн</ins> <del>360.00 грн</del>--}}
-                                                    {{--</div>--}}
-                                                    {{--<div class="rating">--}}
-                                                        {{--@for($i = 1; $i <= 5; $i++)--}}
-                                                            {{--@if($categoryProduct->rating != null)--}}
-                                                                {{--@if($i <= $categoryProduct->rating)--}}
-                                                                    {{--<span class="star active"></span>--}}
-                                                                {{--@else--}}
-                                                                    {{--<span class="star"></span>--}}
-                                                                {{--@endif--}}
-                                                            {{--@else--}}
-                                                                {{--<span class="star active"></span>--}}
-                                                            {{--@endif--}}
-                                                        {{--@endfor--}}
-                                                    {{--</div>--}}
-
-                                                {{--</div>--}}
-                                                {{--<div class="block-inline">--}}
-                                                    {{--<ul class="prod-meta">--}}
-                                                        {{--<li>--}}
-                                                            {{--<a class="theme-btn btn-black" href="javascript:void(0);">--}}
-                                                                {{--Добавить в корзину--}}
-                                                            {{--</a>--}}
-                                                        {{--</li>--}}
-                                                        {{--<li>--}}
-                                                            {{--<a class="fa fa-heart meta-icon" href="javascript:void(0);"></a>--}}
-                                                        {{--</li>--}}
-                                                    {{--</ul>--}}
-                                                {{--</div>--}}
-                                                {{--<div class="testProd">--}}
-                                                    {{--<div class="prod-attributes absolute-pror-attr">--}}
-                                                        {{--<ul class="choose-clr list-inline border-hover">--}}
-                                                            {{--<li> <a class="black-bg" href="#"></a> </li>--}}
-                                                            {{--<li> <a class="gray-bg" href="#"></a> </li>--}}
-                                                            {{--<li> <a class="red-bg" href="#"></a> </li>--}}
-                                                            {{--<li> <a class="yellow-bg active" href="#"></a> </li>--}}
-                                                            {{--<li> <a class="green1-bg" href="#"></a> </li>--}}
-                                                        {{--</ul>--}}
-                                                        {{--<ul class="choose-size list-inline border-hover">--}}
-                                                            {{--<li> <a href="#"> S </a> </li>--}}
-                                                            {{--<li> <a href="#" class="active"> M </a> </li>--}}
-
-                                                        {{--</ul>--}}
-                                                    {{--</div>--}}
-                                                {{--</div>--}}
-                                            {{--</div>--}}
-                                        {{--</div>--}}
-
-                                    {{--</div>--}}
-                                {{--@endforeach--}}
                                 @php($counter = 0)
                                 @foreach($model->categoryProducts as $categoryProduct)
 
@@ -443,8 +327,6 @@
                                                             <img alt="product"
                                                                  src="{{ $categoryProduct->images[0]->medium }}"></a>
                                                         <a class="caption-link meta-icon"
-                                                           {{--data-toggle="modal"--}}
-                                                           {{--data-target="#prod-preview-test"--}}
                                                            href="javascript:void(0);"
                                                            v-on:click="changeCategoryProductPreview({{$counter}})">
                                                             <span class="fa fa-eye"></span>

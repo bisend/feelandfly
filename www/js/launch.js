@@ -27,6 +27,13 @@ var GLOBAL_DATA = {
         count: '',
         rel: ''
     },
+    similarProducts: [],
+    similarProductPreview: {
+        product: [],
+        currentSizeId: '',
+        count: '',
+        rel: ''
+    },
     totalCount: 0,
     totalAmount: 0,
     INIT_CART_ENDED: false,

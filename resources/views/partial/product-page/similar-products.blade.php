@@ -1,6 +1,139 @@
-<div class="block-inline pt-15 similar_prod-section">
+<div class="block-inline pt-15 similar_prod-section" id="similar-product">
+
+    {{--SIMILAR PRODUCT PREVIEW--}}
+    <div id="similar-product-preview">
+        <section class="modal fade  popups-wrap popups-light" id="prod-preview-test"
+                 tabindex="-1"
+                 role="dialog"
+                 aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <button aria-label="Close"
+                            data-dismiss="modal"
+                            class="close close-btn popup-cls"
+                            type="button">
+                        <i class="fa-times fa"></i>
+                    </button>
+                    <div class="block-inline  product-modal">
+                        <!-- Single Products Slider Starts -->
+                        <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
+                            <div class="owl-carousel sync1 pb-25 product-preview-images-big">
+                                <div class="item" v-for="image in similarProductPreview.product.images">
+                                    <img v-bind:src="image.big">
+                                    <a v-bind:href="image.original"
+                                       v-bind:rel="similarProductPreview.rel"
+                                       v-bind:title="similarProductPreview.product.name"
+                                       class="caption-link meta-icon">
+                                        <i class="fa fa-arrows-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="owl-carousel single-prod-thumb sync2 nav-2 product-preview-images-small">
+                                <div class="item" v-for="image in similarProductPreview.product.images">
+                                    <img v-bind:src="image.small">
+                                        <span class="transparent">
+                                            <img src="/img/template/icons/plus.png" alt="view">
+                                        </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Single Products Slider Ends -->
+                        <div class="ptb-40 clearfix visible-sm visible-xs"></div>
+                        <!-- Products Description Starts -->
+                        <div class="col-md-7 col-sm-12">
+                            <div class="prod-details">
+                                <div class="prod-title">@{{ similarProductPreview.product.name }}</div>
+                                <div class="block-inline">
+                                    <div class="rating pull-right">
+                                        <span v-for="i in 5" v-if="i <= similarProductPreview.product.rating" class="star active"></span>
+                                        <span v-else class="star"></span>
+                                    </div>
+                                    <div class="prod-price font-2 pull-left fsz-16">
+                                        <ins>@{{ similarProductPreview.product.price[0].price }} грн</ins>
+                                    </div>
+                                </div>
+                                <div class="discriptions pt-20">
+                                    <ul>
+                                        <li>Наличие: </li>
+                                        <li>Материал: Полиэстер с водоотталкивающей и полиуретановой
+                                            пропиткой для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>
+                                        <li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>
+                                        <li>Металлические нержавеющие молнии;</li>
+                                        <li>Два боковых, один внутренний, один карман на молнии на плече;</li>
+                                        <li>Сверху и снизу расположена трикотажная резинка с компонентом эластана,
+                                            что позволяет резинке не терять с временем форму и не закатываться;</li>
+                                        <li>На бомбере расположены три вышитых патча;</li>
+                                        <li>Весенний / Летний сезон.</li>
+                                        <li>Артикул: @{{ similarProductPreview.product.vendor_code }}</li>
+                                    </ul>
+                                </div>
+                                <div class="prod-attributes">
+                                    <ul class="choose-clr list-inline border-hover">
+                                        <li v-for="relatedProduct in similarProductPreview.product.product_group.products">
+                                            <a v-if="relatedProduct.color.id === similarProductPreview.product.color.id"
+                                               class="active"
+                                               :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
+                                               v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
+                                            <a v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
+                                               v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
+                                        </li>
+                                    </ul>
+                                    <ul class="choose-size list-inline border-hover">
+                                        <li v-for="(size, index) in similarProductPreview.product.sizes">
+                                            <a
+                                                    v-on:click="changeCurrentSizeId(size.id)"
+                                                    :class="{active : similarProductPreview.currentSizeId == size.id}"
+                                                    href="javascript:void(0);">
+                                                @{{ size.name }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <ul class="prod-btns prod-meta">
+                                        <li>
+                                            <div class="quantity">
+                                                <button class="btn minus" v-on:click="decrement()">-</button>
+                                                <input type="number"
+                                                       name="product-preview-quantity"
+                                                       v-model.number="similarProductPreview.count"
+                                                       v-on:change="toInteger(similarProductPreview.count)"
+                                                       class="form-control qty"
+                                                       title="Количество">
+                                                <button class="btn plus" v-on:click="increment()">+</button>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <a class="theme-btn btn-black small-btn"
+                                               v-on:click="addToCart(similarProductPreview.product.id, similarProductPreview.currentSizeId, similarProductPreview.count)"
+                                               href="javascript:void(0);">
+                                                    <span v-cloak
+                                                          v-if="!findWhere(cartItems, {'productId': similarProductPreview.product.id, 'sizeId': similarProductPreview.currentSizeId})">
+                                                        Добавить в корзину
+                                                    </span>
+                                                    <span v-cloak v-else>
+                                                        В корзине
+                                                    </span>
+                                            </a>
+                                        </li>
+                                        <li> <a class="fa fa-heart meta-icon" href="#"></a> </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Products Description Ends -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        {{--<img v-bind:src="path" alt="">--}}
+    </div>
+    {{--SIMILAR PRODUCT PREVIEW--}}
+
+
     <h2 class="section-title"> Похожие Товары </h2>
     <div id="rel-prod-slider" class="rel-prod-slider nav-1 padding-own">
+        @php($counter = 0)
         @foreach($model->similarProducts as $similarProduct)
             <div class="item similar_products">
                 <div class="prod-wrap pt-50">
@@ -12,7 +145,9 @@
                             {{--<div class="prod-tag-1 font-2">--}}
                                 {{--<span> -50% </span>--}}
                             {{--</div>--}}
-                            <a class="caption-link meta-icon" data-toggle="modal" href="#prod-preview">
+                            <a class="caption-link meta-icon"
+                               href="javascript:void(0);"
+                               v-on:click="changeSimilarProductPreview({{$counter}})">
                                 <span class="fa fa-eye"></span>
                             </a>
                         </div>
@@ -43,8 +178,8 @@
                             <div class="block-inline">
                                 <ul class="prod-meta">
                                     <li>
-                                        <a class="theme-btn btn-black" href="#">
-                                            Добавить в корзину
+                                        <a class="theme-btn btn-black" href="{{ url_product($similarProduct->slug, $model->language) }}">
+                                            Подробнее
                                         </a>
                                     </li>
                                     <li>
@@ -56,104 +191,7 @@
                     </figure>
                 </div>
             </div>
+            @php($counter++)
         @endforeach
-
-
-
-        {{--<div class="item similar_products">--}}
-        {{--<div class="prod-wrap pt-50">--}}
-        {{--<figure>--}}
-        {{--<div class="prod-img">--}}
-        {{--<a class="img-hover" href="#"> <img alt="product" src="/img/template/product/category-1/2.jpg"> </a>--}}
-        {{--<div class="prod-tag-1 font-2"> <span> -50% </span> </div>--}}
-        {{--<a class="caption-link meta-icon" data-toggle="modal" href="#prod-preview"> <span class="fa fa-eye"> </span> </a>--}}
-        {{--</div>--}}
-        {{--<figcaption class="prod-content">--}}
-        {{--<h2 class="prod-title"> <a href="product-detail.htm"> КУРТКА FEEL&FLY PRADO BLACK </a> </h2>--}}
-        {{--<div class="block-inline">--}}
-        {{--<div class="rating">--}}
-        {{--<span class="star active"></span>--}}
-        {{--<span class="star active"></span>--}}
-        {{--<span class="star active"></span>--}}
-        {{--<span class="star"></span>--}}
-        {{--<span class="star"></span>--}}
-        {{--</div>--}}
-        {{--<div class="prod-price font-2">--}}
-        {{--<ins>580.00 грн</ins> <del>760.00 грн</del>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        {{--<div class="block-inline">--}}
-        {{--<ul class="prod-meta">--}}
-        {{--<li> <a class="theme-btn btn-black" href="#"> подробнее </a> </li>--}}
-        {{--<li> <a class="fa fa-heart meta-icon" href="#"></a> </li>--}}
-        {{--</ul>--}}
-        {{--</div>--}}
-        {{--</figcaption>--}}
-        {{--</figure>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        {{--<div class="item similar_products">--}}
-        {{--<div class="prod-wrap pt-50">--}}
-        {{--<figure>--}}
-        {{--<div class="prod-img">--}}
-        {{--<a class="img-hover" href="#"> <img alt="product" src="/img/template/product/category-1/3.jpg"> </a>--}}
-        {{--<a class="caption-link meta-icon" data-toggle="modal" href="#prod-preview"> <span class="fa fa-eye"> </span> </a>--}}
-        {{--</div>--}}
-        {{--<figcaption class="prod-content">--}}
-        {{--<h2 class="prod-title"> <a href="product-detail.htm"> КУРТКА FEEL&FLY PRADO BLACK </a> </h2>--}}
-        {{--<div class="block-inline">--}}
-        {{--<div class="rating">--}}
-        {{--<span class="star active"></span>--}}
-        {{--<span class="star active"></span>--}}
-        {{--<span class="star active"></span>--}}
-        {{--<span class="star"></span>--}}
-        {{--<span class="star"></span>--}}
-        {{--</div>--}}
-        {{--<div class="prod-price font-2">--}}
-        {{--<ins>580.00 грн</ins> <del>760.00 грн</del>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        {{--<div class="block-inline">--}}
-        {{--<ul class="prod-meta">--}}
-        {{--<li> <a class="theme-btn btn-black" href="#"> подробнее </a> </li>--}}
-        {{--<li> <a class="fa fa-heart meta-icon" href="#"></a> </li>--}}
-        {{--</ul>--}}
-        {{--</div>--}}
-        {{--</figcaption>--}}
-        {{--</figure>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        {{--<div class="item similar_products">--}}
-        {{--<div class="prod-wrap pt-50">--}}
-        {{--<figure>--}}
-        {{--<div class="prod-img">--}}
-        {{--<a class="img-hover" href="#"> <img alt="product" src="/img/template/product/category-1/6.jpg"> </a>--}}
-        {{--<div class="prod-tag-1 font-2"> <span> -50% </span> </div>--}}
-        {{--<a class="caption-link meta-icon" data-toggle="modal" href="#prod-preview"> <span class="fa fa-eye"> </span> </a>--}}
-        {{--</div>--}}
-        {{--<figcaption class="prod-content">--}}
-        {{--<h2 class="prod-title"> <a href="product-detail.htm"> БОМБЕР FEEL&FLY LITE BLACK </a> </h2>--}}
-        {{--<div class="block-inline">--}}
-        {{--<div class="rating">--}}
-        {{--<span class="star active"></span>--}}
-        {{--<span class="star active"></span>--}}
-        {{--<span class="star active"></span>--}}
-        {{--<span class="star"></span>--}}
-        {{--<span class="star"></span>--}}
-        {{--</div>--}}
-        {{--<div class="prod-price font-2">--}}
-        {{--<ins>580.00 грн</ins>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        {{--<div class="block-inline">--}}
-        {{--<ul class="prod-meta">--}}
-        {{--<li> <a class="theme-btn btn-black" href="#"> подробнее </a> </li>--}}
-        {{--<li> <a class="fa fa-heart meta-icon" href="#"></a> </li>--}}
-        {{--</ul>--}}
-        {{--</div>--}}
-        {{--</figcaption>--}}
-        {{--</figure>--}}
-        {{--</div>--}}
-        {{--</div>--}}
     </div>
 </div>

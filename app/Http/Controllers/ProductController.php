@@ -41,10 +41,12 @@ class ProductController extends LayoutController
         $this->productService->fill($model);
 
         JavaScript::put([
-            'product' => $model->product
+            'product' => $model->product,
+            'similarProducts' => $model->similarProducts
         ]);
 
         \Debugbar::info($model);
+//        \Debugbar::info($model->similarProducts->product_group);
 
         return view('pages.product', compact('model'));
     }
