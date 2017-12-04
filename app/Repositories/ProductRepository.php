@@ -17,6 +17,10 @@ use App\DatabaseModels\Property;
  */
 class ProductRepository
 {
+    protected $wordsSeparator = '+';
+
+    protected $likeSeparator = '%';
+
     /**
      * return single product by slug and language, userTypeId define prices etc.
      * @param string $slug
@@ -452,6 +456,172 @@ class ProductRepository
             'number_of_views',
             'products.created_at'
         ]);
+    }
+
+    public function getAllProductsForSearch($model)
+    {
+        $orderByRaw = 'name';
+
+        if ($model->sort == 'popularity')
+        {
+            $orderByRaw = 'rating desc, name';
+        }
+        elseif ($model->sort == 'new')
+        {
+            $orderByRaw = 'created_at desc, name';
+        }
+        elseif ($model->sort == 'price-asc')
+        {
+            $orderByRaw = 'price asc, name';
+        }
+        elseif ($model->sort == 'price-desc')
+        {
+            $orderByRaw = 'price desc, name';
+        }
+
+        $words = explode($this->wordsSeparator, $model->series);
+        $wordsReverse = array_reverse($words);
+        $seriesReverse = implode($this->likeSeparator, $wordsReverse);
+        $series = implode($this->likeSeparator, $words);
+
+        return Product::with([
+            'images',
+            'color',
+            'product_group.products.color' => function ($query) use ($model) {
+                $query->select([
+                    'id',
+                    "name_$model->language",
+                    'slug',
+                    'html_code'
+                ]);
+            },
+            'sizes' => function ($query) use ($model) {
+                $query->select([
+                    'sizes.id',
+                    "sizes.name_$model->language as name",
+                    'sizes.slug'
+                ]);
+            },
+            'price' => function ($query) use ($model) {
+                $query->select([
+                    'product_prices.id',
+                    'product_prices.product_id',
+                    'product_prices.user_type_id',
+                    'product_prices.price'
+                ])->whereUserTypeId($model->userTypeId);
+            }
+        ])->join('product_prices', function ($join) use ($model) {
+            $join->on('products.id', '=', 'product_prices.product_id')
+                ->where('product_prices.user_type_id', '=', $model->userTypeId);
+        })
+        ->where(function ($query) use ($series, $seriesReverse) {
+            $query->where("name_ru", 'like', '%' . $series . '%');
+            $query->orWhere("name_ru", 'like', '%' . $seriesReverse . '%');
+        })
+        ->orWhere(function ($query) use ($series, $seriesReverse) {
+            $query->where("name_uk", 'like', '%' . $series . '%');
+            $query->orWhere("name_uk", 'like', '%' . $seriesReverse . '%');
+        })
+        ->orderByRaw($orderByRaw)
+        ->offset($model->searchProductsOffset)
+        ->limit($model->searchProductsLimit)
+        ->get([
+            'products.id',
+            "name_$model->language as name",
+            'slug',
+            'color_id',
+            'group_id',
+            'category_id',
+            'breadcrumb_category_id',
+            "description_$model->language as description",
+            'products.priority',
+            'vendor_code',
+            'rating',
+            'number_of_views',
+            'products.created_at'
+        ]);
+    }
+    
+    public function getCountSearchProducts($model)
+    {
+        $words = explode($this->wordsSeparator, $model->series);
+        $wordsReverse = array_reverse($words);
+        $seriesReverse = implode($this->likeSeparator, $wordsReverse);
+        $series = implode($this->likeSeparator, $words);
+
+        return Product::where(function ($query) use ($series, $seriesReverse) {
+                    $query->where("name_ru", 'like', '%' . $series . '%');
+                    $query->orWhere("name_ru", 'like', '%' . $seriesReverse . '%');
+                })->orWhere(function ($query) use ($series, $seriesReverse) {
+                    $query->where("name_uk", 'like', '%' . $series . '%');
+                    $query->orWhere("name_uk", 'like', '%' . $seriesReverse . '%');
+                })->count();
+    }
+
+    public function getAjaxSearchProducts($model)
+    {
+        $orderByRaw = 'name';
+        
+        $words = explode($this->wordsSeparator, $model->series);
+        $wordsReverse = array_reverse($words);
+        $seriesReverse = implode($this->likeSeparator, $wordsReverse);
+        $series = implode($this->likeSeparator, $words);
+
+        return Product::with([
+            'images',
+            'color',
+            'product_group.products.color' => function ($query) use ($model) {
+                $query->select([
+                    'id',
+                    "name_$model->language",
+                    'slug',
+                    'html_code'
+                ]);
+            },
+            'sizes' => function ($query) use ($model) {
+                $query->select([
+                    'sizes.id',
+                    "sizes.name_$model->language as name",
+                    'sizes.slug'
+                ]);
+            },
+            'price' => function ($query) use ($model) {
+                $query->select([
+                    'product_prices.id',
+                    'product_prices.product_id',
+                    'product_prices.user_type_id',
+                    'product_prices.price'
+                ])->whereUserTypeId($model->userTypeId);
+            }
+        ])->join('product_prices', function ($join) use ($model) {
+            $join->on('products.id', '=', 'product_prices.product_id')
+                ->where('product_prices.user_type_id', '=', $model->userTypeId);
+        })
+            ->where(function ($query) use ($series, $seriesReverse) {
+                $query->where("name_ru", 'like', '%' . $series . '%');
+                $query->orWhere("name_ru", 'like', '%' . $seriesReverse . '%');
+            })
+            ->orWhere(function ($query) use ($series, $seriesReverse) {
+                $query->where("name_uk", 'like', '%' . $series . '%');
+                $query->orWhere("name_uk", 'like', '%' . $seriesReverse . '%');
+            })
+            ->orderByRaw($orderByRaw)
+            ->limit(5)
+            ->get([
+                'products.id',
+                "name_$model->language as name",
+                'slug',
+                'color_id',
+                'group_id',
+                'category_id',
+                'breadcrumb_category_id',
+                "description_$model->language as description",
+                'products.priority',
+                'vendor_code',
+                'rating',
+                'number_of_views',
+                'products.created_at'
+            ]);
     }
 
     public function getCountProductsFiltersCategory($model)

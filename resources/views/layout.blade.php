@@ -48,6 +48,7 @@
     {{--Popup: Login-Dark--}}
     @include('modals.login')
     {{--/Popup: Login-Dark--}}
+    @include('modals.register')
 {{--/MODALS--}}
 
 {{--PHP TO JS VARIABLES--}}

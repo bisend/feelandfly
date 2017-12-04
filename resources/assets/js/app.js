@@ -34,3 +34,5 @@ require('./components/Filters');
 require('./components/SelectedFilters');
 
 require('./components/SimilarProduct');
+
+require('./components/Search');

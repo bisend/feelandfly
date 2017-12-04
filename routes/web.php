@@ -108,3 +108,47 @@ Route::group(['prefix' => 'cart'], function ()
 });
 
 Route::post('/get-user', 'LayoutController@getUser');
+
+Route::group(['prefix' => 'search'], function () {
+
+    Route::get('{series}/{language?}', 'SearchController@index')
+        ->where([
+            'language' => '^(uk|ru)?$'
+        ]);
+    
+    /**
+     * Search results page sorted
+     */
+    Route::get('/{series}/{sort}/{language?}', 'SearchController@indexSort')
+        ->where([
+            'sort' => '^(popularity|new|price-asc|price-desc)$',
+            'language' => '^(uk|ru)?$'
+        ]);
+
+    /**
+     * Search results page pagination
+     */
+    Route::get('/{series}/{page}/{language?}', 'SearchController@indexPagination')
+        ->where([
+            'page' => '^[2-9]{1}|[1-9]{1}[0-9]+$',
+            'language' => '^(uk|ru)?$'
+        ]);
+
+    /**
+     * Search results page sorted pagination
+     */
+    Route::get('/{series}/{sort}/{page}/{language?}', 'SearchController@indexPaginationSort')
+        ->where([
+            'sort' => '^(popularity|new|price-asc|price-desc)$',
+            'page' => '^[2-9]{1}|[1-9]{1}[0-9]+$',
+            'language' => '^(uk|ru)?$'
+        ]);
+
+    /**
+     * Ajax search results handler
+     */
+    Route::get('/async/{series}/{language?}', 'SearchController@indexAjax')
+        ->where([
+            'language' => '^(uk|ru)?$'
+        ]);
+});

@@ -104,6 +104,20 @@ function getUser() {
 
 getUser();
 
+//URL FOR SEARCH
+function buildSearchUrl(series)
+{
+    series = series
+        .toLowerCase()
+        .replace(/[^a-zA-Zа-яА-ЯїЇіІьЬєЄэЭъЪёЁґҐ0-9 ]/gi, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .replace(/\s/g, '+');
+
+    return series;
+}
+
+
 function showLoader() {
     // $('body').addClass('modal-open').css('padding-right', '17px');
     $('[data-big-loader]').fadeIn(400);
@@ -127,3 +141,41 @@ $(window).load(function () {
     //     hideLoader();
     // }, 5000);
 });
+
+$(document).ready(
+    function () {
+        var wasHidden = false;
+        $('.open-search').click(function() {
+            var i = $(this).find('i');
+            if (!wasHidden)
+            {
+                $('.open-search').css('border', '2px solid #000');
+                $('.navbar-nav').hide(50);
+                $('.profile-search-smoll').stop().show().animate({
+                    width: '600px'
+                });
+                $('.profile-search-smoll input').focus();
+
+                i.removeClass('fa-search').addClass('fa-times');
+            }
+            else
+            {
+                i.removeClass('fa-times').addClass('fa-search');
+                $('.profile-search-smoll').animate({
+                    width: '0'
+                }, function(){
+                    $('.navbar-nav').show(50);
+                    $('.open-search-this-none').fadeIn(100);
+                    $('.profile-search-smoll').stop().hide();
+                    $('.open-search').css('border', 'none');
+                });
+            }
+
+            wasHidden =! wasHidden
+
+        });
+    }
+);
+
+
+

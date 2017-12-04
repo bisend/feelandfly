@@ -55,7 +55,7 @@
                             @endif
                         </li>
                         <li><a data-toggle="modal" data-target="#login-popup" href="javascript:void(0);"> Вход </a></li>
-                        <li><a data-toggle="modal" data-target="#login-popup" href="javascript:void(0);"> Регистрация </a></li>
+                        <li><a data-toggle="modal" data-target="#register-popup" href="javascript:void(0);"> Регистрация </a></li>
                     </ul>
                 </div>
             </div>
@@ -82,6 +82,45 @@
                                 <span class="nav-trigger toggle-hover visible-xs">
                                     <a class="toggle-icon fa fa-times" href=""> </a>
                                 </span>
+
+                                <div class="serch-button-open">
+                                    <button class="open-search"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                </div>
+                                <div id="search" class="profile-search profile-search-smoll">
+                                    <form class="form-serch-btn" v-bind:action="/search/ + series">
+                                        <input v-model="series" v-on:keyup="searchAjax()" type="text" placeholder="Поиск...">
+
+                                        <button v-on:click.prevent="search()" class="profile-search-btn"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                    </form>
+                                    <div v-if="countSearchProducts == 0 && series != '' && showNoResult" class="search-result-false">
+                                        <span>Товаров не найдено</span>
+                                    </div>
+                                    <div v-if="countSearchProducts > 0 && series != '' && showResult" class="search-result-true">
+                                        <a v-for="searchProduct in searchProducts" class="result-item-link" v-bind:href="'/product/' + searchProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+                                            <div class="search-result-item">
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <div class="resuil-item-img">
+                                                            <img v-bind:src="searchProduct.images[0].small" alt="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <div class="resuil-item-title-price">
+                                                            <div class="result-title">@{{ searchProduct.name }}</div>
+                                                            <div class="result-price">@{{ searchProduct.price[0].price }} грн</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="view-all-result">
+                                            <a v-bind:href="'/search/' + series + '/{{ $model->language == 'ru' ? '' : $model->language }}'" class="theme-btn btn-black">
+                                                <span>Все результаты (@{{ countSearchProducts }})</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <ul class="nav navbar-nav primary-navbar">
                                     @foreach($model->categories as $category)
                                         <li>
@@ -172,36 +211,35 @@
                                         {{--</div>--}}
                                     {{--</li>--}}
 
+
                                 </ul>
+
+
+
                             </div>
+
                         </nav>
+
+
+                        {{--<ul class="top-elements">--}}
+                            {{--<li id="search" :class="{'search-hover': showInput}">--}}
+                                {{--<a href="javascript:void(0);" class="search-icon icon-cube" v-on:click="showSearchInput()">  </a>--}}
+                                {{--<div class="search-popup pop-up-box" id="search-popup" :class="{'show-search-input': showInput}">--}}
+                                    {{--<form action="#" class="form-wrap">--}}
+                                        {{--<div class="no-padding col-sm-12 col-xs-12">--}}
+                                            {{--<div class="form-group">--}}
+                                                {{--<input type="text" placeholder="Поиск..." class="form-control text">--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</form>--}}
+                                {{--</div>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
                     </div>
                     <div class="col-lg-1 col-sm-3 top-right text-right">
                         <ul class="top-elements">
-                            <li class="search-hover">
-                                <a href="#search-popup" class="search-icon icon-cube">  </a>
-                                <div class="search-popup pop-up-box" id="search-popup">
-                                    <form action="#" class="form-wrap">
-                                        <div class="search-selectpicker selectpicker-wrapper col-sm-4 col-xs-5 no-padding">
-                                            <select class="selectpicker input-price"
-                                                    data-width="100%"
-                                                    data-toggle="tooltip"
-                                                    title="All Categories">
-                                                <option>Clothing
-                                                <option>Accesories
-                                                <option> Jwellery
-                                            </select>
-                                        </div>
-                                        <div class="no-padding col-sm-8 col-xs-7">
-                                            <div class="form-group">
-                                                <input type="text" placeholder="Search anything..." class="form-control text">
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </li>
-                            <li id="mini-cart" class="cart-hover">
-                                <a href="#" class="cart-icon">
+                            <li id="mini-cart" :class="{'cart-hover': totalCount}">
+                                <a href="javascript:void(0);" class="cart-icon">
                                         <span v-cloak class="items-count font-1">
                                             @{{ totalCount }}
                                         </span>

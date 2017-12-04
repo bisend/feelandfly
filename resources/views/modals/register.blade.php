@@ -1,4 +1,4 @@
-<div class="modal fade popups-wrap popups-dark white-clr" id="login-popup" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade popups-wrap popups-dark white-clr" id="register-popup" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <button type="button" class="close close-btn popup-cls" data-dismiss="modal" aria-label="Close">
@@ -29,9 +29,12 @@
                     </div>
                     <div class="login-form">
                         <p class="fsz-18 section-title pb-25">
-                            ВОЙДИТЕ В ПРОФИЛЬ
+                            ЗАРЕГИСТРИРУЙТЕ ПРОФИЛЬ
                         </p>
                         <form class="login">
+                            <div class="form-group">
+                                <input type="text" placeholder="Имя" class="form-control">
+                            </div>
                             <div class="form-group">
                                 <input type="text" placeholder="Електронный адрес" class="form-control">
                             </div>
@@ -39,8 +42,11 @@
                                 <input type="password" placeholder="Пароль" class="form-control">
                             </div>
                             <div class="form-group">
+                                <input type="password" placeholder="Подтвердите пароль" class="form-control">
+                            </div>
+                            <div class="form-group">
                                 <button class="theme-btn btn-white-1 small-btn" type="submit">
-                                    Войти
+                                    Зарегистрироваться
                                 </button>
                             </div>
                         </form>
