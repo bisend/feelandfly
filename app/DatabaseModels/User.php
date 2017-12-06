@@ -2,6 +2,7 @@
 
 namespace App\DatabaseModels;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -31,6 +32,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\User whereUserTypeId($value)
  * @mixin \Eloquent
+ * @property bool $active
+ * @property string|null $confirmation_token
+ * @property string|null $new_email
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\User whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\User whereConfirmationToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\User whereNewEmail($value)
  */
 class User extends Authenticatable
 {

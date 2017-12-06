@@ -6,8 +6,33 @@
  */
 
 // require('./bootstrap');
-
 window.Vue = require('vue');
+
+// import Vue from 'vue';
+//
+// import VeeValidate from 'vee-validate';
+// import { Validator } from 'vee-validate';
+//
+// import ru from 'vee-validate/dist/locale/ru';
+// import ua from 'vee-validate/dist/locale/ua';
+//
+// if (LANGUAGE == DEFAULT_LANGUAGE)
+// {
+//     Validator.localize('ru', ru);
+// }
+// else {
+//     Validator.localize('ua', ua);
+// }
+//
+// Vue.use(VeeValidate);
+
+
+// Vue.use(VeeValidate, {
+//     locale: 'ru',
+//     dictionary: {
+//         ru: {messages: messagesRU}
+//     }
+// });
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -36,3 +61,7 @@ require('./components/SelectedFilters');
 require('./components/SimilarProduct');
 
 require('./components/Search');
+
+require('./components/Register');
+
+require('./components/Login');

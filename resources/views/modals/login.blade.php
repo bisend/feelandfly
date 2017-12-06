@@ -31,12 +31,18 @@
                         <p class="fsz-18 section-title pb-25">
                             ВОЙДИТЕ В ПРОФИЛЬ
                         </p>
-                        <form class="login">
-                            <div class="form-group">
-                                <input type="text" placeholder="Електронный адрес" class="form-control">
+                        <form class="login" @submit.prevent="validateBeforeSubmit">
+                            <div class="form-group auth-form-group">
+                                <input data-login-email
+                                       type="text"
+                                       v-model="email"
+                                       placeholder="Електронный адрес" class="form-control">
                             </div>
-                            <div class="form-group">
-                                <input type="password" placeholder="Пароль" class="form-control">
+                            <div class="form-group auth-form-group">
+                                <input data-login-password
+                                       type="password"
+                                       v-model="password"
+                                       placeholder="Пароль" class="form-control">
                             </div>
                             <div class="form-group">
                                 <button class="theme-btn btn-white-1 small-btn" type="submit">

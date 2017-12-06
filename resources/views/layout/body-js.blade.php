@@ -10,6 +10,7 @@
 <script defer src="/template/plugins/jquery-countTo/jquery.countTo.js"></script>
 
 <script defer src="/js/waitsync.min.js"></script>
+<script defer src="/js/jclient.validation.js"></script>
 
 <!-- Custom JS -->
 <script defer src="/js/launch.js"></script>

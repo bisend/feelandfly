@@ -54,8 +54,14 @@
                                 </ul>
                             @endif
                         </li>
-                        <li><a data-toggle="modal" data-target="#login-popup" href="javascript:void(0);"> Вход </a></li>
-                        <li><a data-toggle="modal" data-target="#register-popup" href="javascript:void(0);"> Регистрация </a></li>
+
+                        @if(auth()->check())
+                            <li><a href="javascript:void(0);">{{ auth()->user()->name }}</a></li>
+                            <li><a href="/user/logout">Выход</a></li>
+                        @else
+                            <li><a data-toggle="modal" data-target="#login-popup" href="javascript:void(0);"> Вход </a></li>
+                            <li><a data-toggle="modal" data-target="#register-popup" href="javascript:void(0);"> Регистрация </a></li>
+                        @endif
                     </ul>
                 </div>
             </div>

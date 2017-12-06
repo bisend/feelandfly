@@ -4223,7 +4223,7 @@ table {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 9999;
+    z-index: 99999;
     background: #000;
     opacity: 0.5;
 }
@@ -4623,3 +4623,78 @@ table {
     letter-spacing: 0.5px;
 }
 /*SELECTED FILTERS BAR*/
+
+
+/*VALIDATION*/
+/*.incorrect-field {*/
+    /*border: 1px solid #ff402f !important;*/
+/*}*/
+
+/*.incorrect-text {*/
+    /*color: #ff402f;*/
+/*}*/
+
+.incorrect-field label {
+    border: 1px solid #ff402f !important;
+}
+label.incorrect-field {
+    /*border: 1px solid #ff402f !important;*/
+    color: #ff402f;
+}
+
+.incorrect-field input {
+    border: 1px solid #ff402f !important;
+}
+input.incorrect-field {
+    border: 1px solid #ff402f !important;
+}
+
+.incorrect-field textarea {
+    border: 1px solid #ff402f !important;
+}
+textarea.incorrect-field {
+    border: 1px solid #ff402f !important;
+}
+
+.incorrect-field select {
+    border: 1px solid #ff402f !important;
+    color: #ff402f !important;
+}
+select.incorrect-field {
+    border: 1px solid #ff402f !important;
+    color: #ff402f !important;
+}
+
+.incorrect-field input::-webkit-input-placeholder,
+input.incorrect-field::-webkit-input-placeholder,
+.incorrect-field textarea::-webkit-input-placeholder,
+textarea.incorrect-field::-webkit-input-placeholder {
+    color: #ff402f !important;
+}
+.incorrect-field input:-moz-placeholder,
+input.incorrect-field:-moz-placeholder,
+.incorrect-field textarea:-moz-placeholder,
+textarea.incorrect-field:-moz-placeholder {
+    color: #ff402f !important;
+}
+.incorrect-field input::-moz-placeholder,
+input.incorrect-field::-moz-placeholder,
+.incorrect-field textarea::-moz-placeholder,
+textarea.incorrect-field::-moz-placeholder {
+    color: #ff402f !important;
+}
+.incorrect-field input:-ms-input-placeholder,
+input.incorrect-field:-ms-input-placeholder,
+.incorrect-field textarea:-ms-input-placeholder,
+textarea.incorrect-field:-ms-input-placeholder {
+    color: #ff402f !important;
+}
+
+.auth-form-group {
+    /*margin-bottom: 0;*/
+}
+
+.auth-form-group input {
+    text-transform: none !important;
+}
+/*VALIDATION*/

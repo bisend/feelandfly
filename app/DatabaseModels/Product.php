@@ -48,6 +48,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Size[] $sizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\ProductPrice[] $price
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\ProductSize[] $product_sizes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Property[] $properties
  */
 class Product extends Model
 {

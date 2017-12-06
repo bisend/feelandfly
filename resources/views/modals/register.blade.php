@@ -31,20 +31,34 @@
                         <p class="fsz-18 section-title pb-25">
                             ЗАРЕГИСТРИРУЙТЕ ПРОФИЛЬ
                         </p>
-                        <form class="login">
-                            <div class="form-group">
-                                <input type="text" placeholder="Имя" class="form-control">
+                        <form method="POST" class="login" @submit.prevent="validateBeforeSubmit">
+                            <div class="form-group auth-form-group">
+                                <input data-register-name
+                                       v-model="name"
+                                       name="name"
+                                       autocomplete="off"
+                                       type="text" placeholder="Имя" class="form-control">
                             </div>
-                            <div class="form-group">
-                                <input type="text" placeholder="Електронный адрес" class="form-control">
+                            <div class="form-group auth-form-group">
+                                <input data-register-email
+                                       v-model="email"
+                                       name="email"
+                                       autocomplete="off"
+                                       type="text" placeholder="Електронный адрес" class="form-control">
                             </div>
-                            <div class="form-group">
-                                <input type="password" placeholder="Пароль" class="form-control">
+                            <div class="form-group auth-form-group">
+                                <input data-register-password
+                                       v-model="password"
+                                       name="password"
+                                       type="password" placeholder="Пароль" class="form-control">
                             </div>
-                            <div class="form-group">
-                                <input type="password" placeholder="Подтвердите пароль" class="form-control">
+                            <div class="form-group auth-form-group">
+                                <input data-register-confirm
+                                       v-model="confirmPassword"
+                                       name="confirm"
+                                       type="password" placeholder="Подтвердите пароль" class="form-control">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group auth-form-group">
                                 <button class="theme-btn btn-white-1 small-btn" type="submit">
                                     Зарегистрироваться
                                 </button>

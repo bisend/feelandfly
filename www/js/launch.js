@@ -6,7 +6,20 @@ var LANGUAGE = $('html').attr('lang'),
 
 var INIT_CART_WS;
 
-$.ajaxSetup({
+var INCORRECT_FIELD_CLASS = 'incorrect-field',
+    REQUIRED_FIELD_TEXT = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Обязательное поле' : 'Обов`язкове поле',
+    INCORRECT_FIELD_TEXT = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Неправильные данные' : 'Невірно введені дані',
+    SERVER_ERROR = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Произошла ошибка, попробуйте еще.' : 'Сталася помилка, спробуйте ще.',
+    EMAIL_NOT_VALID = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Пользователь c таким e-mail уже существует.' : 'Користувач з таким e-mail вже існує.',
+    EMAIL_CONFIRM_NOT_VALID = (LANGUAGE == DEFAULT_LANGUAGE) ? 'E-mail не подтвержден.' : 'E-mail не підтверджено.',
+    EMAIL_NOT_EXISTS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Такой e-mail не существует.' : 'Такого e-mail не існує.',
+    REGISTER_SUCCESS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Регистрация прошла успешно, на указанный e-mail отправлено письмо для подтверждения.' : 'Реєстрація пройшла успішно, на вказаний e-mail відправлено лист для підтвердження.',
+    RESTORE_SUCCESS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'На ваш e-mail отправлено письмо с паролем для входа.' : 'На ваш e-mail відправлено лист з паролем для входу.';
+
+
+
+
+    $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
@@ -129,17 +142,38 @@ function hideLoader() {
     // $('body').removeClass('modal-open').css('padding-right', 0);
 }
 
+function showPopup(message) {
+    var popup = $('[data-popup]'),
+        popupMessage = $('[data-popup-text]');
+    popupMessage.text(message);
+    popup.modal();
+}
+
+function hidePopup() {
+    var popup = $('[data-popup]'),
+        popupMessage = $('[data-popup-text]');
+    // popup.modal('hide');
+    popupMessage.text('');
+}
+
+$('body').on('click', '[data-popup-close]', function () {
+    hidePopup();
+});
+
+$('body').on('click', '[data-popup]', function (e) {
+    if ($(e.target).hasClass('pop-up-messege'))
+    {
+        hidePopup();
+    }
+});
+
 $('#sort-select').on('changed.bs.select', function (e, clickedIndex) {
     // do something...
     window.location.href = $(e.currentTarget[clickedIndex]).attr('data-url');
 });
 
 $(window).load(function () {
-    // showLoader();
-
-    // setTimeout(function () {
-    //     hideLoader();
-    // }, 5000);
+    
 });
 
 $(document).ready(

@@ -109,8 +109,33 @@ module.exports = __webpack_require__(2);
  */
 
 // require('./bootstrap');
-
 window.Vue = __webpack_require__(3);
+
+// import Vue from 'vue';
+//
+// import VeeValidate from 'vee-validate';
+// import { Validator } from 'vee-validate';
+//
+// import ru from 'vee-validate/dist/locale/ru';
+// import ua from 'vee-validate/dist/locale/ua';
+//
+// if (LANGUAGE == DEFAULT_LANGUAGE)
+// {
+//     Validator.localize('ru', ru);
+// }
+// else {
+//     Validator.localize('ua', ua);
+// }
+//
+// Vue.use(VeeValidate);
+
+
+// Vue.use(VeeValidate, {
+//     locale: 'ru',
+//     dictionary: {
+//         ru: {messages: messagesRU}
+//     }
+// });
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -138,6 +163,10 @@ __webpack_require__(12);
 __webpack_require__(13);
 
 __webpack_require__(14);
+
+__webpack_require__(15);
+
+__webpack_require__(16);
 
 /***/ }),
 /* 3 */
@@ -13108,6 +13137,326 @@ if (document.getElementById('search')) {
                         });
                     }, 400);
                 }
+            }
+        }
+    });
+}
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+if (document.getElementById('register-popup')) {
+    var nameValidator = {};
+    var emailValidator = {};
+    var passwordValidator = {};
+    var confirmValidator = {};
+
+    new Vue({
+        el: '#register-popup',
+        data: {
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+            isConfirmInvalid: false
+        },
+        mounted: function mounted() {
+            var _this = this;
+            // `this` указывает на экземпляр vm
+            nameValidator = new RegExValidatingInput($('[data-register-name]'), {
+                expression: RegularExpressions.FULL_NAME,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            emailValidator = new RegExValidatingInput($('[data-register-email]'), {
+                expression: RegularExpressions.EMAIL,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            passwordValidator = new RegExValidatingInput($('[data-register-password]'), {
+                expression: RegularExpressions.PASSWORD,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            confirmValidator = new RegExValidatingInput($('[data-register-confirm]'), {
+                expression: RegularExpressions.PASSWORD,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+        },
+        methods: {
+            validateBeforeSubmit: function validateBeforeSubmit() {
+                var _this = this;
+
+                var isValid = true;
+
+                nameValidator.Validate();
+                if (!nameValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                emailValidator.Validate();
+                if (isValid && !emailValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                passwordValidator.Validate();
+                if (isValid && !passwordValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                confirmValidator.Validate();
+                if (isValid && !confirmValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                if (_this.password != _this.confirmPassword) {
+                    $('[data-register-confirm]').addClass(INCORRECT_FIELD_CLASS);
+                    isValid = false;
+                    _this.isConfirmInvalid = true;
+                } else {
+                    _this.isConfirmInvalid = false;
+                }
+
+                if (isValid) {
+                    _this.registerUser();
+                }
+            },
+
+            registerUser: function registerUser() {
+                var _this = this;
+
+                showLoader();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/user/register',
+                    data: {
+                        name: _this.name,
+                        email: _this.email,
+                        password: _this.password,
+                        language: LANGUAGE
+                    },
+                    success: function success(data) {
+                        hideLoader();
+
+                        var LOADED = true;
+
+                        $('#register-popup').modal('hide');
+
+                        if (data.status == 'success') {
+                            $('#register-popup').on('hidden.bs.modal', function () {
+                                if (LOADED) {
+                                    showPopup(REGISTER_SUCCESS);
+                                    LOADED = false;
+                                }
+                            });
+                        }
+
+                        if (data.status == 'error') {
+                            if (data.failed == 'email') {
+                                $('#register-popup').on('hidden.bs.modal', function () {
+                                    if (LOADED) {
+                                        showPopup(EMAIL_NOT_VALID);
+                                        LOADED = false;
+                                    }
+                                });
+                            }
+
+                            if (data.failed == 'server') {
+                                $('#register-popup').on('hidden.bs.modal', function () {
+                                    if (LOADED) {
+                                        showPopup(SERVER_ERROR);
+                                        LOADED = false;
+                                    }
+                                });
+                            }
+                        }
+                    },
+                    error: function error(_error) {
+                        hideLoader();
+
+                        $('#register-popup').modal('hide');
+
+                        var LOADED = true;
+
+                        $('#register-popup').on('hidden.bs.modal', function () {
+                            if (LOADED) {
+                                showPopup(SERVER_ERROR);
+                                LOADED = false;
+                            }
+                        });
+
+                        console.log(_error);
+                    }
+                });
+            }
+        }
+    });
+}
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+if (document.getElementById('login-popup')) {
+
+    new Vue({
+        el: '#login-popup',
+        data: {
+            email: '',
+            password: ''
+        },
+        mounted: function mounted() {
+            var _this = this;
+            // `this` указывает на экземпляр vm
+
+            emailValidator = new RegExValidatingInput($('[data-login-email]'), {
+                expression: RegularExpressions.EMAIL,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            passwordValidator = new RegExValidatingInput($('[data-login-password]'), {
+                expression: RegularExpressions.PASSWORD,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+        },
+        methods: {
+            validateBeforeSubmit: function validateBeforeSubmit() {
+                var _this = this;
+
+                var isValid = true;
+
+                emailValidator.Validate();
+                if (!emailValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                passwordValidator.Validate();
+                if (isValid && !passwordValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    _this.loginUser();
+                }
+            },
+
+            loginUser: function loginUser() {
+                var _this = this;
+
+                showLoader();
+
+                $.ajax({
+                    type: 'get',
+                    url: '/user/login',
+                    data: {
+                        email: _this.email,
+                        password: _this.password,
+                        language: LANGUAGE
+                    },
+                    success: function success(data) {
+                        hideLoader();
+
+                        var LOADED = true;
+
+                        if (data.status == 'success') {
+                            window.location.reload(true);
+                        }
+
+                        if (data.status == 'error') {
+                            if (data.failed == 'email') {
+                                $('#login-popup').modal('hide');
+
+                                $('#login-popup').on('hidden.bs.modal', function () {
+                                    if (LOADED) {
+                                        showPopup(EMAIL_NOT_EXISTS);
+                                        LOADED = false;
+                                    }
+                                });
+                            }
+
+                            if (data.failed == 'active') {
+                                $('#login-popup').modal('hide');
+
+                                $('#login-popup').on('hidden.bs.modal', function () {
+                                    if (LOADED) {
+                                        showPopup(EMAIL_CONFIRM_NOT_VALID);
+                                        LOADED = false;
+                                    }
+                                });
+                            }
+
+                            if (data.failed == 'password') {
+                                $('[data-login-password]').val('').addClass(INCORRECT_FIELD_CLASS).attr("placeholder", INCORRECT_FIELD_TEXT);
+                            }
+                        }
+                    },
+                    error: function error(_error) {
+                        hideLoader();
+
+                        $('#login-popup').modal('hide');
+
+                        var LOADED = true;
+
+                        $('#login-popup').on('hidden.bs.modal', function () {
+                            if (LOADED) {
+                                showPopup(SERVER_ERROR);
+                                LOADED = false;
+                            }
+                        });
+
+                        console.log(_error);
+                    }
+                });
             }
         }
     });

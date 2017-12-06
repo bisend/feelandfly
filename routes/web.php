@@ -152,3 +152,16 @@ Route::group(['prefix' => 'search'], function () {
             'language' => '^(uk|ru)?$'
         ]);
 });
+
+Route::group(['prefix' => 'user'], function () {
+    Route::post('register', 'User\RegisterController@register');
+
+    Route::get('login', 'User\LoginController@login');
+
+    Route::get('logout', 'User\LoginController@logout');
+});
+
+Route::get('/confirm/{confirmationToken}/{language?}', 'User\ConfirmationEmailController@confirm')
+    ->where([
+        'language' => '^(ru|uk)?$'
+    ]);
