@@ -168,6 +168,8 @@ __webpack_require__(15);
 
 __webpack_require__(16);
 
+__webpack_require__(17);
+
 /***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -13461,6 +13463,105 @@ if (document.getElementById('login-popup')) {
         }
     });
 }
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+var socialEmailValidator;
+
+new Vue({
+    el: '[data-social-email]',
+    data: {
+        email: ''
+    },
+    mounted: function mounted() {
+        var _this = this;
+        // `this` указывает на экземпляр vm
+
+        socialEmailValidator = new RegExValidatingInput($('[data-social-email-input]'), {
+            expression: RegularExpressions.EMAIL,
+            ChangeOnValid: function ChangeOnValid(input) {
+                input.removeClass(INCORRECT_FIELD_CLASS);
+            },
+            ChangeOnInvalid: function ChangeOnInvalid(input) {
+                input.addClass(INCORRECT_FIELD_CLASS);
+            },
+            showErrors: true,
+            requiredErrorMessage: REQUIRED_FIELD_TEXT,
+            regExErrorMessage: INCORRECT_FIELD_TEXT
+        });
+    },
+    methods: {
+        validateBeforeSubmit: function validateBeforeSubmit() {
+            var _this = this;
+
+            var isValid = true;
+
+            socialEmailValidator.Validate();
+            if (!socialEmailValidator.IsValid()) {
+                isValid = false;
+            }
+
+            if (isValid) {
+                _this.loginUser();
+            }
+        },
+
+        loginUser: function loginUser() {
+            var _this = this;
+
+            showLoader();
+
+            $.ajax({
+                type: 'post',
+                url: '/user/social-email',
+                data: {
+                    email: _this.email,
+                    language: LANGUAGE
+                },
+                success: function success(data) {
+                    hideLoader();
+
+                    var LOADED = true;
+
+                    if (data.status == 'success') {
+                        window.location.reload(true);
+                    }
+
+                    if (data.status == 'error') {
+                        if (data.failed == 'email') {
+                            $('[data-social-email]').modal('hide');
+
+                            $('[data-social-email]').on('hidden.bs.modal', function () {
+                                if (LOADED) {
+                                    showPopup(EMAIL_NOT_VALID);
+                                    LOADED = false;
+                                }
+                            });
+                        }
+                    }
+                },
+                error: function error(_error) {
+                    hideLoader();
+
+                    $('[data-social-email]').modal('hide');
+
+                    var LOADED = true;
+
+                    $('[data-social-email]').on('hidden.bs.modal', function () {
+                        if (LOADED) {
+                            showPopup(SERVER_ERROR);
+                            LOADED = false;
+                        }
+                    });
+
+                    console.log(_error);
+                }
+            });
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

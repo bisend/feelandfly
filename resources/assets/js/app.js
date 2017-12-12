@@ -65,3 +65,5 @@ require('./components/Search');
 require('./components/Register');
 
 require('./components/Login');
+
+require('./components/SocialEmail');

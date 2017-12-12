@@ -16,13 +16,13 @@
                     <!--<p class="sub-detail fsz-16"> Login and buy </p>-->
                     <div class="row">
                         <div class="col-sm-6 pb-25">
-                            <a href="javascript:void(0);" class="theme-btn btn-white small-btn"> <i class="fa fa-facebook"></i>
+                            <a href="/user/login/facebook{{ $model->language == 'uk' ? '/' . $model->language : '' }}" class="theme-btn btn-white small-btn"> <i class="fa fa-facebook"></i>
                                 <span>Facebook</span>
                             </a>
                         </div>
                         <div class="col-sm-6 pb-25">
-                            <a href="javascript:void(0);" class="theme-btn btn-white small-btn">
-                                <i class="fa fa-google-plus-square"></i>
+                            <a href="/user/login/google{{ $model->language == 'uk' ? '/' . $model->language : '' }}" class="theme-btn btn-white small-btn">
+                                <i class="fa fa-google-plus"></i>
                                 <span>Google+</span>
                             </a>
                         </div>

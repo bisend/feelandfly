@@ -180,8 +180,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
-        
-
     ],
 
     /*

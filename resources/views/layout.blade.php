@@ -18,6 +18,8 @@
     @include('modals.big-cart')
 
     @include('modals.pop-up')
+
+    @include('modals.social-email')
     {{--HEADER--}}
     @include('layout.header')
     {{--/HEADER--}}

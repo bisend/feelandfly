@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Languages;
 use Illuminate\Http\Request;
+use Session;
 
 /**
  * Class LayoutController
@@ -11,6 +12,14 @@ use Illuminate\Http\Request;
  */
 class LayoutController extends Controller
 {
+    public function __construct()
+    {
+//        if (Session::has('language'))
+//        {
+//            Session::remove('language');
+//        }
+    }
+
     public function getUser()
     {
         $language = request('language');

@@ -428,7 +428,7 @@
                                         <div class="block-inline">
                                             <ul class="prod-meta">
                                                 <li>
-                                                    <a class="theme-btn btn-black" data-toggle="modal" data-target=".pop-up-messege">
+                                                    <a class="theme-btn btn-black" data-toggle="modal" data-target="[data-popup]">
                                                         подробнее
                                                     </a>
                                                 </li>

@@ -67,10 +67,10 @@ class LoginController extends LayoutController
     
     public function logout()
     {
-//        if (!auth()->check())
-//        {
-//            return redirect('/');
-//        }
+        if (!auth()->check())
+        {
+            return redirect('/');
+        }
 
         auth()->logout();
 

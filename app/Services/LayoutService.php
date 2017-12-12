@@ -11,6 +11,8 @@ namespace App\Services;
 
 use App\Helpers\Languages;
 use App\Repositories\CategoryRepository;
+use JavaScript;
+use Session;
 
 /**
  * Class LayoutService
@@ -39,6 +41,7 @@ class LayoutService
     {
         $this->localizeApplication($model);
         $this->fillCategories($model);
+        $this->checkUserSocialEmail();
     }
 
     /**
@@ -57,5 +60,15 @@ class LayoutService
     private function fillCategories($model)
     {
         $model->categories = $this->categoryRepository->getCategories($model->language);
+    }
+    
+    private function checkUserSocialEmail()
+    {
+        if (Session::has('social_email'))
+        {
+            JavaScript::put([
+                'social_email' => Session::get('social_email')
+            ]);
+        }
     }
 }

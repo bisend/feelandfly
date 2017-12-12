@@ -16,10 +16,23 @@ var INCORRECT_FIELD_CLASS = 'incorrect-field',
     REGISTER_SUCCESS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Регистрация прошла успешно, на указанный e-mail отправлено письмо для подтверждения.' : 'Реєстрація пройшла успішно, на вказаний e-mail відправлено лист для підтвердження.',
     RESTORE_SUCCESS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'На ваш e-mail отправлено письмо с паролем для входа.' : 'На ваш e-mail відправлено лист з паролем для входу.';
 
+if (window.location.hash && window.location.hash == '#_=_') {
+    if (window.history && history.pushState) {
+        window.history.pushState("", document.title, window.location.pathname);
+    } else {
+        // Prevent scrolling by storing the page's current scroll offset
+        var scroll = {
+            top: document.body.scrollTop,
+            left: document.body.scrollLeft
+        };
+        window.location.hash = '';
+        // Restore the scroll offset, should be flicker free
+        document.body.scrollTop = scroll.top;
+        document.body.scrollLeft = scroll.left;
+    }
+}
 
-
-
-    $.ajaxSetup({
+$.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
@@ -172,9 +185,7 @@ $('#sort-select').on('changed.bs.select', function (e, clickedIndex) {
     window.location.href = $(e.currentTarget[clickedIndex]).attr('data-url');
 });
 
-$(window).load(function () {
-    
-});
+
 
 $(document).ready(
     function () {
@@ -211,5 +222,11 @@ $(document).ready(
     }
 );
 
-
+$(window).load(function () {
+    if (window.FFShop && window.FFShop.social_email && window.FFShop.social_email.isEmail == false)
+    {
+        $('[data-social-email]').modal();
+        // $('[data-popup]').modal();
+    }
+});
 

@@ -30,9 +30,20 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\User::class,
+        'model' => App\DatabaseModels\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'facebook' => [
+        'client_id' => '300232113802173',         // Your facebook app ID
+        'client_secret' => 'ae9a0a77408b5777b33a519cdf7d7137', // Your facebook app Secret
+        'redirect' => 'http://feelandfly.app/user/login/facebook/callback'
+    ],
+
+    'google' => [
+        'client_id' => '813277002010-vs7878j41pj1khru14nioul5vkqubnim.apps.googleusercontent.com',
+        'client_secret' => 'zoLmB9WRzAkTlF9ivAVD9G9w',
+        'redirect' => 'http://feelandfly.app/user/login/google/callback',
+    ],
 ];

@@ -4698,3 +4698,17 @@ textarea.incorrect-field:-ms-input-placeholder {
     text-transform: none !important;
 }
 /*VALIDATION*/
+
+.social-email-input {
+    text-transform: none;
+    border: 2px solid #000;
+}
+
+.social-email-input:focus{
+    border: 2px solid #000;
+}
+
+.bootstrap-select.btn-group .dropdown-menu li.disabled a {
+    /* cursor: not-allowed; */
+    cursor: default;
+}

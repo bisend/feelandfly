@@ -159,6 +159,22 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('login', 'User\LoginController@login');
 
     Route::get('logout', 'User\LoginController@logout');
+    
+    Route::get('login/facebook/{language?}', 'User\FacebookLoginController@redirectToProvider')
+        ->where([
+            'language' => '^(uk|ru)?$'
+        ]);
+    
+    Route::get('login/facebook/callback', 'User\FacebookLoginController@handleProviderCallback');
+
+    Route::post('social-email', 'User\FacebookLoginController@socialEmailHandler');
+
+    Route::get('login/google/{language?}', 'User\GoogleLoginController@redirectToProvider')
+        ->where([
+            'language' => '^(uk|ru)?$'
+        ]);
+    
+    Route::get('login/google/callback', 'User\GoogleLoginController@handleProviderCallback');
 });
 
 Route::get('/confirm/{confirmationToken}/{language?}', 'User\ConfirmationEmailController@confirm')

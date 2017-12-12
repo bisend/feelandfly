@@ -9,7 +9,7 @@
                 <h4 class="modal-title">Сообщение</h4>
             </div>
             <div class="modal-body">
-               <p data-popup-text></p>
+               <p data-popup-text style="text-align: center"></p>
             </div>
             <div class="modal-footer">
                 <a data-dismiss="modal" class="theme-btn btn-white small-btn" data-popup-close>
