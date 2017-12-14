@@ -96,7 +96,7 @@
                         <div class="cart-total-all-price">
                             Сумма: <span>@{{ totalAmount.toFixed(2) }} грн</span>
                         </div>
-                        <a href="#" class="theme-btn btn-white small-btn">
+                        <a href="{{ url_order($model->language) }}" class="theme-btn btn-white small-btn">
                             Оформить заказ
                         </a>
                     </div>

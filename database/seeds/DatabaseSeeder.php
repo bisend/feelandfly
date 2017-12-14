@@ -50,5 +50,11 @@ class DatabaseSeeder extends Seeder
 //        $this->call(PropertyValuesSeeder::class);
         
 //        $this->call(PropertySeeder::class);
+        
+//        $this->call(PaymentsSeeder::class);
+        
+//        $this->call(DeliveriesSeeder::class);
+        
+//        $this->call(OrderStatusesSeeder::class);
     }
 }

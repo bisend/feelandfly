@@ -9,6 +9,7 @@
 namespace App\Services;
 
 
+use App\DatabaseModels\Profile;
 use App\Helpers\Languages;
 use App\Repositories\CategoryRepository;
 use JavaScript;
@@ -42,6 +43,8 @@ class LayoutService
         $this->localizeApplication($model);
         $this->fillCategories($model);
         $this->checkUserSocialEmail();
+        $this->checkIsOrderCreated();
+        $this->checkAuth();
     }
 
     /**
@@ -68,6 +71,34 @@ class LayoutService
         {
             JavaScript::put([
                 'social_email' => Session::get('social_email')
+            ]);
+        }
+    }
+
+    private function checkIsOrderCreated()
+    {
+        if (Session::has('isOrderCreated'))
+        {
+            JavaScript::put([
+                'isOrderCreated' => Session::get('isOrderCreated')
+            ]);
+
+            Session::remove('isOrderCreated');
+        }
+    }
+    
+    private function checkAuth()
+    {
+        if (auth()->check())
+        {
+            $user = auth()->user();
+            $profile = Profile::whereUserId($user->id)->first();
+
+            JavaScript::put([
+                'auth' => [
+                    'user' => $user,
+                    'profile' => $profile
+                ]
             ]);
         }
     }

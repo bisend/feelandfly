@@ -312,7 +312,14 @@ class ProductRepository
     {
         return Product::with([
             'images',
-            'color',
+            'color' => function ($query) use ($language) {
+                $query->select([
+                    'colors.id',
+                    "colors.name_$language as name",
+                    'colors.slug',
+                    'colors.html_code'
+                ]);
+            },
             'product_group.products.color' => function ($query) use ($language) {
                 $query->select([
                     'colors.id',

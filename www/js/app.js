@@ -170,6 +170,12 @@ __webpack_require__(16);
 
 __webpack_require__(17);
 
+__webpack_require__(18);
+
+__webpack_require__(19);
+
+__webpack_require__(20);
+
 /***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -13562,6 +13568,430 @@ new Vue({
         }
     }
 });
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+if (document.getElementById('order-confirm')) {
+    var orderNameValidator, orderPhoneValidator, orderEmailValidator, orderAddressValidator;
+
+    new Vue({
+        el: '#order-confirm',
+        data: GLOBAL_DATA,
+        mounted: function mounted() {
+            var _this = this;
+            // `this` указывает на экземпляр vm
+            orderNameValidator = new RegExValidatingInput($('[data-order-name]'), {
+                expression: RegularExpressions.FULL_NAME,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            orderPhoneValidator = new RegExValidatingInput($('[data-order-phone]'), {
+                expression: RegularExpressions.PHONE_NUMBER,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            orderEmailValidator = new RegExValidatingInput($('[data-order-email]'), {
+                expression: RegularExpressions.EMAIL,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            orderAddressValidator = new RegExValidatingInput($('[data-order-address]'), {
+                expression: RegularExpressions.MIN_TEXT,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+        },
+        watch: {
+            // эта функция запускается при любом изменении count
+            totalCount: function totalCount() {
+                if (GLOBAL_DATA.totalCount == 0) {
+                    window.location.reload(true);
+                }
+            }
+        },
+        methods: {
+            validateBeforeSubmit: function validateBeforeSubmit() {
+                var _this = this;
+
+                var isValid = true;
+
+                orderNameValidator.Validate();
+                if (!orderNameValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                orderPhoneValidator.Validate();
+                if (isValid && !orderPhoneValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                orderEmailValidator.Validate();
+                if (isValid && !orderEmailValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                orderAddressValidator.Validate();
+                if (isValid && !orderAddressValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                if (GLOBAL_DATA.orderConfirm.deliveryId == '') {
+                    isValid = false;
+                    $('[data-order-delivery]').css('border', '2px solid red');
+                }
+
+                if (GLOBAL_DATA.orderConfirm.paymentId == '') {
+                    isValid = false;
+                    $('[data-order-payment]').css('border', '2px solid red');
+                }
+
+                if (isValid) {
+                    _this.createOrder();
+                }
+            },
+            setDeliveryId: function setDeliveryId(deliveryId) {
+                var _this = this;
+
+                GLOBAL_DATA.orderConfirm.deliveryId = deliveryId;
+            },
+            setPaymentId: function setPaymentId(paymentId) {
+                var _this = this;
+
+                GLOBAL_DATA.orderConfirm.paymentId = paymentId;
+            },
+            createOrder: function createOrder() {
+                var _this = this;
+
+                showLoader();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/order/create',
+                    data: {
+                        name: GLOBAL_DATA.orderConfirm.name,
+                        phone: GLOBAL_DATA.orderConfirm.phone,
+                        email: GLOBAL_DATA.orderConfirm.email,
+                        paymentId: GLOBAL_DATA.orderConfirm.paymentId,
+                        deliveryId: GLOBAL_DATA.orderConfirm.deliveryId,
+                        address: GLOBAL_DATA.orderConfirm.address,
+                        comment: GLOBAL_DATA.orderConfirm.comment,
+                        language: LANGUAGE
+                    },
+                    success: function success(data) {
+                        hideLoader();
+
+                        if (data.status == 'success') {
+                            if (LANGUAGE == 'uk') {
+                                window.location.href = '/uk';
+                            } else {
+                                window.location.href = '/';
+                            }
+                        }
+
+                        if (data.status == 'error') {
+                            showPopup(SERVER_ERROR);
+                        }
+                    },
+                    error: function error(_error) {
+                        hideLoader();
+                        showPopup(SERVER_ERROR);
+                        console.log(_error);
+                    }
+                });
+            }
+        }
+    });
+}
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+if (document.getElementById('personal-info')) {
+    var profileNameValidator, profileEmailValidator, profilePhoneValidator;
+
+    new Vue({
+        el: '#personal-info',
+        data: {
+            name: window.FFShop.auth.user.name,
+            email: window.FFShop.auth.user.email,
+            phone: window.FFShop.auth.profile.phone_number
+        },
+        mounted: function mounted() {
+            var _this = this;
+            // `this` указывает на экземпляр vm
+            profileNameValidator = new RegExValidatingInput($('[data-profile-name]'), {
+                expression: RegularExpressions.FULL_NAME,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            profileEmailValidator = new RegExValidatingInput($('[data-profile-email]'), {
+                expression: RegularExpressions.EMAIL,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            profilePhoneValidator = new RegExValidatingInput($('[data-profile-phone]'), {
+                expression: RegularExpressions.PHONE_NUMBER,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+        },
+        methods: {
+            validateBeforeSubmit: function validateBeforeSubmit() {
+                var _this = this;
+
+                var isValid = true;
+
+                profileNameValidator.Validate();
+                if (!profileNameValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                profileEmailValidator.Validate();
+                if (isValid && !profileEmailValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                profilePhoneValidator.Validate();
+                if (isValid && !profilePhoneValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    _this.savePersonalInfo();
+                }
+            },
+            savePersonalInfo: function savePersonalInfo() {
+                var _this = this;
+
+                showLoader();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/profile/save-personal-info',
+                    data: {
+                        name: _this.name,
+                        email: _this.email,
+                        phone: _this.phone,
+                        language: LANGUAGE
+                    },
+                    success: function success(data) {
+                        hideLoader();
+
+                        if (data.status == 'success') {
+                            if (data.emailChanged == true) {
+                                showPopup(EMAIL_CHANGED_MESSAGE);
+                            } else {
+                                showPopup(PERSONAL_INFO_SAVED);
+                                window.location.reload(true);
+                            }
+                        }
+
+                        if (data.status == 'error') {
+                            if (data.isNewEmailValid == false) {
+                                showPopup(EMAIL_NOT_VALID);
+                            }
+
+                            if (data.failed == 'server') {
+                                showPopup(SERVER_ERROR);
+                            }
+                        }
+                    },
+                    error: function error(_error) {
+                        hideLoader();
+                        showPopup(SERVER_ERROR);
+                        console.log(_error);
+                    }
+                });
+            }
+        }
+
+    });
+}
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+if (document.getElementById('change-password')) {
+    var profileOldPasswordValidator, profileNewPasswordValidator, profileConfirmNewPasswordValidator;
+
+    new Vue({
+        el: '#change-password',
+        data: {
+            oldPassword: '',
+            newPassword: '',
+            confirmNewPassword: ''
+        },
+        mounted: function mounted() {
+            var _this = this;
+            // `this` указывает на экземпляр vm
+            profileOldPasswordValidator = new RegExValidatingInput($('[data-profile-old-password]'), {
+                expression: RegularExpressions.PASSWORD,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            profileNewPasswordValidator = new RegExValidatingInput($('[data-profile-new-password]'), {
+                expression: RegularExpressions.PASSWORD,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            profileConfirmNewPasswordValidator = new RegExValidatingInput($('[data-profile-confirm-new-password]'), {
+                expression: RegularExpressions.PASSWORD,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+        },
+        methods: {
+            validateBeforeSubmit: function validateBeforeSubmit() {
+                var _this = this;
+
+                var isValid = true;
+
+                profileOldPasswordValidator.Validate();
+                if (!profileOldPasswordValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                profileNewPasswordValidator.Validate();
+                if (isValid && !profileNewPasswordValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                profileConfirmNewPasswordValidator.Validate();
+                if (isValid && !profileConfirmNewPasswordValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                if (_this.newPassword != _this.confirmNewPassword) {
+                    $('[data-profile-new-password]').addClass(INCORRECT_FIELD_CLASS);
+                    $('[data-profile-confirm-new-password]').addClass(INCORRECT_FIELD_CLASS);
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    _this.changePassword();
+                }
+            },
+            changePassword: function changePassword() {
+                var _this = this;
+
+                showLoader();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/profile/change-password',
+                    data: {
+                        oldPassword: _this.oldPassword,
+                        newPassword: _this.newPassword,
+                        language: LANGUAGE
+                    },
+                    success: function success(data) {
+                        hideLoader();
+
+                        if (data.status == 'success') {
+                            if (data.message == 'goodPass') {
+                                showPopup(PASSWORD_CHANGED_MESSAGE);
+
+                                window.location.reload(true);
+                            }
+                        }
+
+                        if (data.status == 'error') {
+                            if (data.message == 'badPass') {
+                                showPopup(WRONG_OLD_PASSWORD);
+                            }
+                        }
+                    },
+                    error: function error(_error) {
+                        hideLoader();
+                        showPopup(SERVER_ERROR);
+                        console.log(_error);
+                    }
+                });
+            }
+        }
+    });
+}
 
 /***/ })
 /******/ ]);

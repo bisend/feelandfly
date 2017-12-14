@@ -1,0 +1,222 @@
+@extends('layout')
+
+@section('content')
+    <!-- CONTENT AREA -->
+    <article id="order-confirm">
+
+        <!--Breadcrumb Section Start-->
+        <section class="breadcrumb-bg">
+            <div class="theme-container container ">
+                <div class="site-breadcumb white-clr">
+
+                    <!--<div class="edit-order">-->
+                    <!--<a class="theme-btn btn-black" href="#"> Замовити </a>-->
+                    <!--</div>-->
+
+                    <div class="edit-order-btn">
+                        <a class="theme-btn btn-black" href="javascript:void(0);" data-target="#big-cart" data-toggle="modal">
+                            Редактировать заказ
+                        </a>
+                    </div>
+
+                    <h2 class="section-title wht fsz-36"> Оформление заказа </h2>
+                    <ol class="breadcrumb breadcrumb-menubar">
+                        <li> <a href="{{ url_home($model->language) }}"> Главная </a>  Оформление заказа </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+        <!--Breadcrumb Section End-->
+
+        <!-- Page Starts-->
+        <div class="container theme-container ptb-70">
+            <div class="row">
+
+
+                <!-- Product Details Starts-->
+                <aside class="col-md-7 col-sm-8">
+                    <form @submit.prevent="validateBeforeSubmit">
+
+                        <div class="profile-item">
+                            <div class="profile-item-header">
+                                <span><i class="fa fa-user" aria-hidden="true"></i></span> Контактные данные
+                            </div>
+                            <div class="profile-item-body">
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="text"
+                                                   data-order-name
+                                                   v-model="orderConfirm.name"
+                                                   placeholder="Введите Ваше Имя"
+                                                   class="form-control black-input">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="text"
+                                                   data-order-phone
+                                                   v-model="orderConfirm.phone"
+                                                   placeholder="Введите номер телефона"
+                                                   class="form-control black-input">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="text"
+                                                   data-order-email
+                                                   v-model="orderConfirm.email"
+                                                   placeholder="Введите e-mail"
+                                                   class="form-control black-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="profile-item order-dev">
+                            <div class="profile-item-header">
+                                <span><i class="fa fa-truck" aria-hidden="true"></i></span> Доставка и оплата
+                            </div>
+                            <div class="profile-item-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="drop-menu-select" tabindex="1" data-order-payment style="color: rgb(85, 85, 85); font-weight: 500;">
+                                            <div class="select">
+                                                <span>Выберите способ оплаты</span>
+                                                <i class="fa fa-caret-down"></i>
+                                            </div>
+                                            <input type="hidden" name="gender">
+                                            <ul class="dropeddown" style="display: none;">
+                                                @foreach($model->payments as $payment)
+                                                    <li v-on:click="setPaymentId({{$payment->id}})">{{ $payment->name }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="drop-menu-select" tabindex="1" data-order-delivery style="color: rgb(85, 85, 85); font-weight: 500;">
+                                            <div class="select">
+                                                <span>Выберите способ доставки</span>
+                                                <i class="fa fa-caret-down"></i>
+                                            </div>
+                                            <input type="hidden" name="gender">
+                                            <ul class="dropeddown" style="display: none;">
+                                                @foreach($model->deliveries as $delivery)
+                                                    <li v-on:click="setDeliveryId({{$delivery->id}})">{{ $delivery->name }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="text"
+                                                   data-order-address
+                                                   v-model="orderConfirm.address"
+                                                   placeholder="Адрес доставки или номер отделения"
+                                                   class="form-control black-input">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <textarea type="text"
+                                                      v-model="orderConfirm.comment"
+                                                      placeholder="Комментарий..."
+                                                      class="form-control black-input"></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-save-btn">
+                            <button type="submit" class="theme-btn btn-black"> Оформить заказ </button>
+                        </div>
+                    </form>
+                </aside>
+
+
+                <div class="col-md-5 col-sm-4">
+                    <div class="profile-item">
+                        <div class="profile-item-header">
+                            <span><i class="fa fa-shopping-cart" aria-hidden="true"></i></span> Ваш заказ
+                        </div>
+                        <div class="profile-item-body">
+                            <div class="order-products">
+
+                                <div v-cloak class="order-prod-item" v-for="cartItem in cartItems">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-4">
+                                            <div class="order-prod-img">
+                                                <a v-bind:href="'/product/' + cartItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+                                                    <img v-bind:src="cartItem.product.images[0].small" alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-8">
+                                            <div class="order-detail-prod">
+
+                                                <a class="prod-title block-inline" v-bind:href="'/product/' + cartItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+                                                    @{{ cartItem.product.name }}
+                                                </a>
+                                                <div class="productInfo-size-color">
+                                                    <ul class="choose-clr list-inline border-hover">
+                                                        <li>
+                                                            <a href="javascript:void(0);"
+                                                               class="active"
+                                                               :style="{'background-color': '' + cartItem.product.color.html_code + ''}">
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <ul class="choose-size list-inline border-hover">
+                                                        <li>
+                                                            <a href="javascript:void(0);" class="active">
+                                                                <span v-for="size in cartItem.product.sizes" v-if="size.id == cartItem.sizeId">
+                                                                    @{{ size.name }}
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <p class="fsz-16 font-2 no-margin">
+                                                    <span class="fw-300 gray-clr"> <span>@{{ cartItem.count }}</span> <sub>X</sub> </span> @{{ cartItem.product.price[0].price }} грн
+                                                </p>
+                                                <p class="fsz-16 font-2 no-margin order-prod-total">
+                                                    Сумма:<span>@{{ (cartItem.product.price[0].price * cartItem.count).toFixed(2) }} грн</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="order-total-price">
+                                <p v-cloak class="fsz-18 font-2 no-margin order-prod-total">
+                                    Сумма заказа:<span>@{{ totalAmount.toFixed(2) }} грн</span>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Product Details Ends -->
+
+
+
+            </div>
+        </div>
+        <!-- / Page Ends -->
+
+
+    </article>
+    <!-- / CONTENT AREA -->
+@endsection
+
+@push('js')
+<script defer src="/template/js/main.js"></script>
+{{--<script defer src="/template/plugins/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>--}}
+@endpush

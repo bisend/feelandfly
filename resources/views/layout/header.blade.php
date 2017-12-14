@@ -56,8 +56,22 @@
                         </li>
 
                         @if(auth()->check())
-                            <li><a href="javascript:void(0);">{{ auth()->user()->name }}</a></li>
-                            <li><a href="/user/logout">Выход</a></li>
+                            <li><a class="open-drop-profile-nav" href="javascript:void(0);">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                    {{ auth()->user()->name }}</a>
+                            </li>
+
+                        <ul class="drop-nav-profile">
+                            <li><a class="theme-btn btn-black" href="{{ url_personal_info($model->language) }}">Особисті дані</a></li>
+                            <li><a class="theme-btn btn-black" href="">Зміна пароля</a></li>
+                            <li><a class="theme-btn btn-black" href="">Обране</a></li>
+                            <li><a class="theme-btn btn-black" href="">Замовлення</a></li>
+                            <li><a class="theme-btn btn-black" href="/user/logout">Выход</a></li>
+                        </ul>
+
+
+
+                            {{--<li><a href="/user/logout">Выход</a></li>--}}
                         @else
                             <li><a data-toggle="modal" data-target="#login-popup" href="javascript:void(0);"> Вход </a></li>
                             <li><a data-toggle="modal" data-target="#register-popup" href="javascript:void(0);"> Регистрация </a></li>
@@ -297,7 +311,7 @@
                                     <div class="block-inline cart-btns">
                                         <ul class="prod-meta">
                                             <li class="cart_btn">
-                                                <a class="theme-btn btn-black" href="javascript:void(0);">
+                                                <a href="{{ url_order($model->language) }}" class="theme-btn btn-black">
                                                     Оформить заказ
                                                 </a>
                                             </li>

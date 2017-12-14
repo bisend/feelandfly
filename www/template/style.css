@@ -3254,7 +3254,8 @@ table {
     background: rgba(255, 255, 255, 0.9) none repeat scroll 0 0;
 }
 .popups-light .modal-content {
-    background-image: url(/img/template/popup/light-loging-bg.jpg);
+    /*background-image: url(/img/template/popup/light-loging-bg.jpg);*/
+    background-image: url(/img/template/popup/rivne2.jpg);
 }
 .popups-light .login-form .form-control {
     border: 2px solid #000000;
@@ -3273,7 +3274,8 @@ table {
     background: rgba(0, 0, 0, 0.8) none repeat scroll 0 0;
 }
 .popups-dark .modal-content {
-    background-image: url(/img/template/popup/dark-loging-bg.jpg);
+    /*background-image: url(/img/template/popup/dark-loging-bg.jpg);*/
+    background-image: url(/img/template/popup/rivne2.jpg);
 }
 .popups-dark .login-form .form-control {
     border: 2px solid #fff;
@@ -4472,7 +4474,7 @@ table {
 }
 
 .cart-list .cart-detail .smoll-cart-totl-prod{
-    margin-top: 11px;
+    /*margin-top: 11px;*/
     font-size: 14px;
 }
 
@@ -4711,4 +4713,309 @@ textarea.incorrect-field:-ms-input-placeholder {
 .bootstrap-select.btn-group .dropdown-menu li.disabled a {
     /* cursor: not-allowed; */
     cursor: default;
+}
+
+
+/* 06 12 2017 ----------------------------------------------------------------------------------------------------------*/
+
+.black-input{
+    /*border-color: #000;*/
+    border: 2px solid #000;
+    text-transform: none;
+}
+
+.black-input:focus{
+    border: 2px solid #333;
+}
+
+.cart-box {
+    border: 2px solid #000000;
+    display: inline-block;
+    margin-bottom: 30px;
+    padding: 30px 30px 20px 30px;
+    width: 100%;
+}
+
+.profile-item{
+    border: 2px solid #000000;
+    margin-bottom: 20px;
+}
+
+.profile-item .profile-item-header{
+    background-color: #000;
+    color: #fff;
+    border-bottom: 2px solid #000;
+    display: inline-block;
+    height: 48px;
+    line-height: 44px;
+    width: 100%;
+    text-transform: uppercase;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+}
+
+.profile-item .profile-item-header span{
+    background-color: #000000;
+    color: #ffffff;
+    display: inline-block;
+    height: 100%;
+    margin-right: 12px;
+    text-align: center;
+    width: 45px;
+    font-size: 21px;
+}
+
+.profile-item .profile-item-body{
+    padding: 30px 30px 20px 30px;
+}
+
+.profile-item-save{
+    margin-left: 15px;
+}
+
+.profile-item-save button{
+    width: 247px;
+    line-height: 50px;
+    font-size: 15px;
+}
+
+.title-profile-bar{
+    padding: 12px;
+    background-color: #000;
+    color: #fff;
+}
+
+.with-border > li{
+    padding-left: 12px;
+}
+
+
+
+/* SELECT  */
+/*Styling Selectbox*/
+.drop-menu-select {
+    width: 100%;
+    display: inline-block;
+    background-color: #fff;
+    border-radius: 0;
+    transition: all .5s ease;
+    position: relative;
+
+    color: #909090;
+
+    text-align: left;
+    outline: none;
+    border: 2px solid #000;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+
+
+    font-size: 14px;
+    height: 45px;
+
+}
+.drop-menu-select .select {
+    cursor: pointer;
+    display: block;
+    padding: 10px 20px;
+    outline: none;
+    margin-bottom: 0;
+    z-index: 8888;
+}
+
+.drop-menu-select .select span{
+    color: #a3a3a3;
+    z-index: 8888;
+    font-size: 15px;
+    font-weight: 300;
+}
+
+.drop-menu-select .select i {
+    font-size: 13px;
+    color: #909090;
+    cursor: pointer;
+    transition: all .5s ease;
+    float: right;
+    margin-top: 5px;
+    outline: none;
+}
+.drop-menu-select:hover {
+    outline: none;
+}
+.drop-menu-select:active {
+    /* border: 1px solid red;*/
+    outline: none;
+}
+.drop-menu-select.active:hover,
+.drop-menu-select.active {
+    outline: none;
+}
+.drop-menu-select.active .select i {
+    transform: rotate(180deg)
+}
+.drop-menu-select .dropeddown {
+    position: absolute;
+    background-color: #fff;
+    width: calc(100% + 4px);
+    left: 0;
+    margin-top: 0px;
+    overflow: hidden;
+    display: none;
+    overflow-y: auto;
+    z-index: 9;
+    outline: none;
+    border: 2px solid #000;
+    z-index: 8888;
+    margin-left: -2px;
+}
+.drop-menu-select .dropeddown li {
+    padding: 10px 15px;
+    transition: all .2s ease;
+    cursor: pointer;
+    outline: none;
+    border-bottom: 1px solid #eee;
+    color: #444;
+    font-weight: 500;
+    z-index: 8888;
+}
+.drop-menu-select .dropeddown {
+    padding: 0;
+    list-style: none;
+    outline: none;
+    z-index: 8888;
+}
+.drop-menu-select .dropeddown li:hover {
+    outline: none;
+    color: #fff;
+    background-color: #000
+}
+.drop-menu-select .dropeddown li:active {
+    outline: none;
+}
+/* SELECT END */
+
+
+.number-order{
+    float: right;
+    margin-left: 30px;
+}
+
+
+
+.number-order h2 span{
+    vertical-align: 0px;
+    margin-left: 10px;
+}
+
+
+.order-dev .drop-menu-select{
+    margin-bottom: 12px;
+}
+
+.profile-item-body textarea{
+    max-width: 100%;
+    min-width: 100%;
+    width: 100%;
+    height: 100px;
+    min-height: 100px;
+}
+
+.order-save-btn button{
+    width: 250px;
+}
+
+.edit-order{
+    float: right;
+}
+
+.order-prod-item .order-prod-img{
+    width: 117px;
+    display: inline-block;
+}
+
+.order-prod-item .order-detail-prod{
+    display: inline-block;
+}
+
+
+.order-prod-item .order-detail-prod .prod-title{
+    margin-top: 0;
+    padding-top: 0;
+    font-size: 15px;
+}
+
+
+/*.order-prod-item .order-detail-prod .order-prod-total{*/
+    /*margin-top: 6px;*/
+/*}*/
+
+.order-prod-item .order-detail-prod .order-prod-total span{
+    margin-left: 10px;
+}
+
+.order-prod-item{
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #333;
+}
+
+
+.order-detail-prod .productInfo-size-color ul{
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.order-total-price p span{
+    margin-left: 15px;
+    font-size: 20px;
+}
+
+
+.edit-order-btn{
+
+    float: right;
+}
+
+.edit-order-btn a{
+    width: 300px;
+    color: #000;
+}
+
+.edit-order-btn a:hover{
+    color: #fff;
+}
+
+.edit-order-btn a:hover:after {
+    height: 390%;
+    opacity: 1;
+}
+/*6.12*/
+
+.drop-nav-profile{
+    background-color: #fff;
+    position: absolute;
+    z-index: 100;
+    right: 0;
+    padding: 10px;
+    border: 2px solid #000;
+    top: 45px;
+    display: none;
+}
+
+.drop-nav-profile li{
+    display: block;
+}
+
+.drop-nav-profile li a{
+    font-size: 14px;
+    height: 40px;
+    line-height: 36px;
+    font-weight: 300;
+    margin: 6px 0;
+}
+
+
+.open-drop-profile-nav i{
+    color: #fff;
+    margin-right: 5px;
 }

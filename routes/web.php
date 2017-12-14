@@ -181,3 +181,34 @@ Route::get('/confirm/{confirmationToken}/{language?}', 'User\ConfirmationEmailCo
     ->where([
         'language' => '^(ru|uk)?$'
     ]);
+
+/**
+ * Confirmation new email method handler
+ */
+Route::get('/confirm-new-email/{confirmationToken}/{language?}', 'Profile\PersonalInfoController@confirmNewEmail')
+    ->where([
+        'language' => '^(uk|ru)?$'
+    ]);
+
+Route::group(['prefix' => 'order'], function () {
+    
+    Route::get('confirm/{language?}', 'OrderController@index')
+        ->where([
+            'language' => '^(uk|ru)?$'
+        ]);
+
+    Route::post('create', 'OrderController@create');
+
+});
+
+Route::group(['prefix' => 'profile'], function () {
+    
+    Route::get('personal-info/{language?}', 'Profile\PersonalInfoController@index')
+        ->where([
+            'language' => '^(uk|ru)?$'
+        ]);
+    
+    Route::post('save-personal-info', 'Profile\PersonalInfoController@savePersonalInfo');
+
+    Route::post('change-password', 'Profile\ChangePasswordController@changePassword');
+});

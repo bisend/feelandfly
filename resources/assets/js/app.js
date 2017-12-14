@@ -67,3 +67,9 @@ require('./components/Register');
 require('./components/Login');
 
 require('./components/SocialEmail');
+
+require('./components/Order');
+
+require('./components/PersonalInfo');
+
+require('./components/ChangePassword');

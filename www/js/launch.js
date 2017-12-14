@@ -14,7 +14,12 @@ var INCORRECT_FIELD_CLASS = 'incorrect-field',
     EMAIL_CONFIRM_NOT_VALID = (LANGUAGE == DEFAULT_LANGUAGE) ? 'E-mail не подтвержден.' : 'E-mail не підтверджено.',
     EMAIL_NOT_EXISTS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Такой e-mail не существует.' : 'Такого e-mail не існує.',
     REGISTER_SUCCESS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Регистрация прошла успешно, на указанный e-mail отправлено письмо для подтверждения.' : 'Реєстрація пройшла успішно, на вказаний e-mail відправлено лист для підтвердження.',
-    RESTORE_SUCCESS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'На ваш e-mail отправлено письмо с паролем для входа.' : 'На ваш e-mail відправлено лист з паролем для входу.';
+    RESTORE_SUCCESS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'На ваш e-mail отправлено письмо с паролем для входа.' : 'На ваш e-mail відправлено лист з паролем для входу.',
+    ORDER_CREATED_MESSAGE = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Заказ принят. Скоро с вами свяжется наш менеджер.' : 'Замовлення прийнято. Незабаром з вами зв\'яжеться наш менеджер.',
+    PERSONAL_INFO_SAVED = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Данные сохранены.' : 'Дані збережено.',
+    EMAIL_CHANGED_MESSAGE = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Данные сохранены. Вы изменили e-mail, Вам отправлено письмо для подтверждения нового електронного адреса.' : 'Дані збережено. Ви змінили e-mail, Вам відправлено лист для підтвердження нової електронної адреси.',
+    PASSWORD_CHANGED_MESSAGE = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Пароль сохранен.' : 'Пароль змінено.',
+    WRONG_OLD_PASSWORD = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Неверный старый пароль.' : 'Неправильний старий пароль.';
 
 if (window.location.hash && window.location.hash == '#_=_') {
     if (window.history && history.pushState) {
@@ -60,12 +65,22 @@ var GLOBAL_DATA = {
         count: '',
         rel: ''
     },
+    orderConfirm: {
+        name: '',
+        phone: '',
+        email: '',
+        address: '',
+        comment: '',
+        paymentId: '',
+        deliveryId: ''
+    },
     totalCount: 0,
     totalAmount: 0,
     INIT_CART_ENDED: false,
     IS_DATA_PROCESSING: false,
     timer: undefined,
     user: null,
+    profile: null,
     userTypeId: 1
 };
 
@@ -117,6 +132,14 @@ function getUser() {
             function (data) {
                 GLOBAL_DATA.user = data.user;
                 GLOBAL_DATA.userTypeId = data.userTypeId;
+                GLOBAL_DATA.profile = data.profile;
+                
+                if (GLOBAL_DATA.user)
+                {
+                    GLOBAL_DATA.orderConfirm.name = GLOBAL_DATA.user.name;
+                    GLOBAL_DATA.orderConfirm.email = GLOBAL_DATA.user.email;
+
+                }
             }
         ),
         error: INIT_CART_WS.wrap(
@@ -219,14 +242,27 @@ $(document).ready(
             wasHidden =! wasHidden
 
         });
-    }
-);
+
+        $('.open-drop-profile-nav').on('focusin', function () {
+            $('.drop-nav-profile').slideDown(300);
+        });
+
+        $('.open-drop-profile-nav').on('focusout', function () {
+            $('.drop-nav-profile').slideUp(300);
+        });
+
+    });
 
 $(window).load(function () {
     if (window.FFShop && window.FFShop.social_email && window.FFShop.social_email.isEmail == false)
     {
         $('[data-social-email]').modal();
         // $('[data-popup]').modal();
+    }
+
+    if (window.FFShop && window.FFShop.isOrderCreated && window.FFShop.isOrderCreated == true)
+    {
+        showPopup(ORDER_CREATED_MESSAGE);
     }
 });
 

@@ -205,8 +205,19 @@ class CartService
             }
         }
 
-        Session::put($this->sessionKey, $newSessionCart);
+        if (count($newSessionCart) > 0)
+        {
+            Session::put($this->sessionKey, $newSessionCart);
+        }
 
         $this->fill($language, $userTypeId);
+    }
+    
+    public function clearCart()
+    {
+        if (Session::has('cart'))
+        {
+            Session::remove('cart');
+        }
     }
 }

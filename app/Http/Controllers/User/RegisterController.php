@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\DatabaseModels\Profile;
 use App\DatabaseModels\User;
 use App\Http\Controllers\LayoutController;
 use App\Mail\EmailConfirm;
@@ -46,7 +47,7 @@ class RegisterController extends LayoutController
         $confirmationToken = str_random(31) . $user->id;
         $user->confirmation_token = $confirmationToken;
         $user->save();
-
+        
         try {
             $confirmationUrl = url_confirmation($confirmationToken, $language);
 

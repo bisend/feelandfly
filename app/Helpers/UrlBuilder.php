@@ -187,7 +187,7 @@ class UrlBuilder
     * Order page
     * @var string
     */
-    const ORDER = 'order';
+    const ORDER = 'order/confirm';
 
 
 

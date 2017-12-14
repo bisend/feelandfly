@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DatabaseModels\Profile;
 use App\Helpers\Languages;
 use Illuminate\Http\Request;
 use Session;
@@ -30,16 +31,19 @@ class LayoutController extends Controller
         {
             $user = auth()->user();
             $userTypeId = $user->user_type_id;
+            $profile = Profile::whereUserId($user->id)->first();
         }
         else
         {
             $user = null;
             $userTypeId = 1;
+            $profile = null;
         }
             
         return response()->json([
             'status' => 'success',
             'user' => $user,
+            'profile' => $profile,
             'userTypeId' => $userTypeId
         ]);
     }

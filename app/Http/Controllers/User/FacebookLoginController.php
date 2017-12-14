@@ -6,6 +6,7 @@ use App\DatabaseModels\SocialLogin;
 use App\DatabaseModels\User;
 use App\Helpers\Languages;
 use App\Http\Controllers\LayoutController;
+use App\Repositories\ProfileRepository;
 use DB;
 use Illuminate\Http\Request;
 use Session;
@@ -15,6 +16,13 @@ use Validator;
 
 class FacebookLoginController extends LayoutController
 {
+    protected $profileRepository;
+    
+    public function __construct(ProfileRepository $profileRepository)
+    {
+        $this->profileRepository = $profileRepository;
+    }
+
     public function redirectToProvider($language = Languages::DEFAULT_LANGUAGE)
     {
         Languages::localizeApp($language);
@@ -76,6 +84,9 @@ class FacebookLoginController extends LayoutController
                     $user->user_type_id = 1;
                     $user->active = true;
                     $user->save();
+                    $confirmationToken = str_random(31) . $user->id;
+                    $user->confirmation_token = $confirmationToken;
+                    $user->save();
 
                     $sLogin = new SocialLogin();
                     $sLogin->user_id = $user->id;
@@ -84,6 +95,8 @@ class FacebookLoginController extends LayoutController
                     $sLogin->save();
 
                     auth()->login($user);
+
+                    $this->profileRepository->createProfile($user);
 
                     if (Session::has('language'))
                     {
@@ -104,6 +117,8 @@ class FacebookLoginController extends LayoutController
                     $sLogin->save();
 
                     auth()->login($user);
+
+                    $this->profileRepository->createProfile($user);
 
                     if (Session::has('language'))
                     {
@@ -160,7 +175,10 @@ class FacebookLoginController extends LayoutController
             $user->user_type_id = 1;
             $user->active = true;
             $user->save();
-
+            $confirmationToken = str_random(31) . $user->id;
+            $user->confirmation_token = $confirmationToken;
+            $user->save();
+            
             $sLogin = new SocialLogin();
             $sLogin->user_id = $user->id;
             $sLogin->provider_id = $userProvider['providerId'];
@@ -177,6 +195,8 @@ class FacebookLoginController extends LayoutController
         DB::commit();
 
         auth()->login($user);
+        
+        $this->profileRepository->createProfile($user);
 
         return response()->json([
             'status' => 'success'
