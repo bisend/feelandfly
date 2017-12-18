@@ -175,6 +175,8 @@ Route::group(['prefix' => 'user'], function () {
         ]);
     
     Route::get('login/google/callback', 'User\GoogleLoginController@handleProviderCallback');
+
+    Route::post('restore-password', 'User\RestorePasswordController@restore');
 });
 
 Route::get('/confirm/{confirmationToken}/{language?}', 'User\ConfirmationEmailController@confirm')
@@ -186,6 +188,11 @@ Route::get('/confirm/{confirmationToken}/{language?}', 'User\ConfirmationEmailCo
  * Confirmation new email method handler
  */
 Route::get('/confirm-new-email/{confirmationToken}/{language?}', 'Profile\PersonalInfoController@confirmNewEmail')
+    ->where([
+        'language' => '^(uk|ru)?$'
+    ]);
+
+Route::get('/confirm-social-email/{confirmationToken}/{language?}', 'User\FacebookLoginController@confirmSocialEmail')
     ->where([
         'language' => '^(uk|ru)?$'
     ]);
@@ -208,7 +215,20 @@ Route::group(['prefix' => 'profile'], function () {
             'language' => '^(uk|ru)?$'
         ]);
     
+    Route::get('payment-delivery/{language?}', 'Profile\PaymentDeliveryController@index')
+        ->where([
+            'language' => '^(uk|ru)?$'
+        ]);
+    
+    Route::get('wish-list/{language?}', 'Profile\WishListController@index');
+    
     Route::post('save-personal-info', 'Profile\PersonalInfoController@savePersonalInfo');
 
     Route::post('change-password', 'Profile\ChangePasswordController@changePassword');
+
+    Route::post('save-payment-delivery', 'Profile\PaymentDeliveryController@savePaymentDelivery');
+    
+    Route::post('add-to-wish-list', 'Profile\WishListController@addToWishList');
+
+    Route::post('delete-from-wish-list', 'Profile\WishListController@deleteFromWishList');
 });

@@ -20,6 +20,9 @@
     @include('modals.pop-up')
 
     @include('modals.social-email')
+
+    @include('modals.restore-password')
+
     {{--HEADER--}}
     @include('layout.header')
     {{--/HEADER--}}

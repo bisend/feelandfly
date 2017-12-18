@@ -6,7 +6,9 @@ use App\DatabaseModels\SocialLogin;
 use App\DatabaseModels\User;
 use App\Helpers\Languages;
 use App\Http\Controllers\LayoutController;
+use App\Mail\SocialEmailConfirm;
 use App\Repositories\ProfileRepository;
+use App\Repositories\WishListRepository;
 use DB;
 use Illuminate\Http\Request;
 use Session;
@@ -17,10 +19,14 @@ use Validator;
 class FacebookLoginController extends LayoutController
 {
     protected $profileRepository;
+
+    protected $wishListRepository;
     
-    public function __construct(ProfileRepository $profileRepository)
+    public function __construct(ProfileRepository $profileRepository, WishListRepository $wishListRepository)
     {
         $this->profileRepository = $profileRepository;
+
+        $this->wishListRepository = $wishListRepository;
     }
 
     public function redirectToProvider($language = Languages::DEFAULT_LANGUAGE)
@@ -65,7 +71,8 @@ class FacebookLoginController extends LayoutController
                 Session::put('social_email', [
                     'isEmail' => false,
                     'name' => $name,
-                    'providerId' => $providerId
+                    'providerId' => $providerId,
+                    'confirmationToken' => str_random(31) . $providerId
                 ]);
 
                 return redirect(url_home(Session::get('language')));
@@ -98,6 +105,8 @@ class FacebookLoginController extends LayoutController
 
                     $this->profileRepository->createProfile($user);
 
+                    $this->wishListRepository->createWishList($user->id);
+
                     if (Session::has('language'))
                     {
                         return redirect(url_home(Session::get('language')));
@@ -117,8 +126,6 @@ class FacebookLoginController extends LayoutController
                     $sLogin->save();
 
                     auth()->login($user);
-
-                    $this->profileRepository->createProfile($user);
 
                     if (Session::has('language'))
                     {
@@ -151,7 +158,7 @@ class FacebookLoginController extends LayoutController
         }
 
         $validator = Validator::make($request->all(), [
-            'email' => 'required|string|max:191|unique:users,email'
+            'email' => 'required|string|max:191'
         ]);
 
         if ($validator->fails())
@@ -161,29 +168,82 @@ class FacebookLoginController extends LayoutController
                 'failed' => 'email'
             ]);
         }
+        
+        try
+        {
+            $confirmationToken = Session::get('social_email.confirmationToken');
+            
+            Session::put('social_email.email', request('email'));
+            
+            $confirmationUrl = url_social_email_confirmation($confirmationToken, request('language'));
+
+            \Mail::to(request('email'))->send(new SocialEmailConfirm($confirmationUrl, request('language')));
+        }
+        catch (\Exception $e)
+        {
+            \Debugbar::info($e->getMessage());
+        }
+
+        return response()->json([
+            'status' => 'success'
+        ]);
+    }
+
+    public function confirmSocialEmail($confirmationToken, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        if (!Session::has('social_email'))
+        {
+            if (Session::has('language'))
+            {
+                return redirect(url_home(Session::get('language')));
+            }
+            else
+            {
+                return redirect('/');
+            }
+        }
 
         DB::beginTransaction();
 
-        $userProvider = Session::pull('social_email');
-
         try
         {
-            $user = new User();
-            $user->name = $userProvider['name'];
-            $user->email = request('email');
-            $user->password = bcrypt(str_random(8));
-            $user->user_type_id = 1;
-            $user->active = true;
-            $user->save();
-            $confirmationToken = str_random(31) . $user->id;
-            $user->confirmation_token = $confirmationToken;
-            $user->save();
-            
-            $sLogin = new SocialLogin();
-            $sLogin->user_id = $user->id;
-            $sLogin->provider_id = $userProvider['providerId'];
-            $sLogin->provider_name = 'facebook';
-            $sLogin->save();
+            $userProvider = Session::pull('social_email');
+
+            if ($confirmationToken == $userProvider['confirmationToken'])
+            {
+                $user = User::whereEmail($userProvider['email'])->first();
+
+                if (!$user)
+                {
+                    $user = new User();
+                    $user->name = $userProvider['name'];
+                    $user->email = $userProvider['email'];
+                    $user->password = bcrypt(str_random(8));
+                    $user->user_type_id = 1;
+                    $user->active = true;
+                    $user->save();
+                    $confirmationToken = str_random(31) . $user->id;
+                    $user->confirmation_token = $confirmationToken;
+                    $user->save();
+
+                    $this->profileRepository->createProfile($user);
+
+                    $this->wishListRepository->createWishList($user->id);
+                }
+
+                $sLogin = new SocialLogin();
+                $sLogin->user_id = $user->id;
+                $sLogin->provider_id = $userProvider['providerId'];
+                $sLogin->provider_name = 'facebook';
+                $sLogin->save();
+
+                auth()->login($user);
+            }
+            else
+            {
+                Session::put('social_email', $userProvider);
+            }
+
         }
         catch (\Exception $e)
         {
@@ -194,12 +254,13 @@ class FacebookLoginController extends LayoutController
 
         DB::commit();
 
-        auth()->login($user);
-        
-        $this->profileRepository->createProfile($user);
-
-        return response()->json([
-            'status' => 'success'
-        ]);
+        if (Session::has('language'))
+        {
+            return redirect(url_home(Session::get('language')));
+        }
+        else
+        {
+            return redirect('/');
+        }
     }
 }

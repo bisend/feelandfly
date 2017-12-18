@@ -15,7 +15,7 @@
                             <a href="{{ url_home($model->language) }}">
                                 Главная
                             </a>
-                            Мой профиль
+                            Основная информация
                         </li>
                     </ol>
                 </div>
@@ -31,13 +31,10 @@
                     <div class="widget-wrap">
                         <h2 class="widget-title title-profile-bar"> Мой профиль </h2>
                         <ul class="account-list with-border">
-                            <li>
-                                <a href="javascript:void(0);">
-                                    Основная информация
-                                </a>
-                            </li>
-                            <li class="active"><a href="">Оплата и доставка </a></li>
-                            <li ><a href="/user/logout">Выход</a></li>
+                            <li><a href="javascript:void(0);" style="color: #000;">Основная информация</a></li>
+                            <li><a href="{{ url_payment_delivery($model->language) }}">Оплата и доставка </a></li>
+                            <li><a href="{{ url_wish_list($model->language) }}">Избранное</a></li>
+                            <li><a href="/user/logout">Выход</a></li>
                         </ul>
                     </div>
                 </aside>

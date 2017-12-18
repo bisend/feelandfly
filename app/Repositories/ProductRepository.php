@@ -360,6 +360,59 @@ class ProductRepository
                 'number_of_views'
             ]);
     }
+
+    public function getWishListProducts($productIds, $language, $userTypeId)
+    {
+        return Product::with([
+            'images',
+            'color' => function ($query) use ($language) {
+                $query->select([
+                    'colors.id',
+                    "colors.name_$language as name",
+                    'colors.slug',
+                    'colors.html_code'
+                ]);
+            },
+            'product_group.products.color' => function ($query) use ($language) {
+                $query->select([
+                    'colors.id',
+                    "colors.name_$language as name",
+                    'colors.slug',
+                    'colors.html_code'
+                ]);
+            },
+            'sizes' => function ($query) use ($language) {
+                $query->select([
+                    'sizes.id',
+                    "sizes.name_$language as name",
+                    'sizes.slug'
+                ]);
+            },
+            'price' => function ($query) use ($language, $userTypeId) {
+                $query->select([
+                    'product_prices.id',
+                    'product_prices.product_id',
+                    'product_prices.user_type_id',
+                    'product_prices.price'
+                ])->whereUserTypeId($userTypeId);
+            },
+        ])
+            ->whereIn('id', $productIds)
+            ->get([
+                'id',
+                "name_$language as name",
+                'slug',
+                'color_id',
+                'group_id',
+                'category_id',
+                'breadcrumb_category_id',
+                "description_$language as description",
+                'priority',
+                'vendor_code',
+                'rating',
+                'number_of_views'
+            ]);
+    }
     
     public function getAllProductsForFiltersCategory(
         $currentCategory,

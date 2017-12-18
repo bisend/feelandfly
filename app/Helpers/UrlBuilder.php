@@ -69,6 +69,8 @@ class UrlBuilder
      */
     const NEW_EMAIL_CONFIRMATION_PAGE = 'confirm-new-email';
 
+    const SOCIAL_EMAIL_CONFIRMATION_PAGE = 'confirm-social-email';
+
     /**
      * Search async method name
      *
@@ -171,18 +173,19 @@ class UrlBuilder
      */
     const WISHLIST_PAGE = 'profile/wish-list';
 
-    /*
-     * Compare page
-     * @var string
-     */
-    const COMPARE_PAGE = 'compare';
 
     /*
      * Payment Delivery page
      * @var string
      */
-    const PAYMENT_DELIVERY_PAGE = 'payment-delivery';
+    const PAYMENT_DELIVERY_PAGE = 'profile/payment-delivery';
 
+    /*
+     * Compare page
+     * @var string
+     */
+    const COMPARE_PAGE = 'compare';
+    
     /*
     * Order page
     * @var string
@@ -282,6 +285,22 @@ class UrlBuilder
         $url = self::concatParts([
             url(self::URL_ROOT),
             self::NEW_EMAIL_CONFIRMATION_PAGE,
+            $confirmationToken
+        ]);
+
+        return self::localize($url, $language);
+    }
+
+    public static function socialEmailConfirmation($confirmationToken = null, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        if (!$confirmationToken)
+        {
+            return self::UNDEFINED_URL;
+        }
+
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::SOCIAL_EMAIL_CONFIRMATION_PAGE,
             $confirmationToken
         ]);
 
@@ -486,6 +505,17 @@ class UrlBuilder
         $url = self::concatParts([
             url(self::URL_ROOT),
             self::WISHLIST_PAGE
+        ]);
+
+        return self::localize($url, $language);
+    }
+    
+    
+    public static function paymentDelivery($language = Languages::DEFAULT_LANGUAGE)
+    {
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::PAYMENT_DELIVERY_PAGE
         ]);
 
         return self::localize($url, $language);

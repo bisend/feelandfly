@@ -7,14 +7,19 @@ use App\DatabaseModels\User;
 use App\Helpers\Languages;
 use App\Http\Controllers\LayoutController;
 use App\Repositories\ProfileRepository;
+use App\Repositories\WishListRepository;
 
 class ConfirmationEmailController extends LayoutController
 {
     protected $profileRepository;
+    
+    protected $wishListRepository;
 
-    public function __construct(ProfileRepository $profileRepository)
+    public function __construct(ProfileRepository $profileRepository, WishListRepository $wishListRepository)
     {
         $this->profileRepository = $profileRepository;
+        
+        $this->wishListRepository = $wishListRepository;
     }
 
     public function confirm($confirmationToken = null, $language = Languages::DEFAULT_LANGUAGE)
@@ -39,7 +44,7 @@ class ConfirmationEmailController extends LayoutController
 
         $this->profileRepository->createProfile($user);
 
-//        $this->wishListRepository->createWishList($user->id);
+        $this->wishListRepository->createWishList($user->id);
 
         return redirect(url_home($language));
     }

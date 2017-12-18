@@ -73,3 +73,9 @@ require('./components/Order');
 require('./components/PersonalInfo');
 
 require('./components/ChangePassword');
+
+require('./components/RestorePassword');
+
+require('./components/PaymentDelivery');
+
+require('./components/WishList');

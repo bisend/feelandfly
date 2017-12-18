@@ -74,6 +74,13 @@ var GLOBAL_DATA = {
         paymentId: '',
         deliveryId: ''
     },
+    wishListItems: [],
+    wishListPagination: {
+        page: 1,
+        totalItemsCount: '',
+        itemsPerPage: '',
+        maxElements: 7
+    },
     totalCount: 0,
     totalAmount: 0,
     INIT_CART_ENDED: false,
@@ -81,6 +88,7 @@ var GLOBAL_DATA = {
     timer: undefined,
     user: null,
     profile: null,
+    wishList: null,
     userTypeId: 1
 };
 
@@ -133,12 +141,14 @@ function getUser() {
                 GLOBAL_DATA.user = data.user;
                 GLOBAL_DATA.userTypeId = data.userTypeId;
                 GLOBAL_DATA.profile = data.profile;
+                GLOBAL_DATA.wishList = data.wishList;
+                GLOBAL_DATA.wishListItems = data.wishListItems;
                 
                 if (GLOBAL_DATA.user)
                 {
                     GLOBAL_DATA.orderConfirm.name = GLOBAL_DATA.user.name;
                     GLOBAL_DATA.orderConfirm.email = GLOBAL_DATA.user.email;
-
+                    GLOBAL_DATA.orderConfirm.phone = data.profile.phone_number;
                 }
             }
         ),
@@ -206,6 +216,20 @@ $('body').on('click', '[data-popup]', function (e) {
 $('#sort-select').on('changed.bs.select', function (e, clickedIndex) {
     // do something...
     window.location.href = $(e.currentTarget[clickedIndex]).attr('data-url');
+});
+
+$('body').on('click', '[data-restore-password-button]', function (e) {
+    var RESTORE_PASS_CLICKED = true;
+
+    $('#login-popup').modal('hide');
+
+    $('#login-popup').on('hidden.bs.modal', function () {
+        if (RESTORE_PASS_CLICKED)
+        {
+            $('[data-restore-password]').modal();
+        }
+        RESTORE_PASS_CLICKED = false;
+    });
 });
 
 

@@ -42,6 +42,14 @@ if (!function_exists('url_new_email_confirmation'))
     }
 }
 
+if (!function_exists('url_social_email_confirmation'))
+{
+    function url_social_email_confirmation($confirmationToken = null, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::socialEmailConfirmation($confirmationToken, $language);
+    }
+}
+
 
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -246,6 +254,21 @@ if (!function_exists('url_personal_info')) {
     function url_personal_info($language = Languages::DEFAULT_LANGUAGE)
     {
         return UrlBuilder::personalInfo($language);
+    }
+}
+
+if (!function_exists('url_payment_delivery')) {
+
+    /**
+     * Get the personal-info page url
+     *
+     * @param string $language
+     *
+     * @return string
+     */
+    function url_payment_delivery($language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::paymentDelivery($language);
     }
 }
 

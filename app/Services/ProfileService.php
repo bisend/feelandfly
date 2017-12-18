@@ -9,8 +9,12 @@
 namespace App\Services;
 
 use App\Repositories\CategoryRepository;
+use App\Repositories\DeliveryRepository;
+use App\Repositories\PaymentRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\WishListProductRepository;
 
 class ProfileService extends LayoutService
 {
@@ -18,15 +22,35 @@ class ProfileService extends LayoutService
     
     protected $profileRepository;
     
+    protected $paymentRepository;
+    
+    protected $deliveryRepository;
+
+    protected $wishListProductRepository;
+
+    protected $productRepository;
+    
     public function __construct(CategoryRepository $categoryRepository, 
                                 UserRepository $userRepository, 
-                                ProfileRepository $profileRepository)
+                                ProfileRepository $profileRepository,
+                                PaymentRepository $paymentRepository,
+                                DeliveryRepository $deliveryRepository,
+                                WishListProductRepository $wishListProductRepository,
+                                ProductRepository $productRepository)
     {
         parent::__construct($categoryRepository);
         
         $this->userRepository = $userRepository;
         
         $this->profileRepository = $profileRepository;
+        
+        $this->paymentRepository = $paymentRepository;
+        
+        $this->deliveryRepository = $deliveryRepository;
+
+        $this->wishListProductRepository = $wishListProductRepository;
+
+        $this->productRepository = $productRepository;
     }
     
     public function fill($model)
@@ -63,4 +87,89 @@ class ProfileService extends LayoutService
     {
         $this->userRepository->changePassword($userId, $newPassword);
     }
+    
+    public function fillPayments($model)
+    {
+        $model->payments = $this->paymentRepository->getAllPayments($model);
+    }
+    
+    public function fillDeliveries($model)
+    {
+        $model->deliveries = $this->deliveryRepository->getAllDeliveries($model);
+    }
+
+    public function fillSelectedPaymentId($model)
+    {
+        $model->selectedPaymentId = $this->profileRepository->getSelectedPaymentId($model);
+    }
+    
+    public function fillSelectedDeliveryId($model)
+    {
+        $model->selectedDeliveryId = $this->profileRepository->getSelectedDeliveryId($model);
+    }
+    
+    public function fillAddress($model)
+    {
+        $model->address = $this->profileRepository->getAddress($model);
+    }
+    
+    public function savePaymentDelivery($paymentId, $deliveryId, $address)
+    {
+        $this->profileRepository->savePaymentDelivery($paymentId, $deliveryId, $address);
+    }
+
+    public function addToWishList($wishListId, $productId, $sizeId)
+    {
+        $this->wishListProductRepository->addToWishList($wishListId, $productId, $sizeId);
+    }
+
+    public function deleteFromWishList($wishListProductId)
+    {
+        $this->wishListProductRepository->deleteFromWishList($wishListProductId);
+    }
+
+    public function getWishListItems($wishListId, $language, $userTypeId)
+    {
+        $wishListProducts = $this->wishListProductRepository->getWishListProducts($wishListId);
+
+        $productIds = [];
+
+        $wishListItems = [];
+
+        $newWishListItems = [];
+        
+        foreach ($wishListProducts as $wishListProduct)
+        {
+            $productIds[] = $wishListProduct->product_id;
+            $wishListItems[] = [
+                'productId' => $wishListProduct->product_id,
+                'sizeId' => $wishListProduct->size_id,
+                'wishListProductId' => $wishListProduct->id
+            ];
+        }
+
+        $products = $this->productRepository->getWishListProducts($productIds, $language, $userTypeId);
+
+        foreach ($wishListItems as $wishListItem)
+        {
+            foreach ($products as $product)
+            {
+                if ($wishListItem['productId'] == $product->id)
+                {
+                    $newWishListItems[] = [
+                        'wishListProductId' => $wishListItem['wishListProductId'],
+                        'productId' => $wishListItem['productId'],
+                        'sizeId' => $wishListItem['sizeId'],
+                        'product' => $product
+                    ];
+                    $wishListItem['product'] = $product;
+                }
+            }
+        }
+
+        \Debugbar::info($wishListItems, $products, $newWishListItems);
+        
+        return $newWishListItems;
+    }
+
 }

@@ -176,6 +176,12 @@ __webpack_require__(19);
 
 __webpack_require__(20);
 
+__webpack_require__(21);
+
+__webpack_require__(22);
+
+__webpack_require__(23);
+
 /***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -11192,6 +11198,10 @@ process.umask = function() { return 0; };
 /***/ (function(module, exports) {
 
 if (document.getElementById('grid-view')) {
+
+    //container with preview
+    // var $container = $('#prod-preview-test');
+
     var initProductPreviewImagesSlider = function initProductPreviewImagesSlider() {
         //Resize carousels in modal
         if ($('.sync2.product-preview-images-small').length > 0) {
@@ -11322,9 +11332,7 @@ if (document.getElementById('grid-view')) {
         sync1,
         sync2,
         sliderthumb,
-        homethumb;
-
-    GLOBAL_DATA.categoryProducts = window.FFShop.products;
+        homethumb;GLOBAL_DATA.categoryProducts = window.FFShop.products;
 
     //init currentSizeId for categoryProducts
     GLOBAL_DATA.categoryProducts.forEach(function (item) {
@@ -11348,6 +11356,9 @@ if (document.getElementById('grid-view')) {
     var gridView = new Vue({
         el: '#grid-view',
         data: GLOBAL_DATA,
+        // mounted: function () {
+
+        // },
         methods: {
             //check if props in list
             findWhere: function findWhere(list, props) {
@@ -11435,6 +11446,48 @@ if (document.getElementById('grid-view')) {
                     $('#big-cart').modal();
                 }
             },
+            addToWishList: function addToWishList(productId, sizeId, wishListId) {
+                var obj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId)
+                },
+                    _this = this;
+
+                if (_this.findWhere(GLOBAL_DATA.wishListItems, obj) == null) {
+                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                        return false;
+                    }
+
+                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                    showLoader();
+
+                    //ajax
+                    $.ajax({
+                        type: 'post',
+                        url: '/profile/add-to-wish-list',
+                        data: {
+                            productId: obj.productId,
+                            sizeId: obj.sizeId,
+                            wishListId: wishListId,
+                            language: LANGUAGE,
+                            userTypeId: GLOBAL_DATA.userTypeId
+                        },
+                        success: function success(data) {
+                            hideLoader();
+
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                            GLOBAL_DATA.wishListItems = data.wishListItems;
+                        },
+                        error: function error(_error2) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                            console.log(_error2);
+                        }
+                    });
+                }
+            },
             //changing currentSizeId of category product
             changeCurrentSizeId: function changeCurrentSizeId(counter, sizeId) {
                 GLOBAL_DATA.categoryProducts[counter].currentSizeId = sizeId;
@@ -11472,6 +11525,12 @@ if (document.getElementById('grid-view')) {
                 //container with preview
                 var $container = $('#prod-preview-test');
 
+                $container.modal();
+
+                setTimeout(function () {
+                    initProductPreviewImagesSlider();
+                }, 400);
+
                 $("a[rel^='prettyPhoto[category-" + GLOBAL_DATA.categoryProductPreview.product.id + "]']").prettyPhoto({
                     theme: 'facebook',
                     slideshow: 5000,
@@ -11492,12 +11551,6 @@ if (document.getElementById('grid-view')) {
                         $('body').removeClass('modal-open').css('padding-right', 0);
                     }
                 });
-
-                $container.modal();
-
-                setTimeout(function () {
-                    initProductPreviewImagesSlider();
-                }, 400);
             }
         }
     });
@@ -11505,6 +11558,28 @@ if (document.getElementById('grid-view')) {
     var productPreview = new Vue({
         el: '#category-product-preview',
         data: GLOBAL_DATA,
+        mounted: function mounted() {
+            $("a[rel^='prettyPhoto[category-" + GLOBAL_DATA.categoryProductPreview.product.id + "]']").prettyPhoto({
+                theme: 'facebook',
+                slideshow: 5000,
+                autoplay_slideshow: false,
+                social_tools: false,
+                deeplinking: false,
+                ajaxcallback: function ajaxcallback() {
+                    var PRETTY_LOADED = true;
+                    $('#prod-preview-test').modal('hide');
+                    $('#prod-preview-test').on('hidden.bs.modal', function () {
+                        if (PRETTY_LOADED) {
+                            $('body').addClass('modal-open').css('padding-right', '17px');
+                            PRETTY_LOADED = false;
+                        }
+                    });
+                },
+                callback: function callback() {
+                    $('body').removeClass('modal-open').css('padding-right', 0);
+                }
+            });
+        },
         methods: {
             //method handles onChange count input
             toInteger: function toInteger(count) {
@@ -11619,10 +11694,10 @@ if (document.getElementById('grid-view')) {
                                 }
                             });
                         },
-                        error: function error(_error2) {
+                        error: function error(_error3) {
                             hideLoader();
                             GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                            console.log(_error2);
+                            console.log(_error3);
                         }
                     });
                 } else {
@@ -11636,6 +11711,48 @@ if (document.getElementById('grid-view')) {
                             $('#big-cart').modal();
                             // $('body').addClass('modal-open').css('padding-right', '17px');
                             LOADED = false;
+                        }
+                    });
+                }
+            },
+            addToWishList: function addToWishList(productId, sizeId, wishListId) {
+                var obj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId)
+                },
+                    _this = this;
+
+                if (_this.findWhere(GLOBAL_DATA.wishListItems, obj) == null) {
+                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                        return false;
+                    }
+
+                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                    showLoader();
+
+                    //ajax
+                    $.ajax({
+                        type: 'post',
+                        url: '/profile/add-to-wish-list',
+                        data: {
+                            productId: obj.productId,
+                            sizeId: obj.sizeId,
+                            wishListId: wishListId,
+                            language: LANGUAGE,
+                            userTypeId: GLOBAL_DATA.userTypeId
+                        },
+                        success: function success(data) {
+                            hideLoader();
+
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                            GLOBAL_DATA.wishListItems = data.wishListItems;
+                        },
+                        error: function error(_error4) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                            console.log(_error4);
                         }
                     });
                 }
@@ -11692,10 +11809,10 @@ if (document.getElementById('grid-view')) {
                         GLOBAL_DATA.totalCount = data.totalCount;
                         GLOBAL_DATA.totalAmount = data.totalAmount;
                     },
-                    error: function error(_error3) {
+                    error: function error(_error5) {
                         GLOBAL_DATA.IS_DATA_PROCESSING = false;
                         hideLoader();
-                        console.log(_error3);
+                        console.log(_error5);
                     }
                 });
             },
@@ -13532,7 +13649,14 @@ new Vue({
                     var LOADED = true;
 
                     if (data.status == 'success') {
-                        window.location.reload(true);
+                        $('[data-social-email]').modal('hide');
+
+                        $('[data-social-email]').on('hidden.bs.modal', function () {
+                            if (LOADED) {
+                                showPopup(REGISTER_SUCCESS);
+                                LOADED = false;
+                            }
+                        });
                     }
 
                     if (data.status == 'error') {
@@ -13986,6 +14110,345 @@ if (document.getElementById('change-password')) {
                         hideLoader();
                         showPopup(SERVER_ERROR);
                         console.log(_error);
+                    }
+                });
+            }
+        }
+    });
+}
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+var restorePasswordEmailValidator;
+
+new Vue({
+    el: '[data-restore-password]',
+    data: {
+        email: ''
+    },
+    mounted: function mounted() {
+        var _this = this;
+        // `this` указывает на экземпляр vm
+
+        restorePasswordEmailValidator = new RegExValidatingInput($('[data-restore-email-input]'), {
+            expression: RegularExpressions.EMAIL,
+            ChangeOnValid: function ChangeOnValid(input) {
+                input.removeClass(INCORRECT_FIELD_CLASS);
+            },
+            ChangeOnInvalid: function ChangeOnInvalid(input) {
+                input.addClass(INCORRECT_FIELD_CLASS);
+            },
+            showErrors: true,
+            requiredErrorMessage: REQUIRED_FIELD_TEXT,
+            regExErrorMessage: INCORRECT_FIELD_TEXT
+        });
+    },
+    methods: {
+        validateBeforeSubmit: function validateBeforeSubmit() {
+            var _this = this;
+
+            var isValid = true;
+
+            restorePasswordEmailValidator.Validate();
+            if (!restorePasswordEmailValidator.IsValid()) {
+                isValid = false;
+            }
+
+            if (isValid) {
+                _this.restorePassword();
+            }
+        },
+        restorePassword: function restorePassword() {
+            var _this = this;
+
+            showLoader();
+
+            $.ajax({
+                type: 'post',
+                url: '/user/restore-password',
+                data: {
+                    email: _this.email,
+                    language: LANGUAGE
+                },
+                success: function success(data) {
+                    hideLoader();
+
+                    var LOADED = true;
+
+                    if (data.status == 'success') {
+                        $('[data-restore-password]').modal('hide');
+
+                        $('[data-restore-password]').on('hidden.bs.modal', function () {
+                            if (LOADED) {
+                                showPopup(RESTORE_SUCCESS);
+                                LOADED = false;
+                            }
+                        });
+                    }
+
+                    if (data.status == 'error') {
+                        if (data.failed == 'email') {
+                            $('[data-restore-password]').modal('hide');
+
+                            $('[data-restore-password]').on('hidden.bs.modal', function () {
+                                if (LOADED) {
+                                    showPopup(EMAIL_NOT_EXISTS);
+                                    LOADED = false;
+                                }
+                            });
+                        }
+
+                        if (data.failed == 'server') {
+                            $('[data-restore-password]').modal('hide');
+
+                            $('[data-restore-password]').on('hidden.bs.modal', function () {
+                                if (LOADED) {
+                                    showPopup(SERVER_ERROR);
+                                    LOADED = false;
+                                }
+                            });
+                        }
+                    }
+                },
+                error: function error(_error) {
+                    hideLoader();
+
+                    $('[data-restore-password]').modal('hide');
+
+                    var LOADED = true;
+
+                    $('[data-restore-password]').on('hidden.bs.modal', function () {
+                        if (LOADED) {
+                            showPopup(SERVER_ERROR);
+                            LOADED = false;
+                        }
+                    });
+
+                    console.log(_error);
+                }
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+if (document.getElementById('profile-payment-delivery')) {
+    var profileAddressValidator;
+
+    new Vue({
+        el: '#profile-payment-delivery',
+        data: {
+            selectedPaymentId: window.FFShop.selectedPaymentId,
+            selectedDeliveryId: window.FFShop.selectedDeliveryId,
+            address: window.FFShop.address
+        },
+        mounted: function mounted() {
+            profileAddressValidator = new RegExValidatingInput($('[data-profile-address]'), {
+                expression: RegularExpressions.MIN_TEXT,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+        },
+        methods: {
+            setSelectedPaymentId: function setSelectedPaymentId(paymentId) {
+                var _this = this;
+
+                _this.selectedPaymentId = paymentId;
+            },
+            setSelectedDeliveryId: function setSelectedDeliveryId(deliveryId) {
+                var _this = this;
+
+                _this.selectedDeliveryId = deliveryId;
+            },
+            validateBeforeSubmit: function validateBeforeSubmit() {
+                var _this = this;
+
+                var isValid = true;
+
+                profileAddressValidator.Validate();
+                if (!profileAddressValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                if (_this.selectedPaymentId == null) {
+                    isValid = false;
+                    $('[data-profile-payment]').css('border', '2px solid red');
+                }
+
+                if (_this.selectedDeliveryId == null) {
+                    isValid = false;
+                    $('[data-profile-delivery]').css('border', '2px solid red');
+                }
+
+                if (isValid) {
+                    _this.savePaymentDelivery();
+                }
+            },
+            savePaymentDelivery: function savePaymentDelivery() {
+                var _this = this;
+
+                showLoader();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/profile/save-payment-delivery',
+                    data: {
+                        paymentId: _this.selectedPaymentId,
+                        deliveryId: _this.selectedDeliveryId,
+                        address: _this.address,
+                        language: LANGUAGE
+                    },
+                    success: function success(data) {
+                        hideLoader();
+
+                        if (data.status == 'success') {
+                            showPopup(PERSONAL_INFO_SAVED);
+                        }
+
+                        if (data.status == 'error') {
+                            showPopup(SERVER_ERROR);
+                        }
+                    },
+                    error: function error(_error) {
+                        hideLoader();
+                        showPopup(SERVER_ERROR);
+                        console.log(_error);
+                    }
+                });
+            }
+        }
+    });
+}
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+if (document.getElementById('profile-wish-list')) {
+    new Vue({
+        el: '#profile-wish-list',
+        data: GLOBAL_DATA,
+        methods: {
+            //check if props in list
+            findWhere: function findWhere(list, props) {
+                var idx = 0;
+                var len = list.length;
+                var match = false;
+                var item, item_k, item_v, prop_k, prop_val;
+                for (; idx < len; idx++) {
+                    item = list[idx];
+                    for (prop_k in props) {
+                        // If props doesn't own the property, skip it.
+                        if (!props.hasOwnProperty(prop_k)) continue;
+                        // If item doesn't have the property, no match;
+                        if (!item.hasOwnProperty(prop_k)) {
+                            match = false;
+                            break;
+                        }
+                        if (props[prop_k] === item[prop_k]) {
+                            // We have a match…so far.
+                            match = true;
+                        } else {
+                            // No match.
+                            match = false;
+                            // Don't compare more properties.
+                            break;
+                        }
+                    }
+                    // We've iterated all of props' properties, and we still match!
+                    // Return that item!
+                    if (match) return item;
+                }
+                // No matches
+                return null;
+            },
+            //method handles add to cart
+            addToCart: function addToCart(productId, sizeId, count) {
+                var obj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId),
+                    count: parseInt(count)
+                },
+                    searchObj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId)
+                },
+                    _this = this;
+
+                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
+                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                        return false;
+                    }
+
+                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                    showLoader();
+
+                    //ajax
+                    $.ajax({
+                        type: 'post',
+                        url: '/cart/add-to-cart',
+                        data: {
+                            productId: obj.productId,
+                            sizeId: obj.sizeId,
+                            count: obj.count,
+                            language: LANGUAGE,
+                            userTypeId: GLOBAL_DATA.userTypeId
+                        },
+                        success: function success(data) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                            GLOBAL_DATA.cartItems = data.cart;
+                            GLOBAL_DATA.totalCount = data.totalCount;
+                            GLOBAL_DATA.totalAmount = data.totalAmount;
+
+                            $('#big-cart').modal();
+                        },
+                        error: function error(_error) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                            console.log(_error);
+                        }
+                    });
+                } else {
+                    $('#big-cart').modal();
+                }
+            },
+            deleteFromWishList: function deleteFromWishList(wishListProductId) {
+                showLoader();
+
+                //ajax
+                $.ajax({
+                    type: 'post',
+                    url: '/profile/delete-from-wish-list',
+                    data: {
+                        wishListProductId: wishListProductId,
+                        wishListId: GLOBAL_DATA.wishList.id,
+                        language: LANGUAGE,
+                        userTypeId: GLOBAL_DATA.userTypeId
+                    },
+                    success: function success(data) {
+                        hideLoader();
+
+                        GLOBAL_DATA.wishListItems = data.wishListItems;
+                    },
+                    error: function error(_error2) {
+                        hideLoader();
+                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                        console.log(_error2);
                     }
                 });
             }

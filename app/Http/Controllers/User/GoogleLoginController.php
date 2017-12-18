@@ -7,16 +7,21 @@ use App\DatabaseModels\User;
 use App\Helpers\Languages;
 use App\Http\Controllers\LayoutController;
 use App\Repositories\ProfileRepository;
+use App\Repositories\WishListRepository;
 use Session;
 use Socialite;
 
 class GoogleLoginController extends LayoutController
 {
     protected $profileRepository;
+    
+    protected $wishListRepository;
 
-    public function __construct(ProfileRepository $profileRepository)
+    public function __construct(ProfileRepository $profileRepository, WishListRepository $wishListRepository)
     {
         $this->profileRepository = $profileRepository;
+        
+        $this->wishListRepository = $wishListRepository;
     }
 
     public function redirectToProvider($language = Languages::DEFAULT_LANGUAGE)
@@ -70,6 +75,10 @@ class GoogleLoginController extends LayoutController
                 $confirmationToken = str_random(31) . $user->id;
                 $user->confirmation_token = $confirmationToken;
                 $user->save();
+
+                $this->profileRepository->createProfile($user);
+                
+                $this->wishListRepository->createWishList($user->id);
             }
 
             $sLogin = new SocialLogin();
@@ -79,8 +88,6 @@ class GoogleLoginController extends LayoutController
             $sLogin->save();
 
             auth()->login($user);
-
-            $this->profileRepository->createProfile($user);
 
             if (Session::has('language'))
             {

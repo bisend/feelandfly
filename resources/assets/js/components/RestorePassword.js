@@ -1,7 +1,7 @@
-var socialEmailValidator;
+var restorePasswordEmailValidator;
 
 new Vue({
-    el: '[data-social-email]',
+    el: '[data-restore-password]',
     data: {
         email: ''
     },
@@ -9,7 +9,7 @@ new Vue({
         var _this = this;
         // `this` указывает на экземпляр vm
 
-        socialEmailValidator = new RegExValidatingInput($('[data-social-email-input]'), {
+        restorePasswordEmailValidator = new RegExValidatingInput($('[data-restore-email-input]'), {
             expression: RegularExpressions.EMAIL,
             ChangeOnValid: function (input) {
                 input.removeClass(INCORRECT_FIELD_CLASS);
@@ -28,25 +28,25 @@ new Vue({
 
             var isValid = true;
 
-            socialEmailValidator.Validate();
-            if (!socialEmailValidator.IsValid())
+            restorePasswordEmailValidator.Validate();
+            if (!restorePasswordEmailValidator.IsValid())
             {
                 isValid = false;
             }
 
             if (isValid)
             {
-                _this.loginUser();
+                _this.restorePassword();
             }
         },
-        loginUser: function () {
+        restorePassword() {
             var _this = this;
 
             showLoader();
 
             $.ajax({
                 type: 'post',
-                url: '/user/social-email',
+                url: '/user/restore-password',
                 data: {
                     email: _this.email,
                     language: LANGUAGE
@@ -58,12 +58,12 @@ new Vue({
 
                     if (data.status == 'success')
                     {
-                        $('[data-social-email]').modal('hide');
+                        $('[data-restore-password]').modal('hide');
 
-                        $('[data-social-email]').on('hidden.bs.modal', function () {
+                        $('[data-restore-password]').on('hidden.bs.modal', function () {
                             if (LOADED)
                             {
-                                showPopup(REGISTER_SUCCESS);
+                                showPopup(RESTORE_SUCCESS);
                                 LOADED = false;
                             }
                         });
@@ -73,27 +73,40 @@ new Vue({
                     {
                         if (data.failed == 'email')
                         {
-                            $('[data-social-email]').modal('hide');
+                            $('[data-restore-password]').modal('hide');
 
-                            $('[data-social-email]').on('hidden.bs.modal', function () {
+                            $('[data-restore-password]').on('hidden.bs.modal', function () {
                                 if (LOADED)
                                 {
-                                    showPopup(EMAIL_NOT_VALID);
+                                    showPopup(EMAIL_NOT_EXISTS);
                                     LOADED = false;
                                 }
                             });
                         }
-                        
+
+                        if (data.failed == 'server')
+                        {
+                            $('[data-restore-password]').modal('hide');
+
+                            $('[data-restore-password]').on('hidden.bs.modal', function () {
+                                if (LOADED)
+                                {
+                                    showPopup(SERVER_ERROR);
+                                    LOADED = false;
+                                }
+                            });
+                        }
+
                     }
                 },
                 error: function (error) {
                     hideLoader();
 
-                    $('[data-social-email]').modal('hide');
+                    $('[data-restore-password]').modal('hide');
 
                     var LOADED = true;
 
-                    $('[data-social-email]').on('hidden.bs.modal', function () {
+                    $('[data-restore-password]').on('hidden.bs.modal', function () {
                         if (LOADED)
                         {
                             showPopup(SERVER_ERROR);
@@ -104,7 +117,6 @@ new Vue({
                     console.log(error);
                 }
             });
-
         }
     }
 });

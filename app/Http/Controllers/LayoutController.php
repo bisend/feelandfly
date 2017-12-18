@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DatabaseModels\Profile;
+use App\DatabaseModels\WishList;
 use App\Helpers\Languages;
+use App\Services\ProfileService;
 use Illuminate\Http\Request;
 use Session;
 
@@ -13,12 +15,11 @@ use Session;
  */
 class LayoutController extends Controller
 {
-    public function __construct()
+    protected $profileService;
+
+    public function __construct(ProfileService $profileService)
     {
-//        if (Session::has('language'))
-//        {
-//            Session::remove('language');
-//        }
+        $this->profileService = $profileService;
     }
 
     public function getUser()
@@ -32,19 +33,26 @@ class LayoutController extends Controller
             $user = auth()->user();
             $userTypeId = $user->user_type_id;
             $profile = Profile::whereUserId($user->id)->first();
+            $wishList = WishList::whereUserId($user->id)->first();
+
+            $wishListItems = $this->profileService->getWishListItems($wishList->id, $language, $userTypeId);;
         }
         else
         {
             $user = null;
             $userTypeId = 1;
             $profile = null;
+            $wishList = null;
+            $wishListItems = [];
         }
             
         return response()->json([
             'status' => 'success',
             'user' => $user,
             'profile' => $profile,
-            'userTypeId' => $userTypeId
+            'userTypeId' => $userTypeId,
+            'wishList' => $wishList,
+            'wishListItems' => $wishListItems
         ]);
     }
 }

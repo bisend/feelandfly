@@ -28,9 +28,20 @@
                         </div>
                     </div>
                     <div class="login-form">
-                        <p class="fsz-18 section-title pb-25">
-                            ВОЙДИТЕ В ПРОФИЛЬ
-                        </p>
+                        <div class="row">
+                            <div class="col-sm-6 pb-25">
+                                <p class="fsz-18 section-title">
+                                    ВОЙДИТЕ В ПРОФИЛЬ
+                                </p>
+                            </div>
+                            <div class="col-sm-6 pb-25">
+                                <p class="fsz-18 section-title">
+                                    <a href="javascript:void(0);" data-restore-password-button >Забыли пароль?</a>
+                                </p>
+                            </div>
+                        </div>
+
+
                         <form class="login" @submit.prevent="validateBeforeSubmit">
                             <div class="form-group auth-form-group">
                                 <input data-login-email
