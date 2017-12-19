@@ -289,7 +289,54 @@ if (document.getElementById('product-details'))
                         }, 400);
                     }
                 }
-            }
+            },
+            addToWishList: function (productId, sizeId, wishListId) {
+                var obj = {
+                        productId: parseInt(productId),
+                        sizeId: parseInt(sizeId)
+                    },
+                    _this = this;
+
+                if (_this.findWhere(GLOBAL_DATA.wishListItems, obj) == null)
+                {
+                    if (GLOBAL_DATA.IS_DATA_PROCESSING)
+                    {
+                        return false;
+                    }
+
+                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                    showLoader();
+
+                    //ajax
+                    $.ajax({
+                        type: 'post',
+                        url: '/profile/add-to-wish-list',
+                        data: {
+                            productId: obj.productId,
+                            sizeId: obj.sizeId,
+                            wishListId: wishListId,
+                            language: LANGUAGE,
+                            userTypeId: GLOBAL_DATA.userTypeId
+                        },
+                        success: function (data) {
+                            hideLoader();
+
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                            GLOBAL_DATA.wishListItems = data.wishListItems;
+                            GLOBAL_DATA.totalWishListCount = data.totalWishListCount;
+
+                        },
+                        error: function (error) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                            console.log(error);
+                        }
+                    });
+                }
+
+            },
         }
     });
 }

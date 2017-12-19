@@ -115,7 +115,22 @@
                                                     </span>
                                             </a>
                                         </li>
-                                        <li> <a class="fa fa-heart meta-icon" href="#"></a> </li>
+                                        <li>
+                                            @if(auth()->check())
+                                                <a v-cloak
+                                                   v-if="!findWhere(wishListItems, {'productId': similarProductPreview.product.id, 'sizeId': similarProductPreview.currentSizeId})"
+                                                   class="fa fa-heart meta-icon"
+                                                   v-on:click="addToWishList(similarProductPreview.product.id, similarProductPreview.currentSizeId, wishList.id)"
+                                                   href="javascript:void(0);"></a>
+                                                <a v-cloak v-else class="fa fa-heart meta-icon meta-icon-in-wish" href="{{ url_wish_list($model->language) }}"></a>
+                                            @else
+                                                <a class="fa fa-heart meta-icon"
+                                                   data-toggle="modal"
+                                                   data-target="#login-popup"
+                                                   href="javascript:void(0);">
+                                                </a>
+                                            @endif
+                                        </li>
 
                                     </ul>
                                 </div>
@@ -182,9 +197,9 @@
                                             Подробнее
                                         </a>
                                     </li>
-                                    <li>
-                                        <a class="fa fa-heart meta-icon" href="#"></a>
-                                    </li>
+                                    {{--<li>--}}
+                                        {{--<a class="fa fa-heart meta-icon" href="#"></a>--}}
+                                    {{--</li>--}}
                                 </ul>
                             </div>
                         </figcaption>

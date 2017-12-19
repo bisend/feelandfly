@@ -120,7 +120,22 @@
                                                     </span>
                                                 </a>
                                             </li>
-                                            <li> <a class="fa fa-heart meta-icon" href="#"></a> </li>
+                                            <li>
+                                                @if(auth()->check())
+                                                    <a v-cloak
+                                                       v-if="!findWhere(wishListItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})"
+                                                       class="fa fa-heart meta-icon"
+                                                       v-on:click="addToWishList(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, wishList.id)"
+                                                       href="javascript:void(0);"></a>
+                                                    <a v-cloak v-else class="fa fa-heart meta-icon meta-icon-in-wish" href="{{ url_wish_list($model->language) }}"></a>
+                                                @else
+                                                    <a class="fa fa-heart meta-icon"
+                                                       data-toggle="modal"
+                                                       data-target="#login-popup"
+                                                       href="javascript:void(0);">
+                                                    </a>
+                                                @endif
+                                            </li>
 
                                         </ul>
                                     </div>
@@ -269,7 +284,22 @@
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a class="fa fa-heart meta-icon" href="javascript:void(0);"></a>
+                                                                @if(auth()->check())
+                                                                    <a v-cloak
+                                                                       v-if="!findWhere(wishListItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})"
+                                                                       class="fa fa-heart meta-icon"
+                                                                       v-on:click="addToWishList({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, wishList.id)"
+                                                                       href="javascript:void(0);"></a>
+                                                                    <a v-cloak v-else
+                                                                       class="fa fa-heart meta-icon meta-icon-in-wish"
+                                                                       href="{{ url_wish_list($model->language) }}"></a>
+                                                                @else
+                                                                    <a class="fa fa-heart meta-icon"
+                                                                       data-toggle="modal"
+                                                                       data-target="#login-popup"
+                                                                       href="javascript:void(0);">
+                                                                    </a>
+                                                                @endif
                                                             </li>
                                                         </ul>
                                                     </div>

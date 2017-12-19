@@ -30,14 +30,13 @@
                                     <ul class="choose-clr list-inline border-hover">
                                         <li>
                                             <a class="active"
-                                               href="javascript:void(0);"
                                                :style="{'background-color': '' + cartItem.product.color.html_code + ''}">
                                             </a>
                                         </li>
                                     </ul>
                                     <ul class="choose-size list-inline border-hover">
                                         <li>
-                                            <a href="javascript:void(0);" class="active">
+                                            <a class="active">
                                                 <span v-for="size in cartItem.product.sizes" v-if="size.id == cartItem.sizeId">
                                                     @{{ size.name }}
                                                 </span>

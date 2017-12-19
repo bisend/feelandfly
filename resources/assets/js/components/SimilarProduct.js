@@ -156,6 +156,28 @@ if (document.getElementById('similar-product'))
     new Vue({
         el: '#similar-product',
         data: GLOBAL_DATA,
+        mounted: function () {
+            $("a[rel^='prettyPhoto[similar-product-" + GLOBAL_DATA.similarProductPreview.product.id + "]']").prettyPhoto({
+                theme: 'facebook',
+                slideshow: 5000,
+                autoplay_slideshow: false,
+                social_tools: false,
+                deeplinking: false,
+                ajaxcallback: function () {
+                    var PRETTY_LOADED = true;
+                    $('#prod-preview-test').modal('hide');
+                    $('#prod-preview-test').on('hidden.bs.modal', function () {
+                        if (PRETTY_LOADED) {
+                            $('body').addClass('modal-open').css('padding-right', '17px');
+                            PRETTY_LOADED = false;
+                        }
+                    });
+                },
+                callback: function () {
+                    $('body').removeClass('modal-open').css('padding-right', 0);
+                }
+            });
+        },
         methods: {
             //method handles onChange count input
             toInteger: function (count) {
@@ -497,6 +519,53 @@ if (document.getElementById('similar-product'))
                 setTimeout(function () {
                     initProductPreviewImagesSlider();
                 }, 400);
+            },
+            addToWishList: function (productId, sizeId, wishListId) {
+                var obj = {
+                        productId: parseInt(productId),
+                        sizeId: parseInt(sizeId)
+                    },
+                    _this = this;
+
+                if (_this.findWhere(GLOBAL_DATA.wishListItems, obj) == null)
+                {
+                    if (GLOBAL_DATA.IS_DATA_PROCESSING)
+                    {
+                        return false;
+                    }
+
+                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                    showLoader();
+
+                    //ajax
+                    $.ajax({
+                        type: 'post',
+                        url: '/profile/add-to-wish-list',
+                        data: {
+                            productId: obj.productId,
+                            sizeId: obj.sizeId,
+                            wishListId: wishListId,
+                            language: LANGUAGE,
+                            userTypeId: GLOBAL_DATA.userTypeId
+                        },
+                        success: function (data) {
+                            hideLoader();
+
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                            GLOBAL_DATA.wishListItems = data.wishListItems;
+                            GLOBAL_DATA.totalWishListCount = data.totalWishListCount;
+
+                        },
+                        error: function (error) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                            console.log(error);
+                        }
+                    });
+                }
+
             }
         }
     });

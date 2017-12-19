@@ -293,6 +293,7 @@ if (document.getElementById('grid-view'))
                             GLOBAL_DATA.IS_DATA_PROCESSING = false;
 
                             GLOBAL_DATA.wishListItems = data.wishListItems;
+                            GLOBAL_DATA.totalWishListCount = data.totalWishListCount;
                             
                         },
                         error: function (error) {

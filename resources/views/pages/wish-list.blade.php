@@ -38,7 +38,8 @@
 
                 <!-- Product Details Starts-->
                 <aside class="col-md-9 col-sm-8 wishlist-section" v-if="wishListItems.length > 0">
-                    <div class="col-md-12 list-wishlist-item" v-for="(wishListItem, index) in wishListItems" v-if="index < 3" v-cloak>
+                    <div class="col-md-12 list-wishlist-item" v-for="(wishListItem, index) in wishListItems"
+                         v-if="index >= wishListPagination.startIndex && index < wishListPagination.endIndex" v-cloak>
                         <div class="border-item-wishlist">
                             <div class="row">
                                 <div class="col-sm-12 col-md-2">
@@ -55,7 +56,6 @@
                                                 <h2 class="prod-title">
                                                     <a v-bind:href="'/product/' + wishListItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
                                                         @{{ wishListItem.product.name }}
-                                                        {{--@{{ index }}--}}
                                                     </a>
                                                 </h2>
                                             </div>
@@ -69,14 +69,13 @@
                                                 <div class="productInfo-size-color">
                                                     <ul class="choose-clr list-inline border-hover">
                                                         <li>
-                                                            <a href="javascript:void(0);"
-                                                               class="active"
+                                                            <a class="active"
                                                                :style="{'background-color': '' + wishListItem.product.color.html_code + ''}"></a>
                                                         </li>
                                                     </ul>
                                                     <ul class="choose-size list-inline border-hover">
                                                         <li>
-                                                            <a href="javascript:void(0);" class="active">
+                                                            <a class="active">
                                                                 <span v-for="(size, index) in wishListItem.product.sizes"
                                                                       v-if="size.id == wishListItem.sizeId">
                                                                     @{{ size.name }}
@@ -127,13 +126,44 @@
                     </div>
                 </aside>
                 <!-- Pagination Starts -->
-                <div class="block-inline pagination-wrap text-center">
+                <div class="block-inline pagination-wrap text-center" v-cloak v-if="totalWishListCount > 5">
                     <ul class="pagination-1">
-                        <li class="prv"> <a href="#"> <i class="fa fa-long-arrow-left"></i> </a> </li>
-                        <li> <a href="#" class="active"> 1 </a> </li>
-                        <li> <a href="#"> 2 </a> </li>
-                        <li> <a href="#"> 3 </a> </li>
-                        <li class="nxt"> <a href="#"> <i class="fa fa-long-arrow-right"></i> </a> </li>
+
+                        <li v-if="wishListPagination.isPrev" class="prv">
+                            <a class="disabled"
+                               style="cursor: pointer;"
+                               v-on:click="setWishListPage(wishListCurrentPage - 1)">
+                                <i class="fa fa-long-arrow-left"></i>
+                            </a>
+                        </li>
+                        <li v-else class="prv">
+                            <a>
+                                <i class="fa fa-long-arrow-left"></i>
+                            </a>
+                        </li>
+
+                        <li v-for="page in wishListPages">
+                            <a v-if="page == '...'">
+                                @{{ page }}
+                            </a>
+                            <a v-else style="cursor: pointer;"
+                               :class="{active : page == wishListPagination.page}"
+                               v-on:click="setWishListPage(page)">
+                                @{{ page }}
+                            </a>
+                        </li>
+                        <li v-if="wishListPagination.isNext" class="nxt">
+                            <a class="disabled"
+                               style="cursor: pointer;"
+                               v-on:click="setWishListPage(wishListCurrentPage + 1)">
+                                <i class="fa fa-long-arrow-right"></i>
+                            </a>
+                        </li>
+                        <li v-else class="prv">
+                            <a>
+                                <i class="fa fa-long-arrow-right"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <!-- Pagination Ends -->

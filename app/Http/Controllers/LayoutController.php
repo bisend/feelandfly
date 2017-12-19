@@ -34,8 +34,8 @@ class LayoutController extends Controller
             $userTypeId = $user->user_type_id;
             $profile = Profile::whereUserId($user->id)->first();
             $wishList = WishList::whereUserId($user->id)->first();
-
-            $wishListItems = $this->profileService->getWishListItems($wishList->id, $language, $userTypeId);;
+            $wishListItems = $this->profileService->getWishListItems($wishList->id, $language, $userTypeId);
+            $totalWishListCount = $this->profileService->getTotalWishListCount($wishListItems);
         }
         else
         {
@@ -44,6 +44,7 @@ class LayoutController extends Controller
             $profile = null;
             $wishList = null;
             $wishListItems = [];
+            $totalWishListCount = 0;
         }
             
         return response()->json([
@@ -52,7 +53,8 @@ class LayoutController extends Controller
             'profile' => $profile,
             'userTypeId' => $userTypeId,
             'wishList' => $wishList,
-            'wishListItems' => $wishListItems
+            'wishListItems' => $wishListItems,
+            'totalWishListCount' => $totalWishListCount
         ]);
     }
 }

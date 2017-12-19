@@ -77,12 +77,17 @@ var GLOBAL_DATA = {
     wishListItems: [],
     wishListPagination: {
         page: 1,
-        totalItemsCount: '',
-        itemsPerPage: '',
-        maxElements: 7
+        itemsPerPage: 5,
+        startIndex: 0,
+        endIndex: 5,
+        isPrev: false,
+        isNext: false
     },
+    wishListPages: [],
+    wishListCurrentPage: 1,
     totalCount: 0,
     totalAmount: 0,
+    totalWishListCount: 0,
     INIT_CART_ENDED: false,
     IS_DATA_PROCESSING: false,
     timer: undefined,
@@ -143,7 +148,8 @@ function getUser() {
                 GLOBAL_DATA.profile = data.profile;
                 GLOBAL_DATA.wishList = data.wishList;
                 GLOBAL_DATA.wishListItems = data.wishListItems;
-                
+                GLOBAL_DATA.totalWishListCount = data.totalWishListCount;
+
                 if (GLOBAL_DATA.user)
                 {
                     GLOBAL_DATA.orderConfirm.name = GLOBAL_DATA.user.name;

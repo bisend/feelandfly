@@ -171,5 +171,9 @@ class ProfileService extends LayoutService
         
         return $newWishListItems;
     }
-
+    
+    public function getTotalWishListCount($wishListItems)
+    {
+        return count($wishListItems);
+    }
 }

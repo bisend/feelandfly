@@ -41,12 +41,14 @@ class WishListController extends LayoutController
         $this->profileService->addToWishList($wishListId, $productId, $sizeId);
         
         $wishListItems = $this->profileService->getWishListItems($wishListId, $language, $userTypeId);
+        $totalWishListCount = $this->profileService->getTotalWishListCount($wishListItems);
         
         \Debugbar::info(request()->all());
         
         return response()->json([
             'status' => 'success',
-            'wishListItems' => $wishListItems
+            'wishListItems' => $wishListItems,
+            'totalWishListCount' => $totalWishListCount
         ]);
     }
 
@@ -60,10 +62,12 @@ class WishListController extends LayoutController
         $this->profileService->deleteFromWishList($wishListProductId);
 
         $wishListItems = $this->profileService->getWishListItems($wishListId, $language, $userTypeId);
+        $totalWishListCount = $this->profileService->getTotalWishListCount($wishListItems);
         
         return response()->json([
             'status' => 'success',
-            'wishListItems' => $wishListItems
+            'wishListItems' => $wishListItems,
+            'totalWishListCount' => $totalWishListCount
         ]);
     }
 }
