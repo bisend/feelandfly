@@ -2,8 +2,14 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\UrlBuilder;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -13,7 +19,14 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        \Illuminate\Auth\AuthenticationException::class,
+        \Illuminate\Auth\Access\AuthorizationException::class,
+        \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
+        \Illuminate\Session\TokenMismatchException::class,
+        \Illuminate\Validation\ValidationException::class,
+
+        NotFoundHttpException::class,
     ];
 
     /**
@@ -48,6 +61,29 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        $language = config('app.locale');
+
+        if ($exception instanceof BadRequestHttpException)
+        {
+            return redirect(UrlBuilder::error(400, $language));
+        }
+        else if ($exception instanceof UnauthorizedHttpException)
+        {
+            return redirect(UrlBuilder::error(401, $language));
+        }
+        else if ($exception instanceof AccessDeniedHttpException)
+        {
+            return redirect(UrlBuilder::error(403, $language));
+        }
+        else if($exception instanceof NotFoundHttpException)
+        {
+            return redirect(UrlBuilder::error(404, $language));
+        }
+        else if ($exception instanceof HttpException)
+        {
+            return redirect(UrlBuilder::error(500, $language));
+        }
+        
         return parent::render($request, $exception);
     }
 }

@@ -155,6 +155,17 @@ function getUser() {
                     GLOBAL_DATA.orderConfirm.name = GLOBAL_DATA.user.name;
                     GLOBAL_DATA.orderConfirm.email = GLOBAL_DATA.user.email;
                     GLOBAL_DATA.orderConfirm.phone = data.profile.phone_number;
+                    GLOBAL_DATA.orderConfirm.address = data.profile.address_delivery;
+
+                    if (data.profile.payment_id != null)
+                    {
+                        GLOBAL_DATA.orderConfirm.paymentId = data.profile.payment_id;
+                    }
+
+                    if (data.profile.delivery_id != null)
+                    {
+                        GLOBAL_DATA.orderConfirm.deliveryId = data.profile.delivery_id;
+                    }
                 }
             }
         ),

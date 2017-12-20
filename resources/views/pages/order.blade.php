@@ -84,7 +84,15 @@
                                     <div class="col-md-12">
                                         <div class="drop-menu-select" tabindex="1" data-order-payment style="color: rgb(85, 85, 85); font-weight: 500;">
                                             <div class="select">
-                                                <span>Выберите способ оплаты</span>
+                                                @if($model->profile != null && $model->profile->payment_id != null)
+                                                    @foreach($model->payments as $payment)
+                                                        @if($model->profile->payment_id == $payment->id)
+                                                            <span>{{ $payment->name }}</span>
+                                                        @endif
+                                                    @endforeach
+                                                @else
+                                                    <span>Выберите способ оплаты</span>
+                                                @endif
                                                 <i class="fa fa-caret-down"></i>
                                             </div>
                                             <input type="hidden" name="gender">
@@ -98,7 +106,15 @@
                                     <div class="col-md-12">
                                         <div class="drop-menu-select" tabindex="1" data-order-delivery style="color: rgb(85, 85, 85); font-weight: 500;">
                                             <div class="select">
-                                                <span>Выберите способ доставки</span>
+                                                @if($model->profile != null && $model->profile->delivery_id != null)
+                                                    @foreach($model->deliveries as $delivery)
+                                                        @if($model->profile->delivery_id == $delivery->id)
+                                                            <span>{{ $delivery->name }}</span>
+                                                        @endif
+                                                    @endforeach
+                                                @else
+                                                    <span>Выберите способ доставки</span>
+                                                @endif
                                                 <i class="fa fa-caret-down"></i>
                                             </div>
                                             <input type="hidden" name="gender">

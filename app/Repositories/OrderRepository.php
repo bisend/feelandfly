@@ -36,4 +36,27 @@ class OrderRepository
 
         return $order;
     }
+    
+    public function getOrders($model)
+    {
+        return Order::with([
+            'status' => function ($query) use ($model) {
+                $query->select([
+                    'id',
+                    "name_$model->language as name",
+                    'slug'
+                ]);
+            }
+        ])->whereUserId($model->user->id)
+            ->orWhere('email', '=', $model->user->email)
+            ->orderBy('created_at', 'desc')
+            ->offset($model->ordersOffset)
+            ->limit($model->ordersLimit)
+            ->get();
+    }
+    
+    public function getTotalOrdersCount($model)
+    {
+        return Order::whereUserId($model->user->id)->orWhere('email', '=', $model->user->email)->count();
+    }
 }

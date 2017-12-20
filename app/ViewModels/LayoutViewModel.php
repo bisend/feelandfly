@@ -1,6 +1,8 @@
 <?php
 
 namespace App\ViewModels;
+use App\DatabaseModels\Profile;
+use App\DatabaseModels\User;
 
 /**
  * Class LayoutViewModel
@@ -27,6 +29,10 @@ abstract class LayoutViewModel
      * @var integer should contain id of type user
      */
     public $userTypeId = 1;
+    
+    public $user;
+
+    public $profile;
 
     /**
      * LayoutViewModel constructor.
@@ -44,6 +50,10 @@ abstract class LayoutViewModel
         if (auth()->check())
         {
             $this->userTypeId = auth()->user()->user_type_id;
+            
+            $this->user = User::whereId(auth()->user()->id)->first();
+
+            $this->profile = Profile::whereUserId($this->user->id)->first();
         }
     }
 }

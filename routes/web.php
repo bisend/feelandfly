@@ -219,9 +219,17 @@ Route::group(['prefix' => 'profile'], function () {
         ->where([
             'language' => '^(uk|ru)?$'
         ]);
-    
-    Route::get('wish-list/{language?}', 'Profile\WishListController@index');
-    
+
+    Route::get('wish-list/{language?}', 'Profile\WishListController@index')
+        ->where([
+            'language' => '^(uk|ru)?$'
+        ]);
+
+    Route::get('my-orders/{language?}', 'Profile\MyOrdersController@index')
+        ->where([
+            'language' => '^(uk|ru)?$'
+        ]);
+
     Route::post('save-personal-info', 'Profile\PersonalInfoController@savePersonalInfo');
 
     Route::post('change-password', 'Profile\ChangePasswordController@changePassword');
@@ -231,4 +239,21 @@ Route::group(['prefix' => 'profile'], function () {
     Route::post('add-to-wish-list', 'Profile\WishListController@addToWishList');
 
     Route::post('delete-from-wish-list', 'Profile\WishListController@deleteFromWishList');
+
+    Route::post('my-orders', 'Profile\MyOrdersController@indexPagination');
+});
+
+/**
+ * Errors handler
+ */
+Route::group(['prefix' => 'errors'], function ()
+{
+    /**
+     * Error page
+     */
+    Route::get('/{error}/{language?}', 'ErrorController@index')
+        ->where([
+            'error' => '^(400|401|403|404|500)$',
+            'language' => '^(uk|ru)?$'
+        ]);
 });

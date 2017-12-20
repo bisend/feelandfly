@@ -15,7 +15,7 @@
                     </div>
                     <div class="error-text">
                         <p class="fsz-18 font-2">
-                            Страница не найдена
+                            forbidden
                         </p>
                     </div>
                     <div class="error-link">

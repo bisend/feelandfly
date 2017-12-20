@@ -85,7 +85,7 @@
                 <div class="row">
                     <div class="col-md-6 footer-left">
                         <div class="cart-total-count">
-                            Всього: <span>@{{ totalCount }}</span>
+                            Всего: <span>@{{ totalCount }}</span>
                         </div>
                         <a data-dismiss="modal" class="theme-btn btn-white small-btn">
                             Продолжить покупки

@@ -28,6 +28,7 @@
                             <li><a href="{{ url_personal_info($model->language) }}"> Основная информация </a></li>
                             <li><a href="{{ url_payment_delivery($model->language) }}"> Оплата и доставка </a></li>
                             <li><a href="javascript:void(0);" style="color: #000;">Избранное</a></li>
+                            <li><a href="{{ url_my_orders($model->language) }}">Мои заказы</a></li>
                             <li><a href="/user/logout">Выход</a></li>
                         </ul>
                     </div>

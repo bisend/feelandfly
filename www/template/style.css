@@ -5091,3 +5091,152 @@ textarea.incorrect-field:-ms-input-placeholder {
     border:none;
     margin-top: 0;
 }
+
+/*-------- 18/12/17 ----------*/
+
+.order-list-item .table td{
+    vertical-align: middle;
+}
+
+.order-number a{
+    text-decoration: underline;
+}
+
+.order-list-header th{
+    color: #a2a2a2;
+    font-size: 13px;
+}
+
+
+.view-order-details{
+    text-align: center;
+}
+
+.view-order-details a{
+    height: 43px;
+    line-height: 39px;
+    font-size: 13px;
+}
+
+
+.item-list-order td{
+    padding: 15px 8px!important;
+}
+
+
+
+.orderDetails-Modal .modal-content{
+    border-radius: 0px;
+}
+
+.orderDetails-Modal .modal-header{
+    background-color: #000;
+    padding: 25px;
+}
+
+
+.orderDetails-Modal .modal-header h4{
+    color: #fff;
+}
+
+.orderDetails-Modal .modal-header .close{
+    margin-top: -2px;
+    color: #fff;
+    opacity: 0.8;
+    font-size: 27px;
+}
+
+.orderDetails-Modal .modal-header .close:hover{
+    opacity: 1;
+}
+
+
+.orderDetails-Modal .modal-body{
+    padding: 25px;
+}
+
+
+.orderDetails-Modal .modal-dialog{
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.orderDetails-Modal .order-detail-prod .prod-title{
+    font-size: 14px;
+}
+
+.orderDetails-Modal .order-detail-prod .productInfo-size-color{
+    font-size: 14px;
+}
+
+.orderDetails-Modal .order-prod-item .order-detail-prod .order-prod-total{
+    margin-top: 0;
+}
+
+.orderDetails-Modal .modal-footer{
+    text-align: center;
+}
+
+.orderDetails-Modal .modal-footer a{
+    width: 300px;
+}
+
+
+.order-modal-detail{
+    width: 50%;
+}
+
+.order-modal-detail span{
+    position: absolute;
+    left: 160px;
+    font-size: 17px;
+}
+
+
+@media (max-width: 991px){
+    .order-detail-prod{
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 600px){
+    .orderDetails-Modal .modal-dialog{
+        width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (max-width: 500px){
+    .orderDetails-Modal .modal-dialog{
+        width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/*-------- 20/12/17 ---------*/
+
+.error-section{
+    text-align: center;
+    padding: 40px 0;
+}
+
+.error-section .error-num h2{
+    font-size: 160px;
+}
+
+.error-section .error-text p{
+    font-size: 30px;
+    margin: 15px 0 30px 0;
+}
+
+.error-section .error-link a{
+    font-size: 20px;
+}
+
+.error-section .error-link a i {
+    margin-right: 6px;
+}

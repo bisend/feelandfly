@@ -79,3 +79,5 @@ require('./components/RestorePassword');
 require('./components/PaymentDelivery');
 
 require('./components/WishList');
+
+require('./components/MyOrders');

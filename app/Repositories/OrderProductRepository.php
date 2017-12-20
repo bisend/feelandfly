@@ -27,4 +27,9 @@ class OrderProductRepository
             $orderProduct->save();
         }
     }
+
+    public function getOrderProducts($orderId)
+    {
+        return OrderProduct::whereOrderId($orderId)->get();
+    }
 }

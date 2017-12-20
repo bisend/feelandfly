@@ -44,4 +44,9 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $table = 'orders';
+
+    public function status()
+    {
+        return $this->hasOne(OrderStatus::class, 'id', 'status_id');
+    }
 }

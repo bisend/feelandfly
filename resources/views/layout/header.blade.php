@@ -65,7 +65,7 @@
                             <li><a class="theme-btn btn-black" href="{{ url_personal_info($model->language) }}">Личные данные</a></li>
                             <li><a class="theme-btn btn-black" href="{{ url_payment_delivery($model->language) }}">Оплата и доставка</a></li>
                             <li><a class="theme-btn btn-black" href="{{ url_wish_list($model->language) }}">Избранное</a></li>
-                            {{--<li><a class="theme-btn btn-black" href="">Замовлення</a></li>--}}
+                            <li><a class="theme-btn btn-black" href="{{ url_my_orders($model->language) }}">Мои заказы</a></li>
                             <li><a class="theme-btn btn-black" href="/user/logout">Выход</a></li>
                         </ul>
 

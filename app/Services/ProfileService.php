@@ -10,6 +10,8 @@ namespace App\Services;
 
 use App\Repositories\CategoryRepository;
 use App\Repositories\DeliveryRepository;
+use App\Repositories\OrderProductRepository;
+use App\Repositories\OrderRepository;
 use App\Repositories\PaymentRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProfileRepository;
@@ -29,6 +31,10 @@ class ProfileService extends LayoutService
     protected $wishListProductRepository;
 
     protected $productRepository;
+
+    protected $orderRepository;
+    
+    protected $orderProductRepository;
     
     public function __construct(CategoryRepository $categoryRepository, 
                                 UserRepository $userRepository, 
@@ -36,7 +42,9 @@ class ProfileService extends LayoutService
                                 PaymentRepository $paymentRepository,
                                 DeliveryRepository $deliveryRepository,
                                 WishListProductRepository $wishListProductRepository,
-                                ProductRepository $productRepository)
+                                ProductRepository $productRepository,
+                                OrderRepository $orderRepository,
+                                OrderProductRepository $orderProductRepository)
     {
         parent::__construct($categoryRepository);
         
@@ -51,6 +59,10 @@ class ProfileService extends LayoutService
         $this->wishListProductRepository = $wishListProductRepository;
 
         $this->productRepository = $productRepository;
+
+        $this->orderRepository = $orderRepository;
+        
+        $this->orderProductRepository = $orderProductRepository;
     }
     
     public function fill($model)
@@ -175,5 +187,69 @@ class ProfileService extends LayoutService
     public function getTotalWishListCount($wishListItems)
     {
         return count($wishListItems);
+    }
+
+    public function getOrders($model)
+    {
+        $model->orders = $this->orderRepository->getOrders($model);
+    }
+
+    public function getOrdersItems($model)
+    {
+        $orders = $model->orders;
+
+        foreach ($orders as $order)
+        {
+            $productIds = [];
+
+            $orderItems = [];
+
+            $newOrderItems = [];
+
+            $orderProducts = $this->orderProductRepository->getOrderProducts($order->id);
+
+            foreach ($orderProducts as $orderProduct)
+            {
+                $productIds[] = $orderProduct->product_id;
+                $orderItems[] = [
+                    'productId' => $orderProduct->product_id,
+                    'sizeId' => $orderProduct->size_id,
+                    'productCount' => $orderProduct->product_count,
+                    'price' => $orderProduct->price
+//                    'orderProductId' => $wishListProduct->id
+                ];
+            }
+
+            $products = $this->productRepository->getOrdersProducts($productIds, $model->language, $model->user->user_type_id);
+
+            foreach ($orderItems as $orderItem)
+            {
+                foreach ($products as $product)
+                {
+                    if ($orderItem['productId'] == $product->id)
+                    {
+                        $newOrderItems[] = [
+//                            'wishListProductId' => $wishListItem['wishListProductId'],
+                            'productId' => $orderItem['productId'],
+                            'sizeId' => $orderItem['sizeId'],
+                            'productCount' => $orderItem['productCount'],
+                            'price' => $orderItem['price'],
+                            'product' => $product
+                        ];
+                        $orderItem['product'] = $product;
+                    }
+                }
+            }
+
+            $order->orderItems = $newOrderItems;
+            
+//            \Debugbar::info($productIds, $newOrderItems);
+
+        }
+    }
+
+    public function getTotalOrdersCount($model)
+    {
+        $model->totalOrdersCount = $this->orderRepository->getTotalOrdersCount($model);
     }
 }
