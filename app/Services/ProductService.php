@@ -71,6 +71,11 @@ class ProductService extends LayoutService
         }
 
         $model->product = $this->productRepository->getProductBySlug($model->slug, $model->language, $userTypeId);
+
+        if ($model->product == null)
+        {
+            abort(404);
+        }
     }
 
     /**

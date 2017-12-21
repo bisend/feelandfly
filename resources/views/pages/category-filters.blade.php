@@ -86,10 +86,9 @@
                                             </ul>
                                             <ul class="choose-size list-inline border-hover">
                                                 <li v-for="(size, index) in categoryProductPreview.product.sizes">
-                                                    <a
-                                                            v-on:click="changeCurrentSizeId(size.id)"
-                                                            :class="{active : categoryProductPreview.currentSizeId == size.id}"
-                                                            href="javascript:void(0);">
+                                                    <a v-on:click="changeCurrentSizeId(size.id)"
+                                                        :class="{active : categoryProductPreview.currentSizeId == size.id}"
+                                                        href="javascript:void(0);">
                                                         @{{ size.name }}
                                                     </a>
                                                 </li>
@@ -103,7 +102,7 @@
                                                                v-model.number="categoryProductPreview.count"
                                                                v-on:change="toInteger(categoryProductPreview.count)"
                                                                class="form-control qty"
-                                                               title="Количество">
+                                                               title="{{ trans('cart.qty') }}">
                                                         <button class="btn plus" v-on:click="increment()">+</button>
                                                     </div>
                                                 </li>
@@ -113,10 +112,10 @@
                                                        href="javascript:void(0);">
                                                     <span v-cloak
                                                           v-if="!findWhere(cartItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})">
-                                                        Добавить в корзину
+                                                        {{ trans('layout.add_to_cart') }}
                                                     </span>
                                                     <span v-cloak v-else>
-                                                        В корзине
+                                                        {{ trans('layout.in_cart') }}
                                                     </span>
                                                     </a>
                                                 </li>
@@ -238,7 +237,7 @@
                                                 <a v-cloak class="theme-btn btn-black apply-filters-btn"
                                                    v-if="isCheckSelected('{{$filterName}}')"
                                                    v-bind:href="filterUrl">
-                                                    Применить
+                                                    {{ trans('layout.submit') }}
                                                 </a>
                                             </transition>
                                         </ul>
@@ -264,7 +263,7 @@
                             {{--</div>--}}
 
                             <div class="dropdown-div-btn">
-                                <h2 class="widget-title"> Цена  <span class="plus-icon"> - </span> </h2>
+                                <h2 class="widget-title"> {{ trans('layout.price') }}  <span class="plus-icon"> - </span> </h2>
                             </div>
                             <div class="dropdown-div-content">
                                 <div class="widget-box">
@@ -279,7 +278,7 @@
                                         <a v-cloak class="theme-btn btn-black apply-filters-btn"
                                            v-if="priceMin && priceMax && (oldPriceMin != priceMin || oldPriceMax != priceMax)"
                                            v-bind:href="filterUrl">
-                                            Применить
+                                            {{ trans('layout.submit') }}
                                         </a>
                                     </transition>
                                 </div>
@@ -306,7 +305,7 @@
                             {{--</div>--}}
                             <a v-cloak class="theme-btn btn-black apply-filters-btn" style="margin-top: 30px"
                                href="{{ url_category($model->currentCategory->slug, $model->language) }}">
-                                Сбросить фильтры
+                                {{ trans('layout.throw_filters') }}
                             </a>
                         </div>
                     </aside>
@@ -324,7 +323,7 @@
                                     <ol class="breadcrumb breadcrumb-menubar">
                                         <li>
                                             <a href="{{ url_home($model->language) }}">
-                                                Главная
+                                                {{ trans('profile.home') }}
                                             </a>
                                             {{ $model->currentCategory->name }}
                                         </li>
@@ -336,7 +335,7 @@
 
                             <div class="col-md-6 col-sm-5 show-result no-padding">
                                 {{--<form action="#" class="form-sorter">--}}
-                                    <label> Сортировать </label>
+                                    <label> {{ trans('layout.sort') }} </label>
                                     <div class="search-selectpicker selectpicker-wrapper">
                                         @php($selectedSortItem = 'default')
                                         @foreach($model->sortItems->items as $sortItem)
@@ -390,7 +389,7 @@
                             @if($filterCounter > 1)
                                 <div class="selected-filter-container">
                                     <div class="filter-span-container">
-                                        <span>Сбросить фильтры</span>
+                                        <span>{{ trans('layout.throw_filters') }}</span>
                                     </div>
                                     <a href="{{ url_category($model->currentCategory->slug, $model->language) }}"
                                        class="filter-close"><i class="fa fa-refresh"></i></a>
@@ -538,10 +537,10 @@
                                                                        href="javascript:void(0);">
                                                                     <span v-cloak
                                                                           v-if="!findWhere(cartItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})">
-                                                                        Добавить в корзину
+                                                                        {{ trans('layout.add_to_cart') }}
                                                                     </span>
                                                                     <span v-cloak v-else>
-                                                                        В корзине
+                                                                        {{ trans('layout.in_cart') }}
                                                                     </span>
                                                                     </a>
                                                                 </li>

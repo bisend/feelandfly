@@ -12,16 +12,18 @@
                     </div>
                 </div>
                 <div class="col-sm-7">
-                    <h2 class="fsz-30 section-title"> ДОБРО ПОЖАЛОВАТЬ В НАШ МАГАЗИН </h2>
+                    <h2 class="fsz-30 section-title"> {{ trans('login-modal.title') }} </h2>
                     <!--<p class="sub-detail fsz-16"> Login and buy </p>-->
                     <div class="row">
                         <div class="col-sm-6 pb-25">
-                            <a href="/user/login/facebook{{ $model->language == 'uk' ? '/' . $model->language : '' }}" class="theme-btn btn-white small-btn"> <i class="fa fa-facebook"></i>
+                            <a href="/user/login/facebook{{ $model->language == 'uk' ? '/' . $model->language : '' }}"
+                               class="theme-btn btn-white small-btn"> <i class="fa fa-facebook"></i>
                                 <span>Facebook</span>
                             </a>
                         </div>
                         <div class="col-sm-6 pb-25">
-                            <a href="/user/login/google{{ $model->language == 'uk' ? '/' . $model->language : '' }}" class="theme-btn btn-white small-btn">
+                            <a href="/user/login/google{{ $model->language == 'uk' ? '/' . $model->language : '' }}"
+                               class="theme-btn btn-white small-btn">
                                 <i class="fa fa-google-plus"></i>
                                 <span>Google+</span>
                             </a>
@@ -31,12 +33,14 @@
                         <div class="row">
                             <div class="col-sm-6 pb-25">
                                 <p class="fsz-18 section-title">
-                                    ВОЙДИТЕ В ПРОФИЛЬ
+                                    {{ trans('login-modal.log_in_profile') }}
                                 </p>
                             </div>
                             <div class="col-sm-6 pb-25">
                                 <p class="fsz-18 section-title">
-                                    <a href="javascript:void(0);" data-restore-password-button >Забыли пароль?</a>
+                                    <a href="javascript:void(0);" data-restore-password-button >
+                                        {{ trans('login-modal.forgot') }}
+                                    </a>
                                 </p>
                             </div>
                         </div>
@@ -47,17 +51,17 @@
                                 <input data-login-email
                                        type="text"
                                        v-model="email"
-                                       placeholder="Електронный адрес" class="form-control">
+                                       placeholder="{{ trans('login-modal.email') }}" class="form-control">
                             </div>
                             <div class="form-group auth-form-group">
                                 <input data-login-password
                                        type="password"
                                        v-model="password"
-                                       placeholder="Пароль" class="form-control">
+                                       placeholder="{{ trans('login-modal.password') }}" class="form-control">
                             </div>
                             <div class="form-group">
                                 <button class="theme-btn btn-white-1 small-btn" type="submit">
-                                    Войти
+                                    {{ trans('login-modal.log_in') }}
                                 </button>
                             </div>
                         </form>

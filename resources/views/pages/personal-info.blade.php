@@ -9,13 +9,13 @@
         <section class="breadcrumb-bg">
             <div class="theme-container container ">
                 <div class="site-breadcumb white-clr">
-                    <h2 class="section-title wht fsz-36"> Мой профиль </h2>
+                    <h2 class="section-title wht fsz-36">{{ trans('profile.my_profile') }}</h2>
                     <ol class="breadcrumb breadcrumb-menubar">
                         <li>
                             <a href="{{ url_home($model->language) }}">
-                                Главная
+                                {{ trans('profile.home') }}
                             </a>
-                            Основная информация
+                            {{ trans('profile.personal_info') }}
                         </li>
                     </ol>
                 </div>
@@ -29,13 +29,13 @@
                 <!-- Sidebar Starts -->
                 <aside class="col-md-3 col-sm-4 sidebar">
                     <div class="widget-wrap">
-                        <h2 class="widget-title title-profile-bar"> Мой профиль </h2>
+                        <h2 class="widget-title title-profile-bar">{{ trans('profile.my_profile') }}</h2>
                         <ul class="account-list with-border">
-                            <li><a href="javascript:void(0);" style="color: #000;">Основная информация</a></li>
-                            <li><a href="{{ url_payment_delivery($model->language) }}">Оплата и доставка </a></li>
-                            <li><a href="{{ url_wish_list($model->language) }}">Избранное</a></li>
-                            <li><a href="{{ url_my_orders($model->language) }}">Мои заказы</a></li>
-                            <li><a href="/user/logout">Выход</a></li>
+                            <li><a href="javascript:void(0);" style="color: #000;">{{ trans('profile.personal_info') }}</a></li>
+                            <li><a href="{{ url_payment_delivery($model->language) }}">{{ trans('profile.payment_delivery') }}</a></li>
+                            <li><a href="{{ url_wish_list($model->language) }}">{{ trans('profile.wish_list') }}</a></li>
+                            <li><a href="{{ url_my_orders($model->language) }}">{{ trans('profile.my_orders') }}</a></li>
+                            <li><a href="/user/logout">{{ trans('profile.log_out') }}</a></li>
                         </ul>
                     </div>
                 </aside>
@@ -47,7 +47,7 @@
                 <aside class="col-md-9 col-sm-8">
                     <div class="profile-item">
                         <div class="profile-item-header">
-                            <span><i class="fa fa-user" aria-hidden="true"></i></span> ОСНОВНАЯ ИНФОРМАЦИЯ
+                            <span><i class="fa fa-user" aria-hidden="true"></i></span>{{ trans('profile.personal_info') }}
                         </div>
                         <div class="profile-item-body" id="personal-info">
                             <div class="row">
@@ -58,7 +58,8 @@
                                             <input type="text"
                                                    data-profile-name
                                                    v-model="name"
-                                                   placeholder="Имя" class="form-control black-input">
+                                                   placeholder="{{ trans('profile.name') }}"
+                                                   class="form-control black-input">
                                         </div>
                                     </div>
                                     {{--<div class="col-md-6">--}}
@@ -71,7 +72,8 @@
                                             <input type="text"
                                                    data-profile-email
                                                    v-model="email"
-                                                   placeholder="Електронный адрес" class="form-control black-input">
+                                                   placeholder="{{ trans('profile.email') }}"
+                                                   class="form-control black-input">
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-12">
@@ -79,12 +81,15 @@
                                             <input type="text"
                                                    data-profile-phone
                                                    v-model="phone"
-                                                   placeholder="Номер телефона" class="form-control black-input">
+                                                   placeholder="{{ trans('profile.phone') }}"
+                                                   class="form-control black-input">
                                         </div>
                                     </div>
 
                                     <div class="profile-item-save">
-                                        <button type="submit" class="theme-btn btn-black" href="#"> Сохранить </button>
+                                        <button type="submit" class="theme-btn btn-black">
+                                            {{ trans('profile.save') }}
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -93,7 +98,7 @@
 
                     <div class="profile-item">
                         <div class="profile-item-header">
-                            <span><i class="fa fa-unlock-alt" aria-hidden="true"></i></span> Смена пароля
+                            <span><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>{{ trans('profile.change_password') }}
                         </div>
                         <div class="profile-item-body" id="change-password">
                             <form @submit.prevent="validateBeforeSubmit">
@@ -103,7 +108,8 @@
                                             <input type="password"
                                                    data-profile-old-password
                                                    v-model="oldPassword"
-                                                   placeholder="Старый пароль" class="form-control black-input">
+                                                   placeholder="{{ trans('profile.old_password') }}"
+                                                   class="form-control black-input">
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-12">
@@ -111,7 +117,8 @@
                                             <input type="password"
                                                    data-profile-new-password
                                                    v-model="newPassword"
-                                                   placeholder="Новый пароль" class="form-control black-input">
+                                                   placeholder="{{ trans('profile.new_password') }}"
+                                                   class="form-control black-input">
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-12">
@@ -119,12 +126,15 @@
                                             <input type="password"
                                                    data-profile-confirm-new-password
                                                    v-model="confirmNewPassword"
-                                                   placeholder="Повторите новый пароль" class="form-control black-input">
+                                                   placeholder="{{ trans('profile.new_password') }}"
+                                                   class="form-control black-input">
                                         </div>
                                     </div>
 
                                     <div class="profile-item-save">
-                                        <button type="submit" class="theme-btn btn-black" href="#"> Сохранить </button>
+                                        <button type="submit" class="theme-btn btn-black">
+                                            {{ trans('profile.save') }}
+                                        </button>
                                     </div>
 
                                 </div>

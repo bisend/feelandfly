@@ -15,11 +15,11 @@
                     </div>
                     <div class="error-text">
                         <p class="fsz-18 font-2">
-                            unauthorized
+                            {{ trans('layout.unauthorized') }}
                         </p>
                     </div>
                     <div class="error-link">
-                        <a href="{{ url_home($model->language) }}"><i class="fa fa-home" aria-hidden="true"></i> На главную</a>
+                        <a href="{{ url_home($model->language) }}"><i class="fa fa-home" aria-hidden="true"></i>{{ trans('layout.go_home') }}</a>
                     </div>
                 </div>
 

@@ -81,10 +81,9 @@
                                     </ul>
                                     <ul class="choose-size list-inline border-hover">
                                         <li v-for="(size, index) in similarProductPreview.product.sizes">
-                                            <a
-                                                    v-on:click="changeCurrentSizeId(size.id)"
-                                                    :class="{active : similarProductPreview.currentSizeId == size.id}"
-                                                    href="javascript:void(0);">
+                                            <a v-on:click="changeCurrentSizeId(size.id)"
+                                                :class="{active : similarProductPreview.currentSizeId == size.id}"
+                                                href="javascript:void(0);">
                                                 @{{ size.name }}
                                             </a>
                                         </li>
@@ -108,10 +107,10 @@
                                                href="javascript:void(0);">
                                                     <span v-cloak
                                                           v-if="!findWhere(cartItems, {'productId': similarProductPreview.product.id, 'sizeId': similarProductPreview.currentSizeId})">
-                                                        Добавить в корзину
+                                                        {{ trans('layout.add_to_cart') }}
                                                     </span>
                                                     <span v-cloak v-else>
-                                                        В корзине
+                                                        {{ trans('layout.in_cart') }}
                                                     </span>
                                             </a>
                                         </li>
@@ -146,7 +145,7 @@
     {{--SIMILAR PRODUCT PREVIEW--}}
 
 
-    <h2 class="section-title"> Похожие Товары </h2>
+    <h2 class="section-title">{{ trans('product.similar_products') }}</h2>
     <div id="rel-prod-slider" class="rel-prod-slider nav-1 padding-own">
         @php($counter = 0)
         @foreach($model->similarProducts as $similarProduct)
@@ -193,8 +192,8 @@
                             <div class="block-inline">
                                 <ul class="prod-meta">
                                     <li>
-                                        <a class="theme-btn btn-black" href="{{ url_product($similarProduct->slug, $model->language) }}">
-                                            Подробнее
+                                        <a class="theme-btn btn-black min-width-270-px" href="{{ url_product($similarProduct->slug, $model->language) }}">
+                                            {{ trans('product.more_info') }}
                                         </a>
                                     </li>
                                     {{--<li>--}}

@@ -8,13 +8,13 @@
         <section class="breadcrumb-bg">
             <div class="theme-container container ">
                 <div class="site-breadcumb white-clr">
-                    <h2 class="section-title wht fsz-36"> Мой профиль </h2>
+                    <h2 class="section-title wht fsz-36">{{ trans('profile.my_profile') }}</h2>
                     <ol class="breadcrumb breadcrumb-menubar">
                         <li>
                             <a href="{{ url_home($model->language) }}">
-                                Главная
+                                {{ trans('profile.home') }}
                             </a>
-                            Оплата и доставка
+                            {{ trans('profile.payment_delivery') }}
                         </li>
                     </ol>
                 </div>
@@ -28,13 +28,13 @@
                 <!-- Sidebar Starts -->
                 <aside class="col-md-3 col-sm-4 sidebar">
                     <div class="widget-wrap">
-                        <h2 class="widget-title title-profile-bar"> Мой профиль </h2>
+                        <h2 class="widget-title title-profile-bar">{{ trans('profile.my_profile') }}</h2>
                         <ul class="account-list with-border">
-                            <li><a href="{{ url_personal_info($model->language) }}"> Основная информация </a></li>
-                            <li><a href="javascript:void(0);" style="color: #000;"> Оплата и доставка </a></li>
-                            <li><a href="{{ url_wish_list($model->language) }}">Избранное</a></li>
-                            <li><a href="{{ url_my_orders($model->language) }}">Мои заказы</a></li>
-                            <li><a href="/user/logout">Выход</a></li>
+                            <li><a href="{{ url_personal_info($model->language) }}">{{ trans('profile.personal_info') }}</a></li>
+                            <li><a href="javascript:void(0);" style="color: #000;">{{ trans('profile.payment_delivery') }}</a></li>
+                            <li><a href="{{ url_wish_list($model->language) }}">{{ trans('profile.wish_list') }}</a></li>
+                            <li><a href="{{ url_my_orders($model->language) }}">{{ trans('profile.my_orders') }}</a></li>
+                            <li><a href="/user/logout">{{ trans('profile.log_out') }}</a></li>
                         </ul>
                     </div>
                 </aside>
@@ -46,7 +46,7 @@
                 <aside class="col-md-9 col-sm-8" id="profile-payment-delivery">
                     <div class="profile-item">
                         <div class="profile-item-header">
-                            <span><i class="fa fa-credit-card" aria-hidden="true"></i></span> оплата и доставка
+                            <span><i class="fa fa-credit-card" aria-hidden="true"></i></span>{{ trans('profile.payment_delivery') }}
                         </div>
                         <div class="profile-item-body">
                             <div class="row">
@@ -61,7 +61,7 @@
                                                         @endif
                                                     @endforeach
                                                 @else
-                                                    <span>Выберите способ оплаты</span>
+                                                    <span>{{ trans('profile.choose_payment') }}</span>
                                                 @endif
                                                 <i class="fa fa-caret-down"></i>
                                             </div>
@@ -83,14 +83,16 @@
                                                     @endif
                                                 @endforeach
                                                 @else
-                                                    <span>Выберите способ доставки</span>
+                                                    <span>{{ trans('profile.choose_delivery') }}</span>
                                                 @endif
                                                 <i class="fa fa-caret-down"></i>
                                             </div>
                                             <input type="hidden" name="gender">
                                             <ul class="dropeddown" style="display: none;">
                                                 @foreach($model->deliveries as $delivery)
-                                                    <li v-on:click="setSelectedDeliveryId({{$delivery->id}})">{{ $delivery->name }}</li>
+                                                    <li v-on:click="setSelectedDeliveryId({{$delivery->id}})">
+                                                        {{ $delivery->name }}
+                                                    </li>
                                                 @endforeach
                                             </ul>
                                         </div>
@@ -100,12 +102,14 @@
                                             <input type="text"
                                                    data-profile-address
                                                    v-model="address"
-                                                   placeholder="Адрес доставки" class="form-control black-input">
+                                                   placeholder="{{ trans('profile.address') }}" class="form-control black-input">
                                         </div>
                                     </div>
 
                                     <div class="profile-item-save">
-                                        <button type="submit" class="theme-btn btn-black" href="#"> Сохранить </button>
+                                        <button type="submit" class="theme-btn btn-black">
+                                            {{ trans('profile.save') }}
+                                        </button>
                                     </div>
                                 </form>
                             </div>

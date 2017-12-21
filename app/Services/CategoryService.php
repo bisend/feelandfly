@@ -77,6 +77,11 @@ class CategoryService extends LayoutService
     private function fillCurrentCategory($model)
     {
         $model->currentCategory = $this->categoryRepository->getCurrentCategoryBySlug($model->slug, $model->language);
+
+        if ($model->currentCategory == null)
+        {
+            abort(404);
+        }
     }
 
     private function fillCategoryProducts($model)
@@ -96,6 +101,11 @@ class CategoryService extends LayoutService
             $userTypeId,
             $model->sort
         );
+
+        if ($model->categoryProducts == null)
+        {
+            abort(404);
+        }
     }
 
     private function fillCountCategoryProducts($model)

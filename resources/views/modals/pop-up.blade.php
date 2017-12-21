@@ -6,7 +6,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" data-popup-close>&times;</button>
-                <h4 class="modal-title">Сообщение</h4>
+                <h4 class="modal-title">{{ trans('layout.message') }}</h4>
             </div>
             <div class="modal-body">
                <p data-popup-text style="text-align: center"></p>

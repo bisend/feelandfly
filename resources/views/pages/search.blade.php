@@ -86,10 +86,9 @@
                                         </ul>
                                         <ul class="choose-size list-inline border-hover">
                                             <li v-for="(size, index) in categoryProductPreview.product.sizes">
-                                                <a
-                                                        v-on:click="changeCurrentSizeId(size.id)"
-                                                        :class="{active : categoryProductPreview.currentSizeId == size.id}"
-                                                        href="javascript:void(0);">
+                                                <a v-on:click="changeCurrentSizeId(size.id)"
+                                                    :class="{active : categoryProductPreview.currentSizeId == size.id}"
+                                                    href="javascript:void(0);">
                                                     @{{ size.name }}
                                                 </a>
                                             </li>
@@ -103,7 +102,7 @@
                                                            v-model.number="categoryProductPreview.count"
                                                            v-on:change="toInteger(categoryProductPreview.count)"
                                                            class="form-control qty"
-                                                           title="Количество">
+                                                           title="{{ trans('profile.qty') }}">
                                                     <button class="btn plus" v-on:click="increment()">+</button>
                                                 </div>
                                             </li>
@@ -113,10 +112,10 @@
                                                    href="javascript:void(0);">
                                                     <span v-cloak
                                                           v-if="!findWhere(cartItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})">
-                                                        Добавить в корзину
+                                                        {{ trans('layout.add_to_cart') }}
                                                     </span>
                                                     <span v-cloak v-else>
-                                                        В корзине
+                                                        {{ trans('layout.in_cart') }}
                                                     </span>
                                                 </a>
                                             </li>
@@ -157,7 +156,7 @@
             <div class="theme-container container ">
                 <div class="site-breadcumb white-clr">
                     <h1 style="color: #000;" class="section-title wht fsz-36">
-                        Результаты поиска "{{ $model->seriesTitle }}" {{ $model->countSearchProducts }}
+                        {{ trans('layout.search_result') }} "{{ $model->seriesTitle }}" {{ $model->countSearchProducts }}
                     </h1>
                 </div>
             </div>
@@ -181,9 +180,9 @@
                                 <ol class="breadcrumb breadcrumb-menubar">
                                     <li>
                                         <a href="{{ url_home($model->language) }}">
-                                            Главная
+                                            {{ trans('profile.home') }}
                                         </a>
-                                        <a>Поиск</a>
+                                        <a>{{ trans('layout.search') }}</a>
                                         "{{ $model->seriesTitle }}"
                                     </li>
                                 </ol>
@@ -276,10 +275,10 @@
                                                                    href="javascript:void(0);">
                                                                 <span v-cloak
                                                                       v-if="!findWhere(cartItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})">
-                                                                    Добавить в корзину
+                                                                    {{ trans('layout.add_to_cart') }}
                                                                 </span>
                                                                 <span v-cloak v-else>
-                                                                    В корзине
+                                                                    {{ trans('layout.in_cart') }}
                                                                 </span>
                                                                 </a>
                                                             </li>
@@ -330,10 +329,9 @@
                                                                 @foreach($categoryProduct->sizes as $size)
                                                                     <li>
                                                                         @if($counterSize == 0)
-                                                                            <a
-                                                                                    v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
-                                                                                    :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
-                                                                                    href="javascript:void(0);">
+                                                                            <a v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                                :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
+                                                                                href="javascript:void(0);">
                                                                                 {{ $size->name }}
                                                                             </a>
                                                                         @else

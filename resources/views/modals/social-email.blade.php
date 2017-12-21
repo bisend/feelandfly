@@ -10,7 +10,7 @@
                     <h4 class="modal-title">Вход</h4>
                 </div>
                 <div class="modal-body">
-                    <p style="text-align: center">Укажите email адрес для входа</p>
+                    <p style="text-align: center">{{ trans('layout.enter_email_log_in') }}</p>
                     <input type="email"
                            v-model="email"
                            class="form-control social-email-input"
@@ -19,7 +19,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="theme-btn btn-white small-btn">
-                        Подтвердить
+                        {{ trans('layout.submit_email') }}
                     </button>
                 </div>
             </form>

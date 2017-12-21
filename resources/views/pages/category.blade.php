@@ -102,7 +102,7 @@
                                                            v-model.number="categoryProductPreview.count"
                                                            v-on:change="toInteger(categoryProductPreview.count)"
                                                            class="form-control qty"
-                                                           title="Количество">
+                                                           title="{{ trans('cart.qty') }}">
                                                     <button class="btn plus" v-on:click="increment()">+</button>
                                                 </div>
                                             </li>
@@ -112,10 +112,10 @@
                                                    href="javascript:void(0);">
                                                     <span v-cloak
                                                           v-if="!findWhere(cartItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})">
-                                                        Добавить в корзину
+                                                        {{ trans('layout.add_to_cart') }}
                                                     </span>
                                                     <span v-cloak v-else>
-                                                        В корзине
+                                                        {{ trans('layout.in_cart') }}
                                                     </span>
                                                 </a>
                                             </li>
@@ -205,7 +205,7 @@
                                             <a v-cloak class="theme-btn btn-black apply-filters-btn"
                                                     v-if="isCheckSelected('{{$filterName}}')"
                                                     v-bind:href="filterUrl">
-                                                Применить
+                                                {{ trans('layout.submit') }}
                                             </a>
                                         </transition>
                                     </ul>
@@ -231,7 +231,7 @@
                         {{--</div>--}}
 
                         <div class="dropdown-div-btn">
-                            <h2 class="widget-title"> Цена  <span class="plus-icon"> - </span> </h2>
+                            <h2 class="widget-title">{{ trans('layout.price') }}<span class="plus-icon"> - </span> </h2>
                         </div>
                         <div class="dropdown-div-content">
                             <div class="widget-box">
@@ -246,7 +246,7 @@
                                     <a v-cloak class="theme-btn btn-black apply-filters-btn"
                                        v-if="initialPriceMin != priceMin || initialPriceMax != priceMax"
                                        v-bind:href="filterUrl">
-                                        Применить
+                                        {{ trans('layout.submit') }}
                                     </a>
                                 </transition>
                             </div>
@@ -287,7 +287,7 @@
                                 <ol class="breadcrumb breadcrumb-menubar">
                                     <li>
                                         <a href="{{ url_home($model->language) }}">
-                                            Главная
+                                            {{ trans('profile.home') }}
                                         </a>
                                         {{ $model->currentCategory->name }}
                                     </li>
@@ -381,10 +381,10 @@
                                                                    href="javascript:void(0);">
                                                                 <span v-cloak
                                                                       v-if="!findWhere(cartItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})">
-                                                                    Добавить в корзину
+                                                                    {{ trans('layout.add_to_cart') }}
                                                                 </span>
                                                                 <span v-cloak v-else>
-                                                                    В корзине
+                                                                    {{ trans('layout.in_cart') }}
                                                                 </span>
                                                                 </a>
                                                             </li>
@@ -435,10 +435,9 @@
                                                                 @foreach($categoryProduct->sizes as $size)
                                                                     <li>
                                                                         @if($counterSize == 0)
-                                                                            <a
-                                                                                    v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
-                                                                                    :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
-                                                                                    href="javascript:void(0);">
+                                                                            <a v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                                :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
+                                                                                href="javascript:void(0);">
                                                                                 {{ $size->name }}
                                                                             </a>
                                                                         @else

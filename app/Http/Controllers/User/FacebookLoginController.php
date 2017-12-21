@@ -31,6 +31,8 @@ class FacebookLoginController extends LayoutController
 
     public function redirectToProvider($language = Languages::DEFAULT_LANGUAGE)
     {
+        Session::put('previousSocialLoginUrl', url()->previous());
+        
         Languages::localizeApp($language);
         
         Session::put('language', $language);
@@ -54,6 +56,11 @@ class FacebookLoginController extends LayoutController
 
             auth()->login($user);
 
+            if (Session::has('previousSocialLoginUrl'))
+            {
+                return redirect(Session::get('previousSocialLoginUrl'));
+            }
+
             if (Session::has('language'))
             {
                 return redirect(url_home(Session::get('language')));
@@ -74,6 +81,11 @@ class FacebookLoginController extends LayoutController
                     'providerId' => $providerId,
                     'confirmationToken' => str_random(31) . $providerId
                 ]);
+
+                if (Session::has('previousSocialLoginUrl'))
+                {
+                    return redirect(Session::get('previousSocialLoginUrl'));
+                }
 
                 return redirect(url_home(Session::get('language')));
             }
@@ -107,6 +119,11 @@ class FacebookLoginController extends LayoutController
 
                     $this->wishListRepository->createWishList($user->id);
 
+                    if (Session::has('previousSocialLoginUrl'))
+                    {
+                        return redirect(Session::get('previousSocialLoginUrl'));
+                    }
+
                     if (Session::has('language'))
                     {
                         return redirect(url_home(Session::get('language')));
@@ -127,6 +144,11 @@ class FacebookLoginController extends LayoutController
 
                     auth()->login($user);
 
+                    if (Session::has('previousSocialLoginUrl'))
+                    {
+                        return redirect(Session::get('previousSocialLoginUrl'));
+                    }
+
                     if (Session::has('language'))
                     {
                         return redirect(url_home(Session::get('language')));
@@ -137,6 +159,11 @@ class FacebookLoginController extends LayoutController
                     }
                 }
             }
+        }
+
+        if (Session::has('previousSocialLoginUrl'))
+        {
+            return redirect(Session::get('previousSocialLoginUrl'));
         }
 
         if (Session::has('language'))
@@ -193,6 +220,11 @@ class FacebookLoginController extends LayoutController
     {
         if (!Session::has('social_email'))
         {
+            if (Session::has('previousSocialLoginUrl'))
+            {
+                return redirect(Session::get('previousSocialLoginUrl'));
+            }
+
             if (Session::has('language'))
             {
                 return redirect(url_home(Session::get('language')));
@@ -253,6 +285,11 @@ class FacebookLoginController extends LayoutController
         }
 
         DB::commit();
+
+        if (Session::has('previousSocialLoginUrl'))
+        {
+            return redirect(Session::get('previousSocialLoginUrl'));
+        }
 
         if (Session::has('language'))
         {

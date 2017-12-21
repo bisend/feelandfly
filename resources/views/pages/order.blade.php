@@ -15,13 +15,13 @@
 
                     <div class="edit-order-btn">
                         <a class="theme-btn btn-black" href="javascript:void(0);" data-target="#big-cart" data-toggle="modal">
-                            Редактировать заказ
+                            {{ trans('order.edit_order') }}
                         </a>
                     </div>
 
-                    <h2 class="section-title wht fsz-36"> Оформление заказа </h2>
+                    <h2 class="section-title wht fsz-36"> {{ trans('order.order_confirm') }} </h2>
                     <ol class="breadcrumb breadcrumb-menubar">
-                        <li> <a href="{{ url_home($model->language) }}"> Главная </a>  Оформление заказа </li>
+                        <li> <a href="{{ url_home($model->language) }}"> {{ trans('profile.home') }} </a> {{ trans('order.order_confirm') }} </li>
                     </ol>
                 </div>
             </div>
@@ -39,7 +39,7 @@
 
                         <div class="profile-item">
                             <div class="profile-item-header">
-                                <span><i class="fa fa-user" aria-hidden="true"></i></span> Контактные данные
+                                <span><i class="fa fa-user" aria-hidden="true"></i></span> {{ trans('order.contact_data') }}
                             </div>
                             <div class="profile-item-body">
                                 <div class="row">
@@ -49,7 +49,7 @@
                                             <input type="text"
                                                    data-order-name
                                                    v-model="orderConfirm.name"
-                                                   placeholder="Введите Ваше Имя"
+                                                   placeholder="{{ trans('order.enter_name') }}"
                                                    class="form-control black-input">
                                         </div>
                                     </div>
@@ -58,7 +58,7 @@
                                             <input type="text"
                                                    data-order-phone
                                                    v-model="orderConfirm.phone"
-                                                   placeholder="Введите номер телефона"
+                                                   placeholder="{{ trans('order.enter_phone') }}"
                                                    class="form-control black-input">
                                         </div>
                                     </div>
@@ -67,7 +67,7 @@
                                             <input type="text"
                                                    data-order-email
                                                    v-model="orderConfirm.email"
-                                                   placeholder="Введите e-mail"
+                                                   placeholder="{{ trans('order.enter_email') }}"
                                                    class="form-control black-input">
                                         </div>
                                     </div>
@@ -77,7 +77,7 @@
 
                         <div class="profile-item order-dev">
                             <div class="profile-item-header">
-                                <span><i class="fa fa-truck" aria-hidden="true"></i></span> Доставка и оплата
+                                <span><i class="fa fa-truck" aria-hidden="true"></i></span>{{ trans('order.payment_delivery') }}
                             </div>
                             <div class="profile-item-body">
                                 <div class="row">
@@ -91,7 +91,7 @@
                                                         @endif
                                                     @endforeach
                                                 @else
-                                                    <span>Выберите способ оплаты</span>
+                                                    <span>{{ trans('order.choose_payment') }}</span>
                                                 @endif
                                                 <i class="fa fa-caret-down"></i>
                                             </div>
@@ -113,7 +113,7 @@
                                                         @endif
                                                     @endforeach
                                                 @else
-                                                    <span>Выберите способ доставки</span>
+                                                    <span>{{ trans('order.choose_delivery') }}</span>
                                                 @endif
                                                 <i class="fa fa-caret-down"></i>
                                             </div>
@@ -130,7 +130,7 @@
                                             <input type="text"
                                                    data-order-address
                                                    v-model="orderConfirm.address"
-                                                   placeholder="Адрес доставки или номер отделения"
+                                                   placeholder="{{ trans('order.address') }}"
                                                    class="form-control black-input">
                                         </div>
                                     </div>
@@ -139,7 +139,7 @@
                                         <div class="form-group">
                                             <textarea type="text"
                                                       v-model="orderConfirm.comment"
-                                                      placeholder="Комментарий..."
+                                                      placeholder="{{ trans('order.comment') }}"
                                                       class="form-control black-input"></textarea>
                                         </div>
                                     </div>
@@ -149,7 +149,7 @@
                         </div>
 
                         <div class="order-save-btn">
-                            <button type="submit" class="theme-btn btn-black"> Оформить заказ </button>
+                            <button type="submit" class="theme-btn btn-black">{{ trans('order.confirm') }}</button>
                         </div>
                     </form>
                 </aside>
@@ -158,7 +158,7 @@
                 <div class="col-md-5 col-sm-4">
                     <div class="profile-item">
                         <div class="profile-item-header">
-                            <span><i class="fa fa-shopping-cart" aria-hidden="true"></i></span> Ваш заказ
+                            <span><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>{{ trans('order.your_order') }}
                         </div>
                         <div class="profile-item-body">
                             <div class="order-products">
@@ -200,7 +200,7 @@
                                                     <span class="fw-300 gray-clr"> <span>@{{ cartItem.count }}</span> <sub>X</sub> </span> @{{ cartItem.product.price[0].price }} грн
                                                 </p>
                                                 <p class="fsz-16 font-2 no-margin order-prod-total">
-                                                    Сумма:<span>@{{ (cartItem.product.price[0].price * cartItem.count).toFixed(2) }} грн</span>
+                                                    {{ trans('order.sum') }}:<span>@{{ (cartItem.product.price[0].price * cartItem.count).toFixed(2) }} грн</span>
                                                 </p>
                                             </div>
                                         </div>
@@ -211,7 +211,7 @@
 
                             <div class="order-total-price">
                                 <p v-cloak class="fsz-18 font-2 no-margin order-prod-total">
-                                    Сумма заказа:<span>@{{ totalAmount.toFixed(2) }} грн</span>
+                                    {{ trans('order.sum_order') }}:<span>@{{ totalAmount.toFixed(2) }} грн</span>
                                 </p>
                             </div>
 

@@ -8,9 +8,14 @@
         <section class="breadcrumb-bg">
             <div class="theme-container container ">
                 <div class="site-breadcumb white-clr">
-                    <h2 class="section-title wht fsz-36"> Избранное </h2>
+                    <h2 class="section-title wht fsz-36">{{ trans('profile.my_profile') }}</h2>
                     <ol class="breadcrumb breadcrumb-menubar">
-                        <li> <a href="{{ url_home($model->language) }}"> Главная </a>  Избранное </li>
+                        <li>
+                            <a href="{{ url_home($model->language) }}">
+                                {{ trans('profile.home') }}
+                            </a>
+                            {{ trans('profile.wish_list') }}
+                        </li>
                     </ol>
                 </div>
             </div>
@@ -23,13 +28,13 @@
                 <!-- Sidebar Starts -->
                 <aside class="col-md-3 col-sm-4 sidebar">
                     <div class="widget-wrap">
-                        <h2 class="widget-title title-profile-bar"> Мой профиль </h2>
+                        <h2 class="widget-title title-profile-bar">{{ trans('profile.my_profile') }}</h2>
                         <ul class="account-list with-border">
-                            <li><a href="{{ url_personal_info($model->language) }}"> Основная информация </a></li>
-                            <li><a href="{{ url_payment_delivery($model->language) }}"> Оплата и доставка </a></li>
-                            <li><a href="javascript:void(0);" style="color: #000;">Избранное</a></li>
-                            <li><a href="{{ url_my_orders($model->language) }}">Мои заказы</a></li>
-                            <li><a href="/user/logout">Выход</a></li>
+                            <li><a href="{{ url_personal_info($model->language) }}">{{ trans('profile.personal_info') }}</a></li>
+                            <li><a href="{{ url_payment_delivery($model->language) }}">{{ trans('profile.payment_delivery') }}</a></li>
+                            <li><a href="javascript:void(0);" style="color: #000;">{{ trans('profile.wish_list') }}</a></li>
+                            <li><a href="{{ url_my_orders($model->language) }}">{{ trans('profile.my_orders') }}</a></li>
+                            <li><a href="/user/logout">{{ trans('profile.log_out') }}</a></li>
                         </ul>
                     </div>
                 </aside>
@@ -97,10 +102,10 @@
                                                                class="theme-btn btn-black">
                                                                 <span v-cloak
                                                                       v-if="!findWhere(cartItems, {'productId': wishListItem.productId, 'sizeId': wishListItem.sizeId})">
-                                                                    Добавить в корзину
+                                                                    {{ trans('layout.add_to_cart') }}
                                                                 </span>
                                                                 <span v-cloak v-else>
-                                                                    В корзине
+                                                                    {{ trans('layout.in_cart') }}
                                                                 </span>
                                                             </a>
                                                         </li>

@@ -5240,3 +5240,7 @@ textarea.incorrect-field:-ms-input-placeholder {
 .error-section .error-link a i {
     margin-right: 6px;
 }
+
+.prod-meta .theme-btn.min-width-270-px {
+    min-width: 270px;
+}

@@ -6,7 +6,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Корзина</h4>
+                <h4 class="modal-title">{{ trans('cart.title') }}</h4>
             </div>
             <div class="modal-body">
 
@@ -57,7 +57,7 @@
                                            v-model.number="cartItem.count"
                                            v-on:change="toInteger(cartItem.productId, cartItem.sizeId, cartItem.count)"
                                            name="quantity"
-                                           title="Количество" class="form-control qty">
+                                           title="{{ trans('cart.qty') }}" class="form-control qty">
                                     <button class="btn plus" v-on:click="increment(cartItem.productId, cartItem.sizeId)">+</button>
                                 </div>
                             </div>
@@ -85,18 +85,18 @@
                 <div class="row">
                     <div class="col-md-6 footer-left">
                         <div class="cart-total-count">
-                            Всего: <span>@{{ totalCount }}</span>
+                            {{ trans('cart.total') }}: <span>@{{ totalCount }}</span>
                         </div>
                         <a data-dismiss="modal" class="theme-btn btn-white small-btn">
-                            Продолжить покупки
+                            {{ trans('cart.continue') }}
                         </a>
                     </div>
                     <div class="col-md-6 footer-right">
                         <div class="cart-total-all-price">
-                            Сумма: <span>@{{ totalAmount.toFixed(2) }} грн</span>
+                            {{ trans('cart.sum') }}: <span>@{{ totalAmount.toFixed(2) }} грн</span>
                         </div>
                         <a href="{{ url_order($model->language) }}" class="theme-btn btn-white small-btn">
-                            Оформить заказ
+                            {{ trans('cart.confirm') }}
                         </a>
                     </div>
                 </div>

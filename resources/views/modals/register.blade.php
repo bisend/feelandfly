@@ -12,16 +12,18 @@
                     </div>
                 </div>
                 <div class="col-sm-7">
-                    <h2 class="fsz-30 section-title"> ДОБРО ПОЖАЛОВАТЬ В НАШ МАГАЗИН </h2>
+                    <h2 class="fsz-30 section-title">{{ trans('register-modal.title') }}</h2>
                     <!--<p class="sub-detail fsz-16"> Login and buy </p>-->
                     <div class="row">
                         <div class="col-sm-6 pb-25">
-                            <a href="/user/login/facebook{{ $model->language == 'uk' ? '/' . $model->language : '' }}" class="theme-btn btn-white small-btn"> <i class="fa fa-facebook"></i>
+                            <a href="/user/login/facebook{{ $model->language == 'uk' ? '/' . $model->language : '' }}"
+                               class="theme-btn btn-white small-btn"> <i class="fa fa-facebook"></i>
                                 <span>Facebook</span>
                             </a>
                         </div>
                         <div class="col-sm-6 pb-25">
-                            <a href="/user/login/google{{ $model->language == 'uk' ? '/' . $model->language : '' }}" class="theme-btn btn-white small-btn">
+                            <a href="/user/login/google{{ $model->language == 'uk' ? '/' . $model->language : '' }}"
+                               class="theme-btn btn-white small-btn">
                                 <i class="fa fa-google-plus"></i>
                                 <span>Google+</span>
                             </a>
@@ -29,7 +31,7 @@
                     </div>
                     <div class="login-form">
                         <p class="fsz-18 section-title pb-25">
-                            ЗАРЕГИСТРИРУЙТЕ ПРОФИЛЬ
+                            {{ trans('register-modal.register_profile') }}
                         </p>
                         <form method="POST" class="login" @submit.prevent="validateBeforeSubmit">
                             <div class="form-group auth-form-group">
@@ -37,30 +39,38 @@
                                        v-model="name"
                                        name="name"
                                        autocomplete="off"
-                                       type="text" placeholder="Имя" class="form-control">
+                                       type="text"
+                                       placeholder="{{ trans('register-modal.name') }}"
+                                       class="form-control">
                             </div>
                             <div class="form-group auth-form-group">
                                 <input data-register-email
                                        v-model="email"
                                        name="email"
                                        autocomplete="off"
-                                       type="text" placeholder="Електронный адрес" class="form-control">
+                                       type="text"
+                                       placeholder="{{ trans('register-modal.email') }}"
+                                       class="form-control">
                             </div>
                             <div class="form-group auth-form-group">
                                 <input data-register-password
                                        v-model="password"
                                        name="password"
-                                       type="password" placeholder="Пароль" class="form-control">
+                                       type="password"
+                                       placeholder="{{ trans('register-modal.password') }}"
+                                       class="form-control">
                             </div>
                             <div class="form-group auth-form-group">
                                 <input data-register-confirm
                                        v-model="confirmPassword"
                                        name="confirm"
-                                       type="password" placeholder="Подтвердите пароль" class="form-control">
+                                       type="password"
+                                       placeholder="{{ trans('register-modal.confirm') }}"
+                                       class="form-control">
                             </div>
                             <div class="form-group auth-form-group">
                                 <button class="theme-btn btn-white-1 small-btn" type="submit">
-                                    Зарегистрироваться
+                                    {{ trans('register-modal.register') }}
                                 </button>
                             </div>
                         </form>

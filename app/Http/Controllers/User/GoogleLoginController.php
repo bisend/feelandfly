@@ -26,6 +26,8 @@ class GoogleLoginController extends LayoutController
 
     public function redirectToProvider($language = Languages::DEFAULT_LANGUAGE)
     {
+        Session::put('previousSocialLoginUrl', url()->previous());
+
         Languages::localizeApp($language);
 
         Session::put('language', $language);
@@ -48,6 +50,11 @@ class GoogleLoginController extends LayoutController
             $user = User::whereId($socialLogin->user_id)->first();
 
             auth()->login($user);
+
+            if (Session::has('previousSocialLoginUrl'))
+            {
+                return redirect(Session::get('previousSocialLoginUrl'));
+            }
 
             if (Session::has('language'))
             {
@@ -89,6 +96,11 @@ class GoogleLoginController extends LayoutController
 
             auth()->login($user);
 
+            if (Session::has('previousSocialLoginUrl'))
+            {
+                return redirect(Session::get('previousSocialLoginUrl'));
+            }
+
             if (Session::has('language'))
             {
                 return redirect(url_home(Session::get('language')));
@@ -97,6 +109,11 @@ class GoogleLoginController extends LayoutController
             {
                 return redirect('/');
             }
+        }
+
+        if (Session::has('previousSocialLoginUrl'))
+        {
+            return redirect(Session::get('previousSocialLoginUrl'));
         }
 
         if (Session::has('language'))

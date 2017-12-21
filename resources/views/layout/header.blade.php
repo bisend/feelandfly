@@ -5,10 +5,10 @@
             <div class="row">
                 <div class="col-md-5 col-sm-6">
                     <ul class="top_header-list">
-                        <li><a href="javascript:void(0);">О нас</a></li>
-                        <li><a href="javascript:void(0);">Контакты</a></li>
-                        <li><a href="javascript:void(0);">Сотрудничество</a></li>
-                        <li><a href="javascript:void(0);">Оплата и доставка</a></li>
+                        <li><a href="javascript:void(0);">{{ trans('header.about_us') }}</a></li>
+                        <li><a href="javascript:void(0);">{{ trans('header.contacts') }}</a></li>
+                        <li><a href="javascript:void(0);">{{ trans('header.cooperation') }}</a></li>
+                        <li><a href="javascript:void(0);">{{ trans('header.payment_delivery') }}</a></li>
                     </ul>
                 </div>
                 <div class="col-md-7 col-sm-6">
@@ -62,19 +62,43 @@
                             </li>
 
                         <ul class="drop-nav-profile">
-                            <li><a class="theme-btn btn-black" href="{{ url_personal_info($model->language) }}">Личные данные</a></li>
-                            <li><a class="theme-btn btn-black" href="{{ url_payment_delivery($model->language) }}">Оплата и доставка</a></li>
-                            <li><a class="theme-btn btn-black" href="{{ url_wish_list($model->language) }}">Избранное</a></li>
-                            <li><a class="theme-btn btn-black" href="{{ url_my_orders($model->language) }}">Мои заказы</a></li>
-                            <li><a class="theme-btn btn-black" href="/user/logout">Выход</a></li>
+                            <li>
+                                <a class="theme-btn btn-black" href="{{ url_personal_info($model->language) }}">
+                                    {{ trans('header.personal_info') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="theme-btn btn-black" href="{{ url_payment_delivery($model->language) }}">
+                                    {{ trans('header.payment_delivery') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="theme-btn btn-black" href="{{ url_wish_list($model->language) }}">
+                                    {{ trans('header.wish_list') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="theme-btn btn-black" href="{{ url_my_orders($model->language) }}">
+                                    {{ trans('header.my_orders') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="theme-btn btn-black" href="/user/logout">
+                                    {{ trans('header.log_out') }}
+                                </a>
+                            </li>
                         </ul>
-
-
-
-                            {{--<li><a href="/user/logout">Выход</a></li>--}}
                         @else
-                            <li><a data-toggle="modal" data-target="#login-popup" href="javascript:void(0);"> Вход </a></li>
-                            <li><a data-toggle="modal" data-target="#register-popup" href="javascript:void(0);"> Регистрация </a></li>
+                            <li>
+                                <a data-toggle="modal" data-target="#login-popup" href="javascript:void(0);">
+                                    {{ trans('header.log_in') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="modal" data-target="#register-popup" href="javascript:void(0);">
+                                    {{ trans('header.register') }}
+                                </a>
+                            </li>
                         @endif
                     </ul>
                 </div>
@@ -108,15 +132,21 @@
                                 </div>
                                 <div id="search" class="profile-search profile-search-smoll">
                                     <form class="form-serch-btn" v-bind:action="/search/ + series">
-                                        <input v-model="series" v-on:keyup="searchAjax()" type="text" placeholder="Поиск...">
+                                        <input v-model="series" v-on:keyup="searchAjax()"
+                                               type="text"
+                                               placeholder="{{ trans('header.search')}}">
 
-                                        <button v-on:click.prevent="search()" class="profile-search-btn"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                        <button v-on:click.prevent="search()" class="profile-search-btn">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                        </button>
                                     </form>
                                     <div v-if="countSearchProducts == 0 && series != '' && showNoResult" class="search-result-false">
-                                        <span>Товаров не найдено</span>
+                                        <span>{{ trans('header.not_found') }}</span>
                                     </div>
                                     <div v-if="countSearchProducts > 0 && series != '' && showResult" class="search-result-true">
-                                        <a v-for="searchProduct in searchProducts" class="result-item-link" v-bind:href="'/product/' + searchProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+                                        <a v-for="searchProduct in searchProducts"
+                                           class="result-item-link"
+                                           v-bind:href="'/product/' + searchProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
                                             <div class="search-result-item">
                                                 <div class="row">
                                                     <div class="col-md-2">
@@ -135,7 +165,7 @@
                                         </a>
                                         <div class="view-all-result">
                                             <a v-bind:href="'/search/' + series + '/{{ $model->language == 'ru' ? '' : $model->language }}'" class="theme-btn btn-black">
-                                                <span>Все результаты (@{{ countSearchProducts }})</span>
+                                                <span>{{ trans('header.all_results') }} (@{{ countSearchProducts }})</span>
                                             </a>
                                         </div>
                                     </div>
@@ -267,7 +297,7 @@
                                 <div class="pop-up-box cart-style-1">
                                     <div class="cart-title block-inline">
                                         <h2 class="title-1">
-                                            Корзина
+                                            {{ trans('cart.title') }}
                                         </h2>
                                         <span class="fa fa-shopping-cart"></span>
                                         <i v-cloak class="items-count font-1">
@@ -298,21 +328,21 @@
                                                 </p>
                                                 <p class="fsz-16 font-2 no-margin smoll-cart-totl-prod">
 
-                                                   Сумма:<span>@{{ (cartItem.product.price[0].price * cartItem.count).toFixed(2) }} грн</span>
+                                                   {{ trans('cart.sum') }}:<span>@{{ (cartItem.product.price[0].price * cartItem.count).toFixed(2) }} грн</span>
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="font-2 fsz-16 cart-total clearfix">
                                         <div class="col-sm-12 col-xs-12">
-                                            ВСЕГО: @{{ totalAmount.toFixed(2) }} грн
+                                            {{ trans('cart.total') }}: @{{ totalAmount.toFixed(2) }} грн
                                         </div>
                                     </div>
                                     <div class="block-inline cart-btns">
                                         <ul class="prod-meta">
                                             <li class="cart_btn">
                                                 <a href="{{ url_order($model->language) }}" class="theme-btn btn-black">
-                                                    Оформить заказ
+                                                    {{ trans('cart.confirm') }}
                                                 </a>
                                             </li>
                                         </ul>
@@ -321,7 +351,7 @@
                                                 <a class="theme-btn btn-black"
                                                    href="javascript:void(0);"
                                                    data-toggle="modal" data-target=".big-cart">
-                                                    Открыть корзину
+                                                    {{ trans('cart.open') }}
                                                 </a>
                                             </li>
                                         </ul>

@@ -11,13 +11,13 @@
         <section class="breadcrumb-bg">
             <div class="theme-container container ">
                 <div class="site-breadcumb white-clr">
-                    <h2 class="section-title wht fsz-36"> Мои заказы </h2>
+                    <h2 class="section-title wht fsz-36">{{ trans('profile.my_profile') }}</h2>
                     <ol class="breadcrumb breadcrumb-menubar">
                         <li>
                             <a href="{{ url_home($model->language) }}">
-                                Главная
+                                {{ trans('profile.home') }}
                             </a>
-                            Мои заказы
+                            {{ trans('profile.my_orders') }}
                         </li>
                     </ol>
                 </div>
@@ -36,7 +36,7 @@
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h4 class="modal-title fsz-18 font-2" id="myModalLabel">
-                                Детали заказа <span>№@{{ currentOrder.order_number }}</span>
+                                {{ trans('profile.details_order') }} <span>№@{{ currentOrder.order_number }}</span>
                             </h4>
                         </div>
                         <div class="modal-body">
@@ -82,7 +82,7 @@
                                                 </span> @{{ orderItem.price }} грн
                                             </p>
                                             <p class="fsz-16 font-2 no-margin order-prod-total">
-                                                Сумма:<span>
+                                                {{ trans('profile.sum') }}:<span>
                                                     @{{ (orderItem.price * orderItem.productCount).toFixed(2) }} грн
                                                 </span>
                                             </p>
@@ -100,7 +100,7 @@
 
                                 <div class="modal-order-pay">
                                     <p class="fsz-15 font-2 no-margin">
-                                        Способ оплаты: <span class="fsz-17"
+                                        {{ trans('profile.payment_var') }}: <span class="fsz-17"
                                                              v-for="payment in payments"
                                                              v-if="payment.id == currentOrder.payment_id">
                                                         @{{ payment.name }}</span>
@@ -109,16 +109,16 @@
 
                                 <div class="modal-order-del">
                                     <p class="fsz-15 font-2 no-margin">
-                                        Способ доставки: <span class="fsz-17"
+                                        {{ trans('profile.delivery_var') }}: <span class="fsz-17"
                                                                v-for="delivery in deliveries"
                                                                v-if="delivery.id == currentOrder.delivery_id">
-                                                        Новая Почта</span>
+                                                       @{{ delivery.name }}</span>
                                     </p>
                                 </div>
 
                                 <div class="modal-order-total-summ">
                                     <p class="fsz-15 font-2 no-margin">
-                                        Сумма: <span class="fsz-17">@{{ currentOrder.total_order_amount }} грн</span>
+                                        {{ trans('profile.sum') }}: <span class="fsz-17">@{{ currentOrder.total_order_amount }} грн</span>
                                     </p>
                                 </div>
 
@@ -127,7 +127,7 @@
 
                         </div>
                         <div class="modal-footer">
-                            <a class="theme-btn btn-black" data-dismiss="modal" href="#"> Закрыть </a>
+                            <a class="theme-btn btn-black" data-dismiss="modal" href="#">{{ trans('profile.close') }}</a>
                         </div>
                     </div>
                 </div>
@@ -138,13 +138,13 @@
                 <!-- Sidebar Starts -->
                 <aside class="col-md-3 col-sm-4 sidebar">
                     <div class="widget-wrap">
-                        <h2 class="widget-title title-profile-bar"> Мой профиль </h2>
+                        <h2 class="widget-title title-profile-bar">{{ trans('profile.my_profile') }}</h2>
                         <ul class="account-list with-border">
-                            <li><a href="{{ url_personal_info($model->language) }}"> Основная информация </a></li>
-                            <li><a href="{{ url_payment_delivery($model->language) }}"> Оплата и доставка </a></li>
-                            <li><a href="{{ url_wish_list($model->language) }}">Избранное</a></li>
-                            <li><a href="javascript:void(0);" style="color: #000;">Мои заказы</a></li>
-                            <li><a href="/user/logout">Выход</a></li>
+                            <li><a href="{{ url_personal_info($model->language) }}">{{ trans('profile.personal_info') }}</a></li>
+                            <li><a href="{{ url_payment_delivery($model->language) }}">{{ trans('profile.payment_delivery') }}</a></li>
+                            <li><a href="{{ url_wish_list($model->language) }}">{{ trans('profile.wish_list') }}</a></li>
+                            <li><a href="javascript:void(0);" style="color: #000;">{{ trans('profile.my_orders') }}</a></li>
+                            <li><a href="/user/logout">{{ trans('profile.log_out') }}</a></li>
                         </ul>
                     </div>
                 </aside>
@@ -156,7 +156,7 @@
                 <div class="col-md-9 col-sm-8 wishlist-section" v-if="totalOrdersCount > 0">
                     <div class="profile-item">
                         <div class="profile-item-header">
-                            <span><i class="fa fa-archive" aria-hidden="true"></i></span> Мои заказы
+                            <span><i class="fa fa-archive" aria-hidden="true"></i></span>{{ trans('profile.my_orders') }}
                         </div>
                         <div class="profile-item-body">
                             <div class="order-list-item">
@@ -166,8 +166,8 @@
                                         <tr class="order-list-header">
                                             <th>№</th>
                                             <th>Статус</th>
-                                            <th>К-во</th>
-                                            <th>Сумма</th>
+                                            <th>{{ trans('profile.qty') }}</th>
+                                            <th>{{ trans('profile.sum') }}</th>
                                             <th></th>
 
                                         </tr>
@@ -209,7 +209,7 @@
                                                    class="theme-btn btn-black"
                                                    v-on:click="setOrderProducts(order)"
                                                    href="javascript:void(0);">
-                                                    Детали
+                                                    {{ trans('profile.details') }}
                                                 </a>
                                             </td>
                                         </tr>

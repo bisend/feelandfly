@@ -3,7 +3,7 @@
 
 @section('content')
     @php($relatedProducts = $model->product->product_group->products)
-{{--    {{ dd($relatedProducts) }}--}}
+
     <article>
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">
@@ -12,7 +12,7 @@
                     <ol class="breadcrumb breadcrumb-menubar">
                         <li>
                             <a href="{{ url_home($model->language) }}">
-                                Главная
+                                {{ trans('profile.home') }}
                             </a>
                             <a href="{{ url_category($model->currentCategory->slug, $model->language) }}">
                                 {{ $model->currentCategory->name }}
@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="discriptions pt-20">
                                     <ul>
-                                        <li>Наличие:
+                                        <li>{{ trans('product.stock') }}:
                                             <span v-cloak v-for="productSize in singleProduct.product.product_sizes"
                                                   v-if="productSize.size_id == singleProduct.sizeId">
                                                 {{--{{ $model->product->product_sizes[0]->stocks[0]->stock }}--}}
@@ -163,7 +163,7 @@
                                                        name="quantity"
                                                        v-model.number="singleProduct.count"
                                                        v-on:change="toInteger(singleProduct.count)"
-                                                       title="Количество">
+                                                       title="{{ trans('cart.qty') }}">
                                                 <button class="btn plus" v-on:click="increment()">+</button>
                                             </div>
                                         </li>
@@ -173,10 +173,10 @@
                                                href="javascript:void(0);">
                                                 <span v-cloak
                                                       v-if="!findWhere(cartItems, {'productId': singleProduct.productId, 'sizeId': singleProduct.sizeId})">
-                                                    Добавить в корзину
+                                                    {{ trans('layout.add_to_cart') }}
                                                 </span>
                                                 <span v-cloak v-else>
-                                                    В корзине
+                                                    {{ trans('layout.in_cart') }}
                                                 </span>
                                             </a>
 
@@ -214,8 +214,8 @@
                     <div class="tabs-wrap product_tabs-wrap">
                         <div class="tabs">
                             <ul id="tabs" class="nav font-2 theme-tabs">
-                                <li class="active"><a href="#prod-tab-1" data-toggle="tab"> Описание </a></li>
-                                <li class=""><a href="#prod-tab-2" data-toggle="tab"> Отзывы </a></li>
+                                <li class="active"><a href="#prod-tab-1" data-toggle="tab">{{ trans('product.description') }}</a></li>
+                                <li class=""><a href="#prod-tab-2" data-toggle="tab">{{ trans('product.reviews') }}</a></li>
                             </ul>
                         </div>
                         <div class="tab-content prod-tab-content">
