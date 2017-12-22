@@ -257,3 +257,7 @@ Route::group(['prefix' => 'errors'], function ()
             'language' => '^(uk|ru)?$'
         ]);
 });
+
+Route::post('/add-review', 'ProductController@addReview');
+
+Route::post('/get-reviews', 'ProductController@getReviews');

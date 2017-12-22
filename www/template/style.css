@@ -5244,3 +5244,104 @@ textarea.incorrect-field:-ms-input-placeholder {
 .prod-meta .theme-btn.min-width-270-px {
     min-width: 270px;
 }
+
+/*------ 21/12/2017 COMENTS -----------*/
+.comment-item{
+    border: 2px solid #000;
+    margin-bottom: 20px;
+}
+
+.comment-item .comment-item-header{
+    border-bottom: 2px solid #000;
+    padding: 15px 20px;
+}
+
+.comment-item .comment-item-body{
+    padding: 20px;
+}
+
+
+.comment-item .comment-item-body p{
+    margin: 0;
+}
+
+.comment-item .comment-item-header .date-comment{
+    float: right;
+    padding: 0;
+    margin: 0;
+
+}
+
+.comment-item .comment-item-header .comment-user-name {
+    display: inline-block;
+    padding: 0;
+    position: relative;
+}
+
+.comment-item .comment-item-header .comment-user-name p{
+    margin: 0;
+    font-size: 16px;
+    padding-left: 35px;
+}
+
+.comment-item .comment-item-header .comment-user-name p i{
+    position: absolute;
+    left: 0;
+    top: 5px;
+}
+
+.comment-item .comment-item-header  .comment-user-stars{
+    display: inline-block;
+    margin-left: 35px;
+}
+
+
+.comments-list .pagination-wrap{
+    border: none;
+    margin-top: 0;
+}
+
+
+/*.add-comment .add-comment-header{*/
+/*padding: 20px 0 15px 0;*/
+/*border-bottom: 2px solid #000;*/
+/*}*/
+
+.add-comment .add-comment-header p{
+    font-size: 27px;
+    margin: 0;
+}
+
+
+.add-comment{
+    margin-top: 50px;
+}
+
+
+.add-comment-body textarea{
+    min-width: 100%;
+    max-width: 100%;
+    width: 100%;
+    min-height: 100px;
+}
+
+.add-comment .profile-item-save button{
+    width: 220px;
+}
+
+
+.add-comment-rang p {
+    display: inline-block;
+    font-size: 16px;
+    margin: 0;
+}
+
+.add-comment-rang .rating{
+    display: inline-block;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.add-comment .black-input{
+    text-transform: inherit;
+}

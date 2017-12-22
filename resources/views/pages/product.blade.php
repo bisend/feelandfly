@@ -223,20 +223,168 @@
                                 {{ $model->product->description }}
                             </div>
                             <div id="prod-tab-2" class="tab-pane fade">
-                                <p>
-                                    Aliquam lorem ante, dapibus in, viverra quis,
-                                    feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.
-                                    Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue.
-                                    Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus.
-                                    Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero,
-                                    sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel,
-                                    luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus.
-                                </p>
-                                <p>
-                                    Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante.
-                                    Etiam sit amet orci eget eros faucibus tincidunt. amet nibh.
-                                    Donec sodales sagittis magna. Augue velit cursus nunc, quis gravida.
-                                </p>
+                                <div class="comments-list" id="single-product-review">
+
+                                    <div class="comment-item" v-if="totalReviewsCount > 0" v-for="review in reviews">
+                                        <div class="comment-item-header">
+                                            <div class="date-comment">
+                                                <p class="font-2">
+                                                    @{{ review.created_at }}
+                                                </p>
+                                            </div>
+                                            <div class="comment-user-name">
+                                                <p class="font-2"><i class="fa fa-comments fa-lg" aria-hidden="true"></i>
+                                                    @{{ review.name }}
+                                                </p>
+                                            </div>
+                                            <div class="comment-user-stars">
+                                                <div class="rating">
+                                                    <span class="star" v-for="rate in 5" :class="{active: rate <= review.rating}">
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="comment-item-body">
+                                            <p>@{{ review.review }}</p>
+                                        </div>
+                                    </div>
+                                    <div v-if="totalReviewsCount == 0">
+                                        Пусто
+                                    </div>
+
+                                    <div class="block-inline pagination-wrap text-center" v-cloak v-if="totalReviewsCount > 5">
+                                        <ul class="pagination-1">
+                                            <li v-if="reviewIsPrev" class="prv">
+                                                <a class="disabled"
+                                                   style="cursor: pointer;"
+                                                   v-on:click="setPage(reviewsCurrentPage - 1)">
+                                                    <i class="fa fa-long-arrow-left"></i>
+                                                </a>
+                                            </li>
+                                            <li v-else class="prv">
+                                                <a>
+                                                    <i class="fa fa-long-arrow-left"></i>
+                                                </a>
+                                            </li>
+
+                                            <li v-for="reviewPage in reviewsPages">
+                                                <a v-if="reviewPage == '...'">
+                                                    @{{ reviewPage }}
+                                                </a>
+                                                <a v-else style="cursor: pointer;"
+                                                   :class="{active : reviewPage == reviewsCurrentPage}"
+                                                   v-on:click="setPage(reviewPage)">
+                                                    @{{ reviewPage }}
+                                                </a>
+                                            </li>
+
+
+                                            <li v-if="reviewIsNext" class="nxt">
+                                                <a class="disabled"
+                                                   style="cursor: pointer;"
+                                                   v-on:click="setPage(reviewsCurrentPage + 1)">
+                                                    <i class="fa fa-long-arrow-right"></i>
+                                                </a>
+                                            </li>
+                                            <li v-else class="prv">
+                                                <a>
+                                                    <i class="fa fa-long-arrow-right"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+
+
+                                    <div class="profile-item add-comment">
+                                        <div class="profile-item-header add-comment-header">
+                                            <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i></span>{{ trans('product.leave_review') }}
+                                        </div>
+                                        <div class="profile-item-body add-comment-body">
+                                            <form @submit.prevent="validateBeforeSubmit">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <input type="text"
+                                                                   data-review-name
+                                                                   v-model="review.name"
+                                                                   placeholder="{{ trans('product.name') }}"
+                                                                   class="form-control black-input">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <input type="text"
+                                                                   data-review-email
+                                                                   v-model="review.email"
+                                                                   placeholder="{{ trans('product.email') }}"
+                                                                   class="form-control black-input">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <div class="add-comment-rang">
+                                                                <p class="font-2">{{ trans('product.rating') }} : </p>
+                                                                <div class="rating">
+                                                                    <span class="star"
+                                                                          v-on:mouseover="hoverStars(1)"
+                                                                          v-on:mouseleave="mouseLeave()"
+                                                                          v-on:click="clickStars(1)"
+                                                                          :class="{active: review.hoverRating >= 1 || review.rating >= 1}"></span>
+                                                                    <span class="star"
+                                                                          v-on:mouseover="hoverStars(2)"
+                                                                          v-on:mouseleave="mouseLeave()"
+                                                                          v-on:click="clickStars(2)"
+                                                                          :class="{active: review.hoverRating >= 2 || review.rating >= 2}"></span>
+                                                                    <span class="star"
+                                                                          v-on:mouseover="hoverStars(3)"
+                                                                          v-on:mouseleave="mouseLeave()"
+                                                                          v-on:click="clickStars(3)"
+                                                                          :class="{active: review.hoverRating >= 3 || review.rating >= 3}"></span>
+                                                                    <span class="star"
+                                                                          v-on:mouseover="hoverStars(4)"
+                                                                          v-on:mouseleave="mouseLeave()"
+                                                                          v-on:click="clickStars(4)"
+                                                                          :class="{active: review.hoverRating >= 4 || review.rating >= 4}"></span>
+                                                                    <span class="star"
+                                                                          v-on:mouseover="hoverStars(5)"
+                                                                          v-on:mouseleave="mouseLeave()"
+                                                                          v-on:click="clickStars(5)"
+                                                                          :class="{active: review.hoverRating >= 5 || review.rating >= 5}"></span>
+                                                                </div>
+                                                                <p v-if="review.validatedFalse"
+                                                                   class="font-2" style="color: red;">
+                                                                    {{ trans('product.pls_rate') }}
+                                                                </p>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <textarea type="text"
+                                                                      data-review-text
+                                                                      v-model="review.text"
+                                                                      placeholder="{{ trans('product.review') }}"
+                                                                      class="form-control black-input"></textarea>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="profile-item-save">
+                                                        <button class="theme-btn btn-black" type="submit">
+                                                            {{ trans('product.save') }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+
+                                </div>
                             </div>
                         </div>
                     </div>

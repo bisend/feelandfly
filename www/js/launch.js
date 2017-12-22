@@ -19,7 +19,8 @@ var INCORRECT_FIELD_CLASS = 'incorrect-field',
     PERSONAL_INFO_SAVED = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Данные сохранены.' : 'Дані збережено.',
     EMAIL_CHANGED_MESSAGE = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Данные сохранены. Вы изменили e-mail, Вам отправлено письмо для подтверждения нового електронного адреса.' : 'Дані збережено. Ви змінили e-mail, Вам відправлено лист для підтвердження нової електронної адреси.',
     PASSWORD_CHANGED_MESSAGE = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Пароль сохранен.' : 'Пароль змінено.',
-    WRONG_OLD_PASSWORD = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Неверный старый пароль.' : 'Неправильний старий пароль.';
+    WRONG_OLD_PASSWORD = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Неверный старый пароль.' : 'Неправильний старий пароль.',
+    REVIEW_ADDED = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Спасибо! Модератор пересмотрит Ваш отзыв, после чего он появится на сайте.' : 'Дякуємо! Модератор перегляне Ваш відгук, після чого він з`явиться на сайті.';
 
 if (window.location.hash && window.location.hash == '#_=_') {
     if (window.history && history.pushState) {
@@ -83,11 +84,28 @@ var GLOBAL_DATA = {
         isPrev: false,
         isNext: false
     },
+    review: {
+        rating: 0,
+        hoverRating: 0,
+        tempRating: 0,
+        validatedFalse: false,
+        name: '',
+        email: '',
+        text: ''
+    },
     wishListPages: [],
     wishListCurrentPage: 1,
     totalCount: 0,
     totalAmount: 0,
     totalWishListCount: 0,
+    
+    reviewsPages: [],
+    reviewIsPrev: false,
+    reviewIsNext: false,
+    totalReviewsCount: 0,
+    reviewsCurrentPage: 1,
+    reviews: [],
+    
     INIT_CART_ENDED: false,
     IS_DATA_PROCESSING: false,
     timer: undefined,
@@ -166,6 +184,9 @@ function getUser() {
                     {
                         GLOBAL_DATA.orderConfirm.deliveryId = data.profile.delivery_id;
                     }
+
+                    GLOBAL_DATA.review.name = GLOBAL_DATA.user.name;
+                    GLOBAL_DATA.review.email = GLOBAL_DATA.user.email;
                 }
             }
         ),
