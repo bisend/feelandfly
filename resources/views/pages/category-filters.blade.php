@@ -635,7 +635,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div style="min-height: 300px">
-                            <h1 style="text-align: center">Таких товаров нет</h1>
+                            <h1 style="text-align: center">{{ trans('layout.no_products') }}</h1>
                             {{--<h2 style="text-align: center;  margin-top: 50px">--}}
                                 {{----}}
                             {{--</h2>--}}
@@ -644,7 +644,7 @@
                                     Назад
                                 </a>
                                 <a href="{{ url_home($model->language) }}">
-                                    На главную
+                                    {{ trans('layout.go_home') }}
                                 </a>
                             </h2>
                         </div>
