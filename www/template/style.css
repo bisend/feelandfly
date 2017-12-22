@@ -5342,6 +5342,10 @@ textarea.incorrect-field:-ms-input-placeholder {
     margin-right: 15px;
 }
 
+.add-comment-rang .rating .star{
+    cursor: pointer;
+}
+
 .add-comment .black-input{
     text-transform: inherit;
 }
