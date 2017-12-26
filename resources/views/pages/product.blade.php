@@ -193,7 +193,7 @@
                                                    v-on:click="addToWishList(singleProduct.productId, singleProduct.sizeId, wishList.id)"
                                                    href="javascript:void(0);"></a>
                                                 <a v-cloak v-else
-                                                   class="fa fa-heart meta-icon meta-icon-in-wish"
+                                                   class="fa fa-check meta-icon meta-icon-in-wish"
                                                    href="{{ url_wish_list($model->language) }}"></a>
                                             @else
                                                 <a class="fa fa-heart meta-icon"
@@ -211,11 +211,11 @@
                     </div>
 
                     <!-- Products Description Tabination Starts -->
-                    <div class="tabs-wrap product_tabs-wrap">
+                    <div class="tabs-wrap product_tabs-wrap" id="single-product-review" v-cloak>
                         <div class="tabs">
                             <ul id="tabs" class="nav font-2 theme-tabs">
                                 <li class="active"><a href="#prod-tab-1" data-toggle="tab">{{ trans('product.description') }}</a></li>
-                                <li class=""><a href="#prod-tab-2" data-toggle="tab">{{ trans('product.reviews') }}</a></li>
+                                <li class=""><a href="#prod-tab-2" data-toggle="tab">{{ trans('product.reviews') }} (@{{ totalReviewsCount }})</a></li>
                             </ul>
                         </div>
                         <div class="tab-content prod-tab-content">
@@ -223,8 +223,17 @@
                                 {{ $model->product->description }}
                             </div>
                             <div id="prod-tab-2" class="tab-pane fade">
-                                <div class="comments-list" id="single-product-review">
-
+                                <div class="comment-count">
+                                    <a v-if="totalReviewsCount >= 3"
+                                       href="javascript:void(0);"
+                                       v-on:click="scrollToReview()"
+                                       class="font-2">
+                                        {{ trans('product.leave_review') }}
+                                    </a>
+                                    <p class="font-2">{{ trans('product.total_reviews') }} :
+                                        <span>@{{ totalReviewsCount }}</span> </p>
+                                </div>
+                                <div class="comments-list">
                                     <div class="comment-item" v-if="totalReviewsCount > 0" v-for="review in reviews">
                                         <div class="comment-item-header">
                                             <div class="date-comment">
@@ -248,9 +257,9 @@
                                             <p>@{{ review.review }}</p>
                                         </div>
                                     </div>
-                                    <div v-if="totalReviewsCount == 0">
-                                        Пусто
-                                    </div>
+                                    {{--<div v-if="totalReviewsCount == 0">--}}
+                                        {{--Пусто--}}
+                                    {{--</div>--}}
 
                                     <div class="block-inline pagination-wrap text-center" v-cloak v-if="totalReviewsCount > 5">
                                         <ul class="pagination-1">
@@ -298,9 +307,10 @@
 
                                     <div class="profile-item add-comment">
                                         <div class="profile-item-header add-comment-header">
-                                            <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i></span>{{ trans('product.leave_review') }}
+                                            <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i></span>
+                                            {{ trans('product.leave_review') }}
                                         </div>
-                                        <div class="profile-item-body add-comment-body">
+                                        <div class="profile-item-body add-comment-body" data-review-form>
                                             <form @submit.prevent="validateBeforeSubmit">
                                                 <div class="row">
                                                     <div class="col-md-6">

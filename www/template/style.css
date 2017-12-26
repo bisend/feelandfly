@@ -5349,3 +5349,18 @@ textarea.incorrect-field:-ms-input-placeholder {
 .add-comment .black-input{
     text-transform: inherit;
 }
+
+.theme-tabs > li:first-child {
+    padding-left: 0;
+}
+
+.comment-count span{
+    margin-left: 8px;
+    font-size: 16px;
+}
+
+.comment-count a{
+    float: right;
+    text-decoration: underline;
+    font-size: 16px;
+}

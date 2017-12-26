@@ -15150,6 +15150,11 @@ if (document.getElementById('single-product-review')) {
                 GLOBAL_DATA.review.rating = rating;
                 GLOBAL_DATA.review.tempRating = rating;
                 GLOBAL_DATA.review.validatedFalse = false;
+            },
+            scrollToReview: function scrollToReview() {
+                $('html, body').animate({
+                    scrollTop: $("[data-review-form]").offset().top - 150
+                }, 600);
             }
         }
     });

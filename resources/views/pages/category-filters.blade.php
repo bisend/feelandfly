@@ -126,7 +126,9 @@
                                                            class="fa fa-heart meta-icon"
                                                            v-on:click="addToWishList(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, wishList.id)"
                                                            href="javascript:void(0);"></a>
-                                                        <a v-cloak v-else class="fa fa-heart meta-icon meta-icon-in-wish" href="{{ url_wish_list($model->language) }}"></a>
+                                                        <a v-cloak v-else
+                                                           class="fa fa-check meta-icon meta-icon-in-wish"
+                                                           href="{{ url_wish_list($model->language) }}"></a>
                                                     @else
                                                         <a class="fa fa-heart meta-icon"
                                                            data-toggle="modal"
@@ -552,7 +554,7 @@
                                                                            v-on:click="addToWishList({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, wishList.id)"
                                                                            href="javascript:void(0);"></a>
                                                                         <a v-cloak v-else
-                                                                           class="fa fa-heart meta-icon meta-icon-in-wish"
+                                                                           class="fa fa-check meta-icon meta-icon-in-wish"
                                                                            href="{{ url_wish_list($model->language) }}"></a>
                                                                     @else
                                                                         <a class="fa fa-heart meta-icon"
