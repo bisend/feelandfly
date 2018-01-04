@@ -17,8 +17,16 @@ use App\DatabaseModels\Property;
  */
 class ProductRepository
 {
+    /**
+     * word separator for search
+     * @var string
+     */
     protected $wordsSeparator = '+';
 
+    /**
+     * like separator for search query
+     * @var string
+     */
     protected $likeSeparator = '%';
 
     /**
@@ -77,6 +85,12 @@ class ProductRepository
             ]);
     }
 
+    /**
+     * return product properties
+     * @param $productId
+     * @param $language
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function getProductProperties($productId, $language = Languages::DEFAULT_LANGUAGE)
     {
         return Property::select([
@@ -246,7 +260,15 @@ class ProductRepository
     {
         return Product::whereCategoryId($currentCategory->id)->count();
     }
-    
+
+    /**
+     * return similar products for single product page
+     * @param $productId
+     * @param $categoryId
+     * @param $language
+     * @param $userTypeId
+     * @return \Illuminate\Support\Collection
+     */
     public function getSimilarProducts($productId, $categoryId, $language, $userTypeId)
     {
         return Product::with([
@@ -307,7 +329,14 @@ class ProductRepository
 //                'number_of_views'
             ]);
     }
-    
+
+    /**
+     * get products for Cart
+     * @param $productIds
+     * @param $language
+     * @param $userTypeId
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function getCartProducts($productIds, $language, $userTypeId)
     {
         return Product::with([
@@ -361,6 +390,13 @@ class ProductRepository
             ]);
     }
 
+    /**
+     * return products for wish list
+     * @param $productIds
+     * @param $language
+     * @param $userTypeId
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function getWishListProducts($productIds, $language, $userTypeId)
     {
         return Product::with([
@@ -414,6 +450,13 @@ class ProductRepository
             ]);
     }
 
+    /**
+     * return products for order
+     * @param $productIds
+     * @param $language
+     * @param $userTypeId
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function getOrdersProducts($productIds, $language, $userTypeId)
     {
         return Product::with([
@@ -466,7 +509,17 @@ class ProductRepository
                 'number_of_views'
             ]);
     }
-    
+
+    /**
+     * return products for filtered categories
+     * @param $currentCategory
+     * @param $categoryProductsLimit
+     * @param $categoryProductsOffset
+     * @param $language
+     * @param $userTypeId
+     * @param $model
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function getAllProductsForFiltersCategory(
         $currentCategory,
         $categoryProductsLimit,
@@ -571,6 +624,11 @@ class ProductRepository
         ]);
     }
 
+    /**
+     * return search products
+     * @param $model
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function getAllProductsForSearch($model)
     {
         $orderByRaw = 'name';
@@ -654,7 +712,12 @@ class ProductRepository
             'products.created_at'
         ]);
     }
-    
+
+    /**
+     * return count of search products
+     * @param $model
+     * @return int
+     */
     public function getCountSearchProducts($model)
     {
         $words = explode($this->wordsSeparator, $model->series);
@@ -671,6 +734,11 @@ class ProductRepository
                 })->count();
     }
 
+    /**
+     * return ajax search products
+     * @param $model
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function getAjaxSearchProducts($model)
     {
         $orderByRaw = 'name';
@@ -737,37 +805,14 @@ class ProductRepository
             ]);
     }
 
+    /**
+     * return count of product filtered categories
+     * @param $model
+     * @return int
+     */
     public function getCountProductsFiltersCategory($model)
     {
         $query = Product::query();
-
-//        $query->with([
-//            'images',
-//            'color',
-//            'product_group.products.color' => function ($query) use ($language) {
-//                $query->select([
-//                    'id',
-//                    "name_$language",
-//                    'slug',
-//                    'html_code'
-//                ]);
-//            },
-//            'sizes' => function ($query) use ($language) {
-//                $query->select([
-//                    'sizes.id',
-//                    "sizes.name_$language as name",
-//                    'sizes.slug'
-//                ]);
-//            },
-//            'price' => function ($query) use ($language, $userTypeId) {
-//                $query->select([
-//                    'product_prices.id',
-//                    'product_prices.product_id',
-//                    'product_prices.user_type_id',
-//                    'product_prices.price'
-//                ])->whereUserTypeId($userTypeId);
-//            }
-//        ]);
 
         if ($model->priceMin && $model->priceMax)
         {
@@ -789,11 +834,14 @@ class ProductRepository
 
         $query->whereCategoryId($model->currentCategory->id);
 
-
         return $query->count();
-//        return Product::whereCategoryId($currentCategory->id)->count();
     }
-    
+
+    /**
+     * return min value of price for categories
+     * @param $model
+     * @return mixed
+     */
     public function getPriceMinForCategoryProducts($model)
     {
         return Product::join('product_prices', function ($join) use($model) {
@@ -801,7 +849,12 @@ class ProductRepository
                 ->where('product_prices.user_type_id', '=', $model->userTypeId);
         })->whereCategoryId($model->currentCategory->id)->min('price');
     }
-    
+
+    /**
+     * return max value of price for categories
+     * @param $model
+     * @return mixed
+     */
     public function getPriceMaxForCategoryProducts($model)
     {
         return Product::join('product_prices', function ($join) use($model) {
@@ -809,7 +862,12 @@ class ProductRepository
                 ->where('product_prices.user_type_id', '=', $model->userTypeId);
         })->whereCategoryId($model->currentCategory->id)->max('price');
     }
-    
+
+    /**
+     * return min value of price for filtered categories
+     * @param $model
+     * @return mixed
+     */
     public function getPriceMinForFiltersCategoryProducts($model)
     {
         $query = Product::query();
@@ -835,6 +893,11 @@ class ProductRepository
         return $query->min('price');
     }
 
+    /**
+     * return max value of price for filtered categories
+     * @param $model
+     * @return mixed
+     */
     public function getPriceMaxForFiltersCategoryProducts($model)
     {
         $query = Product::query();
@@ -858,10 +921,5 @@ class ProductRepository
         }
 
         return $query->max('price');
-
-//        return Product::join('product_prices', function ($join) use($model) {
-//            $join->on('products.id', '=', 'product_prices.product_id')
-//                ->where('product_prices.user_type_id', '=', $model->userTypeId);
-//        })->whereCategoryId($model->currentCategory->id)->max('price');
     }
 }

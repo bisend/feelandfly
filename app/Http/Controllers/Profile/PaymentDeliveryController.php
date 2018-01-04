@@ -9,15 +9,31 @@ use App\ViewModels\PaymentDeliveryViewModel;
 use DB;
 use JavaScript;
 
+/**
+ * Class PaymentDeliveryController
+ * @package App\Http\Controllers\Profile
+ */
 class PaymentDeliveryController extends LayoutController
 {
+    /**
+     * @var ProfileService
+     */
     protected $profileService;
-    
+
+    /**
+     * PaymentDeliveryController constructor.
+     * @param ProfileService $profileService
+     */
     public function __construct(ProfileService $profileService)
     {
         $this->profileService = $profileService;
     }
 
+    /**
+     * payment delivery page in profile
+     * @param string $language
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function index($language = Languages::DEFAULT_LANGUAGE)
     {
         if (!auth()->check())
@@ -44,12 +60,14 @@ class PaymentDeliveryController extends LayoutController
             'selectedDeliveryId' => $model->selectedDeliveryId,
             'address' => $model->address
         ]);
-
-        \Debugbar::info($model);
         
         return view('pages.payment-delivery', compact('model'));
     }
 
+    /**
+     * method handles saving of user payment and delivery
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function savePaymentDelivery()
     {
         $paymentId = request('paymentId');

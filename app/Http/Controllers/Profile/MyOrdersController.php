@@ -8,10 +8,21 @@ use App\Services\ProfileService;
 use App\ViewModels\MyOrdersViewModel;
 use JavaScript;
 
+/**
+ * Class MyOrdersController
+ * @package App\Http\Controllers\Profile
+ */
 class MyOrdersController extends LayoutController
 {
+    /**
+     * @var ProfileService
+     */
     protected $profileService;
-    
+
+    /**
+     * MyOrdersController constructor.
+     * @param ProfileService $profileService
+     */
     public function __construct(ProfileService $profileService)
     {
         parent::__construct($profileService);
@@ -19,6 +30,11 @@ class MyOrdersController extends LayoutController
         $this->profileService = $profileService;
     }
 
+    /**
+     * my orders page in profile
+     * @param string $language
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function index($language = Languages::DEFAULT_LANGUAGE)
     {
         if (!auth()->check())
@@ -40,8 +56,6 @@ class MyOrdersController extends LayoutController
         
         $this->profileService->getTotalOrdersCount($model);
 
-        \Debugbar::info($model);
-
         JavaScript::put([
             'orders' => $model->orders,
             'page' => $model->page,
@@ -53,6 +67,10 @@ class MyOrdersController extends LayoutController
         return view('pages.my-orders', compact('model'));
     }
 
+    /**
+     * method handles pagination of my orders
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function indexPagination()
     {
         $page = request('page');
@@ -72,8 +90,6 @@ class MyOrdersController extends LayoutController
         $this->profileService->getOrdersItems($model);
 
         $this->profileService->getTotalOrdersCount($model);
-
-        \Debugbar::info($model);
 
         return response()->json([
             'orders' => $model->orders,

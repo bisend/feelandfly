@@ -11,8 +11,17 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Validator;
 
+/**
+ * Class RegisterController
+ * @package App\Http\Controllers\User
+ */
 class RegisterController extends LayoutController
 {
+    /**
+     * registering user
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(Request $request)
     {
         if(!request()->ajax())

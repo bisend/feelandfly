@@ -8,11 +8,18 @@
 
 namespace App\Repositories;
 
-
 use App\DatabaseModels\Profile;
 
+/**
+ * Class ProfileRepository
+ * @package App\Repositories
+ */
 class ProfileRepository
 {
+    /**
+     * save new profile
+     * @param $user
+     */
     public function createProfile($user)
     {
         $profile = new Profile();
@@ -21,7 +28,12 @@ class ProfileRepository
 
         $profile->save();
     }
-    
+
+    /**
+     * save phone number
+     * @param $userId
+     * @param $phone
+     */
     public function saveProfilePhoneNumber($userId, $phone)
     {
         $profile = Profile::whereUserId($userId)->first();
@@ -30,7 +42,12 @@ class ProfileRepository
         
         $profile->save();
     }
-    
+
+    /**
+     * return selected payment id
+     * @param $model
+     * @return int|mixed|null
+     */
     public function getSelectedPaymentId($model)
     {
         $user = auth()->user();
@@ -39,7 +56,12 @@ class ProfileRepository
         
         return $profile->payment_id;
     }
-    
+
+    /**
+     * return selected delivery id
+     * @param $model
+     * @return int|mixed|null
+     */
     public function getSelectedDeliveryId($model)
     {
         $user = auth()->user();
@@ -48,7 +70,11 @@ class ProfileRepository
         
         return $profile->delivery_id;
     }
-    
+
+    /**
+     * @param $model
+     * @return mixed|null|string
+     */
     public function getAddress($model)
     {
         $user = auth()->user();
@@ -57,7 +83,13 @@ class ProfileRepository
 
         return $profile->address_delivery;
     }
-    
+
+    /**
+     * save selected payment and delivery
+     * @param $paymentId
+     * @param $deliveryId
+     * @param $address
+     */
     public function savePaymentDelivery($paymentId, $deliveryId, $address)
     {
         $user = auth()->user();

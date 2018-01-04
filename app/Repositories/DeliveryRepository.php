@@ -11,8 +11,17 @@ namespace App\Repositories;
 
 use App\DatabaseModels\Delivery;
 
+/**
+ * Class DeliveryRepository
+ * @package App\Repositories
+ */
 class DeliveryRepository
 {
+    /**
+     * return all deliveries
+     * @param $model
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function getAllDeliveries($model)
     {
         return Delivery::get([

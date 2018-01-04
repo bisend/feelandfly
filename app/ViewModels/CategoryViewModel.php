@@ -1,6 +1,7 @@
 <?php
 
 namespace App\ViewModels;
+
 use App\Helpers\ProductsSort;
 
 /**
@@ -49,8 +50,14 @@ class CategoryViewModel extends LayoutViewModel
      */
     public $filters = [];
 
+    /**
+     * @var
+     */
     public $priceMin;
 
+    /**
+     * @var
+     */
     public $priceMax;
 
     /**

@@ -385,7 +385,7 @@
 
                                                     <div class="profile-item-save">
                                                         <button class="theme-btn btn-black" type="submit">
-                                                            {{ trans('product.save') }}
+                                                            {{ trans('product.leave_review') }}
                                                         </button>
                                                     </div>
                                                 </div>

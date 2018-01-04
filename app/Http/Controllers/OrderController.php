@@ -12,17 +12,39 @@ use DB;
 use Session;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * Class OrderController
+ * @package App\Http\Controllers
+ */
 class OrderController extends LayoutController
 {
+    /**
+     * @var OrderService
+     */
     protected $orderService;
+    
+    /**
+     * @var CartService
+     */
     protected $cartService;
 
+    /**
+     * OrderController constructor.
+     * @param OrderService $orderService
+     * @param CartService $cartService
+     */
     public function __construct(OrderService $orderService, CartService $cartService)
     {
         $this->orderService = $orderService;
+        
         $this->cartService = $cartService;
     }
 
+    /**
+     * order page
+     * @param string $language
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function index($language = Languages::DEFAULT_LANGUAGE)
     {
         if (!Session::has('cart'))
@@ -34,11 +56,13 @@ class OrderController extends LayoutController
 
         $this->orderService->fill($model);
 
-        \Debugbar::info($model);
-
         return view('pages.order', compact('model'));
     }
-    
+
+    /**
+     * creating new order
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create()
     {
         if(!request()->ajax())
@@ -90,8 +114,6 @@ class OrderController extends LayoutController
         $this->cartService->clearCart();
 
         DB::commit();
-
-        \Debugbar::info($model, $this->cartService);
 
         Session::put('isOrderCreated', true);
 

@@ -4,13 +4,20 @@ namespace App\ViewModels;
 
 use App\Helpers\ProductsSort;
 
+/**
+ * Class SearchViewModel
+ * @package App\ViewModels
+ */
 class SearchViewModel extends LayoutViewModel
 {
     /**
      * @var string
      */
     public $sort;
-    
+
+    /**
+     * @var ProductsSort
+     */
     public $sortItems;
     
     //pagination fields
@@ -48,7 +55,15 @@ class SearchViewModel extends LayoutViewModel
      * @var
      */
     public $seriesTitle;
-    
+
+    /**
+     * SearchViewModel constructor.
+     * @param string $view
+     * @param string $language
+     * @param $series
+     * @param $sort
+     * @param $page
+     */
     public function __construct($view, $language, $series, $sort, $page)
     {
         parent::__construct($view, $language);

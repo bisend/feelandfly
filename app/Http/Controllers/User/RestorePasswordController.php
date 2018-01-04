@@ -9,8 +9,16 @@ use App\Mail\RestorePassword;
 use DB;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * Class RestorePasswordController
+ * @package App\Http\Controllers\User
+ */
 class RestorePasswordController extends LayoutController
 {
+    /**
+     * sending new password to user
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function restore()
     {
         if(!request()->ajax())

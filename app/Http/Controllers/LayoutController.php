@@ -15,13 +15,24 @@ use Session;
  */
 class LayoutController extends Controller
 {
+    /**
+     * @var ProfileService
+     */
     protected $profileService;
 
+    /**
+     * LayoutController constructor.
+     * @param ProfileService $profileService
+     */
     public function __construct(ProfileService $profileService)
     {
         $this->profileService = $profileService;
     }
 
+    /**
+     * ajax method get user and fill some fields
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getUser()
     {
         $language = request('language');

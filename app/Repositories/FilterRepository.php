@@ -16,6 +16,11 @@ use DB;
  */
 class FilterRepository
 {
+    /**
+     * init filters for category
+     * @param $model
+     * @return array
+     */
     public function initFilters($model)
     {
         $query = "SELECT
@@ -46,7 +51,12 @@ class FilterRepository
         
         return DB::select($query);
     }
-    
+
+    /**
+     * init active filters
+     * @param $model
+     * @return array
+     */
     public function initActiveFilters($model)
     {
         $activeFiltersQuery = "";

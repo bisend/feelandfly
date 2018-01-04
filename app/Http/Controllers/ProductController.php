@@ -22,8 +22,16 @@ class ProductController extends LayoutController
      */
     protected $productService;
 
+    /**
+     * @var ReviewService
+     */
     protected $reviewService;
 
+    /**
+     * ProductController constructor.
+     * @param ProductService $productService
+     * @param ReviewService $reviewService
+     */
     public function __construct(ProductService $productService, ReviewService $reviewService)
     {
         $this->productService = $productService;
@@ -32,6 +40,7 @@ class ProductController extends LayoutController
     }
 
     /**
+     * product page
      * @param string|null $slug
      * @param string $language
      * @return mixed
@@ -52,12 +61,14 @@ class ProductController extends LayoutController
             'reviews' => $reviews,
             'reviewsCount' => $reviewsCount
         ]);
-
-        \Debugbar::info($model);
         
         return view('pages.product', compact('model'));
     }
-    
+
+    /**
+     * ajax get reviews for product
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getReviews()
     {
         if(!request()->ajax())
@@ -79,6 +90,10 @@ class ProductController extends LayoutController
         ]);
     }
 
+    /**
+     * add review
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function addReview()
     {
         if(!request()->ajax())
@@ -87,10 +102,15 @@ class ProductController extends LayoutController
         }
 
         $productId = request('productId');
+        
         $userId = auth()->check() ? auth()->user()->id : null;
+        
         $review = request('review');
+        
         $name = request('name');
+        
         $email = request('email');
+        
         $rating = request('rating');
 
         try

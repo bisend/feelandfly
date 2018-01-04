@@ -27,6 +27,7 @@ class HomeController extends LayoutController
     }
 
     /**
+     * home page
      * @param string $language
      * @return mixed
      */

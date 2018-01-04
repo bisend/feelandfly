@@ -11,8 +11,17 @@ namespace App\Repositories;
 
 use App\DatabaseModels\OrderProduct;
 
+/**
+ * Class OrderProductRepository
+ * @package App\Repositories
+ */
 class OrderProductRepository
 {
+    /**
+     * save order products to DB
+     * @param $model
+     * @param $cartService
+     */
     public function createOrderProducts($model, $cartService)
     {
         foreach ($cartService->cart as $cartProduct)
@@ -28,6 +37,11 @@ class OrderProductRepository
         }
     }
 
+    /**
+     * return order products
+     * @param $orderId
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function getOrderProducts($orderId)
     {
         return OrderProduct::whereOrderId($orderId)->get();

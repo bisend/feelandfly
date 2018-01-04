@@ -8,9 +8,12 @@
 
 namespace App\ViewModels;
 
-
 use App\Helpers\Languages;
 
+/**
+ * Class SearchAjaxViewModel
+ * @package App\ViewModels
+ */
 class SearchAjaxViewModel
 {
     /**

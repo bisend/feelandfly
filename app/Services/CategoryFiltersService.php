@@ -8,7 +8,6 @@
 
 namespace App\Services;
 
-
 use App\Repositories\CategoryRepository;
 use App\Repositories\FilterRepository;
 use App\Repositories\ProductRepository;
@@ -70,6 +69,7 @@ class CategoryFiltersService extends LayoutService
     }
 
     /**
+     * fill current category
      * @param $model
      */
     private function fillCurrentCategory($model)
@@ -82,6 +82,10 @@ class CategoryFiltersService extends LayoutService
         }
     }
 
+    /**
+     * fill filtered products
+     * @param $model
+     */
     private function fillCategoryProducts($model)
     {
         $userTypeId = $model->userTypeId;
@@ -106,11 +110,19 @@ class CategoryFiltersService extends LayoutService
         }
     }
 
+    /**
+     * fill count of filtered products
+     * @param $model
+     */
     private function fillCountCategoryProducts($model)
     {
         $model->countCategoryProducts = $this->productRepository->getCountProductsFiltersCategory($model);
     }
 
+    /**
+     * fill active filters
+     * @param $model
+     */
     private function fillFilters($model)
     {
 
@@ -145,11 +157,19 @@ class CategoryFiltersService extends LayoutService
         }
     }
 
+    /**
+     * fill min price
+     * @param $model
+     */
     private function fillInitialPriceMin($model)
     {
         $model->initialPriceMin = $this->productRepository->getPriceMinForFiltersCategoryProducts($model);
     }
 
+    /**
+     * fill max price
+     * @param $model
+     */
     private function fillInitialPriceMax($model)
     {
         $model->initialPriceMax = $this->productRepository->getPriceMaxForFiltersCategoryProducts($model);

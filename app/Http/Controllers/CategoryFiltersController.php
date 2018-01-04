@@ -19,6 +19,9 @@ class CategoryFiltersController extends LayoutController
      */
     protected $categoryFiltersService;
 
+    /**
+     * @var ProductRepository
+     */
     protected $productRepository;
 
     /**
@@ -29,10 +32,12 @@ class CategoryFiltersController extends LayoutController
     public function __construct(CategoryFiltersService $categoryFiltersService, ProductRepository $productRepository)
     {
         $this->categoryFiltersService = $categoryFiltersService;
+        
         $this->productRepository = $productRepository;
     }
 
     /**
+     * filtered categories
      * @param string|null $slug
      * @param string|null $filters
      * @param string $language
@@ -44,8 +49,6 @@ class CategoryFiltersController extends LayoutController
         
         $this->categoryFiltersService->fill($model);
 
-        \Debugbar::info($model);
-
 //        if ($model->categoryProducts->count() < 1)
 //        {
 //            abort(404);
@@ -64,14 +67,20 @@ class CategoryFiltersController extends LayoutController
         return view('pages.category-filters', compact('model'));
     }
 
+    /**
+     * paginated filtered categories
+     * @param null $slug
+     * @param null $filters
+     * @param $page
+     * @param string $language
+     * @return mixed
+     */
     public function indexPagination($slug = null, $filters = null, $page, $language = Languages::DEFAULT_LANGUAGE)
     {
         $model = new CategoryFiltersViewModel('category-filters', $language, $slug, $page, $filters, 'default');
 
         $this->categoryFiltersService->fill($model);
 
-        \Debugbar::info($model);
-
 //        if ($model->categoryProducts->count() < 1)
 //        {
 //            abort(404);
@@ -90,14 +99,20 @@ class CategoryFiltersController extends LayoutController
         return view('pages.category-filters', compact('model'));
     }
 
+    /**
+     * filtered categories with sort
+     * @param null $slug
+     * @param null $filters
+     * @param string $sort
+     * @param string $language
+     * @return mixed
+     */
     public function indexSort($slug = null, $filters = null, $sort = 'default', $language = Languages::DEFAULT_LANGUAGE)
     {
         $model = new CategoryFiltersViewModel('category-filters', $language, $slug, 1, $filters, $sort);
 
         $this->categoryFiltersService->fill($model);
 
-        \Debugbar::info($model);
-
 //        if ($model->categoryProducts->count() < 1)
 //        {
 //            abort(404);
@@ -116,13 +131,20 @@ class CategoryFiltersController extends LayoutController
         return view('pages.category-filters', compact('model'));
     }
 
+    /**
+     * filtered categories with pagination and sort
+     * @param null $slug
+     * @param null $filters
+     * @param string $sort
+     * @param $page
+     * @param string $language
+     * @return mixed
+     */
     public function indexPaginationSort($slug = null, $filters = null, $sort = 'default', $page, $language = Languages::DEFAULT_LANGUAGE)
     {
         $model = new CategoryFiltersViewModel('category-filters', $language, $slug, $page, $filters, $sort);
 
         $this->categoryFiltersService->fill($model);
-
-        \Debugbar::info($model);
 
 //        if ($model->categoryProducts->count() < 1)
 //        {

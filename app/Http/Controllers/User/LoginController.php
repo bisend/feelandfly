@@ -16,6 +16,7 @@ use Validator;
 class LoginController extends LayoutController
 {
     /**
+     * method handles login user to site
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -64,7 +65,11 @@ class LoginController extends LayoutController
             'status' => 'success'
         ]);
     }
-    
+
+    /**
+     * logout user from site
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function logout()
     {
         if (!auth()->check())

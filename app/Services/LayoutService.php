@@ -8,7 +8,6 @@
 
 namespace App\Services;
 
-
 use App\DatabaseModels\Profile;
 use App\Helpers\Languages;
 use App\Repositories\CategoryRepository;
@@ -64,7 +63,10 @@ class LayoutService
     {
         $model->categories = $this->categoryRepository->getCategories($model->language);
     }
-    
+
+    /**
+     * check if social email exist in session put on js
+     */
     private function checkUserSocialEmail()
     {
         if (Session::has('social_email'))
@@ -75,6 +77,9 @@ class LayoutService
         }
     }
 
+    /**
+     * check if order created to show pop up
+     */
     private function checkIsOrderCreated()
     {
         if (Session::has('isOrderCreated'))
@@ -86,7 +91,10 @@ class LayoutService
             Session::remove('isOrderCreated');
         }
     }
-    
+
+    /**
+     * check if user auth put on js
+     */
     private function checkAuth()
     {
         if (auth()->check())

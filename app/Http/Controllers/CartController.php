@@ -28,6 +28,7 @@ class CartController extends LayoutController
     }
 
     /**
+     * init cart on page load
      * @return \Illuminate\Http\JsonResponse
      */
     public function initCart()
@@ -54,6 +55,7 @@ class CartController extends LayoutController
     }
 
     /**
+     * method handles adding product to cart
      * @return \Illuminate\Http\JsonResponse
      */
     public function addToCart()
@@ -88,6 +90,7 @@ class CartController extends LayoutController
     }
 
     /**
+     * method handles updating cart
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateCart()
@@ -122,6 +125,7 @@ class CartController extends LayoutController
     }
 
     /**
+     * method handles deleting product from cart
      * @return \Illuminate\Http\JsonResponse
      */
     public function deleteFromCart()

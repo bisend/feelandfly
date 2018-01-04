@@ -10,15 +10,31 @@ use App\Services\ProfileService;
 use App\ViewModels\PersonalInfoViewModel;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * Class PersonalInfoController
+ * @package App\Http\Controllers\Profile
+ */
 class PersonalInfoController extends LayoutController
 {
+    /**
+     * @var ProfileService
+     */
     protected $profileService;
-    
+
+    /**
+     * PersonalInfoController constructor.
+     * @param ProfileService $profileService
+     */
     public function __construct(ProfileService $profileService)
     {
         $this->profileService = $profileService;
     }
 
+    /**
+     * personal info page in profile
+     * @param string $language
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function index($language = Languages::DEFAULT_LANGUAGE)
     {
         if (!auth()->check())
@@ -33,6 +49,10 @@ class PersonalInfoController extends LayoutController
         return view('pages.personal-info', compact('model'));
     }
 
+    /**
+     * method handles saving of personal info
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function savePersonalInfo()
     {
         if(!request()->ajax())
@@ -84,6 +104,12 @@ class PersonalInfoController extends LayoutController
         ]);
     }
 
+    /**
+     * method handles confirmation of new email if user changed it
+     * @param null $confirmationToken
+     * @param string $language
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function confirmNewEmail($confirmationToken = null, $language = Languages::DEFAULT_LANGUAGE)
     {
         Languages::localizeApp($language);

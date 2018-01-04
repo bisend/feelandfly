@@ -51,7 +51,12 @@ class CategoryRepository
                 'priority'
             ]);
     }
-    
+
+    /**
+     * @param $categoryId
+     * @param $language
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
     public function getCurrentCategoryById($categoryId, $language)
     {
         return Category::whereId($categoryId)

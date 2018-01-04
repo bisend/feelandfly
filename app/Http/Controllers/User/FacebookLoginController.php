@@ -16,12 +16,27 @@ use Socialite;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Validator;
 
+/**
+ * Class FacebookLoginController
+ * @package App\Http\Controllers\User
+ */
 class FacebookLoginController extends LayoutController
 {
+    /**
+     * @var ProfileRepository
+     */
     protected $profileRepository;
 
+    /**
+     * @var WishListRepository
+     */
     protected $wishListRepository;
-    
+
+    /**
+     * FacebookLoginController constructor.
+     * @param ProfileRepository $profileRepository
+     * @param WishListRepository $wishListRepository
+     */
     public function __construct(ProfileRepository $profileRepository, WishListRepository $wishListRepository)
     {
         $this->profileRepository = $profileRepository;
@@ -29,6 +44,11 @@ class FacebookLoginController extends LayoutController
         $this->wishListRepository = $wishListRepository;
     }
 
+    /**
+     * method handles redirecting query to Facebook provider
+     * @param string $language
+     * @return mixed
+     */
     public function redirectToProvider($language = Languages::DEFAULT_LANGUAGE)
     {
         Session::put('previousSocialLoginUrl', url()->previous());
@@ -40,12 +60,18 @@ class FacebookLoginController extends LayoutController
         return Socialite::driver('facebook')->redirect();
     }
 
+    /**
+     * method handles the callback from facebook and try to register|login user
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function handleProviderCallback()
     {
         $userProvider = Socialite::driver('facebook')->user();
 
         $name = $userProvider->getName();
+
         $email = $userProvider->getEmail();
+
         $providerId = $userProvider->getId();
 
         $socialLogin = SocialLogin::whereProviderId($providerId)->first();
@@ -174,9 +200,13 @@ class FacebookLoginController extends LayoutController
         {
             return redirect('/');
         }
-        // $user->token;
     }
 
+    /**
+     * method handles if user does not have an email in facebook account then user entering email to complete the registration
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function socialEmailHandler(Request $request)
     {
         if(!request()->ajax())
@@ -216,6 +246,12 @@ class FacebookLoginController extends LayoutController
         ]);
     }
 
+    /**
+     * method handles confirm of user email for social register|login
+     * @param $confirmationToken
+     * @param string $language
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function confirmSocialEmail($confirmationToken, $language = Languages::DEFAULT_LANGUAGE)
     {
         if (!Session::has('social_email'))

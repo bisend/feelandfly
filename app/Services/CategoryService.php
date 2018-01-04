@@ -8,7 +8,6 @@
 
 namespace App\Services;
 
-
 use App\Repositories\CategoryRepository;
 use App\Repositories\FilterRepository;
 use App\Repositories\ProductRepository;
@@ -40,7 +39,9 @@ class CategoryService extends LayoutService
      * @param ProductRepository $productRepository
      * @param FilterRepository $filterRepository
      */
-    public function __construct(CategoryRepository $categoryRepository, ProductRepository $productRepository, FilterRepository $filterRepository)
+    public function __construct(CategoryRepository $categoryRepository,
+                                ProductRepository $productRepository,
+                                FilterRepository $filterRepository)
     {
         parent::__construct($categoryRepository);
 
@@ -72,6 +73,7 @@ class CategoryService extends LayoutService
     }
 
     /**
+     * fill category
      * @param $model
      */
     private function fillCurrentCategory($model)
@@ -84,6 +86,10 @@ class CategoryService extends LayoutService
         }
     }
 
+    /**
+     * fill products for category
+     * @param $model
+     */
     private function fillCategoryProducts($model)
     {
         $userTypeId = $model->userTypeId;
@@ -108,11 +114,19 @@ class CategoryService extends LayoutService
         }
     }
 
+    /**
+     * fill count of category products
+     * @param $model
+     */
     private function fillCountCategoryProducts($model)
     {
         $model->countCategoryProducts = $this->productRepository->getCountProductsCategory($model->currentCategory);
     }
-    
+
+    /**
+     * fill filters for category
+     * @param $model
+     */
     private function fillFilters($model)
     {
 
@@ -130,15 +144,21 @@ class CategoryService extends LayoutService
         }
 
         $model->filters = collect($filters);
-        
-        \Debugbar::info($model->filters);
     }
 
+    /**
+     * fill min price
+     * @param $model
+     */
     private function fillPriceMin($model)
     {
         $model->priceMin = $this->productRepository->getPriceMinForCategoryProducts($model);
     }
 
+    /**
+     * fill max price
+     * @param $model
+     */
     private function fillPriceMax($model)
     {
         $model->priceMax = $this->productRepository->getPriceMaxForCategoryProducts($model);

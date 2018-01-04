@@ -6,15 +6,30 @@ use App\Http\Controllers\LayoutController;
 use App\Services\ProfileService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * Class ChangePasswordController
+ * @package App\Http\Controllers\Profile
+ */
 class ChangePasswordController extends LayoutController
 {
+    /**
+     * @var ProfileService
+     */
     protected $profileService;
-    
+
+    /**
+     * ChangePasswordController constructor.
+     * @param ProfileService $profileService
+     */
     public function __construct(ProfileService $profileService)
     {
         $this->profileService = $profileService;
     }
-    
+
+    /**
+     * method handles changing of user password
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function changePassword()
     {
         if(!request()->ajax())

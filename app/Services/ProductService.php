@@ -89,7 +89,11 @@ class ProductService extends LayoutService
             $model->language
         );
     }
-    
+
+    /**
+     * fill $model->productProperties
+     * @param $model
+     */
     private function fillProductProperties($model)
     {
         $model->productProperties = $this->productRepository->getProductProperties($model->product->id, $model->language);

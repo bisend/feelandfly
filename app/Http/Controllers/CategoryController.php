@@ -19,19 +19,25 @@ class CategoryController extends LayoutController
      */
     protected $categoryService;
 
+    /**
+     * @var ProductRepository
+     */
     protected $productRepository;
 
     /**
      * CategoryController constructor.
      * @param CategoryService $categoryService
+     * @param ProductRepository $productRepository
      */
     public function __construct(CategoryService $categoryService, ProductRepository $productRepository)
     {
         $this->categoryService = $categoryService;
+        
         $this->productRepository = $productRepository;
     }
 
     /**
+     * show category page
      * @param string|null $slug
      * @param string $language
      * @return mixed
@@ -41,9 +47,7 @@ class CategoryController extends LayoutController
         $model = new CategoryViewModel('category', $language, $slug, 1, 'default');
 
         $this->categoryService->fill($model);
-
-        \Debugbar::info($model);
-
+        
         if ($model->categoryProducts->count() < 1)
         {
             abort(404);
@@ -60,14 +64,19 @@ class CategoryController extends LayoutController
         return view('pages.category', compact('model'));
     }
 
+    /**
+     * method handles categories pagination
+     * @param null $slug
+     * @param $page
+     * @param string $language
+     * @return mixed
+     */
     public function indexPagination($slug = null, $page, $language = Languages::DEFAULT_LANGUAGE)
     {
         $model = new CategoryViewModel('category', $language, $slug, $page, 'default');
 
         $this->categoryService->fill($model);
 
-        \Debugbar::info($model);
-
         if ($model->categoryProducts->count() < 1)
         {
             abort(404);
@@ -84,14 +93,19 @@ class CategoryController extends LayoutController
         return view('pages.category', compact('model'));
     }
 
+    /**
+     * method handles categories with sort
+     * @param null $slug
+     * @param string $sort
+     * @param string $language
+     * @return mixed
+     */
     public function indexSort($slug = null, $sort = 'default', $language = Languages::DEFAULT_LANGUAGE)
     {
         $model = new CategoryViewModel('category', $language, $slug, 1, $sort);
 
         $this->categoryService->fill($model);
 
-        \Debugbar::info($model);
-
         if ($model->categoryProducts->count() < 1)
         {
             abort(404);
@@ -108,14 +122,20 @@ class CategoryController extends LayoutController
         return view('pages.category', compact('model'));
     }
 
+    /**
+     * method handles categories pagination with sort
+     * @param null $slug
+     * @param string $sort
+     * @param $page
+     * @param string $language
+     * @return mixed
+     */
     public function indexPaginationSort($slug = null, $sort = 'default', $page, $language = Languages::DEFAULT_LANGUAGE)
     {
         $model = new CategoryViewModel('category', $language, $slug, $page, $sort);
 
         $this->categoryService->fill($model);
 
-        \Debugbar::info($model);
-
         if ($model->categoryProducts->count() < 1)
         {
             abort(404);
@@ -131,20 +151,4 @@ class CategoryController extends LayoutController
 
         return view('pages.category', compact('model'));
     }
-
-//    public function getAjaxProductPreview()
-//    {
-//        $productId = request('productId');
-//
-//        $language = request('language');
-//
-//        $product = $this->productRepository->getProductById($productId, $language);
-//
-//        $view = view('partial.category-page.product-preview-ajax', compact('product', 'language'))->render();
-//
-//        return response()->json([
-//            'status' => 'success',
-//            'view' => $view
-//        ]);
-//    }
 }

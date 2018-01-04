@@ -9,12 +9,27 @@ use App\Http\Controllers\LayoutController;
 use App\Repositories\ProfileRepository;
 use App\Repositories\WishListRepository;
 
+/**
+ * Class ConfirmationEmailController
+ * @package App\Http\Controllers\User
+ */
 class ConfirmationEmailController extends LayoutController
 {
+    /**
+     * @var ProfileRepository
+     */
     protected $profileRepository;
-    
+
+    /**
+     * @var WishListRepository
+     */
     protected $wishListRepository;
 
+    /**
+     * ConfirmationEmailController constructor.
+     * @param ProfileRepository $profileRepository
+     * @param WishListRepository $wishListRepository
+     */
     public function __construct(ProfileRepository $profileRepository, WishListRepository $wishListRepository)
     {
         $this->profileRepository = $profileRepository;
@@ -22,6 +37,12 @@ class ConfirmationEmailController extends LayoutController
         $this->wishListRepository = $wishListRepository;
     }
 
+    /**
+     * method handles confirmation of user email when simple registration
+     * @param null $confirmationToken
+     * @param string $language
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function confirm($confirmationToken = null, $language = Languages::DEFAULT_LANGUAGE)
     {
         $user = User::whereConfirmationToken($confirmationToken)->first();

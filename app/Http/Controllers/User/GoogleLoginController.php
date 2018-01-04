@@ -11,12 +11,27 @@ use App\Repositories\WishListRepository;
 use Session;
 use Socialite;
 
+/**
+ * Class GoogleLoginController
+ * @package App\Http\Controllers\User
+ */
 class GoogleLoginController extends LayoutController
 {
+    /**
+     * @var ProfileRepository
+     */
     protected $profileRepository;
-    
+
+    /**
+     * @var WishListRepository
+     */
     protected $wishListRepository;
 
+    /**
+     * GoogleLoginController constructor.
+     * @param ProfileRepository $profileRepository
+     * @param WishListRepository $wishListRepository
+     */
     public function __construct(ProfileRepository $profileRepository, WishListRepository $wishListRepository)
     {
         $this->profileRepository = $profileRepository;
@@ -24,6 +39,11 @@ class GoogleLoginController extends LayoutController
         $this->wishListRepository = $wishListRepository;
     }
 
+    /**
+     * method handles redirect query to google provider
+     * @param string $language
+     * @return mixed
+     */
     public function redirectToProvider($language = Languages::DEFAULT_LANGUAGE)
     {
         Session::put('previousSocialLoginUrl', url()->previous());
@@ -35,12 +55,18 @@ class GoogleLoginController extends LayoutController
         return Socialite::driver('google')->redirect();
     }
 
+    /**
+     * method handles callback from google and trying to register|login user
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function handleProviderCallback()
     {
         $userProvider = Socialite::driver('google')->user();
 
         $name = $userProvider->getName();
+
         $email = $userProvider->getEmail();
+
         $providerId = $userProvider->getId();
 
         $socialLogin = SocialLogin::whereProviderId($providerId)->first();
@@ -124,6 +150,5 @@ class GoogleLoginController extends LayoutController
         {
             return redirect('/');
         }
-        // $user->token;
     }
 }

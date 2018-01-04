@@ -63,7 +63,7 @@ class CartService
     }
 
     /**
-     * 
+     * fill $cart with data from session
      */
     public function fillCart()
     {
@@ -74,6 +74,7 @@ class CartService
     }
 
     /**
+     * fill cart with products
      * @param $language
      * @param $userTypeId
      */
@@ -110,6 +111,7 @@ class CartService
     }
 
     /**
+     * add to cart
      * @param $productId
      * @param $sizeId
      * @param $count
@@ -148,6 +150,7 @@ class CartService
     }
 
     /**
+     * update cart
      * @param $productId
      * @param $sizeId
      * @param $count
@@ -182,6 +185,7 @@ class CartService
     }
 
     /**
+     * delete from cart
      * @param $productId
      * @param $sizeId
      * @param $language
@@ -212,7 +216,10 @@ class CartService
 
         $this->fill($language, $userTypeId);
     }
-    
+
+    /**
+     * clear cart
+     */
     public function clearCart()
     {
         if (Session::has('cart'))

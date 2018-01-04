@@ -2,6 +2,10 @@
 
 namespace App\ViewModels;
 
+/**
+ * Class WishListViewModel
+ * @package App\ViewModels
+ */
 class WishListViewModel extends LayoutViewModel
 {
     /**
@@ -34,7 +38,12 @@ class WishListViewModel extends LayoutViewModel
      */
     public $wishListProductsOffset;
 
-
+    /**
+     * WishListViewModel constructor.
+     * @param string $view
+     * @param string $language
+     * @param $page
+     */
     public function __construct($view, $language, $page)
     {
         parent::__construct($view, $language);

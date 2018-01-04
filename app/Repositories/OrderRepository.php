@@ -12,8 +12,21 @@ namespace App\Repositories;
 use App\DatabaseModels\Order;
 use App\DatabaseModels\OrderStatus;
 
+/**
+ * Class OrderRepository
+ * @package App\Repositories
+ */
 class OrderRepository
 {
+    /**
+     * save order to DB and return $order
+     * @param $data
+     * @param $userId
+     * @param $userTypeId
+     * @param $model
+     * @param $cartService
+     * @return Order
+     */
     public function createOrder($data, $userId, $userTypeId, $model, $cartService)
     {
         $orderStatus = OrderStatus::whereIsDefault(true)->first();
@@ -36,7 +49,12 @@ class OrderRepository
 
         return $order;
     }
-    
+
+    /**
+     * return orders for user
+     * @param $model
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function getOrders($model)
     {
         return Order::with([
@@ -54,7 +72,12 @@ class OrderRepository
             ->limit($model->ordersLimit)
             ->get();
     }
-    
+
+    /**
+     * return count of orders for user
+     * @param $model
+     * @return int
+     */
     public function getTotalOrdersCount($model)
     {
         return Order::whereUserId($model->user->id)->orWhere('email', '=', $model->user->email)->count();

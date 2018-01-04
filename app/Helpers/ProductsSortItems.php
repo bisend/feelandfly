@@ -19,16 +19,34 @@ class ProductsSortItems
      */
     public $sortSlug;
 
+    /**
+     * @var array|\Illuminate\Contracts\Translation\Translator|null|string
+     */
     public $name;
 
+    /**
+     * @var string
+     */
     public $url;
-    
+
+    /**
+     * @var string
+     */
     public $url_filters;
 
+    /**
+     * @var string
+     */
     public $url_search;
 
+    /**
+     * @var bool
+     */
     public $isSelected = false;
 
+    /**
+     * @var bool
+     */
     public $isVisible = true;
 
     /**

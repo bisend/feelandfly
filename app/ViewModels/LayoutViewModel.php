@@ -1,6 +1,7 @@
 <?php
 
 namespace App\ViewModels;
+
 use App\DatabaseModels\Profile;
 use App\DatabaseModels\User;
 
@@ -29,9 +30,15 @@ abstract class LayoutViewModel
      * @var integer should contain id of type user
      */
     public $userTypeId = 1;
-    
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Model|null|static
+     */
     public $user;
 
+    /**
+     * @var \Illuminate\Database\Eloquent\Model|null|static
+     */
     public $profile;
 
     /**
