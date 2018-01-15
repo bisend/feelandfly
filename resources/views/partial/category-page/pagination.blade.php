@@ -8,7 +8,7 @@
             {{--PREV PAGE--}}
             @if($isPrev)
                 <li class="prv">
-                    <a href="{{ url_category_per_page($model->currentCategory->slug, $model->page - 1, $model->language) }}"
+                    <a href="{{ url_category_per_page($model->currentCategory->slug . ($model->sort == 'default' ? '' : '/' . $model->sort), $model->page - 1, $model->language) }}"
                        class="disabled">
                         <i class="fa fa-long-arrow-left"></i>
                     </a>
@@ -34,7 +34,7 @@
                                 {{ $page }}
                             </a>
                         @else
-                            <a href="{{ url_category_per_page($model->currentCategory->slug, $page, $model->language) }}">
+                            <a href="{{ url_category_per_page($model->currentCategory->slug  . ($model->sort == 'default' ? '' : '/' . $model->sort), $page, $model->language) }}">
                                 {{ $page }}
                             </a>
                         @endif
@@ -46,7 +46,7 @@
             {{--NEXT PAGE--}}
             @if($isNext)
                 <li class="nxt">
-                    <a href="{{ url_category_per_page($model->currentCategory->slug, $model->page + 1, $model->language) }}">
+                    <a href="{{ url_category_per_page($model->currentCategory->slug  . ($model->sort == 'default' ? '' : '/' . $model->sort), $model->page + 1, $model->language) }}">
                         <i class="fa fa-long-arrow-right"></i>
                     </a>
                 </li>

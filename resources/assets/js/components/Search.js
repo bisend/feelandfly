@@ -16,6 +16,8 @@ if (document.getElementById('search'))
             search: function () {
                 var _this = this;
 
+                _this.url = '/search';
+
                 if (_this.series != '')
                 {
                     _this.url += '/' + buildSearchUrl(_this.series);
@@ -33,6 +35,8 @@ if (document.getElementById('search'))
 
                 _this.urlAjax = '/search/async';
 
+                _this.url = '/search';
+
                 if (_this.series == '')
                 {
                     _this.showNoResult = false;
@@ -46,6 +50,13 @@ if (document.getElementById('search'))
                     if (LANGUAGE != DEFAULT_LANGUAGE)
                     {
                         _this.urlAjax += '/' + LANGUAGE;
+                    }
+
+                    _this.url += '/' + buildSearchUrl(_this.series);
+
+                    if (LANGUAGE != DEFAULT_LANGUAGE)
+                    {
+                        _this.url += '/' + LANGUAGE;
                     }
 
                     if (_this.timer) {

@@ -13,10 +13,24 @@
                 <div class="big-cart-item" v-for="cartItem in cartItems">
                     <div class="row flex-section-item">
                         <div class="col-md-2">
-                            <div class="big-cart_img">
+                            <div class="big-cart_img big-cart-img-relative">
                                 <a v-bind:href="'/product/' + cartItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
                                     <img v-bind:src="cartItem.product.images[0].small" alt="">
                                 </a>
+
+                                <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1"
+                                     class="prod-tag-1 font-2">
+                                    <span> -@{{ cartItem.product.price[0].discount }}% </span>
+                                </div>
+                                <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 2"
+                                     class="prod-tag-1 font-2 prod-tag-green">
+                                    <span> NEW </span>
+                                </div>
+                                <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 3"
+                                     class="prod-tag-1 font-2 prod-tag-violet">
+                                    <span> TOP </span>
+                                </div>
+
                             </div>
                         </div>
                         <div class="col-md-5">

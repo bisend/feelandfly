@@ -4485,9 +4485,9 @@ table {
 
 .cart-list .cart-detail .smoll-cart-delete{
     position: absolute;
-    right: -11px;
+    right: -20px;
     font-size: 20px;
-    top: 0px;;
+    top: 5px;
 }
 
 
@@ -4931,6 +4931,8 @@ textarea.incorrect-field:-ms-input-placeholder {
 .order-prod-item .order-prod-img{
     width: 117px;
     display: inline-block;
+    position: relative;
+    overflow: hidden;
 }
 
 .order-prod-item .order-detail-prod{
@@ -5364,3 +5366,36 @@ textarea.incorrect-field:-ms-input-placeholder {
     text-decoration: underline;
     font-size: 16px;
 }
+
+/*15.01.2017 lables for products*/
+.prod-tag-green, .prod-tag-green > span {
+    background-color: green;
+}
+
+.prod-tag-violet, .prod-tag-violet > span {
+    background-color: purple;
+}
+
+.big-cart_img.big-cart-img-relative {
+    overflow: hidden;
+    position: relative;
+}
+
+.big-cart_img.big-cart-img-relative .prod-tag-1 {
+    height: 30px;
+    line-height: 25px;
+    right: -41px;
+}
+
+.cart-img .cart-small-img {
+    width: 117px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cart-img .cart-small-img .prod-tag-1 {
+    height: 30px;
+    line-height: 25px;
+    right: -41px;
+}
+/*15.01.2017 lables for products*/

@@ -131,7 +131,7 @@
                                     <button class="open-search"><i class="fa fa-search" aria-hidden="true"></i></button>
                                 </div>
                                 <div id="search" class="profile-search profile-search-smoll">
-                                    <form class="form-serch-btn" v-bind:action="/search/ + series">
+                                    <form class="form-serch-btn" v-bind:action="url" method="get">
                                         <input v-model="series" v-on:keyup="searchAjax()"
                                                type="text"
                                                placeholder="{{ trans('header.search')}}">
@@ -164,7 +164,8 @@
                                             </div>
                                         </a>
                                         <div class="view-all-result">
-                                            <a v-bind:href="'/search/' + series + '/{{ $model->language == 'ru' ? '' : $model->language }}'" class="theme-btn btn-black">
+                                            {{--<a v-bind:href="'/search/' + series + '/{{ $model->language == 'ru' ? '' : $model->language }}'" class="theme-btn btn-black">--}}
+                                            <a v-bind:href="url" class="theme-btn btn-black">
                                                 <span>{{ trans('header.all_results') }} (@{{ countSearchProducts }})</span>
                                             </a>
                                         </div>
@@ -307,7 +308,23 @@
                                     <div class="cart-item">
                                         <div class="cart-list" v-for="cartItem in cartItems">
                                             <div class="cart-img">
-                                                <img v-bind:src="cartItem.product.images[0].small" alt="">
+                                                <div class="cart-small-img">
+                                                    <img v-bind:src="cartItem.product.images[0].small" alt="">
+
+                                                    <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1"
+                                                         class="prod-tag-1 font-2">
+                                                        <span> -@{{ cartItem.product.price[0].discount }}% </span>
+                                                    </div>
+                                                    <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 2"
+                                                         class="prod-tag-1 font-2 prod-tag-green">
+                                                        <span> NEW </span>
+                                                    </div>
+                                                    <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 3"
+                                                         class="prod-tag-1 font-2 prod-tag-violet">
+                                                        <span> TOP </span>
+                                                    </div>
+
+                                                </div>
                                             </div>
                                             <div class="cart-detail">
                                                 <a class="smoll-cart-delete"

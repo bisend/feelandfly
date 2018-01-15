@@ -24,6 +24,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPrice whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPrice whereUserTypeId($value)
  * @mixin \Eloquent
+ * @property float|null $old_price
+ * @property int|null $discount
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPrice whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPrice whereOldPrice($value)
  */
 class ProductPrice extends Model
 {

@@ -23,6 +23,20 @@
                                 <div class="owl-carousel sync1 pb-25 product-preview-images-big">
                                     <div class="item" v-for="image in categoryProductPreview.product.images">
                                         <img v-bind:src="image.big">
+
+                                        <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].id == 1"
+                                             class="prod-tag-1 font-2">
+                                            <span> -@{{ categoryProductPreview.product.price[0].discount }}% </span>
+                                        </div>
+                                        <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].id == 2"
+                                             class="prod-tag-1 font-2 prod-tag-green">
+                                            <span> NEW </span>
+                                        </div>
+                                        <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].id == 3"
+                                             class="prod-tag-1 font-2 prod-tag-violet">
+                                            <span> TOP </span>
+                                        </div>
+
                                         <a v-bind:href="image.original"
                                            v-bind:rel="categoryProductPreview.rel"
                                            v-bind:title="categoryProductPreview.product.name"
@@ -54,6 +68,11 @@
                                         </div>
                                         <div class="prod-price font-2 pull-left fsz-16">
                                             <ins>@{{ categoryProductPreview.product.price[0].price }} грн</ins>
+
+                                            <del v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].id == 1">
+                                                @{{ categoryProductPreview.product.price[0].old_price }} грн
+                                            </del>
+
                                         </div>
                                     </div>
                                     <div class="discriptions pt-20">
@@ -342,7 +361,27 @@
                                                         <a class="img-hover"
                                                            href="{{ url_product($categoryProduct->slug, $model->language) }}">
                                                             <img alt="product"
-                                                                 src="{{ $categoryProduct->images[0]->medium }}"></a>
+                                                                 src="{{ $categoryProduct->images[0]->medium }}">
+                                                        </a>
+
+                                                        @if($categoryProduct->promotions != null && $categoryProduct->promotions->count() > 0)
+                                                            @if($categoryProduct->promotions[0]->id == 1)
+                                                                <div class="prod-tag-1 font-2">
+                                                                    <span> -{{ $categoryProduct->price[0]->discount }}% </span>
+                                                                </div>
+                                                            @endif
+                                                            @if($categoryProduct->promotions[0]->id == 2)
+                                                                <div class="prod-tag-1 font-2 prod-tag-green">
+                                                                    <span> NEW </span>
+                                                                </div>
+                                                            @endif
+                                                            @if($categoryProduct->promotions[0]->id == 3)
+                                                                <div class="prod-tag-1 font-2 prod-tag-violet">
+                                                                    <span> TOP </span>
+                                                                </div>
+                                                            @endif
+                                                        @endif
+
                                                         <a class="caption-link meta-icon"
                                                            href="javascript:void(0);"
                                                            v-on:click="changeCategoryProductPreview({{$counter}})">
@@ -358,7 +397,14 @@
                                                     </h2>
                                                     <div class="block-inline">
                                                         <div class="prod-price font-2">
-                                                            <ins>{{ $categoryProduct->price[0]->price }} грн</ins> {{--<del>360.00 грн</del>--}}
+                                                            <ins>{{ $categoryProduct->price[0]->price }} грн</ins>
+
+                                                            @if($categoryProduct->promotions != null && $categoryProduct->promotions->count() > 0)
+                                                                @if($categoryProduct->promotions[0]->pivot->promotion_id == 1)
+                                                                    <del>{{ $categoryProduct->price[0]->old_price }} грн</del>
+                                                                @endif
+                                                            @endif
+
                                                         </div>
                                                         <div class="rating">
                                                             @for($i = 1; $i <= 5; $i++)

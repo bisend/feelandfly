@@ -54,7 +54,9 @@ class ProductController extends LayoutController
         $reviews = $this->reviewService->getReviews($model->product->id, 1);
 
         $reviewsCount = $this->reviewService->getReviewsCount($model->product->id);
-        
+
+        \Debugbar::info($model->similarProducts);
+
         JavaScript::put([
             'product' => $model->product,
             'similarProducts' => $model->similarProducts,

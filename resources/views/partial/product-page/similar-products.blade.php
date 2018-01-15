@@ -20,6 +20,20 @@
                             <div class="owl-carousel sync1 pb-25 product-preview-images-big">
                                 <div class="item" v-for="image in similarProductPreview.product.images">
                                     <img v-bind:src="image.big">
+
+                                    <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].id == 1"
+                                         class="prod-tag-1 font-2">
+                                        <span> -@{{ similarProductPreview.product.price[0].discount }}% </span>
+                                    </div>
+                                    <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].id == 2"
+                                         class="prod-tag-1 font-2 prod-tag-green">
+                                        <span> NEW </span>
+                                    </div>
+                                    <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].id == 3"
+                                         class="prod-tag-1 font-2 prod-tag-violet">
+                                        <span> TOP </span>
+                                    </div>
+
                                     <a v-bind:href="image.original"
                                        v-bind:rel="similarProductPreview.rel"
                                        v-bind:title="similarProductPreview.product.name"
@@ -51,6 +65,11 @@
                                     </div>
                                     <div class="prod-price font-2 pull-left fsz-16">
                                         <ins>@{{ similarProductPreview.product.price[0].price }} грн</ins>
+
+                                        <del v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].id == 1">
+                                            @{{ similarProductPreview.product.price[0].old_price }} грн
+                                        </del>
+
                                     </div>
                                 </div>
                                 <div class="discriptions pt-20">
@@ -157,10 +176,26 @@
                         <div class="prod-img">
                             <a class="img-hover" href="{{ url_product($similarProduct->slug, $model->language) }}">
                                 <img alt="{{ $similarProduct->name }}" src="{{ $similarProduct->images[0]->big }}">
+
+                                @if($similarProduct->promotions != null && $similarProduct->promotions->count() > 0)
+                                    @if($similarProduct->promotions[0]->id == 1)
+                                        <div class="prod-tag-1 font-2">
+                                            <span> -{{ $similarProduct->price[0]->discount }}% </span>
+                                        </div>
+                                    @endif
+                                    @if($similarProduct->promotions[0]->id == 2)
+                                        <div class="prod-tag-1 font-2 prod-tag-green">
+                                            <span> NEW </span>
+                                        </div>
+                                    @endif
+                                    @if($similarProduct->promotions[0]->id == 3)
+                                        <div class="prod-tag-1 font-2 prod-tag-violet">
+                                            <span> TOP </span>
+                                        </div>
+                                    @endif
+                                @endif
+
                             </a>
-                            {{--<div class="prod-tag-1 font-2">--}}
-                                {{--<span> -50% </span>--}}
-                            {{--</div>--}}
                             <a class="caption-link meta-icon"
                                href="javascript:void(0);"
                                v-on:click="changeSimilarProductPreview({{$counter}})">
@@ -189,6 +224,13 @@
                                 </div>
                                 <div class="prod-price font-2">
                                     <ins>{{ $similarProduct->price[0]->price }} грн</ins>
+
+                                    @if($similarProduct->promotions != null && $similarProduct->promotions->count() > 0)
+                                        @if($similarProduct->promotions[0]->pivot->promotion_id == 1)
+                                            <del>{{ $similarProduct->price[0]->old_price }} грн</del>
+                                        @endif
+                                    @endif
+
                                 </div>
                             </div>
                             <div class="block-inline">

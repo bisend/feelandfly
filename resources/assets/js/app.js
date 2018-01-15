@@ -83,3 +83,5 @@ require('./components/WishList');
 require('./components/MyOrders');
 
 require('./components/Review');
+
+require('./components/Sales');

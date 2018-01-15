@@ -153,6 +153,7 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereUserId($value)
  * @mixin \Eloquent
+ * @property-read \App\DatabaseModels\OrderStatus $status
  */
 	class Order extends \Eloquent {}
 }
@@ -278,6 +279,7 @@ namespace App\DatabaseModels{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\ProductPrice[] $price
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\ProductSize[] $product_sizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Property[] $properties
+ * @property-read \App\DatabaseModels\Sale $sales
  */
 	class Product extends \Eloquent {}
 }
@@ -501,6 +503,46 @@ namespace App\DatabaseModels{
 
 namespace App\DatabaseModels{
 /**
+ * App\DatabaseModels\Review
+ *
+ * @property int $id
+ * @property int $product_id
+ * @property int|null $user_id
+ * @property bool $is_moderated
+ * @property string $review
+ * @property string $name
+ * @property string $email
+ * @property float $rating
+ * @property string|null $code_1c
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereIsModerated($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereRating($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereReview($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereUserId($value)
+ * @mixin \Eloquent
+ */
+	class Review extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
+ * App\DatabaseModels\Sale
+ *
+ * @property-read \App\DatabaseModels\Product $product
+ */
+	class Sale extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
  * App\DatabaseModels\Size
  *
  * @property int $id
@@ -604,5 +646,47 @@ namespace App\DatabaseModels{
  * @mixin \Eloquent
  */
 	class UserType extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
+ * App\DatabaseModels\WishList
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string|null $code_1c
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\WishList whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\WishList whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\WishList whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\WishList whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\WishList whereUserId($value)
+ * @mixin \Eloquent
+ */
+	class WishList extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
+ * App\DatabaseModels\WishListProduct
+ *
+ * @property int $id
+ * @property int $wish_list_id
+ * @property int $product_id
+ * @property int $size_id
+ * @property string|null $code_1c
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\WishListProduct whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\WishListProduct whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\WishListProduct whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\WishListProduct whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\WishListProduct whereSizeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\WishListProduct whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\WishListProduct whereWishListId($value)
+ * @mixin \Eloquent
+ */
+	class WishListProduct extends \Eloquent {}
 }
 

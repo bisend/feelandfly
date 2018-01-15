@@ -88,4 +88,9 @@ class Product extends Model
     {
         return $this->hasMany(Property::class, 'product_id', 'id');
     }
+    
+    public function promotions()
+    {
+        return $this->belongsToMany(Promotion::class, 'products_promotions');
+    }
 }

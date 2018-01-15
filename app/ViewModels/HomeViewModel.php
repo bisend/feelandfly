@@ -8,6 +8,7 @@ namespace App\ViewModels;
  */
 class HomeViewModel extends LayoutViewModel
 {
+    public $salesProducts;
     /**
      * HomeViewModel constructor.
      * @param string $view

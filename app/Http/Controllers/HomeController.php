@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Languages;
 use App\Services\HomeService;
 use App\ViewModels\HomeViewModel;
+use JavaScript;
 
 /**
  * Class HomeController
@@ -36,6 +37,12 @@ class HomeController extends LayoutController
         $model = new HomeViewModel('home', $language);
 
         $this->homeService->fill($model);
+
+        JavaScript::put([
+            'salesProducts' => $model->salesProducts
+        ]);
+        
+        \Debugbar::info($model);
 
         return view('pages.home', compact('model'));
     }

@@ -105,6 +105,14 @@ var GLOBAL_DATA = {
     totalReviewsCount: 0,
     reviewsCurrentPage: 1,
     reviews: [],
+
+    saleProductPreview: {
+        product: [],
+        currentSizeId: '',
+        count: '',
+        rel: ''
+    },
+    salesProducts: [],
     
     INIT_CART_ENDED: false,
     IS_DATA_PROCESSING: false,
