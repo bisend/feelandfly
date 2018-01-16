@@ -3,7 +3,7 @@ if (document.getElementById('similar-product'))
     var initProductPreviewImagesSliderInited = false,
         sync1, sync2, sliderthumb, homethumb;
 
-    function initProductPreviewImagesSlider () {
+    function initProductPreviewImagesSliderSimilar () {
         //Resize carousels in modal
         if ($('.sync2.product-preview-images-small').length > 0) {
             $(document).on('shown.bs.modal', function () {
@@ -116,7 +116,7 @@ if (document.getElementById('similar-product'))
         }
     }
 
-    function destroyProductPreviewImagesSlider () {
+    function destroyProductPreviewImagesSliderSimilar () {
         if (initProductPreviewImagesSliderInited === true) {
             sync1.trigger('destroy.owl.carousel');
             sliderthumb.trigger('destroy.owl.carousel');
@@ -157,6 +157,10 @@ if (document.getElementById('similar-product'))
         el: '#similar-product',
         data: GLOBAL_DATA,
         mounted: function () {
+            initProductPreviewImagesSliderSimilar();
+
+            destroyProductPreviewImagesSliderSimilar();
+
             $("a[rel^='prettyPhoto[similar-product-" + GLOBAL_DATA.similarProductPreview.product.id + "]']").prettyPhoto({
                 theme: 'facebook',
                 slideshow: 5000,
@@ -463,7 +467,7 @@ if (document.getElementById('similar-product'))
                 }
             },
             changeSimilarProductPreview: function (counter) {
-                destroyProductPreviewImagesSlider();
+                destroyProductPreviewImagesSliderSimilar();
 
 
                 GLOBAL_DATA.similarProductPreview.product = GLOBAL_DATA.similarProducts[counter];
@@ -493,32 +497,32 @@ if (document.getElementById('similar-product'))
                 //container with preview
                 var $container = $('#prod-preview-test');
 
-                $("a[rel^='prettyPhoto[similar-product-" + GLOBAL_DATA.similarProductPreview.product.id + "]']").prettyPhoto({
-                    theme: 'facebook',
-                    slideshow: 5000,
-                    autoplay_slideshow: false,
-                    social_tools: false,
-                    deeplinking: false,
-                    ajaxcallback: function () {
-                        var PRETTY_LOADED = true;
-                        $container.modal('hide');
-                        $container.on('hidden.bs.modal', function () {
-                            if (PRETTY_LOADED) {
-                                $('body').addClass('modal-open').css('padding-right', '17px');
-                                PRETTY_LOADED = false;
-                            }
-                        });
-                    },
-                    callback: function () {
-                        $('body').removeClass('modal-open').css('padding-right', 0);
-                    }
-                });
-
                 $container.modal();
 
                 setTimeout(function () {
-                    initProductPreviewImagesSlider();
-                }, 400);
+                    initProductPreviewImagesSliderSimilar();
+
+                    $("a[rel^='prettyPhoto[similar-product-" + GLOBAL_DATA.similarProductPreview.product.id + "]']").prettyPhoto({
+                        theme: 'facebook',
+                        slideshow: 5000,
+                        autoplay_slideshow: false,
+                        social_tools: false,
+                        deeplinking: false,
+                        ajaxcallback: function () {
+                            var PRETTY_LOADED = true;
+                            $container.modal('hide');
+                            $container.on('hidden.bs.modal', function () {
+                                if (PRETTY_LOADED) {
+                                    $('body').addClass('modal-open').css('padding-right', '17px');
+                                    PRETTY_LOADED = false;
+                                }
+                            });
+                        },
+                        callback: function () {
+                            $('body').removeClass('modal-open').css('padding-right', 0);
+                        }
+                    });
+                }, 500);
             },
             addToWishList: function (productId, sizeId, wishListId) {
                 var obj = {

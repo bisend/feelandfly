@@ -78,7 +78,13 @@
                                     </div>
                                     <div class="discriptions pt-20">
                                         <ul>
-                                            <li>Наличие: </li>
+                                            <li>{{ trans('product.stock') }}:
+                                                <span v-cloak v-for="productSize in categoryProductPreview.product.product_sizes"
+                                                      v-if="productSize.size_id == categoryProductPreview.currentSizeId">
+                                                {{--{{ $model->product->product_sizes[0]->stocks[0]->stock }}--}}
+                                                    @{{ productSize.stocks[0].stock }}
+                                                </span>
+                                            </li>
                                             <li>Материал: Полиэстер с водоотталкивающей и полиуретановой
                                                 пропиткой для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>
                                             <li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>

@@ -210,8 +210,13 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-                                                <p class="fsz-16 font-2 no-margin">
-                                                    <span class="fw-300 gray-clr"> <span>@{{ cartItem.count }}</span> <sub>X</sub> </span> @{{ cartItem.product.price[0].price }} грн
+                                                <p class="fsz-16 font-2 no-margin prod-price">
+                                                    <span class="fw-300 gray-clr">
+                                                        <span>@{{ cartItem.count }}</span> <sub>X</sub>
+                                                    </span> @{{ cartItem.product.price[0].price }} грн
+                                                    <del v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1">
+                                                        @{{ cartItem.product.price[0].old_price }} грн
+                                                    </del>
                                                 </p>
                                                 <p class="fsz-16 font-2 no-margin order-prod-total">
                                                     {{ trans('order.sum') }}:<span>@{{ (cartItem.product.price[0].price * cartItem.count).toFixed(2) }} грн</span>

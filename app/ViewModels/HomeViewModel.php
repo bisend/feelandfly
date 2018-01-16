@@ -9,6 +9,16 @@ namespace App\ViewModels;
 class HomeViewModel extends LayoutViewModel
 {
     public $salesProducts;
+    
+    public $salesIds = [];
+    
+    public $topProducts;
+    
+    public $topIds = [];
+    
+    public $newProducts;
+    
+    public $newIds = [];
     /**
      * HomeViewModel constructor.
      * @param string $view

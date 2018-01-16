@@ -39,20 +39,22 @@
                                     <div class="item">
                                         <img src="{{ $image->big }}" alt="{{ $model->product->name }}">
 
-                                        @if($model->product->promotions[0]->id == 1)
-                                            <div class="prod-tag-1 font-2">
-                                                <span> -{{ $model->product->price[0]->discount }}% </span>
-                                            </div>
-                                        @endif
-                                        @if($model->product->promotions[0]->id == 2)
-                                            <div class="prod-tag-1 font-2 prod-tag-green">
-                                                <span> NEW </span>
-                                            </div>
-                                        @endif
-                                        @if($model->product->promotions[0]->id == 3)
-                                            <div class="prod-tag-1 font-2 prod-tag-violet">
-                                                <span> TOP </span>
-                                            </div>
+                                        @if($model->product->promotions != null && $model->product->promotions->count() > 0)
+                                            @if($model->product->promotions[0]->id == 1)
+                                                <div class="prod-tag-1 font-2">
+                                                    <span> -{{ $model->product->price[0]->discount }}% </span>
+                                                </div>
+                                            @endif
+                                            @if($model->product->promotions[0]->id == 2)
+                                                <div class="prod-tag-1 font-2 prod-tag-green">
+                                                    <span> NEW </span>
+                                                </div>
+                                            @endif
+                                            @if($model->product->promotions[0]->id == 3)
+                                                <div class="prod-tag-1 font-2 prod-tag-violet">
+                                                    <span> TOP </span>
+                                                </div>
+                                            @endif
                                         @endif
 
 

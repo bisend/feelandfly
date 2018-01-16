@@ -114,6 +114,22 @@ var GLOBAL_DATA = {
     },
     salesProducts: [],
     
+    topProductPreview: {
+        product: [],
+        currentSizeId: '',
+        count: '',
+        rel: ''
+    },
+    topProducts: [],
+    
+    newProductPreview: {
+        product: [],
+        currentSizeId: '',
+        count: '',
+        rel: ''
+    },
+    newProducts: [],
+    
     INIT_CART_ENDED: false,
     IS_DATA_PROCESSING: false,
     timer: undefined,

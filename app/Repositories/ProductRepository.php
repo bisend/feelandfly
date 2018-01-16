@@ -243,6 +243,9 @@ class ProductRepository
                     'product_prices.discount'
                 ])->whereUserTypeId($userTypeId);
             },
+            'product_sizes.stocks' => function ($query) use ($userTypeId) {
+                $query->whereUserTypeId($userTypeId);
+            },
             'promotions' => function ($query) {
                 //$query->where('promotions.priority', '=', $query->max('promotions.priority'));
                 $query->orderByRaw('promotions.priority desc');
@@ -321,6 +324,9 @@ class ProductRepository
                     'product_prices.old_price',
                     'product_prices.discount'
                 ])->whereUserTypeId($userTypeId);
+            },
+            'product_sizes.stocks' => function ($query) use ($userTypeId) {
+                $query->whereUserTypeId($userTypeId);
             },
             'promotions' => function ($query) {
                 //$query->where('products_promotions.priority', '=', $query->max('products_promotions.priority'));
@@ -472,6 +478,10 @@ class ProductRepository
                     'product_prices.old_price',
                     'product_prices.discount'
                 ])->whereUserTypeId($userTypeId);
+            },
+            'promotions' => function ($query) {
+                //$query->where('promotions.priority', '=', $query->max('promotions.priority'));
+                $query->orderByRaw('promotions.priority desc');
             },
         ])
             ->whereIn('id', $productIds)
@@ -629,6 +639,9 @@ class ProductRepository
                     'product_prices.discount'
                 ])->whereUserTypeId($userTypeId);
             },
+            'product_sizes.stocks' => function ($query) use ($userTypeId) {
+                $query->whereUserTypeId($userTypeId);
+            },
             'promotions' => function ($query) {
                 //$query->where('promotions.priority', '=', $query->max('promotions.priority'));
                 $query->orderByRaw('promotions.priority desc');
@@ -741,6 +754,9 @@ class ProductRepository
                     'product_prices.old_price',
                     'product_prices.discount'
                 ])->whereUserTypeId($model->userTypeId);
+            },
+            'product_sizes.stocks' => function ($query) use ($model) {
+                $query->whereUserTypeId($model->userTypeId);
             },
             'promotions' => function ($query) {
                 //$query->where('promotions.priority', '=', $query->max('promotions.priority'));
@@ -1022,6 +1038,9 @@ class ProductRepository
                     'product_prices.discount'
                 ])->whereUserTypeId($model->userTypeId);
             },
+            'product_sizes.stocks' => function ($query) use ($model) {
+                $query->whereUserTypeId($model->userTypeId);
+            },
             'promotions' => function ($query) use ($model) {
                 $query->where('products_promotions.promotion_id', '=', 1);
             },
@@ -1032,6 +1051,134 @@ class ProductRepository
             ->whereHas('promotions', function ($query) use ($model) {
                 $query->where('products_promotions.promotion_id', '=', 1);
             })
+//            ->orderByRaw($orderByRaw)
+//            ->offset($categoryProductsOffset)
+//            ->limit($categoryProductsLimit)
+            ->get([
+                'products.id',
+                "name_$model->language as name",
+                'slug',
+                'color_id',
+                'group_id',
+                'category_id',
+                'breadcrumb_category_id',
+                "description_$model->language as description",
+                'products.priority',
+                'vendor_code',
+                'rating',
+                'number_of_views',
+                'products.created_at'
+            ]);
+    }
+    
+    public function getTopProducts($model)
+    {
+        return Product::with([
+            'images',
+            'color',
+            'product_group.products.color' => function ($query) use ($model) {
+                $query->select([
+                    'id',
+                    "name_$model->language",
+                    'slug',
+                    'html_code'
+                ]);
+            },
+            'sizes' => function ($query) use ($model) {
+                $query->select([
+                    'sizes.id',
+                    "sizes.name_$model->language as name",
+                    'sizes.slug'
+                ]);
+            },
+            'price' => function ($query) use ($model) {
+                $query->select([
+                    'product_prices.id',
+                    'product_prices.product_id',
+                    'product_prices.user_type_id',
+                    'product_prices.price',
+                    'product_prices.old_price',
+                    'product_prices.discount'
+                ])->whereUserTypeId($model->userTypeId);
+            },
+            'product_sizes.stocks' => function ($query) use ($model) {
+                $query->whereUserTypeId($model->userTypeId);
+            },
+            'promotions' => function ($query) use ($model) {
+                $query->where('products_promotions.promotion_id', '=', 3);
+            },
+        ])->join('product_prices', function ($join) use ($model) {
+            $join->on('products.id', '=', 'product_prices.product_id')
+                ->where('product_prices.user_type_id', '=', $model->userTypeId);
+        })
+            ->whereHas('promotions', function ($query) use ($model) {
+                $query->where('products_promotions.promotion_id', '=', 3);
+            })
+            ->whereNotIn('products.id', $model->salesIds)
+//            ->orderByRaw($orderByRaw)
+//            ->offset($categoryProductsOffset)
+//            ->limit($categoryProductsLimit)
+            ->get([
+                'products.id',
+                "name_$model->language as name",
+                'slug',
+                'color_id',
+                'group_id',
+                'category_id',
+                'breadcrumb_category_id',
+                "description_$model->language as description",
+                'products.priority',
+                'vendor_code',
+                'rating',
+                'number_of_views',
+                'products.created_at'
+            ]);
+    }
+    
+    public function getNewProducts($model)
+    {
+        return Product::with([
+            'images',
+            'color',
+            'product_group.products.color' => function ($query) use ($model) {
+                $query->select([
+                    'id',
+                    "name_$model->language",
+                    'slug',
+                    'html_code'
+                ]);
+            },
+            'sizes' => function ($query) use ($model) {
+                $query->select([
+                    'sizes.id',
+                    "sizes.name_$model->language as name",
+                    'sizes.slug'
+                ]);
+            },
+            'price' => function ($query) use ($model) {
+                $query->select([
+                    'product_prices.id',
+                    'product_prices.product_id',
+                    'product_prices.user_type_id',
+                    'product_prices.price',
+                    'product_prices.old_price',
+                    'product_prices.discount'
+                ])->whereUserTypeId($model->userTypeId);
+            },
+            'product_sizes.stocks' => function ($query) use ($model) {
+                $query->whereUserTypeId($model->userTypeId);
+            },
+            'promotions' => function ($query) use ($model) {
+                $query->where('products_promotions.promotion_id', '=', 2);
+            },
+        ])->join('product_prices', function ($join) use ($model) {
+            $join->on('products.id', '=', 'product_prices.product_id')
+                ->where('product_prices.user_type_id', '=', $model->userTypeId);
+        })
+            ->whereHas('promotions', function ($query) use ($model) {
+                $query->where('products_promotions.promotion_id', '=', 2);
+            })
+            ->whereNotIn('products.id', $model->topIds)
 //            ->orderByRaw($orderByRaw)
 //            ->offset($categoryProductsOffset)
 //            ->limit($categoryProductsLimit)

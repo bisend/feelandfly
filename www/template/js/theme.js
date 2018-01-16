@@ -163,7 +163,7 @@ $(document).ready(function () {
     if ($('#prod-slider-1, #prod-slider-2').length > 0) {
         $("#prod-slider-1, #prod-slider-2").owlCarousel({
             dots: false,
-            loop: true,
+            loop: false,
             autoplay: false,
             autoplayHoverPause: true,
             smartSpeed: 100,
@@ -307,7 +307,7 @@ $(document).ready(function () {
     if ($('#rel-prod-slider').length > 0) {
         $("#rel-prod-slider").owlCarousel({
             dots: false,
-            loop: true,
+            loop: false,
             autoplay: false,
             autoplayHoverPause: true,
             smartSpeed: 100,

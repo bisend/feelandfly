@@ -336,12 +336,15 @@
                                                    v-bind:href="'/product/' + cartItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
                                                     @{{ cartItem.product.name }}
                                                 </a>
-                                                <p class="fsz-13 font-2 no-margin">
+                                                <p class="fsz-13 font-2 no-margin prod-price">
                                                         <span class="fw-300 gray-clr">
                                                             @{{ cartItem.count }}
                                                             <sub>X</sub>
                                                         </span>
                                                     @{{ cartItem.product.price[0].price }} грн
+                                                    <del v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1">
+                                                        @{{ cartItem.product.price[0].old_price }} грн
+                                                    </del>
                                                 </p>
                                                 <p class="fsz-16 font-2 no-margin smoll-cart-totl-prod">
 

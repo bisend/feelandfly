@@ -58,8 +58,11 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="productInfo-price">
+                                <div class="productInfo-price prod-price font-2">
                                     <span>@{{ cartItem.product.price[0].price }}</span> грн
+                                    <del v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1">
+                                        @{{ cartItem.product.price[0].old_price }} грн
+                                    </del>
                                 </div>
                             </div>
                         </div>

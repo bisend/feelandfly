@@ -5398,4 +5398,9 @@ textarea.incorrect-field:-ms-input-placeholder {
     line-height: 25px;
     right: -41px;
 }
+
+.wishlist-item-img {
+    position: relative;
+    overflow: hidden;
+}
 /*15.01.2017 lables for products*/

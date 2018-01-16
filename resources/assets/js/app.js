@@ -85,3 +85,7 @@ require('./components/MyOrders');
 require('./components/Review');
 
 require('./components/Sales');
+
+require('./components/TopProducts');
+
+require('./components/NewProducts');

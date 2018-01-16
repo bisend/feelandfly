@@ -1,13 +1,13 @@
 /**
- * Created by vlad_ on 12.01.2018.
+ * Created by vlad_ on 16.01.2018.
  */
 
-if (document.getElementById('sales-products'))
+if (document.getElementById('top-products'))
 {
     var initProductPreviewImagesSliderInited = false,
         sync1, sync2, sliderthumb, homethumb;
 
-    function initProductPreviewImagesSliderSales () {
+    function initProductPreviewImagesSliderTop () {
         //Resize carousels in modal
         if ($('.sync2.product-preview-images-small').length > 0) {
             $(document).on('shown.bs.modal', function () {
@@ -120,7 +120,7 @@ if (document.getElementById('sales-products'))
         }
     }
 
-    function destroyProductPreviewImagesSliderSales () {
+    function destroyProductPreviewImagesSliderTop () {
         if (initProductPreviewImagesSliderInited === true) {
             sync1.trigger('destroy.owl.carousel');
             sliderthumb.trigger('destroy.owl.carousel');
@@ -141,27 +141,26 @@ if (document.getElementById('sales-products'))
     }
 
 
+    GLOBAL_DATA.topProducts = window.FFShop.topProducts;
 
-    GLOBAL_DATA.salesProducts = window.FFShop.salesProducts;
+    GLOBAL_DATA.topProductPreview.product = GLOBAL_DATA.topProducts[0];
 
-    GLOBAL_DATA.saleProductPreview.product = GLOBAL_DATA.salesProducts[0];
+    GLOBAL_DATA.topProductPreview.rel = 'prettyPhoto[top-' + GLOBAL_DATA.topProducts[0].id + ']';
 
-    GLOBAL_DATA.saleProductPreview.rel = 'prettyPhoto[sale-' + GLOBAL_DATA.salesProducts[0].id + ']';
-
-    GLOBAL_DATA.saleProductPreview.currentSizeId = GLOBAL_DATA.saleProductPreview.product.sizes[0].id;
+    GLOBAL_DATA.topProductPreview.currentSizeId = GLOBAL_DATA.topProductPreview.product.sizes[0].id;
 
     //init category product preview count
-    GLOBAL_DATA.saleProductPreview.count = 1;
+    GLOBAL_DATA.topProductPreview.count = 1;
 
     new Vue({
-        el: '#sales-products',
+        el: '#top-products',
         data: GLOBAL_DATA,
         mounted: function () {
-            initProductPreviewImagesSliderSales();
+            initProductPreviewImagesSliderTop();
 
-            destroyProductPreviewImagesSliderSales();
+            destroyProductPreviewImagesSliderTop();
 
-            $("a[rel^='prettyPhoto[sale-" + GLOBAL_DATA.saleProductPreview.product.id + "]']").prettyPhoto({
+            $("a[rel^='prettyPhoto[top-" + GLOBAL_DATA.topProductPreview.product.id + "]']").prettyPhoto({
                 theme: 'facebook',
                 slideshow: 5000,
                 autoplay_slideshow: false,
@@ -169,8 +168,8 @@ if (document.getElementById('sales-products'))
                 deeplinking: false,
                 ajaxcallback: function () {
                     var PRETTY_LOADED = true;
-                    $('#sale-preview').modal('hide');
-                    $('#sale-preview').on('hidden.bs.modal', function () {
+                    $('#top-preview').modal('hide');
+                    $('#top-preview').on('hidden.bs.modal', function () {
                         if (PRETTY_LOADED) {
                             $('body').addClass('modal-open').css('padding-right', '17px');
                             PRETTY_LOADED = false;
@@ -216,42 +215,42 @@ if (document.getElementById('sales-products'))
                 // No matches
                 return null;
             },
-            changeSalesProductPreview(counter) {
-                destroyProductPreviewImagesSliderSales();
+            changeTopProductPreview(counter) {
+                destroyProductPreviewImagesSliderTop();
 
-                GLOBAL_DATA.saleProductPreview.product = GLOBAL_DATA.salesProducts[counter];
+                GLOBAL_DATA.topProductPreview.product = GLOBAL_DATA.topProducts[counter];
 
-                GLOBAL_DATA.saleProductPreview.rel = 'prettyPhoto[sale-' + GLOBAL_DATA.saleProductPreview.product.id + ']';
+                GLOBAL_DATA.topProductPreview.rel = 'prettyPhoto[top-' + GLOBAL_DATA.topProductPreview.product.id + ']';
 
-                GLOBAL_DATA.saleProductPreview.currentSizeId = GLOBAL_DATA.saleProductPreview.product.sizes[0].id;
+                GLOBAL_DATA.topProductPreview.currentSizeId = GLOBAL_DATA.topProductPreview.product.sizes[0].id;
 
                 //init count checking if current preview in cart
-                if (this.findWhere(GLOBAL_DATA.cartItems, ({productId: GLOBAL_DATA.saleProductPreview.product.id, sizeId: GLOBAL_DATA.saleProductPreview.currentSizeId})))
+                if (this.findWhere(GLOBAL_DATA.cartItems, ({productId: GLOBAL_DATA.topProductPreview.product.id, sizeId: GLOBAL_DATA.topProductPreview.currentSizeId})))
                 {
                     //looping cartItems
                     GLOBAL_DATA.cartItems.forEach(function (item) {
                         //check if current active size id in cart
-                        if (item.productId == GLOBAL_DATA.saleProductPreview.product.id && item.sizeId == GLOBAL_DATA.saleProductPreview.currentSizeId)
+                        if (item.productId == GLOBAL_DATA.topProductPreview.product.id && item.sizeId == GLOBAL_DATA.topProductPreview.currentSizeId)
                         {
                             //then setting count
-                            GLOBAL_DATA.saleProductPreview.count = item.count;
+                            GLOBAL_DATA.topProductPreview.count = item.count;
                         }
                     });
                 }
                 else
                 {
-                    GLOBAL_DATA.saleProductPreview.count = 1;
+                    GLOBAL_DATA.topProductPreview.count = 1;
                 }
 
                 //container with preview
-                var $container = $('#sale-preview');
+                var $container = $('#top-preview');
 
                 $container.modal();
 
                 setTimeout(function () {
-                    initProductPreviewImagesSliderSales();
+                    initProductPreviewImagesSliderTop();
 
-                    $("a[rel^='prettyPhoto[sale-" + GLOBAL_DATA.saleProductPreview.product.id + "]']").prettyPhoto({
+                    $("a[rel^='prettyPhoto[top-" + GLOBAL_DATA.topProductPreview.product.id + "]']").prettyPhoto({
                         theme: 'facebook',
                         slideshow: 5000,
                         autoplay_slideshow: false,
@@ -272,23 +271,24 @@ if (document.getElementById('sales-products'))
                         }
                     });
                 }, 500);
+
             },
             //method handles onChange count input
             toInteger: function (count) {
                 var searchObj = {
-                        productId: GLOBAL_DATA.saleProductPreview.product.id,
-                        sizeId: GLOBAL_DATA.saleProductPreview.currentSizeId
+                        productId: GLOBAL_DATA.topProductPreview.product.id,
+                        sizeId: GLOBAL_DATA.topProductPreview.currentSizeId
                     },
                     _this = this;
 
                 if (count < 1 || count == '')
                 {
-                    GLOBAL_DATA.saleProductPreview.count = 1;
+                    GLOBAL_DATA.topProductPreview.count = 1;
                 }
 
                 if (count > 99)
                 {
-                    GLOBAL_DATA.saleProductPreview.count = 99;
+                    GLOBAL_DATA.topProductPreview.count = 99;
                 }
 
                 //if prod size in cart
@@ -302,7 +302,7 @@ if (document.getElementById('sales-products'))
                     }
                     _this.timer = setTimeout(function () {
 
-                        _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.saleProductPreview.count);
+                        _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.topProductPreview.count);
 
                     }, 400);
                 }
@@ -351,8 +351,8 @@ if (document.getElementById('sales-products'))
                             GLOBAL_DATA.totalAmount = data.totalAmount;
 
                             var LOADED = true;
-                            $('#sale-preview').modal('hide');
-                            $('#sale-preview').on('hidden.bs.modal', function () {
+                            $('#top-preview').modal('hide');
+                            $('#top-preview').on('hidden.bs.modal', function () {
                                 if (LOADED)
                                 {
                                     $('#big-cart').modal();
@@ -375,8 +375,8 @@ if (document.getElementById('sales-products'))
                     // $('#big-cart').modal();
 
                     var LOADED = true;
-                    $('#sale-preview').modal('hide');
-                    $('#sale-preview').on('hidden.bs.modal', function () {
+                    $('#top-preview').modal('hide');
+                    $('#top-preview').on('hidden.bs.modal', function () {
                         if (LOADED)
                         {
                             $('#big-cart').modal();
@@ -434,23 +434,23 @@ if (document.getElementById('sales-products'))
             },
             //changing current sizeId in preview
             changeCurrentSizeId: function (sizeId) {
-                GLOBAL_DATA.saleProductPreview.currentSizeId = sizeId;
+                GLOBAL_DATA.topProductPreview.currentSizeId = sizeId;
 
-                if (this.findWhere(GLOBAL_DATA.cartItems, ({productId: GLOBAL_DATA.saleProductPreview.product.id, sizeId: GLOBAL_DATA.saleProductPreview.currentSizeId})))
+                if (this.findWhere(GLOBAL_DATA.cartItems, ({productId: GLOBAL_DATA.topProductPreview.product.id, sizeId: GLOBAL_DATA.topProductPreview.currentSizeId})))
                 {
                     //looping cartItems
                     GLOBAL_DATA.cartItems.forEach(function (item) {
                         //check if current active size id in cart
-                        if (item.productId == GLOBAL_DATA.saleProductPreview.product.id && item.sizeId == GLOBAL_DATA.saleProductPreview.currentSizeId)
+                        if (item.productId == GLOBAL_DATA.topProductPreview.product.id && item.sizeId == GLOBAL_DATA.topProductPreview.currentSizeId)
                         {
                             //then setting count
-                            GLOBAL_DATA.saleProductPreview.count = item.count;
+                            GLOBAL_DATA.topProductPreview.count = item.count;
                         }
                     });
                 }
                 else
                 {
-                    GLOBAL_DATA.saleProductPreview.count = 1;
+                    GLOBAL_DATA.topProductPreview.count = 1;
                 }
             },
             //method handles updating cart, change count
@@ -499,25 +499,25 @@ if (document.getElementById('sales-products'))
             //method handles + button incrementing value
             increment: function () {
                 var searchObj = {
-                        productId: GLOBAL_DATA.saleProductPreview.product.id,
-                        sizeId: GLOBAL_DATA.saleProductPreview.currentSizeId
+                        productId: GLOBAL_DATA.topProductPreview.product.id,
+                        sizeId: GLOBAL_DATA.topProductPreview.currentSizeId
                     },
                     _this = this;
 
-                var oldCount = GLOBAL_DATA.saleProductPreview.count;
+                var oldCount = GLOBAL_DATA.topProductPreview.count;
 
-                GLOBAL_DATA.saleProductPreview.count++;
+                GLOBAL_DATA.topProductPreview.count++;
 
-                if (GLOBAL_DATA.saleProductPreview.count > 99)
+                if (GLOBAL_DATA.topProductPreview.count > 99)
                 {
-                    GLOBAL_DATA.saleProductPreview.count = 99;
+                    GLOBAL_DATA.topProductPreview.count = 99;
                 }
 
                 //check if size id in cart
                 if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj))
                 {
                     //check if old count != new count
-                    if (oldCount != GLOBAL_DATA.saleProductPreview.count)
+                    if (oldCount != GLOBAL_DATA.topProductPreview.count)
                     {
                         //then send update ajax
                         if (_this.timer) {
@@ -526,7 +526,7 @@ if (document.getElementById('sales-products'))
                         }
                         _this.timer = setTimeout(function () {
 
-                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.saleProductPreview.count);
+                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.topProductPreview.count);
 
                         }, 400);
                     }
@@ -535,25 +535,25 @@ if (document.getElementById('sales-products'))
             //method handles - button decrementing value
             decrement: function () {
                 var searchObj = {
-                        productId: GLOBAL_DATA.saleProductPreview.product.id,
-                        sizeId: GLOBAL_DATA.saleProductPreview.currentSizeId
+                        productId: GLOBAL_DATA.topProductPreview.product.id,
+                        sizeId: GLOBAL_DATA.topProductPreview.currentSizeId
                     },
                     _this = this;
 
-                var oldCount = GLOBAL_DATA.saleProductPreview.count;
+                var oldCount = GLOBAL_DATA.topProductPreview.count;
 
-                GLOBAL_DATA.saleProductPreview.count--;
+                GLOBAL_DATA.topProductPreview.count--;
 
-                if (GLOBAL_DATA.saleProductPreview.count < 1)
+                if (GLOBAL_DATA.topProductPreview.count < 1)
                 {
-                    GLOBAL_DATA.saleProductPreview.count = 1;
+                    GLOBAL_DATA.topProductPreview.count = 1;
                 }
 
                 //check if size id in cart
                 if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj))
                 {
                     //check if old count != new count
-                    if (oldCount != GLOBAL_DATA.saleProductPreview.count)
+                    if (oldCount != GLOBAL_DATA.topProductPreview.count)
                     {
                         //then send update ajax
                         if (_this.timer)
@@ -563,7 +563,7 @@ if (document.getElementById('sales-products'))
                         }
                         _this.timer = setTimeout(function () {
 
-                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.saleProductPreview.count);
+                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.topProductPreview.count);
 
                         }, 400);
                     }
@@ -571,4 +571,5 @@ if (document.getElementById('sales-products'))
             }
         }
     });
+
 }

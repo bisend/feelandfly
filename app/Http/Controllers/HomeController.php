@@ -39,7 +39,9 @@ class HomeController extends LayoutController
         $this->homeService->fill($model);
 
         JavaScript::put([
-            'salesProducts' => $model->salesProducts
+            'salesProducts' => $model->salesProducts,
+            'topProducts' => $model->topProducts,
+            'newProducts' => $model->newProducts
         ]);
         
         \Debugbar::info($model);
