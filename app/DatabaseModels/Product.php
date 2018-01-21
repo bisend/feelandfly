@@ -49,6 +49,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\ProductPrice[] $price
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\ProductSize[] $product_sizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Property[] $properties
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Promotion[] $promotions
+ * @property bool $is_visible
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereIsVisible($value)
+ * @property-read \App\DatabaseModels\ProductCategory $product_category
  */
 class Product extends Model
 {
@@ -92,5 +96,15 @@ class Product extends Model
     public function promotions()
     {
         return $this->belongsToMany(Promotion::class, 'products_promotions');
+    }
+
+//    public function product_category()
+//    {
+//        return $this->belongsTo(ProductCategory::class, 'id', 'product_id');
+//    }
+
+    public function product_category()
+    {
+        return $this->hasMany(ProductCategory::class, 'product_id', 'id');
     }
 }

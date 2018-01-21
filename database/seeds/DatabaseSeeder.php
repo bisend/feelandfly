@@ -58,5 +58,9 @@ class DatabaseSeeder extends Seeder
 //        $this->call(OrderStatusesSeeder::class);
         
 //        $this->call(PromotionsSeeder::class);
+        
+//        $this->call(ProductCategorySeeder::class);
+        
+//        $this->call(BlogsSeeder::class);
     }
 }

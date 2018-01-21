@@ -23,14 +23,17 @@ class CategoryRepository
      */
     public function getCategories($language)
     {
-        return Category::get([
-            'id',
-            'parent_id',
-            "name_$language as name",
-            'slug',
-            "description_$language as description",
-            'priority'
-        ]);
+        return Category::whereIsVisible(true)
+            ->whereNull('parent_id')
+            ->get([
+                'id',
+                'parent_id',
+                'icon',
+                "name_$language as name",
+                'slug',
+                "description_$language as description",
+                'priority'
+            ]);
     }
 
     /**
@@ -41,10 +44,11 @@ class CategoryRepository
      */
     public function getCurrentCategoryBySlug($slug, $language)
     {
-        return Category::whereSlug($slug)
+        return Category::whereSlug($slug)->whereIsVisible(true)
             ->first([
                 'id',
                 'parent_id',
+                'icon',
                 "name_$language as name",
                 'slug',
                 "description_$language as description",
@@ -59,10 +63,11 @@ class CategoryRepository
      */
     public function getCurrentCategoryById($categoryId, $language)
     {
-        return Category::whereId($categoryId)
+        return Category::whereId($categoryId)->whereIsVisible(true)
             ->first([
                 'id',
                 'parent_id',
+                'icon',
                 "name_$language as name",
                 'slug',
                 "description_$language as description",

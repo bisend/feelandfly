@@ -417,3 +417,19 @@ if (!function_exists('set_format_price')) {
         return sprintf('%0.2f', round($price, 2, PHP_ROUND_HALF_UP) * $product_count);
     }
 }
+
+if (!function_exists('url_blog_page'))
+{
+    function url_blog_page($slug = null, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::blog($slug, $language);
+    }
+}
+
+if (!function_exists('url_all_blogs'))
+{
+    function url_all_blogs($language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::allBlogs($language);
+    }
+}

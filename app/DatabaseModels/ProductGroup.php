@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductGroup whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Product[] $products
+ * @property string|null $name
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductGroup whereName($value)
  */
 class ProductGroup extends Model
 {

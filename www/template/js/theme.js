@@ -148,6 +148,7 @@ $(document).ready(function () {
         $("#main-slider").owlCarousel({
             //animateOut: 'slideOutDown',
             //animateIn: 'flipInX',
+            autoplay: false,
             animateIn: 'fadeInDown',
             animateOut: 'slideOutDown',
             items: 1,
@@ -672,3 +673,50 @@ $(window).scroll(function () {
 /*------------------- Page Loader Ends  -------------------*/
 
 
+/*------ 12.01.2018  -------*/
+/*------------------- lookbook Slider -------------------*/
+if ($('#lookbook-slider').length > 0) {
+    $("#lookbook-slider").owlCarousel({
+        dots: true,
+        loop: true,
+        autoplay: true,
+        autoplayHoverPause: true,
+        smartSpeed: 300,
+        nav: true,
+        margin: 30,
+        responsive: {
+            0: {items: 1},
+            1200: {items: 1},
+            992: {items: 1},
+            568: {items: 1}
+        },
+        navText: [
+            "<i class='fa fa-angle-left'></i>",
+            "<i class='fa fa-angle-right'></i>"
+        ]
+    });
+}
+
+/*------------------- category Slider -------------------*/
+if ($('#slider-category').length > 0) {
+    $("#slider-category").owlCarousel({
+        dots: true,
+        loop: true,
+        autoplay: true,
+        autoplayHoverPause: true,
+        smartSpeed: 100,
+        nav: true,
+        margin: 30,
+        responsive: {
+            0: {items: 1},
+            1200: {items: 4},
+            992: {items: 3},
+            568: {items: 2},
+            400: {items: 1}
+        },
+        navText: [
+            "<i class='fa fa-angle-left'></i>",
+            "<i class='fa fa-angle-right'></i>"
+        ]
+    });
+}

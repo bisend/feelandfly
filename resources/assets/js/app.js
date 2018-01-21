@@ -89,3 +89,5 @@ require('./components/Sales');
 require('./components/TopProducts');
 
 require('./components/NewProducts');
+
+require('./components/MainSlider');

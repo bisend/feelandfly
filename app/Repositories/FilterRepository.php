@@ -39,8 +39,9 @@ class FilterRepository
                           COUNT(DISTINCT products.id) AS filter_products_count
                         FROM properties
                         JOIN products
-                          ON properties.product_id = products.id
-                        WHERE products.category_id = " . $model->currentCategory->id . "
+                          ON properties.product_id = products.id AND products.is_visible = true
+                        JOIN product_category
+                          ON products.id = product_category.product_id AND product_category.category_id = " . $model->currentCategory->id . "
                         GROUP BY properties.property_name_id, properties.property_value_id
                       ) properties
                   JOIN property_names
@@ -120,9 +121,10 @@ class FilterRepository
                         JOIN property_values
                           ON property_values.id = properties.property_value_id
                         JOIN products
-                          ON properties.product_id = products.id
+                          ON properties.product_id = products.id AND products.is_visible = true
                         " . $priceQuery . "
-                        WHERE products.category_id = " . $model->currentCategory->id . "
+                        JOIN product_category
+                          ON products.id = product_category.product_id AND product_category.category_id = " . $model->currentCategory->id . "
                         " . $activeFiltersQuery . "
                         GROUP BY properties.property_name_id, properties.property_value_id
                       ) properties

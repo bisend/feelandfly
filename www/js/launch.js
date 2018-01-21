@@ -106,6 +106,14 @@ var GLOBAL_DATA = {
     reviewsCurrentPage: 1,
     reviews: [],
 
+    mainSliderPreview: {
+        product: [],
+        currentSizeId: '',
+        count: '',
+        rel: ''
+    },
+    mainSliderProducts: [],
+
     saleProductPreview: {
         product: [],
         currentSizeId: '',

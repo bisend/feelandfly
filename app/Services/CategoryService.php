@@ -79,7 +79,7 @@ class CategoryService extends LayoutService
     private function fillCurrentCategory($model)
     {
         $model->currentCategory = $this->categoryRepository->getCurrentCategoryBySlug($model->slug, $model->language);
-
+//        \Debugbar::info($model->currentCategory);
         if ($model->currentCategory == null)
         {
             abort(404);

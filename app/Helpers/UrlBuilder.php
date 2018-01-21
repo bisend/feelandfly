@@ -192,6 +192,10 @@ class UrlBuilder
     */
     const ORDER = 'order/confirm';
 
+    const BLOG_PAGE = 'blog';
+
+    const BLOG_ALL_PAGE = 'blog/all';
+
 
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -1002,5 +1006,30 @@ class UrlBuilder
 
         return $result;
     }
+    
+    public static function blog($slug = null, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        if (!$slug)
+        {
+            return self::UNDEFINED_URL;
+        }
 
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::BLOG_PAGE,
+            $slug
+        ]);
+
+        return self::localize($url, $language);
+    }
+    
+    public static function allBlogs($language = Languages::DEFAULT_LANGUAGE)
+    {
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::BLOG_ALL_PAGE
+        ]);
+
+        return self::localize($url, $language);
+    }
 }

@@ -48,10 +48,12 @@ class CategoryController extends LayoutController
 
         $this->categoryService->fill($model);
         
-        if ($model->categoryProducts->count() < 1)
-        {
-            abort(404);
-        }
+//        if ($model->categoryProducts->count() < 1)
+//        {
+//            abort(404);
+//        }
+
+        \Debugbar::info($model);
 
         JavaScript::put([
             'products' => $model->categoryProducts,
