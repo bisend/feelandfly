@@ -261,3 +261,20 @@ Route::group(['prefix' => 'errors'], function ()
 Route::post('/add-review', 'ProductController@addReview');
 
 Route::post('/get-reviews', 'ProductController@getReviews');
+
+Route::group(['prefix' => 'blog'], function () {
+
+    Route::get('all/{language?}', 'BlogController@allBlogs')
+        ->where([
+            'language' => '^(uk|ru)?$'
+        ]);
+
+    Route::get('all/{page}/{language?}', 'BlogController@allBlogsPagination')
+        ->where([
+            'page' => '^[2-9]{1}|[1-9]{1}[0-9]+$',
+            'language' => '^(uk|ru)?$'
+        ]);
+
+    Route::get('{slug}/{language?}', 'BlogController@blogPage');
+
+});

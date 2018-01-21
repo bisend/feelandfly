@@ -433,3 +433,11 @@ if (!function_exists('url_all_blogs'))
         return UrlBuilder::allBlogs($language);
     }
 }
+
+if (!function_exists('url_all_blogs_per_page'))
+{
+    function url_all_blogs_per_page($page = 1, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::allBlogsPerPage($page, $language);
+    }
+}

@@ -1032,4 +1032,23 @@ class UrlBuilder
 
         return self::localize($url, $language);
     }
+    
+    public static function allBlogsPerPage($page = 1, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        if ($page < 1)
+        {
+            $page = 1;
+        }
+
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::BLOG_ALL_PAGE,
+        ]);
+
+        if ($page > 1) {
+            $url = self::concatParts([$url, $page]);
+        }
+
+        return self::localize($url, $language);
+    }
 }

@@ -129,6 +129,6 @@ class HomeService extends LayoutService
     
     private function fillBlogs($model)
     {
-        $model->blogs = $this->blogRepository->getBlogs($model);
+        $model->blogs = $this->blogRepository->getBlogsOnHomePage($model);
     }
 }
