@@ -97,7 +97,7 @@ class FilterRepository
             $priceQuery = "
                           JOIN product_prices
                             ON product_prices.product_id = products.id 
-                            AND product_prices.user_type_id = 1 AND product_prices.price between ". $model->priceMin . " and " . $model->priceMax . "
+                            AND product_prices.user_type_id = " . $model->userTypeId . "  AND product_prices.price between ". $model->priceMin . " and " . $model->priceMax . "
                           ";
         }
 

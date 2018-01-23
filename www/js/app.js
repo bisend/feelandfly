@@ -12468,6 +12468,15 @@ new Vue({
 new Vue({
     el: '#mini-cart',
     data: GLOBAL_DATA,
+    watch: {
+        totalCount: function totalCount() {
+            var _this = this;
+
+            if (GLOBAL_DATA.totalCount < 1) {
+                $('.smol-cart-content').stop(100, 100).fadeOut(100);
+            }
+        }
+    },
     methods: {
         deleteFromCart: function deleteFromCart(productId, sizeId) {
             if (GLOBAL_DATA.IS_DATA_PROCESSING) {
@@ -12504,6 +12513,13 @@ new Vue({
                     console.log(_error);
                 }
             });
+        },
+        showMiniCart: function showMiniCart() {
+            if (GLOBAL_DATA.totalCount > 0) {
+                // $('.dropdown_cart_smoll').hover(function () {
+                $('.smol-cart-content').stop(100, 100).fadeIn(100);
+                // });
+            }
         }
     }
 });

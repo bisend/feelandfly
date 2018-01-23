@@ -16,7 +16,8 @@
 <script defer src="/js/launch.js"></script>
 <script defer src="/template/js/theme.js"></script>
 <script defer src="/template/js/jquery.matchHeight.js"></script>
-
+<script defer src="/template/js/header.js"></script>
+<script defer src="/template/js/main.js"></script>
 <!--Page JS BEGIN-->
 @stack('js')
 <!--Page JS END-->

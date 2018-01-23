@@ -64,6 +64,8 @@ class CategoryFiltersController extends LayoutController
             'priceMax' => $model->priceMax
         ]);
 
+        \Debugbar::info($model);
+
         return view('pages.category-filters', compact('model'));
     }
 

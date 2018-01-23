@@ -62,6 +62,28 @@ class LayoutService
     private function fillCategories($model)
     {
         $model->categories = $this->categoryRepository->getCategories($model->language);
+
+        foreach ($model->categories as $category)
+        {
+            if ($category->childs->count() > 0)
+            {
+                $category->hasSecondLevel = true;
+                
+                $category->hasThirdLevel = false;
+
+                foreach ($category->childs as $secondChild)
+                {
+                    if ($secondChild->childs && $secondChild->childs->count() > 0)
+                    {
+                        $category->hasThirdLevel = true;
+                    }
+                }
+            }
+            else
+            {
+                $category->hasSecondLevel = false;
+            }
+        }
     }
 
     /**

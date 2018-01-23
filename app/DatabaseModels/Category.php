@@ -34,10 +34,20 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereIsVisible($value)
  * @property string|null $icon
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereIcon($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Category[] $childs
+ * @property-read \App\DatabaseModels\Category|null $parent
  */
 class Category extends Model
 {
     protected $table = 'categories';
     
-    
+    public function childs()
+    {
+        return $this->hasMany(Category::class, 'parent_id', 'id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id', 'id');
+    }
 }

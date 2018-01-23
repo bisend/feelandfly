@@ -128,7 +128,7 @@ class CartService
             'count' => (int) $count
         ];
 
-        if (count($cart) != 0)
+        if (!is_null($cart) && count($cart) != 0)
         {
             foreach ($cart as $cartItem)
             {

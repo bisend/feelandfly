@@ -30,6 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereUserId($value)
  * @mixin \Eloquent
+ * @property int $is_deleted
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereIsDeleted($value)
  */
 class Review extends Model
 {

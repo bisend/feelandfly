@@ -62,5 +62,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call(ProductCategorySeeder::class);
         
 //        $this->call(BlogsSeeder::class);
+        
+//        $this->call(ReviewsSeeder::class);
     }
 }

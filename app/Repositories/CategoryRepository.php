@@ -25,6 +25,26 @@ class CategoryRepository
     {
         return Category::whereIsVisible(true)
             ->whereNull('parent_id')
+            ->with([
+                'childs' => function ($query) use ($language) {
+                    $query->select([
+                        'id',
+                        'parent_id',
+                        "name_$language as name",
+                        'slug'
+                    ])->orderByRaw('priority desc', 'name');
+                    $query->with([
+                        'childs' => function ($query) use ($language) {
+                            $query->select([
+                                'id',
+                                'parent_id',
+                                "name_$language as name",
+                                'slug'
+                            ])->orderByRaw('priority desc', 'name');
+                        }
+                    ]);
+                }
+            ])
             ->get([
                 'id',
                 'parent_id',

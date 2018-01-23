@@ -29,7 +29,7 @@ abstract class LayoutViewModel
     /**
      * @var integer should contain id of type user
      */
-    public $userTypeId = 1;
+    public $userTypeId = 3;
 
     /**
      * @var \Illuminate\Database\Eloquent\Model|null|static
@@ -52,7 +52,7 @@ abstract class LayoutViewModel
         
         $this->language = $language;
 
-        //$this->userTypeId = 4;
+        $this->userTypeId = 3;
 
         if (auth()->check())
         {

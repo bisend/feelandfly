@@ -23,6 +23,8 @@
                                 <div class="owl-carousel sync1 pb-25 product-preview-images-big">
                                     <div class="item" v-for="image in categoryProductPreview.product.images">
                                         <img v-bind:src="image.big">
+                                        {{--<img v-if="categoryProductPreview.product.images.length > 0" v-bind:src="image.big">--}}
+                                        {{--<img v-else src="/img/product/big/no_photo.jpg">--}}
 
                                         <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].id == 1"
                                              class="prod-tag-1 font-2">
@@ -48,6 +50,8 @@
 
                                 <div class="owl-carousel single-prod-thumb sync2 nav-2 product-preview-images-small">
                                     <div class="item" v-for="image in categoryProductPreview.product.images">
+                                        {{--<img v-if="categoryProductPreview.product.images.length > 0" v-bind:src="image.small">--}}
+                                        {{--<img v-else src="/img/product/small/no_photo.jpg">--}}
                                         <img v-bind:src="image.small">
                                         <span class="transparent">
                                             <img src="/img/template/icons/plus.png" alt="view">
@@ -80,26 +84,24 @@
                                             <li>{{ trans('product.stock') }}:
                                                 <span v-cloak v-for="productSize in categoryProductPreview.product.product_sizes"
                                                       v-if="productSize.size_id == categoryProductPreview.currentSizeId">
-                                                {{--{{ $model->product->product_sizes[0]->stocks[0]->stock }}--}}
                                                     @{{ productSize.stocks[0].stock }}
                                                 </span>
                                             </li>
-                                            <li>Материал: Полиэстер с водоотталкивающей и полиуретановой
-                                                пропиткой для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>
-                                            <li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>
-                                            <li>Металлические нержавеющие молнии;</li>
-                                            <li>Два боковых, один внутренний, один карман на молнии на плече;</li>
-                                            <li>Сверху и снизу расположена трикотажная резинка с компонентом эластана,
-                                                что позволяет резинке не терять с временем форму и не закатываться;</li>
-                                            <li>На бомбере расположены три вышитых патча;</li>
-                                            <li>Весенний / Летний сезон.</li>
+                                            {{--<li>Материал: Полиэстер с водоотталкивающей и полиуретановой--}}
+                                                {{--пропиткой для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>--}}
+                                            {{--<li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>--}}
+                                            {{--<li>Металлические нержавеющие молнии;</li>--}}
+                                            {{--<li>Два боковых, один внутренний, один карман на молнии на плече;</li>--}}
+                                            {{--<li>Сверху и снизу расположена трикотажная резинка с компонентом эластана,--}}
+                                                {{--что позволяет резинке не терять с временем форму и не закатываться;</li>--}}
+                                            {{--<li>На бомбере расположены три вышитых патча;</li>--}}
+                                            {{--<li>Весенний / Летний сезон.</li>--}}
                                             <li>Артикул: @{{ categoryProductPreview.product.vendor_code }}</li>
                                         </ul>
                                     </div>
                                     <div class="prod-attributes">
                                         <ul class="choose-clr list-inline border-hover">
                                             <li v-for="relatedProduct in categoryProductPreview.product.product_group.products">
-                                                {{--<a v-bind:href="related_product.color.slug" class="black-bg"></a>--}}
                                                 <a v-if="relatedProduct.color.id === categoryProductPreview.product.color.id"
                                                    class="active"
                                                    :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
@@ -366,8 +368,11 @@
                                                     <div class="prod-img">
                                                         <a class="img-hover"
                                                            href="{{ url_product($categoryProduct->slug, $model->language) }}">
-                                                            <img alt="product"
-                                                                 src="{{ $categoryProduct->images[0]->medium }}">
+                                                            @if($categoryProduct->images->count() > 0)
+                                                                <img alt="{{ $categoryProduct->name }}" src="{{ $categoryProduct->images[0]->medium }}">
+                                                            @else
+                                                                <img alt="{{ $categoryProduct->name }}" src="/img/product/medium/no_photo.jpg">
+                                                            @endif
                                                         </a>
 
                                                         @if($categoryProduct->promotions != null && $categoryProduct->promotions->count() > 0)
@@ -531,6 +536,5 @@
 @endsection
 
 @push('js')
-<script defer src="/template/js/main.js"></script>
 <script defer src="/template/plugins/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
 @endpush
