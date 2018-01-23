@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- CONTENT AREA -->
-    <article id="order-confirm">
+    <article id="order-confirm" class="margin-after-header">
 
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">

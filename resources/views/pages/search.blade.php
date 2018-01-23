@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-    <article>
+    <article class="margin-after-header">
 
 
         {{--CATEGORY PRODUCT PREVIEW--}}

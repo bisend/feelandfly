@@ -7,7 +7,7 @@
         <div class="row">
 
             {{--BLOG Starts--}}
-            <aside class="col-md-12 col-sm-12 single-post">
+            <aside class="col-md-12 col-sm-12 single-post margin-after-header">
                 <div class="blog-wrap">
                     <div class="blog-img">
                         <a class="img-hover" href="{{ url_blog_page($model->blog->slug, $model->language) }}">

@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- CONTENT AREA -->
-    <article>
+    <article class="margin-after-header">
 
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">

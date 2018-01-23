@@ -4,7 +4,7 @@
 @section('content')
     @php($relatedProducts = $model->product->product_group->products)
 
-    <article>
+    <article class="margin-after-header">
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">
             <div class="theme-container container ">

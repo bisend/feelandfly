@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-    <article class="light-bg-1">
+    <article class="light-bg-1 margin-after-header">
         <!-- Slider Start -->
         <section class="slider-section" id="main-slider-section">
 

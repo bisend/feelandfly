@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-    <article>
+    <article class="margin-after-header">
         @if($model->categoryProducts->count() > 0)
 
             {{--CATEGORY PRODUCT PREVIEW--}}
