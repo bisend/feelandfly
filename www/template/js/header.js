@@ -153,8 +153,10 @@ $( document ).ready(function() {
         var windowScroll = $(window).scrollTop(); //Получаем величину, показывающую на сколько прокручено окно
         if (windowScroll > topOfObjToStick) { // Если прокрутили больше, чем расстояние до блока, то приклеиваем его
             $(objToStick).addClass("topWindow");
+            $('.header-topbar').slideUp(150);
         } else {
             $(objToStick).removeClass("topWindow");
+            $('.header-topbar').slideDown(400);
         }
     });
 });
