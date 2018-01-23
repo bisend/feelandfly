@@ -131,13 +131,13 @@ $( document ).ready(function() {
     // $('.dropdown_cart_smoll').hover(function () {
     //     $('.smol-cart-content').stop(100,100).fadeToggle(100);
     // })
-    $(document).on('click', 'body', function (e) {
-        var container = $('#mini-cart');
-        if (container.has(e.target).length === 0)
-        {
-            $('.smol-cart-content').stop(100,100).fadeOut(100);
-        }
-    });
+    // $(document).on('click', 'body', function (e) {
+    //     var container = $('#mini-cart');
+    //     if (container.has(e.target).length === 0)
+    //     {
+    //         $('.smol-cart-content').stop(100,100).fadeOut(100);
+    //     }
+    // });
 
 });
 /*Smoll cart header END*/

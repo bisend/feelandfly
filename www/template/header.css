@@ -3877,9 +3877,9 @@ header {
     transform: translateY(50px);
     -webkit-transform: translateY(50px);
     -ms-transform: translateY(50px);
-    transition: transform 0.3s ease 0s;
-    -webkit-transition: transform 0.3s ease-in-out 0s;
-    -ms-transition: transform 0.3s ease 0s;
+    /*transition: transform 0.3s ease 0s;*/
+    /*-webkit-transition: transform 0.3s ease-in-out 0s;*/
+    /*-ms-transition: transform 0.3s ease 0s;*/
     transition: all 0.3s ease 0s;
     -webkit-transition: all 0.3s ease-in-out 0s;
     -ms-transition: all 0.3s ease 0s;

@@ -5,10 +5,10 @@ new Vue({
         totalCount: function () {
             var _this = this;
             
-            if (GLOBAL_DATA.totalCount < 1)
-            {
-                $('.smol-cart-content').stop(100,100).fadeOut(100);
-            }
+            // if (GLOBAL_DATA.totalCount < 1)
+            // {
+            //     $('.smol-cart-content').stop(100,100).fadeOut(100);
+            // }
         }
     },
     methods: {
@@ -54,7 +54,7 @@ new Vue({
             if (GLOBAL_DATA.totalCount > 0)
             {
                 // $('.dropdown_cart_smoll').hover(function () {
-                    $('.smol-cart-content').stop(100,100).fadeIn(100);
+                //     $('.smol-cart-content').stop(100,100).fadeIn(100);
                 // });
             }
         }

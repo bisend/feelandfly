@@ -232,9 +232,9 @@
                     </div>
                 </div>
 
-                <div class="div_smoll-cart" id="mini-cart">
-                    <div class="dropdown_cart_smoll" :class="{'can-show-mini-cart': totalCount}">
-                        <a class="show_cart" v-on:click.prevent="showMiniCart()">
+                <div class="div_smoll-cart" id="mini-cart" :class="{'can-show-mini-cart': totalCount > 0}">
+                    <div class="dropdown_cart_smoll">
+                        <a class="show_cart">
                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                         </a>
                         <span v-cloak class="badge">
