@@ -182,10 +182,10 @@ header {
     background-color: #fff;
     box-shadow: 0 0 15px rgba(0,0,0,.09);
     height: 77px;
-    transition: all 0.5s ease;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
+    /*transition: all 0.5s ease;*/
+    /*-webkit-transition: all 0.5s ease;*/
+    /*-moz-transition: all 0.5s ease;*/
+    /*-o-transition: all 0.5s ease;*/
 }
 .header-main .navbar-header {
     display: inline-block;
@@ -4158,41 +4158,61 @@ header {
 
 .topWindow{
     position: fixed;
-    top: 0;
-    -o-transition: 0.3s;
-    -webkit-transition: 0.3s;
-    -moz-transition: 0.3s;
-    box-shadow: 0 0 15px rgba(0,0,0,.09);
-    z-index: 66;
+    /*top: 0;*/
+    /*-o-transition: 0.3s;*/
+    /*-webkit-transition: 0.3s;*/
+    /*-moz-transition: 0.3s;*/
+    /*box-shadow: 0 0 15px rgba(0,0,0,.09);*/
+    /*z-index: 66;*/
+    /*transition-delay: 2s;*/
 }
 
 .header-main .navbar-header{
     padding: 10px 0;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
 }
 
 
 .topWindow.header-main .navbar-header {
     padding: 0!important;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
+
 }
 
 .topWindow .navigation .nav-links .main-menu{
     padding-top: 0;
     padding-bottom: 0;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
 }
 
 .topWindow .navigation .button-search{
     padding: 0;
     padding-top: 2px;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
 }
 
 .topWindow .div_smoll-cart {
     float: right;
     line-height: 54px;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
 }
 
 
 .topWindow.header-main{
     height: 59px;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
 }
 
 .topWindow .div_smoll-cart {
@@ -4200,10 +4220,16 @@ header {
     line-height: 54px;
     padding: 0;
     padding-top: 2px;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
 }
 
 .topWindow .hamburger-menu{
     top: 10px;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
 }
 
 
@@ -4211,10 +4237,10 @@ header {
     max-width: 100px;
 }
 
-.topWindow .logo .logo-title {
-    color: #000;
-    font-size: 18px;
-}
+/*.topWindow .logo .logo-title {*/
+    /*color: #000;*/
+    /*font-size: 18px;*/
+/*}*/
 
 .prof-block{
     position: relative;
