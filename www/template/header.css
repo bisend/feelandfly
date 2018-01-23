@@ -2,7 +2,9 @@
 
 /*----------  2.1. Header Topbar ----------*/
 header {
-    position: relative;
+    position: fixed;
+    z-index: 2;
+    width: 100%;
 }
 .header-topbar {
     font-size: 13px;
@@ -4654,4 +4656,8 @@ header {
 
 .sidenav .nav-slide-body ul li .dropdown-div .dropdown-div-btn h2 a{
     border-bottom: none;
+}
+
+.margin-after-header{
+    padding-top: 119px;
 }
