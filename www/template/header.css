@@ -3860,7 +3860,7 @@ header {
 
 /* Dropdown Content (Hidden by Default) */
 .smol-cart-content {
-    display: none;
+    /*display: none;*/
     position: absolute;
     background-color: #fff;
     width: 320px;
@@ -3872,16 +3872,26 @@ header {
     top: 4px;
     /*top: 58px;*/
 
-    /*opacity: 0;*/
-    /*visibility:hidden;*/
-    /*transition: opacity 0s linear;*/
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(50px);
+    -webkit-transform: translateY(50px);
+    -ms-transform: translateY(50px);
+    transition: transform 0.3s ease 0s;
+    -webkit-transition: transform 0.3s ease-in-out 0s;
+    -ms-transition: transform 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease-in-out 0s;
+    -ms-transition: all 0.3s ease 0s;
 }
 
 .can-show-mini-cart:hover .smol-cart-content {
-    display: block;
-    /*visibility: visible;*/
-    /*opacity: 1;*/
-    /*transition: opacity 0.4s linear;*/
+    /*display: block;*/
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+    -ms-transform: translateY(0px);
 }
 
 /* Show the dropdown menu on hover */
