@@ -36,14 +36,14 @@ return [
     ],
 
     'facebook' => [
-        'client_id' => '300232113802173',         // Your facebook app ID
-        'client_secret' => 'ae9a0a77408b5777b33a519cdf7d7137', // Your facebook app Secret
-        'redirect' => 'http://feelandfly.xyz/user/login/facebook/callback'
+        'client_id' => env('FACEBOOK_ID'),         // Your facebook app ID
+        'client_secret' => env('FACEBOOK_SECRET'), // Your facebook app Secret
+        'redirect' => env('FACEBOOK_CALLBACK'),
     ],
 
     'google' => [
-        'client_id' => '813277002010-vs7878j41pj1khru14nioul5vkqubnim.apps.googleusercontent.com',
-        'client_secret' => 'zoLmB9WRzAkTlF9ivAVD9G9w',
-        'redirect' => 'http://feelandfly.xyz/user/login/google/callback',
+        'client_id' => env('GOOGLE_ID'),
+        'client_secret' => env('GOOGLE_SECRET'),
+        'redirect' => env('GOOGLE_CALLBACK'),
     ],
 ];

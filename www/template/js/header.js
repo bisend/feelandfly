@@ -155,7 +155,7 @@ $( document ).ready(function() {
             $(objToStick).addClass("topWindow");
         } else {
             $(objToStick).removeClass("topWindow");
-        };
+        }
     });
 });
 

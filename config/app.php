@@ -235,5 +235,10 @@ return [
         'LocalizedCarbon' => Laravelrus\LocalizedCarbon\LocalizedCarbon::class,
         'DiffFormatter'   => Laravelrus\LocalizedCarbon\DiffFactoryFacade::class,
     ],
-
+    
+    
+    /*
+     * additional variables for project settings
+     */
+    'defUserTypeId' => env('DEFAULT_USER_TYPE_ID'),
 ];

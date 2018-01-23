@@ -5711,9 +5711,9 @@ textarea.incorrect-field:-ms-input-placeholder {
     .big-cart .modal-footer .theme-btn{
         width: 240px;
     }
-    .slider-section{
-        display: none;
-    }
+    /*.slider-section{*/
+        /*display: none;*/
+    /*}*/
 }
 
 @media screen and (max-width:780px){

@@ -1867,68 +1867,7 @@ header {
     .margin-bottom-100 {
         margin-bottom: 60px
     }
-    .header-slider-options-wrapper .list-feature-prenancy {
-        padding-top: 60px;
-        margin-bottom: 0
-    }
-    .header-slider-options-wrapper .home-appointment {
-        padding-top: 60px
-    }
-    .slider-medic .typo-adds-on {
-        margin-top: 0
-    }
-    .slider-medic .slide-2,
-    .slider-medic .slide-10 {
-        height: 320px
-    }
-    .slider-medic .slide-2 .item,
-    .slider-medic .slide-10 .item {
-        height: 320px
-    }
-    .slider-medic .slide-2 .typo-adds-on,
-    .slider-medic .slide-10 .typo-adds-on {
-        margin-right: -375px;
-        margin-top: 0
-    }
-    .slider-medic .description {
-        width: 65%
-    }
-    .slider-medic .slide-5 .typo-adds-on,
-    .slider-medic .slide-6 .typo-adds-on,
-    .slider-medic .slide-9 .typo-adds-on,
-    .slider-medic .slide-11 .typo-adds-on,
-    .slider-medic .slide-12 .typo-adds-on,
-    .slider-medic .slide-13 .typo-adds-on,
-    .slider-medic .slide-16 .typo-adds-on {
-        margin-top: 0
-    }
-    .slider-medic .slide-9,
-    .slider-medic .slide-11,
-    .slider-medic .slide-12,
-    .slider-medic .slide-13,
-    .slider-medic .slide-14,
-    .slider-medic .slide-15,
-    .slider-medic .slide-16 {
-        height: 320px
-    }
-    .slider-medic .slide-9 .item,
-    .slider-medic .slide-11 .item,
-    .slider-medic .slide-12 .item,
-    .slider-medic .slide-13 .item,
-    .slider-medic .slide-14 .item,
-    .slider-medic .slide-15 .item,
-    .slider-medic .slide-16 .item {
-        height: 320px
-    }
-    .slider-medic .slide-9 .typo-adds-on,
-    .slider-medic .slide-11 .typo-adds-on,
-    .slider-medic .slide-12 .typo-adds-on,
-    .slider-medic .slide-13 .typo-adds-on,
-    .slider-medic .slide-14 .typo-adds-on,
-    .slider-medic .slide-15 .typo-adds-on,
-    .slider-medic .slide-16 .typo-adds-on {
-        width: 750px
-    }
+
     .with-appointment-board .make-app-inner {
         margin: auto;
         transform: translate(-50%, 0);
@@ -2161,22 +2100,7 @@ header {
     .whatwedo-dermatology img {
         margin-top: -30px
     }
-    .text-below-slider {
-        padding: 20px 0
-    }
-    .text-below-slider .text-left {
-        display: block;
-        text-align: center;
-        margin-left: auto;
-        margin-right: auto
-    }
-    .text-below-slider .text-right {
-        display: block;
-        text-align: center;
-        margin-top: 15px;
-        margin-left: auto;
-        margin-right: auto
-    }
+
     .whatwedo-dermatology .whatwedo-dermatology-before-img {
         float: left
     }
@@ -2576,19 +2500,7 @@ header {
     .testimonials {
         position: relative
     }
-    .testimonials .slider-testimonials .owl-dot {
-        display: none;
-        margin-right: 0;
-        border: 2px solid #EEE;
-        box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.5)
-    }
-    .testimonials .slider-testimonials .owl-dot.active {
-        display: block
-    }
-    .testimonials .slider-testimonials .testimonial-graph {
-        font-size: 24px;
-        padding: 0 30px
-    }
+
     .testimonials .nav-testimonial {
         display: block;
         position: absolute;
@@ -2654,131 +2566,7 @@ header {
     .wrapper-mobile-nav .header-topbar {
         padding: 14px 0
     }
-    .slider-medic .slide-1 .item,
-    .slider-medic .slide-2 .item,
-    .slider-medic .slide-4 .item,
-    .slider-medic .slide-5 .item,
-    .slider-medic .slide-6 .item,
-    .slider-medic .slide-7 .item,
-    .slider-medic .slide-8 .item,
-    .slider-medic .slide-10 .item {
-        position: relative;
-        z-index: 1
-    }
-    .slider-medic .slide-1 .item:after,
-    .slider-medic .slide-2 .item:after,
-    .slider-medic .slide-4 .item:after,
-    .slider-medic .slide-5 .item:after,
-    .slider-medic .slide-6 .item:after,
-    .slider-medic .slide-7 .item:after,
-    .slider-medic .slide-8 .item:after,
-    .slider-medic .slide-10 .item:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(255, 255, 255, 0.7);
-        z-index: -1
-    }
-    .slider-medic .slide-2 .typo-adds-on,
-    .slider-medic .slide-10 .typo-adds-on {
-        margin-right: 0;
-        right: 0
-    }
-    .slider-medic .sub-header {
-        font-size: 18px
-    }
-    .slider-medic .header {
-        font-size: 40px
-    }
-    .slider-medic .description {
-        margin-bottom: 20px
-    }
-    .slider-medic .slide-1,
-    .slider-medic .slide-1 .item,
-    .slider-medic .slide-2,
-    .slider-medic .slide-2 .item,
-    .slider-medic .slide-3,
-    .slider-medic .slide-3 .item,
-    .slider-medic .slide-4,
-    .slider-medic .slide-4 .item,
-    .slider-medic .slide-5,
-    .slider-medic .slide-5 .item,
-    .slider-medic .slide-6,
-    .slider-medic .slide-6 .item,
-    .slider-medic .slide-7,
-    .slider-medic .slide-7 .item,
-    .slider-medic .slide-8,
-    .slider-medic .slide-8 .item,
-    .slider-medic .slide-9,
-    .slider-medic .slide-9 .item,
-    .slider-medic .slide-10,
-    .slider-medic .slide-10 .item,
-    .slider-medic .slide-11,
-    .slider-medic .slide-11 .item,
-    .slider-medic .slide-12,
-    .slider-medic .slide-12 .item,
-    .slider-medic .slide-13,
-    .slider-medic .slide-13 .item,
-    .slider-medic .slide-14,
-    .slider-medic .slide-14 .item,
-    .slider-medic .slide-15,
-    .slider-medic .slide-15 .item,
-    .slider-medic .slide-16,
-    .slider-medic .slide-16 .item {
-        height: 302px
-    }
-    .slider-medic .slide-9 .item,
-    .slider-medic .slide-15 .item,
-    .slider-medic .slide-16 .item {
-        position: relative;
-        z-index: 1
-    }
-    .slider-medic .slide-9 .item:after,
-    .slider-medic .slide-15 .item:after,
-    .slider-medic .slide-16 .item:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.3);
-        z-index: -1
-    }
-    .slider-medic .slide-9 .typo-adds-on,
-    .slider-medic .slide-15 .typo-adds-on,
-    .slider-medic .slide-16 .typo-adds-on {
-        width: 100%
-    }
-    .slider-medic .slide-11 .item,
-    .slider-medic .slide-12 .item,
-    .slider-medic .slide-13 .item,
-    .slider-medic .slide-14 .item {
-        position: relative;
-        z-index: 1
-    }
-    .slider-medic .slide-11 .item:after,
-    .slider-medic .slide-12 .item:after,
-    .slider-medic .slide-13 .item:after,
-    .slider-medic .slide-14 .item:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(255, 255, 255, 0.7);
-        z-index: -1
-    }
-    .slider-medic .slide-11 .typo-adds-on,
-    .slider-medic .slide-12 .typo-adds-on,
-    .slider-medic .slide-13 .typo-adds-on,
-    .slider-medic .slide-14 .typo-adds-on {
-        width: 100%
-    }
+
     .with-appointment-board .make-app-inner {
         position: relative;
         -webkit-transform: none;
@@ -2792,9 +2580,7 @@ header {
         padding: 0 30px;
         font-weight: bold
     }
-    .slider-howwedo {
-        width: 100%
-    }
+
     .btn-wrapper.back-to-top {
         bottom: 10px;
         right: 10px
