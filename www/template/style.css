@@ -2375,10 +2375,17 @@ textarea:focus:-ms-input-placeholder {
 
 
 .prod-details .prod-price ins {
+    font-size: 20px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+}
+
+.prod-details .prod_price-prod-page ins {
     font-size: 36px;
     font-family: 'Oswald', sans-serif;
     font-weight: 500;
 }
+
 .discriptions > p {
     margin-bottom: 25px;
 }

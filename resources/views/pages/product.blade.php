@@ -106,7 +106,7 @@
 
                                 </div>
 
-                                <div class="prod-price font-2 fsz-26">
+                                <div class="prod-price prod_price-prod-page font-2 fsz-26">
                                     <ins>{{ $model->product->price[0]->price }} грн</ins>
 
                                     @if($model->product->promotions != null && $model->product->promotions->count() > 0)
