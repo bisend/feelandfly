@@ -252,10 +252,11 @@
                             <div class="smoll-cart_body">
                                 <div class="smoll-cart_products">
                                     <div class="cart-product-item" v-for="cartItem in cartItems">
-                                        <a v-bind:href="'/product/' + cartItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+
                                             <div class="prod-item_img">
-                                                <img v-bind:src="cartItem.product.images[0].small" v-bind:alt="cartItem.product.name">
-                                                <div class="position_lable">
+                                                <a v-bind:href="'/product/' + cartItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+                                                    <img v-bind:src="cartItem.product.images[0].small" v-bind:alt="cartItem.product.name">
+                                                    <div class="position_lable">
                                                         <div class="lable_smoll">
                                                             <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1"
                                                                  class="prod-tag-1 font-2">
@@ -271,8 +272,9 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </a>
                                             </div>
-                                        </a>
+
                                         <div class="prod-item_detail">
                                             <a class="prod-title block-inline"
                                                v-bind:href="'/product/' + cartItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
