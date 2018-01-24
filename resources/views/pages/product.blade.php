@@ -87,7 +87,7 @@
                                     <h1>{{ $model->product->name }}</h1>
                                 </div>
                                 <div class="block-inline">
-                                    <div class="rating pull-right">
+                                    <div class="rating pull-left">
                                         @for($i = 1; $i <= 5; $i++)
                                             @if($model->product->rating != null)
                                                 @if($i <= $model->product->rating)
@@ -100,7 +100,7 @@
                                             @endif
                                         @endfor
                                     </div>
-                                    <div class="scroll_to_comments pull-left">
+                                    <div class="scroll_to_comments pull-right">
                                         <span>0 Відгуків</span>
                                     </div>
 
