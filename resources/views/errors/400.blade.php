@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- CONTENT AREA -->
-    <article>
+    <article class="margin-after-header">
 
 
         <!-- ERROR PAGE ---------------------------------------------------------------- -->
