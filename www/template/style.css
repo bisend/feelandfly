@@ -5839,3 +5839,6 @@ textarea.incorrect-field:-ms-input-placeholder {
     margin-left: 7px;
 }
 
+.no-flex-title{
+    display: block;
+}

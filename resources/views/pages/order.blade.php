@@ -7,7 +7,7 @@
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">
             <div class="theme-container container ">
-                <div class="site-breadcumb white-clr">
+                <div class="site-breadcumb white-clr no-flex-title">
 
                     <!--<div class="edit-order">-->
                     <!--<a class="theme-btn btn-black" href="#"> Замовити </a>-->
