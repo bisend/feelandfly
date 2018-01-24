@@ -23,7 +23,7 @@
                                 <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
                                     <div class="owl-carousel sync1 pb-25 product-preview-images-big">
                                         <div class="item" v-for="image in categoryProductPreview.product.images">
-                                            <img v-bind:src="image.big">
+                                            <img v-bind:src="image.big" v-bind:alt="categoryProductPreview.product.name">
 
                                             <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].id == 1"
                                                  class="prod-tag-1 font-2">
@@ -49,7 +49,7 @@
 
                                     <div class="owl-carousel single-prod-thumb sync2 nav-2 product-preview-images-small">
                                         <div class="item" v-for="image in categoryProductPreview.product.images">
-                                            <img v-bind:src="image.small">
+                                            <img v-bind:src="image.small" v-bind:alt="categoryProductPreview.product.name">
                                         <span class="transparent">
                                             <img src="/img/template/icons/plus.png" alt="view">
                                         </span>
@@ -81,26 +81,21 @@
                                                 <li>{{ trans('product.stock') }}:
                                                 <span v-cloak v-for="productSize in categoryProductPreview.product.product_sizes"
                                                       v-if="productSize.size_id == categoryProductPreview.currentSizeId">
-                                                {{--{{ $model->product->product_sizes[0]->stocks[0]->stock }}--}}
                                                     @{{ productSize.stocks[0].stock }}
                                                 </span>
                                                 </li>
-                                                {{--<li>Материал: Полиэстер с водоотталкивающей и полиуретановой--}}
-                                                    {{--пропиткой для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>--}}
-                                                {{--<li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>--}}
-                                                {{--<li>Металлические нержавеющие молнии;</li>--}}
-                                                {{--<li>Два боковых, один внутренний, один карман на молнии на плече;</li>--}}
-                                                {{--<li>Сверху и снизу расположена трикотажная резинка с компонентом эластана,--}}
-                                                    {{--что позволяет резинке не терять с временем форму и не закатываться;</li>--}}
-                                                {{--<li>На бомбере расположены три вышитых патча;</li>--}}
-                                                {{--<li>Весенний / Летний сезон.</li>--}}
+                                                <li v-for="property in categoryProductPreview.product.properties" v-if="property.slug != 'razmer'">
+                                                    @{{ property.property_name }}: @{{ property.property_value }}
+                                                </li>
                                                 <li>Артикул: @{{ categoryProductPreview.product.vendor_code }}</li>
                                             </ul>
                                         </div>
                                         <div class="prod-attributes">
                                             <ul class="choose-clr list-inline border-hover">
+                                                <div class="prod-color_title">
+                                                    {{ trans('email.color') }} : <span v-cloak>@{{ categoryProductPreview.product.color.name }}</span>
+                                                </div>
                                                 <li v-for="relatedProduct in categoryProductPreview.product.product_group.products">
-                                                    {{--<a v-bind:href="related_product.color.slug" class="black-bg"></a>--}}
                                                     <a v-if="relatedProduct.color.id === categoryProductPreview.product.color.id"
                                                        class="active"
                                                        :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
@@ -110,10 +105,16 @@
                                                 </li>
                                             </ul>
                                             <ul class="choose-size list-inline border-hover">
+                                                <div class="prod-size_title">
+                                                    {{ trans('email.size') }} :
+                                                    <span v-for="size in categoryProductPreview.product.sizes" v-if="size.id == categoryProductPreview.currentSizeId" v-cloak>
+                                                        @{{ size.name }}
+                                                    </span>
+                                                </div>
                                                 <li v-for="(size, index) in categoryProductPreview.product.sizes">
-                                                    <a v-on:click="changeCurrentSizeId(size.id)"
+                                                    <a v-on:click.prevent="changeCurrentSizeId(size.id)"
                                                         :class="{active : categoryProductPreview.currentSizeId == size.id}"
-                                                        href="javascript:void(0);">
+                                                        href="#">
                                                         @{{ size.name }}
                                                     </a>
                                                 </li>
@@ -133,8 +134,8 @@
                                                 </li>
                                                 <li>
                                                     <a class="theme-btn btn-black small-btn"
-                                                       v-on:click="addToCart(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, categoryProductPreview.count)"
-                                                       href="javascript:void(0);">
+                                                       v-on:click.prevent="addToCart(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, categoryProductPreview.count)"
+                                                       href="#">
                                                     <span v-cloak
                                                           v-if="!findWhere(cartItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})">
                                                         {{ trans('layout.add_to_cart') }}
@@ -149,8 +150,8 @@
                                                         <a v-cloak
                                                            v-if="!findWhere(wishListItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})"
                                                            class="fa fa-heart meta-icon"
-                                                           v-on:click="addToWishList(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, wishList.id)"
-                                                           href="javascript:void(0);"></a>
+                                                           v-on:click.prevent="addToWishList(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, wishList.id)"
+                                                           href="#"></a>
                                                         <a v-cloak v-else
                                                            class="fa fa-check meta-icon meta-icon-in-wish"
                                                            href="{{ url_wish_list($model->language) }}"></a>
@@ -158,7 +159,7 @@
                                                         <a class="fa fa-heart meta-icon"
                                                            data-toggle="modal"
                                                            data-target="#login-popup"
-                                                           href="javascript:void(0);">
+                                                           href="#">
                                                         </a>
                                                     @endif
                                                 </li>
@@ -172,7 +173,6 @@
                         </div>
                     </div>
                 </section>
-                {{--<img v-bind:src="path" alt="">--}}
             </div>
 
             <!--Breadcrumb Section Start-->
@@ -378,7 +378,7 @@
                                                             <a class="img-hover"
                                                                href="{{ url_product($categoryProduct->slug, $model->language) }}">
                                                                 <div class="photo-cat_fit">
-                                                                    <img alt="product"
+                                                                    <img alt="{{ $categoryProduct->name }}"
                                                                          src="{{ $categoryProduct->images[0]->medium }}">
                                                                 </div>
 
@@ -403,10 +403,8 @@
                                                             @endif
 
                                                             <a class="caption-link meta-icon"
-                                                               {{--data-toggle="modal"--}}
-                                                               {{--data-target="#prod-preview-test"--}}
-                                                               href="javascript:void(0);"
-                                                               v-on:click="changeCategoryProductPreview({{$counter}})">
+                                                               href="#"
+                                                               v-on:click.prevent="changeCategoryProductPreview({{$counter}})">
                                                                 <span class="fa fa-eye"></span>
                                                             </a>
                                                         </div>
@@ -437,7 +435,7 @@
                                                                             <span class="star"></span>
                                                                         @endif
                                                                     @else
-                                                                        <span class="star active"></span>
+                                                                        <span class="star"></span>
                                                                     @endif
                                                                 @endfor
                                                             </div>
@@ -447,8 +445,8 @@
                                                             <ul class="prod-meta">
                                                                 <li>
                                                                     <a class="theme-btn btn-black"
-                                                                       v-on:click="addToCart({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, 1)"
-                                                                       href="javascript:void(0);">
+                                                                       v-on:click.prevent="addToCart({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, 1)"
+                                                                       href="#">
                                                                     <span v-cloak
                                                                           v-if="!findWhere(cartItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})">
                                                                         {{ trans('layout.add_to_cart') }}
@@ -463,8 +461,8 @@
                                                                         <a v-cloak
                                                                            v-if="!findWhere(wishListItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})"
                                                                            class="fa fa-heart meta-icon"
-                                                                           v-on:click="addToWishList({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, wishList.id)"
-                                                                           href="javascript:void(0);"></a>
+                                                                           v-on:click.prevent="addToWishList({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, wishList.id)"
+                                                                           href="#"></a>
                                                                         <a v-cloak v-else
                                                                            class="fa fa-check meta-icon meta-icon-in-wish"
                                                                            href="{{ url_wish_list($model->language) }}"></a>
@@ -472,7 +470,7 @@
                                                                         <a class="fa fa-heart meta-icon"
                                                                            data-toggle="modal"
                                                                            data-target="#login-popup"
-                                                                           href="javascript:void(0);">
+                                                                           href="#">
                                                                         </a>
                                                                     @endif
                                                                 </li>
@@ -492,27 +490,20 @@
                                                                             @endif
                                                                         </li>
                                                                     @endforeach
-
-
-                                                                    {{--<li> <a class="black-bg" href="#"></a> </li>--}}
-                                                                    {{--<li> <a class="gray-bg" href="#"></a> </li>--}}
-                                                                    {{--<li> <a class="red-bg" href="#"></a> </li>--}}
-                                                                    {{--<li> <a class="yellow-bg active" href="#"></a> </li>--}}
-                                                                    {{--<li> <a class="green1-bg" href="#"></a> </li>--}}
                                                                 </ul>
                                                                 <ul class="choose-size list-inline border-hover">
                                                                     @php($counterSize = 0)
                                                                     @foreach($categoryProduct->sizes as $size)
                                                                         <li>
                                                                             @if($counterSize == 0)
-                                                                                <a v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                                <a v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
                                                                                    :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
-                                                                                   href="javascript:void(0);">
+                                                                                   href="#">
                                                                                     {{ $size->name }}
                                                                                 </a>
                                                                             @else
-                                                                                <a href="javascript:void(0);"
-                                                                                   v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                                <a href="#"
+                                                                                   v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
                                                                                    :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}">
                                                                                     {{ $size->name }}
                                                                                 </a>
@@ -520,7 +511,6 @@
                                                                         </li>
                                                                         @php($counterSize++)
                                                                     @endforeach
-                                                                    {{--<li> <a href="#" class="active"> M </a> </li>--}}
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -549,9 +539,6 @@
                     <div class="col-sm-12">
                         <div class="no_prod-filters">
                             <h1 style="text-align: center">{{ trans('layout.no_products') }}</h1>
-                            {{--<h2 style="text-align: center;  margin-top: 50px">--}}
-                                {{----}}
-                            {{--</h2>--}}
                             <div class="no_prod-filters-links">
                                 <a href="{{ redirect()->back()->getTargetUrl() }}">
                                     <i class="fa fa-chevron-left" aria-hidden="true"></i> Назад

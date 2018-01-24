@@ -203,6 +203,26 @@ class ProductRepository
             'promotions' => function ($query) {
                 $query->orderByRaw('promotions.priority desc');
             },
+            'properties' => function ($query) use ($language) {
+                $query->select([
+                    'properties.id',
+                    'properties.product_id',
+                    'properties.property_name_id',
+                    'properties.property_value_id',
+                    'properties.priority',
+                    'property_names.id',
+                    'property_values.id',
+                    'property_names.slug',
+                    "property_names.name_$language as property_name",
+                    "property_values.name_$language as property_value",
+                ]);
+                $query->join('property_names', function ($join) {
+                    $join->on('properties.property_name_id', '=', 'property_names.id');
+                });
+                $query->join('property_values', function ($join) {
+                    $join->on('properties.property_value_id', '=', 'property_values.id');
+                });
+            }
         ])->join('product_prices', function ($join) use ($userTypeId) {
             $join->on('products.id', '=', 'product_prices.product_id')
                 ->where('product_prices.user_type_id', '=', $userTypeId);
@@ -618,6 +638,26 @@ class ProductRepository
             'promotions' => function ($query) {
                 $query->orderByRaw('promotions.priority desc');
             },
+            'properties' => function ($query) use ($language) {
+                $query->select([
+                    'properties.id',
+                    'properties.product_id',
+                    'properties.property_name_id',
+                    'properties.property_value_id',
+                    'properties.priority',
+                    'property_names.id',
+                    'property_values.id',
+                    'property_names.slug',
+                    "property_names.name_$language as property_name",
+                    "property_values.name_$language as property_value",
+                ]);
+                $query->join('property_names', function ($join) {
+                    $join->on('properties.property_name_id', '=', 'property_names.id');
+                });
+                $query->join('property_values', function ($join) {
+                    $join->on('properties.property_value_id', '=', 'property_values.id');
+                });
+            }
         ]);
 
         if ($model->priceMin && $model->priceMax)
@@ -703,10 +743,10 @@ class ProductRepository
 
         return Product::with([
             'images',
-            'color' => function ($query) use ($language) {
+            'color' => function ($query) use ($model) {
                 $query->select([
                     'colors.id',
-                    "colors.name_$language as name",
+                    "colors.name_$model->language as name",
                     'colors.slug',
                     'colors.html_code'
                 ]);
@@ -742,6 +782,26 @@ class ProductRepository
             'promotions' => function ($query) {
                 $query->orderByRaw('promotions.priority desc');
             },
+            'properties' => function ($query) use ($model) {
+                $query->select([
+                    'properties.id',
+                    'properties.product_id',
+                    'properties.property_name_id',
+                    'properties.property_value_id',
+                    'properties.priority',
+                    'property_names.id',
+                    'property_values.id',
+                    'property_names.slug',
+                    "property_names.name_$model->language as property_name",
+                    "property_values.name_$model->language as property_value",
+                ]);
+                $query->join('property_names', function ($join) {
+                    $join->on('properties.property_name_id', '=', 'property_names.id');
+                });
+                $query->join('property_values', function ($join) {
+                    $join->on('properties.property_value_id', '=', 'property_values.id');
+                });
+            }
         ])->join('product_prices', function ($join) use ($model) {
             $join->on('products.id', '=', 'product_prices.product_id')
                 ->where('product_prices.user_type_id', '=', $model->userTypeId);
@@ -820,10 +880,10 @@ class ProductRepository
 
         return Product::with([
             'images',
-            'color' => function ($query) use ($language) {
+            'color' => function ($query) use ($model) {
                 $query->select([
                     'colors.id',
-                    "colors.name_$language as name",
+                    "colors.name_$model->language as name",
                     'colors.slug',
                     'colors.html_code'
                 ]);
@@ -1066,6 +1126,26 @@ class ProductRepository
             'promotions' => function ($query) use ($model) {
                 $query->where('products_promotions.promotion_id', '=', 1);
             },
+            'properties' => function ($query) use ($model) {
+                $query->select([
+                    'properties.id',
+                    'properties.product_id',
+                    'properties.property_name_id',
+                    'properties.property_value_id',
+                    'properties.priority',
+                    'property_names.id',
+                    'property_values.id',
+                    'property_names.slug',
+                    "property_names.name_$model->language as property_name",
+                    "property_values.name_$model->language as property_value",
+                ]);
+                $query->join('property_names', function ($join) {
+                    $join->on('properties.property_name_id', '=', 'property_names.id');
+                });
+                $query->join('property_values', function ($join) {
+                    $join->on('properties.property_value_id', '=', 'property_values.id');
+                });
+            }
         ])->join('product_prices', function ($join) use ($model) {
             $join->on('products.id', '=', 'product_prices.product_id')
                 ->where('product_prices.user_type_id', '=', $model->userTypeId);
@@ -1136,6 +1216,26 @@ class ProductRepository
             'promotions' => function ($query) use ($model) {
                 $query->where('products_promotions.promotion_id', '=', 3);
             },
+            'properties' => function ($query) use ($model) {
+                $query->select([
+                    'properties.id',
+                    'properties.product_id',
+                    'properties.property_name_id',
+                    'properties.property_value_id',
+                    'properties.priority',
+                    'property_names.id',
+                    'property_values.id',
+                    'property_names.slug',
+                    "property_names.name_$model->language as property_name",
+                    "property_values.name_$model->language as property_value",
+                ]);
+                $query->join('property_names', function ($join) {
+                    $join->on('properties.property_name_id', '=', 'property_names.id');
+                });
+                $query->join('property_values', function ($join) {
+                    $join->on('properties.property_value_id', '=', 'property_values.id');
+                });
+            }
         ])->join('product_prices', function ($join) use ($model) {
             $join->on('products.id', '=', 'product_prices.product_id')
                 ->where('product_prices.user_type_id', '=', $model->userTypeId);
@@ -1207,6 +1307,26 @@ class ProductRepository
             'promotions' => function ($query) use ($model) {
                 $query->where('products_promotions.promotion_id', '=', 2);
             },
+            'properties' => function ($query) use ($model) {
+                $query->select([
+                    'properties.id',
+                    'properties.product_id',
+                    'properties.property_name_id',
+                    'properties.property_value_id',
+                    'properties.priority',
+                    'property_names.id',
+                    'property_values.id',
+                    'property_names.slug',
+                    "property_names.name_$model->language as property_name",
+                    "property_values.name_$model->language as property_value",
+                ]);
+                $query->join('property_names', function ($join) {
+                    $join->on('properties.property_name_id', '=', 'property_names.id');
+                });
+                $query->join('property_values', function ($join) {
+                    $join->on('properties.property_value_id', '=', 'property_values.id');
+                });
+            }
         ])->join('product_prices', function ($join) use ($model) {
             $join->on('products.id', '=', 'product_prices.product_id')
                 ->where('product_prices.user_type_id', '=', $model->userTypeId);
@@ -1301,6 +1421,26 @@ class ProductRepository
             'markers.product.promotions' => function ($query) {
                 $query->orderByRaw('promotions.priority desc');
             },
+            'markers.product.properties' => function ($query) use ($model) {
+                $query->select([
+                    'properties.id',
+                    'properties.product_id',
+                    'properties.property_name_id',
+                    'properties.property_value_id',
+                    'properties.priority',
+                    'property_names.id',
+                    'property_values.id',
+                    'property_names.slug',
+                    "property_names.name_$model->language as property_name",
+                    "property_values.name_$model->language as property_value",
+                ]);
+                $query->join('property_names', function ($join) {
+                    $join->on('properties.property_name_id', '=', 'property_names.id');
+                });
+                $query->join('property_values', function ($join) {
+                    $join->on('properties.property_value_id', '=', 'property_values.id');
+                });
+            }
         ])
             ->whereHas('markers.product', function ($query) {
             $query->where('is_visible', '=', true);

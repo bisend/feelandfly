@@ -61,7 +61,6 @@
                                 <div class="block-inline">
                                     <div class="rating pull-right">
                                         <span v-for="i in 5" v-if="i <= similarProductPreview.product.rating" class="star active"></span>
-                                        {{--<span v-else-if="!similarProductPreview.product.rating" class="star active"></span>--}}
                                         <span v-else class="star"></span>
                                     </div>
                                     <div class="prod-price font-2 pull-left fsz-16">
@@ -109,9 +108,9 @@
                                             </span>
                                         </div>
                                         <li v-for="(size, index) in similarProductPreview.product.sizes">
-                                            <a v-on:click="changeCurrentSizeId(size.id)"
+                                            <a v-on:click.prevent="changeCurrentSizeId(size.id)"
                                                 :class="{active : similarProductPreview.currentSizeId == size.id}"
-                                                href="javascript:void(0);">
+                                                href="#">
                                                 @{{ size.name }}
                                             </a>
                                         </li>
@@ -131,8 +130,8 @@
                                         </li>
                                         <li>
                                             <a class="theme-btn btn-black small-btn"
-                                               v-on:click="addToCart(similarProductPreview.product.id, similarProductPreview.currentSizeId, similarProductPreview.count)"
-                                               href="javascript:void(0);">
+                                               v-on:click.prevent="addToCart(similarProductPreview.product.id, similarProductPreview.currentSizeId, similarProductPreview.count)"
+                                               href="#">
                                                     <span v-cloak
                                                           v-if="!findWhere(cartItems, {'productId': similarProductPreview.product.id, 'sizeId': similarProductPreview.currentSizeId})">
                                                         {{ trans('layout.add_to_cart') }}
@@ -147,8 +146,8 @@
                                                 <a v-cloak
                                                    v-if="!findWhere(wishListItems, {'productId': similarProductPreview.product.id, 'sizeId': similarProductPreview.currentSizeId})"
                                                    class="fa fa-heart meta-icon"
-                                                   v-on:click="addToWishList(similarProductPreview.product.id, similarProductPreview.currentSizeId, wishList.id)"
-                                                   href="javascript:void(0);"></a>
+                                                   v-on:click.prevent="addToWishList(similarProductPreview.product.id, similarProductPreview.currentSizeId, wishList.id)"
+                                                   href="#"></a>
                                                 <a v-cloak v-else
                                                    class="fa fa-check meta-icon meta-icon-in-wish"
                                                    href="{{ url_wish_list($model->language) }}"></a>
@@ -156,7 +155,7 @@
                                                 <a class="fa fa-heart meta-icon"
                                                    data-toggle="modal"
                                                    data-target="#login-popup"
-                                                   href="javascript:void(0);">
+                                                   href="#">
                                                 </a>
                                             @endif
                                         </li>
@@ -170,7 +169,6 @@
                 </div>
             </div>
         </section>
-        {{--<img v-bind:src="path" alt="">--}}
     </div>
     {{--SIMILAR PRODUCT PREVIEW--}}
 
@@ -206,8 +204,8 @@
 
                             </a>
                             <a class="caption-link meta-icon"
-                               href="javascript:void(0);"
-                               v-on:click="changeSimilarProductPreview({{$counter}})">
+                               href="#"
+                               v-on:click.prevent="changeSimilarProductPreview({{$counter}})">
                                 <span class="fa fa-eye"></span>
                             </a>
                         </div>
@@ -227,7 +225,7 @@
                                                 <span class="star"></span>
                                             @endif
                                         @else
-                                            <span class="star active"></span>
+                                            <span class="star"></span>
                                         @endif
                                     @endfor
                                 </div>
@@ -249,9 +247,6 @@
                                             {{ trans('product.more_info') }}
                                         </a>
                                     </li>
-                                    {{--<li>--}}
-                                        {{--<a class="fa fa-heart meta-icon" href="#"></a>--}}
-                                    {{--</li>--}}
                                 </ul>
                             </div>
                         </figcaption>

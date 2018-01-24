@@ -71,7 +71,7 @@
                             <div class="owl-carousel single-prod-thumb sync2 nav-2 item-smoll">
                                 @foreach($model->product->images as $image)
                                     <div class="item">
-                                        <img src="{{ $image->small }}" alt="product">
+                                        <img src="{{ $image->small }}" alt="{{ $model->product->name }}">
                                         <span class="transparent">
                                             <img src="/img/template/icons/plus.png" alt="view">
                                         </span>
@@ -96,7 +96,7 @@
                                                     <span class="star"></span>
                                                 @endif
                                             @else
-                                                <span class="star active"></span>
+                                                <span class="star"></span>
                                             @endif
                                         @endfor
                                     </div>
@@ -165,14 +165,14 @@
                                         @foreach($model->product->sizes as $size)
                                             <li>
                                                 @if($counterSize == 0)
-                                                    <a href="javascript:void(0);"
-                                                       v-on:click="changeSizeId('{{ $size->id }}')"
+                                                    <a href="#"
+                                                       v-on:click.prevent="changeSizeId('{{ $size->id }}')"
                                                        :class="{active : singleProduct.sizeId == {{$size->id}}}">
                                                         {{ $size->name }}
                                                     </a>
                                                 @else
-                                                    <a href="javascript:void(0);"
-                                                       v-on:click="changeSizeId('{{ $size->id }}')"
+                                                    <a href="#"
+                                                       v-on:click.prevent="changeSizeId('{{ $size->id }}')"
                                                        :class="{active : singleProduct.sizeId == {{$size->id}}}">
                                                         {{ $size->name }}
                                                     </a>
@@ -196,8 +196,8 @@
                                         </li>
                                         <li>
                                             <a class="theme-btn btn-black small-btn"
-                                               v-on:click="addToCart(singleProduct.productId, singleProduct.sizeId, singleProduct.count)"
-                                               href="javascript:void(0);">
+                                               v-on:click.prevent="addToCart(singleProduct.productId, singleProduct.sizeId, singleProduct.count)"
+                                               href="#">
                                                 <span v-cloak
                                                       v-if="!findWhere(cartItems, {'productId': singleProduct.productId, 'sizeId': singleProduct.sizeId})">
                                                     {{ trans('layout.add_to_cart') }}
@@ -212,8 +212,8 @@
                                                 <a v-cloak
                                                    v-if="!findWhere(wishListItems, {'productId': singleProduct.productId, 'sizeId': singleProduct.sizeId})"
                                                    class="fa fa-heart meta-icon"
-                                                   v-on:click="addToWishList(singleProduct.productId, singleProduct.sizeId, wishList.id)"
-                                                   href="javascript:void(0);"></a>
+                                                   v-on:click.prevent="addToWishList(singleProduct.productId, singleProduct.sizeId, wishList.id)"
+                                                   href="#"></a>
                                                 <a v-cloak v-else
                                                    class="fa fa-check meta-icon meta-icon-in-wish"
                                                    href="{{ url_wish_list($model->language) }}"></a>
@@ -221,7 +221,7 @@
                                                 <a class="fa fa-heart meta-icon"
                                                    data-toggle="modal"
                                                    data-target="#login-popup"
-                                                   href="javascript:void(0);">
+                                                   href="#">
                                                 </a>
                                             @endif
                                         </li>
@@ -247,8 +247,8 @@
                             <div id="prod-tab-2" class="tab-pane fade">
                                 <div class="comment-count">
                                     <a v-if="totalReviewsCount >= 3"
-                                       href="javascript:void(0);"
-                                       v-on:click="scrollToReview()"
+                                       href="#"
+                                       v-on:click.prevent="scrollToReview()"
                                        class="font-2">
                                         {{ trans('product.leave_review') }}
                                     </a>

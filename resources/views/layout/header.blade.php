@@ -119,10 +119,10 @@
         <div class="container">
             <div class="topbar-left topbar-left-nav">
                 <ul>
-                    <li><a href="javascript:void(0);">{{ trans('header.about_us') }}</a></li>
-                    <li><a href="javascript:void(0);">{{ trans('header.contacts') }}</a></li>
-                    <li><a href="javascript:void(0);">{{ trans('header.cooperation') }}</a></li>
-                    <li><a href="javascript:void(0);">{{ trans('header.payment_delivery') }}</a></li>
+                    <li><a href="#">{{ trans('header.about_us') }}</a></li>
+                    <li><a href="#">{{ trans('header.contacts') }}</a></li>
+                    <li><a href="#">{{ trans('header.cooperation') }}</a></li>
+                    <li><a href="#">{{ trans('header.payment_delivery') }}</a></li>
                 </ul>
             </div>
             <div class="topbar-right">
@@ -199,12 +199,12 @@
                         </ul>
                     @else
                         <li>
-                            <a data-toggle="modal" data-target="#login-popup" href="javascript:void(0);">
+                            <a data-toggle="modal" data-target="#login-popup" href="#">
                                 {{ trans('header.log_in') }}
                             </a>
                         </li>
                         <li>
-                            <a data-toggle="modal" data-target="#register-popup" href="javascript:void(0);">
+                            <a data-toggle="modal" data-target="#register-popup" href="#">
                                 {{ trans('header.register') }}
                             </a>
                         </li>
@@ -252,28 +252,27 @@
                             <div class="smoll-cart_body">
                                 <div class="smoll-cart_products">
                                     <div class="cart-product-item" v-for="cartItem in cartItems">
-                                        <div class="prod-item_img">
-                                            {{--<img v-if="cartItem.product.images.length > 0" v-bind:src="cartItem.product.images[0].small" alt="">--}}
-                                            {{--<img v-else src="/img/product/small/no_photo.jpg" alt="">--}}
-                                            <img v-bind:src="cartItem.product.images[0].small" alt="">
-                                            <div class="position_lable">
-                                                <div class="lable_smoll">
-                                                    <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1"
-                                                         class="prod-tag-1 font-2">
-                                                        <span> -@{{ cartItem.product.price[0].discount }}% </span>
+                                        <a v-bind:href="'/product/' + cartItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+                                            <div class="prod-item_img">
+                                                <img v-bind:src="cartItem.product.images[0].small" v-bind:alt="cartItem.product.name">
+                                                <div class="position_lable">
+                                                        <div class="lable_smoll">
+                                                            <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1"
+                                                                 class="prod-tag-1 font-2">
+                                                                <span> -@{{ cartItem.product.price[0].discount }}% </span>
+                                                            </div>
+                                                            <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 2"
+                                                                 class="prod-tag-1 font-2 prod-tag-green">
+                                                                <span> NEW </span>
+                                                            </div>
+                                                            <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 3"
+                                                                 class="prod-tag-1 font-2 prod-tag-violet">
+                                                                <span> TOP </span>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 2"
-                                                         class="prod-tag-1 font-2 prod-tag-green">
-                                                        <span> NEW </span>
-                                                    </div>
-                                                    <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 3"
-                                                         class="prod-tag-1 font-2 prod-tag-violet">
-                                                        <span> TOP </span>
-                                                    </div>
-                                                </div>
                                             </div>
-
-                                        </div>
+                                        </a>
                                         <div class="prod-item_detail">
                                             <a class="prod-title block-inline"
                                                v-bind:href="'/product/' + cartItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
@@ -312,7 +311,7 @@
                                         {{ trans('cart.confirm') }}
                                     </a>
                                     <a class="theme-btn btn-black"
-                                       href="javascript:void(0);"
+                                       href="#"
                                        data-toggle="modal" data-target=".big-cart">
                                         {{ trans('cart.open') }}
                                     </a>

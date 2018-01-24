@@ -26,8 +26,7 @@
                                     <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
                                         <div class="owl-carousel sync1 pb-25 product-preview-images-big">
                                             <div class="item" v-for="image in mainSliderPreview.product.images">
-                                                <img v-bind:src="image.big">
-
+                                                <img v-bind:src="image.big" v-bind:alt="mainSliderPreview.product.name">
 
                                                 <div v-if="mainSliderPreview.product.promotions != null && mainSliderPreview.product.promotions.length > 0 && mainSliderPreview.product.promotions[0].id == 1"
                                                      class="prod-tag-1 font-2">
@@ -54,7 +53,7 @@
 
                                         <div class="owl-carousel single-prod-thumb sync2 nav-2 product-preview-images-small">
                                             <div class="item" v-for="image in mainSliderPreview.product.images">
-                                                <img v-bind:src="image.small">
+                                                <img v-bind:src="image.small" v-bind:alt="mainSliderPreview.product.name">
                                                 <span class="transparent">
                                                     <img src="/img/template/icons/plus.png" alt="view">
                                                 </span>
@@ -86,26 +85,21 @@
                                                     <li>{{ trans('product.stock') }}:
                                                     <span v-cloak v-for="productSize in mainSliderPreview.product.product_sizes"
                                                           v-if="productSize.size_id == mainSliderPreview.currentSizeId">
-                                                    {{--{{ $model->product->product_sizes[0]->stocks[0]->stock }}--}}
                                                         @{{ productSize.stocks[0].stock }}
                                                     </span>
                                                     </li>
-                                                    <li>Материал: Полиэстер с водоотталкивающей и полиуретановой
-                                                        пропиткой для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>
-                                                    <li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>
-                                                    <li>Металлические нержавеющие молнии;</li>
-                                                    <li>Два боковых, один внутренний, один карман на молнии на плече;</li>
-                                                    <li>Сверху и снизу расположена трикотажная резинка с компонентом эластана,
-                                                        что позволяет резинке не терять с временем форму и не закатываться;</li>
-                                                    <li>На бомбере расположены три вышитых патча;</li>
-                                                    <li>Весенний / Летний сезон.</li>
+                                                    <li v-for="property in mainSliderPreview.product.properties" v-if="property.slug != 'razmer'">
+                                                        @{{ property.property_name }}: @{{ property.property_value }}
+                                                    </li>
                                                     <li>Артикул: @{{ mainSliderPreview.product.vendor_code }}</li>
                                                 </ul>
                                             </div>
                                             <div class="prod-attributes">
                                                 <ul class="choose-clr list-inline border-hover">
+                                                    <div class="prod-color_title">
+                                                        {{ trans('email.color') }} : <span v-cloak>@{{ mainSliderPreview.product.color.name }}</span>
+                                                    </div>
                                                     <li v-for="relatedProduct in mainSliderPreview.product.product_group.products">
-                                                        {{--<a v-bind:href="related_product.color.slug" class="black-bg"></a>--}}
                                                         <a v-if="relatedProduct.color.id === mainSliderPreview.product.color.id"
                                                            class="active"
                                                            :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
@@ -115,6 +109,12 @@
                                                     </li>
                                                 </ul>
                                                 <ul class="choose-size list-inline border-hover">
+                                                    <div class="prod-size_title">
+                                                        {{ trans('email.size') }} :
+                                                        <span v-for="size in mainSliderPreview.product.sizes" v-if="size.id == mainSliderPreview.currentSizeId" v-cloak>
+                                                            @{{ size.name }}
+                                                        </span>
+                                                    </div>
                                                     <li v-for="(size, index) in mainSliderPreview.product.sizes">
                                                         <a v-on:click.prevent="changeCurrentSizeId(size.id)"
                                                            :class="{active : mainSliderPreview.currentSizeId == size.id}"
@@ -188,7 +188,7 @@
                     <div class="item">
                         <div class="carousel-inner white-mask">
                             <div class="big-slider-cover">
-                                <img src="{{ $slide->image->original }}" alt="slide">
+                                <img src="{{ $slide->image->original }}" alt="slide{{ $counter }}">
                             </div>
 
                             <div class="theme-container container">
@@ -260,7 +260,7 @@
                                                                                                 <span class="star"></span>
                                                                                             @endif
                                                                                         @else
-                                                                                            <span class="star active"></span>
+                                                                                            <span class="star"></span>
                                                                                         @endif
                                                                                     @endfor
                                                                                 </div>
@@ -273,7 +273,6 @@
                                                                                             {{ trans('home.detail') }}
                                                                                         </a>
                                                                                     </li>
-                                                                                    {{--<li> <a class="fa fa-heart meta-icon" href="#"></a> </li>--}}
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
@@ -319,7 +318,7 @@
                                 <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
                                     <div class="owl-carousel sync1 pb-25 product-preview-images-big">
                                         <div class="item" v-for="image in saleProductPreview.product.images">
-                                            <img v-bind:src="image.big">
+                                            <img v-bind:src="image.big" v-bind:alt="saleProductPreview.product.name">
                                             <div class="prod-tag-1 font-2">
                                                 <span> -@{{ saleProductPreview.product.price[0].discount }}% </span>
                                             </div>
@@ -334,7 +333,7 @@
 
                                     <div class="owl-carousel single-prod-thumb sync2 nav-2 product-preview-images-small">
                                         <div class="item" v-for="image in saleProductPreview.product.images">
-                                            <img v-bind:src="image.small">
+                                            <img v-bind:src="image.small" v-bind:alt="saleProductPreview.product.name">
                                         <span class="transparent">
                                             <img src="/img/template/icons/plus.png" alt="view">
                                         </span>
@@ -362,26 +361,21 @@
                                                 <li>{{ trans('product.stock') }}:
                                                     <span v-cloak v-for="productSize in saleProductPreview.product.product_sizes"
                                                           v-if="productSize.size_id == saleProductPreview.currentSizeId">
-                                                    {{--{{ $model->product->product_sizes[0]->stocks[0]->stock }}--}}
                                                         @{{ productSize.stocks[0].stock }}
                                                     </span>
                                                 </li>
-                                                <li>Материал: Полиэстер с водоотталкивающей и полиуретановой
-                                                    пропиткой для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>
-                                                <li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>
-                                                <li>Металлические нержавеющие молнии;</li>
-                                                <li>Два боковых, один внутренний, один карман на молнии на плече;</li>
-                                                <li>Сверху и снизу расположена трикотажная резинка с компонентом эластана,
-                                                    что позволяет резинке не терять с временем форму и не закатываться;</li>
-                                                <li>На бомбере расположены три вышитых патча;</li>
-                                                <li>Весенний / Летний сезон.</li>
+                                                <li v-for="property in saleProductPreview.product.properties" v-if="property.slug != 'razmer'">
+                                                    @{{ property.property_name }}: @{{ property.property_value }}
+                                                </li>
                                                 <li>Артикул: @{{ saleProductPreview.product.vendor_code }}</li>
                                             </ul>
                                         </div>
                                         <div class="prod-attributes">
                                             <ul class="choose-clr list-inline border-hover">
+                                                <div class="prod-color_title">
+                                                    {{ trans('email.color') }} : <span v-cloak>@{{ saleProductPreview.product.color.name }}</span>
+                                                </div>
                                                 <li v-for="relatedProduct in saleProductPreview.product.product_group.products">
-                                                    {{--<a v-bind:href="related_product.color.slug" class="black-bg"></a>--}}
                                                     <a v-if="relatedProduct.color.id === saleProductPreview.product.color.id"
                                                        class="active"
                                                        :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
@@ -391,6 +385,12 @@
                                                 </li>
                                             </ul>
                                             <ul class="choose-size list-inline border-hover">
+                                                <div class="prod-size_title">
+                                                    {{ trans('email.size') }} :
+                                                    <span v-for="size in saleProductPreview.product.sizes" v-if="size.id == saleProductPreview.currentSizeId" v-cloak>
+                                                        @{{ size.name }}
+                                                    </span>
+                                                </div>
                                                 <li v-for="(size, index) in saleProductPreview.product.sizes">
                                                     <a v-on:click.prevent="changeCurrentSizeId(size.id)"
                                                         :class="{active : saleProductPreview.currentSizeId == size.id}"
@@ -472,8 +472,9 @@
                                         <div class="prod-img">
                                             <a class="img-hover"
                                                href="{{ url_product($saleProduct->slug, $model->language) }}">
-                                                <img alt="product"
-                                                     src="{{ $saleProduct->images[0]->medium }}"></a>
+                                                <img alt="{{ $saleProduct->name }}"
+                                                     src="{{ $saleProduct->images[0]->medium }}">
+                                            </a>
                                             <div class="prod-tag-1 font-2">
                                                 <span> -{{ $saleProduct->price[0]->discount }}% </span>
                                             </div>
@@ -499,7 +500,7 @@
                                                                 <span class="star"></span>
                                                             @endif
                                                         @else
-                                                            <span class="star active"></span>
+                                                            <span class="star"></span>
                                                         @endif
                                                     @endfor
                                                 </div>
@@ -559,7 +560,7 @@
                     <div class="item">
                         <a href="{{ url_category($category->slug, $model->language) }}" class="promo">
                             <h2 class="section-title wht fsz-106 font-s-cat">
-                                <img src="{{ $category->icon }}" >
+                                <img alt="{{ $category->name }}" src="{{ $category->icon }}" >
                             </h2>
                             <span class="sub-detail wht font-s-number"> {{ $category->name }} </span>
                         </a>
@@ -597,7 +598,7 @@
                                             <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
                                                 <div class="owl-carousel sync1 pb-25 product-preview-images-big">
                                                     <div class="item" v-for="image in topProductPreview.product.images">
-                                                        <img v-bind:src="image.big">
+                                                        <img v-bind:src="image.big" v-bind:alt="topProductPreview.product.name">
                                                         <div class="prod-tag-1 font-2 prod-tag-violet">
                                                             <span> TOP </span>
                                                         </div>
@@ -612,7 +613,7 @@
 
                                                 <div class="owl-carousel single-prod-thumb sync2 nav-2 product-preview-images-small">
                                                     <div class="item" v-for="image in topProductPreview.product.images">
-                                                        <img v-bind:src="image.small">
+                                                        <img v-bind:src="image.small" v-bind:alt="topProductPreview.product.name">
                                                         <span class="transparent">
                                                             <img src="/img/template/icons/plus.png" alt="view">
                                                         </span>
@@ -632,7 +633,6 @@
                                                         </div>
                                                         <div class="prod-price font-2 pull-left fsz-16">
                                                             <ins>@{{ topProductPreview.product.price[0].price }} грн</ins>
-                                                            {{--<del>@{{ topProductPreview.product.price[0].old_price }} грн</del>--}}
                                                         </div>
                                                     </div>
                                                     <div class="discriptions pt-20">
@@ -640,26 +640,21 @@
                                                             <li>{{ trans('product.stock') }}:
                                                                 <span v-cloak v-for="productSize in topProductPreview.product.product_sizes"
                                                                       v-if="productSize.size_id == topProductPreview.currentSizeId">
-                                                                {{--{{ $model->product->product_sizes[0]->stocks[0]->stock }}--}}
                                                                     @{{ productSize.stocks[0].stock }}
                                                                 </span>
                                                             </li>
-                                                            <li>Материал: Полиэстер с водоотталкивающей и полиуретановой
-                                                                пропиткой для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>
-                                                            <li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>
-                                                            <li>Металлические нержавеющие молнии;</li>
-                                                            <li>Два боковых, один внутренний, один карман на молнии на плече;</li>
-                                                            <li>Сверху и снизу расположена трикотажная резинка с компонентом эластана,
-                                                                что позволяет резинке не терять с временем форму и не закатываться;</li>
-                                                            <li>На бомбере расположены три вышитых патча;</li>
-                                                            <li>Весенний / Летний сезон.</li>
+                                                            <li v-for="property in topProductPreview.product.properties" v-if="property.slug != 'razmer'">
+                                                                @{{ property.property_name }}: @{{ property.property_value }}
+                                                            </li>
                                                             <li>Артикул: @{{ topProductPreview.product.vendor_code }}</li>
                                                         </ul>
                                                     </div>
                                                     <div class="prod-attributes">
                                                         <ul class="choose-clr list-inline border-hover">
+                                                            <div class="prod-color_title">
+                                                                {{ trans('email.color') }} : <span v-cloak>@{{ topProductPreview.product.color.name }}</span>
+                                                            </div>
                                                             <li v-for="relatedProduct in topProductPreview.product.product_group.products">
-                                                                {{--<a v-bind:href="related_product.color.slug" class="black-bg"></a>--}}
                                                                 <a v-if="relatedProduct.color.id === topProductPreview.product.color.id"
                                                                    class="active"
                                                                    :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
@@ -669,6 +664,12 @@
                                                             </li>
                                                         </ul>
                                                         <ul class="choose-size list-inline border-hover">
+                                                            <div class="prod-size_title">
+                                                                {{ trans('email.size') }} :
+                                                                <span v-for="size in topProductPreview.product.sizes" v-if="size.id == topProductPreview.currentSizeId" v-cloak>
+                                                                    @{{ size.name }}
+                                                                </span>
+                                                            </div>
                                                             <li v-for="(size, index) in topProductPreview.product.sizes">
                                                                 <a v-on:click.prevent="changeCurrentSizeId(size.id)"
                                                                    :class="{active : topProductPreview.currentSizeId == size.id}"
@@ -770,7 +771,7 @@
                                                                     <span class="star"></span>
                                                                 @endif
                                                             @else
-                                                                <span class="star active"></span>
+                                                                <span class="star"></span>
                                                             @endif
                                                         @endfor
                                                     </div>
@@ -786,9 +787,6 @@
                                                                 {{ trans('home.detail') }}
                                                             </a>
                                                         </li>
-                                                        {{--<li>--}}
-                                                            {{--<a class="fa fa-heart meta-icon" href="#"></a>--}}
-                                                        {{--</li>--}}
                                                     </ul>
                                                 </div>
                                             </figcaption>
@@ -823,7 +821,7 @@
                                             <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
                                                 <div class="owl-carousel sync1 pb-25 product-preview-images-big">
                                                     <div class="item" v-for="image in newProductPreview.product.images">
-                                                        <img v-bind:src="image.big">
+                                                        <img v-bind:src="image.big" v-bind:alt="newProductPreview.product.name">
                                                         <div class="prod-tag-1 font-2 prod-tag-green">
                                                             <span> NEW </span>
                                                         </div>
@@ -838,7 +836,7 @@
 
                                                 <div class="owl-carousel single-prod-thumb sync2 nav-2 product-preview-images-small">
                                                     <div class="item" v-for="image in newProductPreview.product.images">
-                                                        <img v-bind:src="image.small">
+                                                        <img v-bind:src="image.small" v-bind:alt="newProductPreview.product.name">
                                                         <span class="transparent">
                                                             <img src="/img/template/icons/plus.png" alt="view">
                                                         </span>
@@ -858,7 +856,6 @@
                                                         </div>
                                                         <div class="prod-price font-2 pull-left fsz-16">
                                                             <ins>@{{ newProductPreview.product.price[0].price }} грн</ins>
-                                                            {{--<del>@{{ newProductPreview.product.price[0].old_price }} грн</del>--}}
                                                         </div>
                                                     </div>
                                                     <div class="discriptions pt-20">
@@ -866,26 +863,21 @@
                                                             <li>{{ trans('product.stock') }}:
                                                                 <span v-cloak v-for="productSize in newProductPreview.product.product_sizes"
                                                                       v-if="productSize.size_id == newProductPreview.currentSizeId">
-                                                                {{--{{ $model->product->product_sizes[0]->stocks[0]->stock }}--}}
                                                                     @{{ productSize.stocks[0].stock }}
                                                                 </span>
                                                             </li>
-                                                            <li>Материал: Полиэстер с водоотталкивающей и полиуретановой
-                                                                пропиткой для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>
-                                                            <li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>
-                                                            <li>Металлические нержавеющие молнии;</li>
-                                                            <li>Два боковых, один внутренний, один карман на молнии на плече;</li>
-                                                            <li>Сверху и снизу расположена трикотажная резинка с компонентом эластана,
-                                                                что позволяет резинке не терять с временем форму и не закатываться;</li>
-                                                            <li>На бомбере расположены три вышитых патча;</li>
-                                                            <li>Весенний / Летний сезон.</li>
+                                                            <li v-for="property in newProductPreview.product.properties" v-if="property.slug != 'razmer'">
+                                                                @{{ property.property_name }}: @{{ property.property_value }}
+                                                            </li>
                                                             <li>Артикул: @{{ newProductPreview.product.vendor_code }}</li>
                                                         </ul>
                                                     </div>
                                                     <div class="prod-attributes">
                                                         <ul class="choose-clr list-inline border-hover">
+                                                            <div class="prod-color_title">
+                                                                {{ trans('email.color') }} : <span v-cloak>@{{ newProductPreview.product.color.name }}</span>
+                                                            </div>
                                                             <li v-for="relatedProduct in newProductPreview.product.product_group.products">
-                                                                {{--<a v-bind:href="related_product.color.slug" class="black-bg"></a>--}}
                                                                 <a v-if="relatedProduct.color.id === newProductPreview.product.color.id"
                                                                    class="active"
                                                                    :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
@@ -895,6 +887,12 @@
                                                             </li>
                                                         </ul>
                                                         <ul class="choose-size list-inline border-hover">
+                                                            <div class="prod-size_title">
+                                                                {{ trans('email.size') }} :
+                                                                <span v-for="size in newProductPreview.product.sizes" v-if="size.id == newProductPreview.currentSizeId" v-cloak>
+                                                                    @{{ size.name }}
+                                                                </span>
+                                                            </div>
                                                             <li v-for="(size, index) in newProductPreview.product.sizes">
                                                                 <a v-on:click.prevent="changeCurrentSizeId(size.id)"
                                                                    :class="{active : newProductPreview.currentSizeId == size.id}"
@@ -993,7 +991,7 @@
                                                                     <span class="star"></span>
                                                                 @endif
                                                             @else
-                                                                <span class="star active"></span>
+                                                                <span class="star"></span>
                                                             @endif
                                                         @endfor
                                                     </div>
@@ -1009,7 +1007,6 @@
                                                                 {{ trans('home.detail') }}
                                                             </a>
                                                         </li>
-                                                        {{--<li> <a class="fa fa-heart meta-icon" href="#"></a> </li>--}}
                                                     </ul>
                                                 </div>
                                             </figcaption>

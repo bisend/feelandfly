@@ -22,9 +22,7 @@
                             <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
                                 <div class="owl-carousel sync1 pb-25 product-preview-images-big">
                                     <div class="item" v-for="image in categoryProductPreview.product.images">
-                                        <img v-bind:src="image.big">
-                                        {{--<img v-if="categoryProductPreview.product.images.length > 0" v-bind:src="image.big">--}}
-                                        {{--<img v-else src="/img/product/big/no_photo.jpg">--}}
+                                        <img v-bind:src="image.big" v-bind:alt="categoryProductPreview.product.name">
 
                                         <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].id == 1"
                                              class="prod-tag-1 font-2">
@@ -50,9 +48,7 @@
 
                                 <div class="owl-carousel single-prod-thumb sync2 nav-2 product-preview-images-small">
                                     <div class="item" v-for="image in categoryProductPreview.product.images">
-                                        {{--<img v-if="categoryProductPreview.product.images.length > 0" v-bind:src="image.small">--}}
-                                        {{--<img v-else src="/img/product/small/no_photo.jpg">--}}
-                                        <img v-bind:src="image.small">
+                                        <img v-bind:src="image.small" v-bind:alt="categoryProductPreview.product.name">
                                         <span class="transparent">
                                             <img src="/img/template/icons/plus.png" alt="view">
                                         </span>
@@ -87,20 +83,17 @@
                                                     @{{ productSize.stocks[0].stock }}
                                                 </span>
                                             </li>
-                                            {{--<li>Материал: Полиэстер с водоотталкивающей и полиуретановой--}}
-                                                {{--пропиткой для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>--}}
-                                            {{--<li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>--}}
-                                            {{--<li>Металлические нержавеющие молнии;</li>--}}
-                                            {{--<li>Два боковых, один внутренний, один карман на молнии на плече;</li>--}}
-                                            {{--<li>Сверху и снизу расположена трикотажная резинка с компонентом эластана,--}}
-                                                {{--что позволяет резинке не терять с временем форму и не закатываться;</li>--}}
-                                            {{--<li>На бомбере расположены три вышитых патча;</li>--}}
-                                            {{--<li>Весенний / Летний сезон.</li>--}}
+                                            <li v-for="property in categoryProductPreview.product.properties" v-if="property.slug != 'razmer'">
+                                                @{{ property.property_name }}: @{{ property.property_value }}
+                                            </li>
                                             <li>Артикул: @{{ categoryProductPreview.product.vendor_code }}</li>
                                         </ul>
                                     </div>
                                     <div class="prod-attributes">
                                         <ul class="choose-clr list-inline border-hover">
+                                            <div class="prod-color_title">
+                                                {{ trans('email.color') }} : <span v-cloak>@{{ categoryProductPreview.product.color.name }}</span>
+                                            </div>
                                             <li v-for="relatedProduct in categoryProductPreview.product.product_group.products">
                                                 <a v-if="relatedProduct.color.id === categoryProductPreview.product.color.id"
                                                    class="active"
@@ -111,11 +104,16 @@
                                             </li>
                                         </ul>
                                         <ul class="choose-size list-inline border-hover">
+                                            <div class="prod-size_title">
+                                                {{ trans('email.size') }} :
+                                                <span v-for="size in categoryProductPreview.product.sizes" v-if="size.id == categoryProductPreview.currentSizeId" v-cloak>
+                                                    @{{ size.name }}
+                                                </span>
+                                            </div>
                                             <li v-for="(size, index) in categoryProductPreview.product.sizes">
-                                                <a
-                                                   v-on:click="changeCurrentSizeId(size.id)"
+                                                <a v-on:click.prevent="changeCurrentSizeId(size.id)"
                                                    :class="{active : categoryProductPreview.currentSizeId == size.id}"
-                                                   href="javascript:void(0);">
+                                                   href="#">
                                                     @{{ size.name }}
                                                 </a>
                                             </li>
@@ -135,8 +133,8 @@
                                             </li>
                                             <li>
                                                 <a class="theme-btn btn-black small-btn"
-                                                   v-on:click="addToCart(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, categoryProductPreview.count)"
-                                                   href="javascript:void(0);">
+                                                   v-on:click.prevent="addToCart(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, categoryProductPreview.count)"
+                                                   href="#">
                                                     <span v-cloak
                                                           v-if="!findWhere(cartItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})">
                                                         {{ trans('layout.add_to_cart') }}
@@ -151,8 +149,8 @@
                                                     <a v-cloak
                                                        v-if="!findWhere(wishListItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})"
                                                        class="fa fa-heart meta-icon"
-                                                       v-on:click="addToWishList(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, wishList.id)"
-                                                       href="javascript:void(0);"></a>
+                                                       v-on:click.prevent="addToWishList(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, wishList.id)"
+                                                       href="#"></a>
                                                     <a v-cloak v-else
                                                        class="fa fa-check meta-icon meta-icon-in-wish"
                                                        href="{{ url_wish_list($model->language) }}"></a>
@@ -160,7 +158,7 @@
                                                     <a class="fa fa-heart meta-icon"
                                                        data-toggle="modal"
                                                        data-target="#login-popup"
-                                                       href="javascript:void(0);">
+                                                       href="#">
                                                     </a>
                                                 @endif
                                             </li>
@@ -174,7 +172,6 @@
                     </div>
                 </div>
             </section>
-            {{--<img v-bind:src="path" alt="">--}}
         </div>
         {{--CATEGORY PRODUCT PREVIEW--}}
 
@@ -190,8 +187,8 @@
                         {{ $model->currentCategory->name }}
                     </h1>
                     <span class="category-prod_count fsz-36">
-                            {{ $model->countCategoryProducts }}
-                        </span>
+                        {{ $model->countCategoryProducts }}
+                    </span>
                 </div>
             </div>
         </section>
@@ -246,23 +243,6 @@
                             </div>
                         @endforeach
 
-                        {{--<div class="dropdown-div-btn">--}}
-                            {{--<h2 class="widget-title"> Размер  <span class="plus-icon"> - </span> </h2>--}}
-                        {{--</div>--}}
-                        {{--<div class="dropdown-div-content">--}}
-                            {{--<div class="widget-box">--}}
-                                {{--<ul>--}}
-                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span>  XXS</span> </label> </li>--}}
-                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> XS</span> </label> </li>--}}
-                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> S</span> </label> </li>--}}
-                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> M</span> </label> </li>--}}
-                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> L</span> </label> </li>--}}
-                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> XL</span> </label> </li>--}}
-                                    {{--<li><label class="checkbox-inline"><input type="checkbox" value=""> <span class="square-box"></span> <span> XXL</span> </label> </li>--}}
-                                {{--</ul>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-
                         <div class="dropdown-div-btn">
                             <h2 class="widget-title">{{ trans('layout.price') }}<span class="plus-icon"> - </span> </h2>
                         </div>
@@ -284,26 +264,6 @@
                                 </transition>
                             </div>
                         </div>
-
-                        {{--<div class="dropdown-div-btn">--}}
-                            {{--<h2 class="widget-title"> Цвет  <span class="plus-icon"> - </span> </h2>--}}
-                        {{--</div>--}}
-                        {{--<div class="dropdown-div-content">--}}
-                            {{--<div class="widget-box">--}}
-                                {{--<ul class="choose-clr list-inline border-hover">--}}
-                                    {{--<li> <a class="black-bg" href="#"></a> </li>--}}
-                                    {{--<li> <a class="gray-bg" href="#"></a> </li>--}}
-                                    {{--<li> <a class="red-bg" href="#"></a> </li>--}}
-                                    {{--<li> <a class="yellow-bg active" href="#"></a> </li>--}}
-                                    {{--<li> <a class="green1-bg" href="#"></a> </li>--}}
-                                    {{--<li> <a class="blue1-bg" href="#"></a> </li>--}}
-                                    {{--<li> <a class="blue2-bg" href="#"></a> </li>--}}
-                                    {{--<li> <a class="violate-bg" href="#"></a> </li>--}}
-                                    {{--<li> <a class="pink-bg" href="#"></a> </li>--}}
-                                    {{--<li> <a class="green2-bg" href="#"></a> </li>--}}
-                                {{--</ul>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
                     </div>
                 </aside>
                 <!-- Sidebar Ends -->
@@ -331,26 +291,24 @@
                         </div>
 
                         <div class="col-md-6 col-sm-5 show-result no-padding">
-                            {{--<form action="#" class="form-sorter">--}}
-                                <label>{{ trans('layout.sort') }}</label>
-                                <div class="search-selectpicker selectpicker-wrapper">
-                                    @php($selectedSortItem = 'default')
-                                        @foreach($model->sortItems->items as $sortItem)
-                                            @if ($sortItem->isSelected)
-                                                @php($selectedSortItem = $sortItem->name)
-                                            @endif
-                                        @endforeach
-                                    <select id="sort-select" class="selectpicker input-price"
-                                            data-width="100%" data-toggle="tooltip"
-                                            title="{{ $model->sort == 'default' ? trans('layout.how_to_sort') : $selectedSortItem }}">
-                                        @foreach($model->sortItems->items as $sortItem)
-                                            <option data-url="{{ $sortItem->url }}" {{$sortItem->isSelected ? 'disabled' : ''}}>
-                                                {{ $sortItem->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            {{--</form>--}}
+                            <label>{{ trans('layout.sort') }}</label>
+                            <div class="search-selectpicker selectpicker-wrapper">
+                                @php($selectedSortItem = 'default')
+                                    @foreach($model->sortItems->items as $sortItem)
+                                        @if ($sortItem->isSelected)
+                                            @php($selectedSortItem = $sortItem->name)
+                                        @endif
+                                    @endforeach
+                                <select id="sort-select" class="selectpicker input-price"
+                                        data-width="100%" data-toggle="tooltip"
+                                        title="{{ $model->sort == 'default' ? trans('layout.how_to_sort') : $selectedSortItem }}">
+                                    @foreach($model->sortItems->items as $sortItem)
+                                        <option data-url="{{ $sortItem->url }}" {{$sortItem->isSelected ? 'disabled' : ''}}>
+                                            {{ $sortItem->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -400,8 +358,8 @@
                                                         @endif
 
                                                         <a class="caption-link meta-icon"
-                                                           href="javascript:void(0);"
-                                                           v-on:click="changeCategoryProductPreview({{$counter}})">
+                                                           href="#"
+                                                           v-on:click.prevent="changeCategoryProductPreview({{$counter}})">
                                                             <span class="fa fa-eye"></span>
                                                         </a>
                                                     </div>
@@ -432,7 +390,7 @@
                                                                         <span class="star"></span>
                                                                     @endif
                                                                 @else
-                                                                    <span class="star active"></span>
+                                                                    <span class="star"></span>
                                                                 @endif
                                                             @endfor
                                                         </div>
@@ -442,8 +400,8 @@
                                                         <ul class="prod-meta">
                                                             <li>
                                                                 <a class="theme-btn btn-black"
-                                                                   v-on:click="addToCart({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, 1)"
-                                                                   href="javascript:void(0);">
+                                                                   v-on:click.prevent="addToCart({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, 1)"
+                                                                   href="#">
                                                                 <span v-cloak
                                                                       v-if="!findWhere(cartItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})">
                                                                     {{ trans('layout.add_to_cart') }}
@@ -458,8 +416,8 @@
                                                                     <a v-cloak
                                                                        v-if="!findWhere(wishListItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})"
                                                                        class="fa fa-heart meta-icon"
-                                                                       v-on:click="addToWishList({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, wishList.id)"
-                                                                       href="javascript:void(0);"></a>
+                                                                       v-on:click.prevent="addToWishList({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, wishList.id)"
+                                                                       href="#"></a>
                                                                     <a v-cloak v-else
                                                                        class="fa fa-check meta-icon meta-icon-in-wish"
                                                                        href="{{ url_wish_list($model->language) }}"></a>
@@ -467,7 +425,7 @@
                                                                     <a class="fa fa-heart meta-icon"
                                                                        data-toggle="modal"
                                                                        data-target="#login-popup"
-                                                                       href="javascript:void(0);">
+                                                                       href="#">
                                                                     </a>
                                                                 @endif
                                                             </li>
@@ -487,27 +445,20 @@
                                                                         @endif
                                                                     </li>
                                                                 @endforeach
-
-
-                                                                {{--<li> <a class="black-bg" href="#"></a> </li>--}}
-                                                                {{--<li> <a class="gray-bg" href="#"></a> </li>--}}
-                                                                {{--<li> <a class="red-bg" href="#"></a> </li>--}}
-                                                                {{--<li> <a class="yellow-bg active" href="#"></a> </li>--}}
-                                                                {{--<li> <a class="green1-bg" href="#"></a> </li>--}}
                                                             </ul>
                                                             <ul class="choose-size list-inline border-hover">
                                                                 @php($counterSize = 0)
                                                                 @foreach($categoryProduct->sizes as $size)
                                                                     <li>
                                                                         @if($counterSize == 0)
-                                                                            <a v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                            <a v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
                                                                                 :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
-                                                                                href="javascript:void(0);">
+                                                                                href="#">
                                                                                 {{ $size->name }}
                                                                             </a>
                                                                         @else
-                                                                            <a href="javascript:void(0);"
-                                                                               v-on:click="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                            <a href="#"
+                                                                               v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
                                                                                :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}">
                                                                                 {{ $size->name }}
                                                                             </a>

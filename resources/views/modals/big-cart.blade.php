@@ -89,8 +89,8 @@
                         </div>
                         <div class="col-md-1 flex-item">
                             <div class="big-cart_delete">
-                                <a href="javascript:void(0);"
-                                    v-on:click="deleteFromCart(cartItem.productId, cartItem.sizeId)">
+                                <a href="#"
+                                    v-on:click.prevent="deleteFromCart(cartItem.productId, cartItem.sizeId)">
                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </a>
                             </div>
