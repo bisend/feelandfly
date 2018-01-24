@@ -60,7 +60,6 @@
 
                                         <a href="{{ $image->original }}"
                                            rel="prettyPhoto[single-product]"
-                                           {{--data-gal="prettyPhoto[prettyPhoto]"--}}
                                            title="{{ $model->product->name }}"
                                            class="caption-link meta-icon">
                                             <i class="fa fa-arrows-alt"></i>
@@ -117,7 +116,6 @@
                                         <li>{{ trans('product.stock') }}:
                                             <span v-cloak v-for="productSize in singleProduct.product.product_sizes"
                                                   v-if="productSize.size_id == singleProduct.sizeId">
-                                                {{--{{ $model->product->product_sizes[0]->stocks[0]->stock }}--}}
                                                 @{{ productSize.stocks[0].stock }}
                                             </span>
                                         </li>
@@ -128,22 +126,13 @@
                                                 </li>
                                             @endif
                                         @endforeach
-                                        {{--<li>Материал: Полиэстер с водоотталкивающей и полиуретановой пропиткой--}}
-                                            {{--для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>--}}
-                                        {{--<li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>--}}
-                                        {{--<li>Металлические нержавеющие молнии;</li>--}}
-                                        {{--<li>Два боковых, один внутренний, один карман на молнии на плече;</li>--}}
-                                        {{--<li>Сверху и снизу расположена трикотажная резинка с компонентом эластана,--}}
-                                            {{--что позволяет резинке не терять с временем форму и не закатываться;</li>--}}
-                                        {{--<li>На бомбере расположены три вышитых патча;</li>--}}
-                                        {{--<li>Весенний / Летний сезон.</li>--}}
                                         <li>Артикул: {{ $model->product->vendor_code }}</li>
                                     </ul>
                                 </div>
                                 <div class="prod-attributes">
                                     <ul class="choose-clr list-inline border-hover">
                                         <div class="prod-color_title">
-                                            Цвет : <span>Black</span>
+                                            {{ trans('email.color') }} : <span v-cloak>@{{ singleProduct.product.color.name }}</span>
                                         </div>
                                         @foreach($relatedProducts as $relatedProduct)
                                             <li>
@@ -157,15 +146,13 @@
                                                 @endif
                                             </li>
                                         @endforeach
-                                        {{--<li> <a href="#" class="black-bg"></a> </li>--}}
-                                        {{--<li> <a href="#" class="gray-bg"></a> </li>--}}
-                                        {{--<li> <a href="#" class="red-bg"></a> </li>--}}
-                                        {{--<li> <a href="#" class="yellow-bg active"></a> </li>--}}
-                                        {{--<li> <a href="#" class="brown-bg"></a> </li>--}}
                                     </ul>
                                     <ul class="choose-size list-inline border-hover">
                                         <div class="prod-size_title">
-                                           Розмер : <span>L</span>
+                                           {{ trans('email.size') }} :
+                                            <span v-for="size in singleProduct.product.sizes" v-if="size.id == singleProduct.sizeId" v-cloak>
+                                                @{{ size.name }}
+                                            </span>
                                         </div>
                                         @php($counterSize = 0)
                                         @foreach($model->product->sizes as $size)
@@ -212,11 +199,6 @@
                                                     {{ trans('layout.in_cart') }}
                                                 </span>
                                             </a>
-
-                                            {{--<a v-else--}}
-                                               {{--class="theme-btn btn-black small-btn">--}}
-                                                {{--В корзине--}}
-                                            {{--</a>--}}
                                         </li>
                                         <li>
                                             @if(auth()->check())
@@ -264,7 +246,8 @@
                                         {{ trans('product.leave_review') }}
                                     </a>
                                     <p class="font-2">{{ trans('product.total_reviews') }} :
-                                        <span>@{{ totalReviewsCount }}</span> </p>
+                                        <span>@{{ totalReviewsCount }}</span>
+                                    </p>
                                 </div>
                                 <div class="comments-list">
                                     <div class="comment-item" v-if="totalReviewsCount > 0" v-for="review in reviews">
@@ -290,9 +273,7 @@
                                             <p>@{{ review.review }}</p>
                                         </div>
                                     </div>
-                                    {{--<div v-if="totalReviewsCount == 0">--}}
-                                        {{--Пусто--}}
-                                    {{--</div>--}}
+
 
                                     <div class="block-inline pagination-wrap text-center" v-cloak v-if="totalReviewsCount > 5">
                                         <ul class="pagination-1">

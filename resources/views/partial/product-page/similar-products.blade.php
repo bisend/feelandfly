@@ -61,6 +61,7 @@
                                 <div class="block-inline">
                                     <div class="rating pull-right">
                                         <span v-for="i in 5" v-if="i <= similarProductPreview.product.rating" class="star active"></span>
+                                        {{--<span v-else-if="!similarProductPreview.product.rating" class="star active"></span>--}}
                                         <span v-else class="star"></span>
                                     </div>
                                     <div class="prod-price font-2 pull-left fsz-16">
@@ -77,24 +78,20 @@
                                         <li>{{ trans('product.stock') }}:
                                             <span v-cloak v-for="productSize in similarProductPreview.product.product_sizes"
                                                   v-if="productSize.size_id == similarProductPreview.currentSizeId">
-                                                {{--{{ $model->product->product_sizes[0]->stocks[0]->stock }}--}}
                                                 @{{ productSize.stocks[0].stock }}
                                             </span>
                                         </li>
-                                        <li>Материал: Полиэстер с водоотталкивающей и полиуретановой
-                                            пропиткой для терморегуляции, удерживает влагу 1000 мм/вод.ст;</li>
-                                        <li>Полиэстеровая 210 г/м2 сверхлегкая фирменная принтованная подкладка;</li>
-                                        <li>Металлические нержавеющие молнии;</li>
-                                        <li>Два боковых, один внутренний, один карман на молнии на плече;</li>
-                                        <li>Сверху и снизу расположена трикотажная резинка с компонентом эластана,
-                                            что позволяет резинке не терять с временем форму и не закатываться;</li>
-                                        <li>На бомбере расположены три вышитых патча;</li>
-                                        <li>Весенний / Летний сезон.</li>
+                                        <li v-for="property in similarProductPreview.product.properties" v-if="property.slug != 'razmer'">
+                                            @{{ property.property_name }}: @{{ property.property_value }}
+                                        </li>
                                         <li>Артикул: @{{ similarProductPreview.product.vendor_code }}</li>
                                     </ul>
                                 </div>
                                 <div class="prod-attributes">
                                     <ul class="choose-clr list-inline border-hover">
+                                        <div class="prod-color_title">
+                                            {{ trans('email.color') }} : <span v-cloak>@{{ similarProductPreview.product.color.name }}</span>
+                                        </div>
                                         <li v-for="relatedProduct in similarProductPreview.product.product_group.products">
                                             <a v-if="relatedProduct.color.id === similarProductPreview.product.color.id"
                                                class="active"
@@ -105,6 +102,12 @@
                                         </li>
                                     </ul>
                                     <ul class="choose-size list-inline border-hover">
+                                        <div class="prod-size_title">
+                                            {{ trans('email.size') }} :
+                                            <span v-for="size in similarProductPreview.product.sizes" v-if="size.id == similarProductPreview.currentSizeId" v-cloak>
+                                                @{{ size.name }}
+                                            </span>
+                                        </div>
                                         <li v-for="(size, index) in similarProductPreview.product.sizes">
                                             <a v-on:click="changeCurrentSizeId(size.id)"
                                                 :class="{active : similarProductPreview.currentSizeId == size.id}"
