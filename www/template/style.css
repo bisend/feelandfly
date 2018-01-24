@@ -5568,8 +5568,13 @@ textarea.incorrect-field:-ms-input-placeholder {
 
 .lookbook-sld .lookbook-ban-col{
     padding-bottom: 30px;
+    margin-top: 60px;
 }
 
+.lookbook-ban-col .section-title{
+    font-size: 32px;
+    margin-bottom: 20px;
+}
 
 .lookbook-ban-col .title-wrap{
     padding-bottom: 0px;
@@ -5728,3 +5733,42 @@ textarea.incorrect-field:-ms-input-placeholder {
 .single-post .blog-detail{
     margin-top: 10px;
 }
+
+
+.photo-cat_fit{
+    display: block;
+    width: 270px;
+    height: 270px;
+}
+
+.photo-cat_fit img{
+    width: 270px;
+    height: 270px;
+    object-fit: cover;
+}
+
+.site-breadcumb{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+.site-breadcumb .category-prod_count{
+    vertical-align: inherit!important;
+    font-family: 'Oswald', sans-serif;
+    margin-left: 20px;
+    border: 2px solid #000;
+    font-size: 17px;
+    width: 37px;
+    height: 37px;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+ .site-breadcumb .section-title{
+     display: inline-flex;
+     align-items: center;
+ }

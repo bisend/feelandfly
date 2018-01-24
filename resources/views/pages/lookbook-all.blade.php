@@ -8,7 +8,7 @@
                 <section class="sec-banner-1 clearfix lookbook-ban-col">
                     <div class="container">
                         <div class="title-wrap pb-50">
-                            <h2 class="section-title"> LookBook's </h2>
+                            <h1 class="section-title"> LookBook's </h1>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
