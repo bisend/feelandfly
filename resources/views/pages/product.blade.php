@@ -142,6 +142,9 @@
                                 </div>
                                 <div class="prod-attributes">
                                     <ul class="choose-clr list-inline border-hover">
+                                        <div class="prod-color_title">
+                                            Цвет : <span>Black</span>
+                                        </div>
                                         @foreach($relatedProducts as $relatedProduct)
                                             <li>
                                                 @if($model->product->color->id == $relatedProduct->color->id)
@@ -161,6 +164,9 @@
                                         {{--<li> <a href="#" class="brown-bg"></a> </li>--}}
                                     </ul>
                                     <ul class="choose-size list-inline border-hover">
+                                        <div class="prod-size_title">
+                                           Розмер : <span>L</span>
+                                        </div>
                                         @php($counterSize = 0)
                                         @foreach($model->product->sizes as $size)
                                             <li>

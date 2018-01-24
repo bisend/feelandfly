@@ -5801,3 +5801,17 @@ textarea.incorrect-field:-ms-input-placeholder {
 .no_prod-filters .no_prod-filters-links a i{
     margin-right: 6px;
 }
+
+.prod-size_title,
+.prod-color_title{
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    margin-left: 6px;
+    margin-bottom: 7px;
+}
+
+.prod-size_title span,
+.prod-color_title span{
+    margin-left: 7px;
+}
+
