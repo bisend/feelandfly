@@ -195,6 +195,10 @@ class UrlBuilder
     const BLOG_PAGE = 'blog';
 
     const BLOG_ALL_PAGE = 'blog/all';
+    
+    const LOOKBOOK_PAGE = 'lookbook';
+
+    const LOOKBOOK_ALL_PAGE = 'lookbook/all';
 
 
 
@@ -1048,6 +1052,21 @@ class UrlBuilder
         if ($page > 1) {
             $url = self::concatParts([$url, $page]);
         }
+
+        return self::localize($url, $language);
+    }
+    
+    public static function lookbookPage()
+    {
+        
+    }
+    
+    public static function lookbookAllPage($language = Languages::DEFAULT_LANGUAGE)
+    {
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::LOOKBOOK_ALL_PAGE
+        ]);
 
         return self::localize($url, $language);
     }

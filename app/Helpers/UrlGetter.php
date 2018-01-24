@@ -441,3 +441,11 @@ if (!function_exists('url_all_blogs_per_page'))
         return UrlBuilder::allBlogsPerPage($page, $language);
     }
 }
+
+if (!function_exists('url_all_lookbook'))
+{
+    function url_all_lookbook($language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::lookbookAllPage($language);
+    }
+}

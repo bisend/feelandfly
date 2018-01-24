@@ -1031,7 +1031,7 @@
             <div class="container">
                 <div class="title-wrap  pb-50">
                     <div class="my_title_link my_title_link-lookbook">
-                        <a href="" class="title_link">Переглянути усі</a>
+                        <a href="{{ url_all_lookbook($model->language) }}" class="title_link">{{ trans('home.see_all') }}</a>
                         <h2 class="section-title"> LookBook's </h2>
                     </div>
                 </div>
@@ -1093,6 +1093,7 @@
         </section>
         <!-- / LOOKBOOK Ends -->
 
+        @if(null)
         <!-- Blog Starts-->
         <section class="blog-sec padding-b-30">
             <div class="container theme-container">
@@ -1149,5 +1150,6 @@
             </div>
         </section>
         <!-- / Blog Ends -->
+        @endif
     </article>
 @endsection

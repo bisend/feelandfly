@@ -1352,6 +1352,8 @@ textarea:focus:-ms-input-placeholder {
 /*--------------------- 2.4 - Special Promo Starts ------------------------- */
 .special-promo-sec {
     background-image: url('promo-bg.jpg');
+    /*background-image: url('/img/template/slider/slide-1.jpg');*/
+    /*background-image: url('/img/template/slider/slide5.jpg');*/
     background-size: cover;
     background-repeat: no-repeat;
     display: inline-block;
@@ -5433,13 +5435,13 @@ textarea.incorrect-field:-ms-input-placeholder {
 }
 
 .baner-big{
-    height: 180px;
+    height: 300px;
     margin: 5px;
 }
 
 .baner-big .baner_img{
     width: 100%;
-    height: 200px;
+    height: 300px;
 }
 
 .baner-big .baner_img img{

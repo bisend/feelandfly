@@ -278,3 +278,7 @@ Route::group(['prefix' => 'blog'], function () {
     Route::get('{slug}/{language?}', 'BlogController@blogPage');
 
 });
+
+Route::get('/lookbook/all/{language?}', 'LookBookController@showAllLookBook')->where([
+    'language' => '^(uk|ru)?$'
+]);
