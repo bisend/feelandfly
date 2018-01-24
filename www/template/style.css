@@ -5772,3 +5772,32 @@ textarea.incorrect-field:-ms-input-placeholder {
      display: inline-flex;
      align-items: center;
  }
+
+
+ .no_prod-filters{
+     height: 300px;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+ }
+
+ .no_prod-filters h1{
+     font-family: 'Oswald', sans-serif;
+ }
+
+.no_prod-filters .no_prod-filters-links{
+    margin-top: 30px;
+}
+
+.no_prod-filters .no_prod-filters-links a{
+    font-size: 20px;
+    font-family: 'Oswald', sans-serif;
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.no_prod-filters .no_prod-filters-links a i{
+    margin-right: 6px;
+}

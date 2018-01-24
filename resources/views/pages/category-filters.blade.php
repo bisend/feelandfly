@@ -547,19 +547,19 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div style="min-height: 300px">
+                        <div class="no_prod-filters">
                             <h1 style="text-align: center">{{ trans('layout.no_products') }}</h1>
                             {{--<h2 style="text-align: center;  margin-top: 50px">--}}
                                 {{----}}
                             {{--</h2>--}}
-                            <h2 style="text-align: center; margin-top: 200px">
+                            <div class="no_prod-filters-links">
                                 <a href="{{ redirect()->back()->getTargetUrl() }}">
-                                    Назад
+                                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Назад
                                 </a>
                                 <a href="{{ url_home($model->language) }}">
-                                    {{ trans('layout.go_home') }}
+                                    <i class="fa fa-home" aria-hidden="true"></i> {{ trans('layout.go_home') }}
                                 </a>
-                            </h2>
+                            </div>
                         </div>
                     </div>
                 </div>
