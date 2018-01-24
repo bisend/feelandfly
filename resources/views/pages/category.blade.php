@@ -184,10 +184,14 @@
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">
             <div class="theme-container container ">
-                <div class="site-breadcumb white-clr">
-                    <h2 class="section-title wht fsz-36">
-                        {{ $model->currentCategory->name }} {{ $model->countCategoryProducts }}
-                    </h2>
+                <div class="site-breadcumb">
+
+                    <h1 class="section-title fsz-36">
+                        {{ $model->currentCategory->name }}
+                    </h1>
+                    <span class="category-prod_count fsz-36">
+                            {{ $model->countCategoryProducts }}
+                        </span>
                 </div>
             </div>
         </section>
@@ -368,11 +372,13 @@
                                                     <div class="prod-img">
                                                         <a class="img-hover"
                                                            href="{{ url_product($categoryProduct->slug, $model->language) }}">
-                                                            @if($categoryProduct->images->count() > 0)
-                                                                <img alt="{{ $categoryProduct->name }}" src="{{ $categoryProduct->images[0]->medium }}">
-                                                            @else
-                                                                <img alt="{{ $categoryProduct->name }}" src="/img/product/medium/no_photo.jpg">
-                                                            @endif
+                                                            <div class="photo-cat_fit">
+                                                                @if($categoryProduct->images->count() > 0)
+                                                                    <img alt="{{ $categoryProduct->name }}" src="{{ $categoryProduct->images[0]->medium }}">
+                                                                @else
+                                                                    <img alt="{{ $categoryProduct->name }}" src="/img/product/medium/no_photo.jpg">
+                                                                @endif
+                                                            </div>
                                                         </a>
 
                                                         @if($categoryProduct->promotions != null && $categoryProduct->promotions->count() > 0)
