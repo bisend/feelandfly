@@ -24,6 +24,8 @@ class FilterRepository
     public function initFilters($model)
     {
         $query = "SELECT
+                      property_names.priority,
+                      property_values.priority,
                       property_names.id          AS filter_name_id,
                       property_values.id         AS filter_value_id,
                       property_names.slug        AS filter_name_slug,
@@ -48,7 +50,7 @@ class FilterRepository
                     ON property_names.id = properties.property_name_id
                   JOIN property_values
                     ON property_values.id = properties.property_value_id
-                  ORDER BY property_names.id, property_values.id";
+                  ORDER BY property_names.priority DESC, property_values.priority DESC, property_names.id, property_values.id";
         
         return DB::select($query);
     }
@@ -102,6 +104,8 @@ class FilterRepository
         }
 
         $query = "SELECT
+                      property_names.priority,
+                      property_values.priority,
                       property_names.id          AS filter_name_id,
                       property_values.id         AS filter_value_id,
                       property_names.slug        AS filter_name_slug,
@@ -132,7 +136,7 @@ class FilterRepository
                     ON property_names.id = properties.property_name_id
                   JOIN property_values
                     ON property_values.id = properties.property_value_id
-                  ORDER BY property_names.id, property_values.id";
+                  ORDER BY property_names.priority DESC, property_values.priority DESC, property_names.id, property_values.id";
 
         return DB::select($query);
     }
