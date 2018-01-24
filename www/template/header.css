@@ -3972,6 +3972,11 @@ header {
     border-bottom: 1px solid #f2f0f0;
 }
 
+.smoll-cart_products .cart-product-item a{
+    padding: 0;
+}
+
+
 .smoll-cart_products .cart-product-item .prod-item_detail{
     margin-left: 15px;
 }
