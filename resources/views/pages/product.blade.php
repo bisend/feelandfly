@@ -100,17 +100,24 @@
                                             @endif
                                         @endfor
                                     </div>
-                                    <div class="prod-price font-2 pull-left fsz-16">
-                                        <ins>{{ $model->product->price[0]->price }} грн</ins>
-
-                                        @if($model->product->promotions != null && $model->product->promotions->count() > 0)
-                                            @if($model->product->promotions[0]->pivot->promotion_id == 1)
-                                                <del>{{ $model->product->price[0]->old_price }} грн</del>
-                                            @endif
-                                        @endif
-
+                                    <div class="scroll_to_comments pull-left">
+                                        <span>0 Відгуків</span>
                                     </div>
+
                                 </div>
+
+                                <div class="prod-price font-2 fsz-26">
+                                    <ins>{{ $model->product->price[0]->price }} грн</ins>
+
+                                    @if($model->product->promotions != null && $model->product->promotions->count() > 0)
+                                        @if($model->product->promotions[0]->pivot->promotion_id == 1)
+                                            <del>{{ $model->product->price[0]->old_price }} грн</del>
+                                        @endif
+                                    @endif
+
+                                </div>
+
+
                                 <div class="discriptions pt-20">
                                     <ul>
                                         <li>{{ trans('product.stock') }}:

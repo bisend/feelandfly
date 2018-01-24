@@ -2352,8 +2352,32 @@ textarea:focus:-ms-input-placeholder {
     /*margin: 0 0 25px;*/
     padding: 0px 0 17px;
 }
+.prod-details .prod-price{
+    margin-top: 15px;
+}
+
+.scroll_to_comments span{
+    font-family: 'Oswald', sans-serif;
+    border-bottom: 1px dotted #000;
+    font-size: 16px;
+    -ms-transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+    cursor: pointer;
+}
+
+.scroll_to_comments span:hover{
+    color: #a3a3a3;
+    -ms-transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+}
+
+
 .prod-details .prod-price ins {
-    font-size: 20px;
+    font-size: 36px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
 }
 .discriptions > p {
     margin-bottom: 25px;
