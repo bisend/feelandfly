@@ -10,7 +10,8 @@
 <link href="/template/plugins/malihu-custom-scrollbar-plugin-master/jquery.mCustomScrollbar.min.css" rel="stylesheet" type="text/css">
 <link href="/template/plugins/prettyphoto-master/css/prettyPhoto.css" rel="stylesheet" type="text/css">
 <link href="/template/plugins/jquery-ui-1.11.4.custom/jquery-ui.min.css" rel="stylesheet" type="text/css">
-
+<link href="/template/plugins/tooltipster-master/dist/css/tooltipster.bundle.min.css" rel="stylesheet">
+<link href="/template/plugins/tooltipster-master/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-noir.min.css" rel="stylesheet">
 <!-- Custom CSS -->
 <link href="/template/header.css" rel="stylesheet" type="text/css">
 <link href="/template/style.css" rel="stylesheet" type="text/css">

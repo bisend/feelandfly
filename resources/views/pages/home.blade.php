@@ -101,10 +101,13 @@
                                                     </div>
                                                     <li v-for="relatedProduct in mainSliderPreview.product.product_group.products">
                                                         <a v-if="relatedProduct.color.id === mainSliderPreview.product.color.id"
-                                                           class="active"
+                                                           class="active ttip"
+                                                           v-bind:title="'{{ trans('email.color') }}' + ': ' + relatedProduct.color.name"
                                                            :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                            v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
-                                                        <a v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
+                                                        <a class="ttip"
+                                                           v-bind:title="'{{ trans('email.color') }}' + ': ' + relatedProduct.color.name"
+                                                           v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                            v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
                                                     </li>
                                                 </ul>
@@ -117,6 +120,8 @@
                                                     </div>
                                                     <li v-for="(size, index) in mainSliderPreview.product.sizes">
                                                         <a v-on:click.prevent="changeCurrentSizeId(size.id)"
+                                                           class="ttip"
+                                                           v-bind:title="'{{ trans('email.size') }}' + ': ' + size.name"
                                                            :class="{active : mainSliderPreview.currentSizeId == size.id}"
                                                            href="#">
                                                             @{{ size.name }}
@@ -377,10 +382,13 @@
                                                 </div>
                                                 <li v-for="relatedProduct in saleProductPreview.product.product_group.products">
                                                     <a v-if="relatedProduct.color.id === saleProductPreview.product.color.id"
-                                                       class="active"
+                                                       class="active ttip"
+                                                       v-bind:title="'{{ trans('email.color') }}' + ': ' + relatedProduct.color.name"
                                                        :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                        v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
-                                                    <a v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
+                                                    <a class="ttip"
+                                                       v-bind:title="'{{ trans('email.color') }}' + ': ' + relatedProduct.color.name"
+                                                       v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                        v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
                                                 </li>
                                             </ul>
@@ -393,7 +401,9 @@
                                                 </div>
                                                 <li v-for="(size, index) in saleProductPreview.product.sizes">
                                                     <a v-on:click.prevent="changeCurrentSizeId(size.id)"
-                                                        :class="{active : saleProductPreview.currentSizeId == size.id}"
+                                                       class="ttip"
+                                                       v-bind:title="'{{ trans('email.size') }}' + ': ' + size.name"
+                                                       :class="{active : saleProductPreview.currentSizeId == size.id}"
                                                         href="#">
                                                         @{{ size.name }}
                                                     </a>
@@ -656,10 +666,13 @@
                                                             </div>
                                                             <li v-for="relatedProduct in topProductPreview.product.product_group.products">
                                                                 <a v-if="relatedProduct.color.id === topProductPreview.product.color.id"
-                                                                   class="active"
+                                                                   class="active ttip"
+                                                                   v-bind:title="'{{ trans('email.color') }}' + ': ' + relatedProduct.color.name"
                                                                    :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                                    v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
-                                                                <a v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
+                                                                <a class="ttip"
+                                                                   v-bind:title="'{{ trans('email.color') }}' + ': ' + relatedProduct.color.name"
+                                                                   v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                                    v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
                                                             </li>
                                                         </ul>
@@ -672,6 +685,8 @@
                                                             </div>
                                                             <li v-for="(size, index) in topProductPreview.product.sizes">
                                                                 <a v-on:click.prevent="changeCurrentSizeId(size.id)"
+                                                                   class="ttip"
+                                                                   v-bind:title="'{{ trans('email.size') }}' + ': ' + size.name"
                                                                    :class="{active : topProductPreview.currentSizeId == size.id}"
                                                                    href="#">
                                                                     @{{ size.name }}
@@ -879,10 +894,13 @@
                                                             </div>
                                                             <li v-for="relatedProduct in newProductPreview.product.product_group.products">
                                                                 <a v-if="relatedProduct.color.id === newProductPreview.product.color.id"
-                                                                   class="active"
+                                                                   class="active ttip"
+                                                                   v-bind:title="'{{ trans('email.color') }}' + ': ' + relatedProduct.color.name"
                                                                    :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                                    v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
-                                                                <a v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
+                                                                <a class="ttip"
+                                                                   v-bind:title="'{{ trans('email.color') }}' + ': ' + relatedProduct.color.name"
+                                                                   v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                                    v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
                                                             </li>
                                                         </ul>
@@ -895,6 +913,8 @@
                                                             </div>
                                                             <li v-for="(size, index) in newProductPreview.product.sizes">
                                                                 <a v-on:click.prevent="changeCurrentSizeId(size.id)"
+                                                                   class="ttip"
+                                                                   v-bind:title="'{{ trans('email.size') }}' + ': ' + size.name"
                                                                    :class="{active : newProductPreview.currentSizeId == size.id}"
                                                                    href="#">
                                                                     @{{ size.name }}

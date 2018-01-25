@@ -337,6 +337,19 @@ if (document.getElementById('product-details'))
                 }
 
             },
+            scrollToReview() {
+                $("a[href='#prod-tab-1']").closest('li').removeClass('active');
+
+                $('#prod-tab-1').removeClass('active in');
+
+                $("a[href='#prod-tab-2']").closest('li').addClass('active');
+
+                $('#prod-tab-2').addClass('active in');
+
+                $('html, body').animate({
+                    scrollTop: ($("[data-review-form]").offset().top) - 150
+                }, 600);
+            }
         }
     });
 }

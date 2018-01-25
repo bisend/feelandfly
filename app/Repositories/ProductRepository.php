@@ -175,7 +175,7 @@ class ProductRepository
             'product_group.products.color' => function ($query) use ($language) {
                 $query->select([
                     'id',
-                    "name_$language",
+                    "name_$language as name",
                     'slug',
                     'html_code'
                 ]);
@@ -290,7 +290,7 @@ class ProductRepository
             'product_group.products.color' => function ($query) use ($language) {
                 $query->select([
                     'id',
-                    "name_$language",
+                    "name_$language as name",
                     'slug',
                     'html_code'
                 ]);
@@ -610,7 +610,7 @@ class ProductRepository
             'product_group.products.color' => function ($query) use ($language) {
                 $query->select([
                     'id',
-                    "name_$language",
+                    "name_$language as name",
                     'slug',
                     'html_code'
                 ]);
@@ -754,7 +754,7 @@ class ProductRepository
             'product_group.products.color' => function ($query) use ($model) {
                 $query->select([
                     'id',
-                    "name_$model->language",
+                    "name_$model->language as name",
                     'slug',
                     'html_code'
                 ]);
@@ -891,7 +891,7 @@ class ProductRepository
             'product_group.products.color' => function ($query) use ($model) {
                 $query->select([
                     'id',
-                    "name_$model->language",
+                    "name_$model->language as name",
                     'slug',
                     'html_code'
                 ]);
@@ -1098,7 +1098,7 @@ class ProductRepository
             'product_group.products.color' => function ($query) use ($model) {
                 $query->select([
                     'id',
-                    "name_$model->language",
+                    "name_$model->language as name",
                     'slug',
                     'html_code'
                 ]);
@@ -1188,7 +1188,7 @@ class ProductRepository
             'product_group.products.color' => function ($query) use ($model) {
                 $query->select([
                     'id',
-                    "name_$model->language",
+                    "name_$model->language as name",
                     'slug',
                     'html_code'
                 ]);
@@ -1279,7 +1279,7 @@ class ProductRepository
             'product_group.products.color' => function ($query) use ($model) {
                 $query->select([
                     'id',
-                    "name_$model->language",
+                    "name_$model->language as name",
                     'slug',
                     'html_code'
                 ]);
@@ -1393,7 +1393,7 @@ class ProductRepository
             'markers.product.product_group.products.color' => function ($query) use ($model) {
                 $query->select([
                     'id',
-                    "name_$model->language",
+                    "name_$model->language as name",
                     'slug',
                     'html_code'
                 ]);

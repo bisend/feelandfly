@@ -3,14 +3,15 @@
 <script defer src="/template/plugins/bootstrap/js/bootstrap.min.js"></script>
 <script defer src="/template/plugins/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
 <script defer src="/template/plugins/owl.carousel.2/owl.carousel.min.js"></script>
-<script defer src="/template/js/isotope.pkgd.min.js"></script>
+{{--<script defer src="/template/js/isotope.pkgd.min.js"></script>--}}
 <script defer src="/template/plugins/prettyphoto-master/js/jquery.prettyPhoto.js"></script>
-<script defer src="/template/plugins/subscribe-better-master/jquery.subscribe-better.min.js"></script>
-<script defer src="/template/plugins/malihu-custom-scrollbar-plugin-master/js/minified/jquery.mCustomScrollbar.min.js"></script>
-<script defer src="/template/plugins/jquery-countTo/jquery.countTo.js"></script>
+{{--<script defer src="/template/plugins/subscribe-better-master/jquery.subscribe-better.min.js"></script>--}}
+{{--<script defer src="/template/plugins/malihu-custom-scrollbar-plugin-master/js/minified/jquery.mCustomScrollbar.min.js"></script>--}}
+{{--<script defer src="/template/plugins/jquery-countTo/jquery.countTo.js"></script>--}}
 
 <script defer src="/js/waitsync.min.js"></script>
 <script defer src="/js/jclient.validation.js"></script>
+<script defer src="/template/plugins/tooltipster-master/dist/js/tooltipster.bundle.min.js"></script>
 
 <!-- Custom JS -->
 <script defer src="/js/launch.js"></script>

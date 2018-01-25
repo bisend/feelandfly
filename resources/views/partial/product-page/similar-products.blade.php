@@ -93,10 +93,13 @@
                                         </div>
                                         <li v-for="relatedProduct in similarProductPreview.product.product_group.products">
                                             <a v-if="relatedProduct.color.id === similarProductPreview.product.color.id"
-                                               class="active"
+                                               class="active ttip"
+                                               v-bind:title="'{{ trans('email.color') }}' + ': ' + relatedProduct.color.name"
                                                :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
-                                            <a v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
+                                            <a class="ttip"
+                                               v-bind:title="'{{ trans('email.color') }}' + ': ' + relatedProduct.color.name"
+                                               v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
                                         </li>
                                     </ul>
@@ -109,6 +112,8 @@
                                         </div>
                                         <li v-for="(size, index) in similarProductPreview.product.sizes">
                                             <a v-on:click.prevent="changeCurrentSizeId(size.id)"
+                                               class="ttip"
+                                               v-bind:title="'{{ trans('email.size') }}' + ': ' + size.name"
                                                 :class="{active : similarProductPreview.currentSizeId == size.id}"
                                                 href="#">
                                                 @{{ size.name }}

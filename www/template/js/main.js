@@ -83,3 +83,13 @@ $('body').on('click','.drop-menu-select .dropeddown li:not(.select-multi)', func
 });
 
 /* select end */
+
+// TOOLTIPSTER
+
+$(document).ready(function() {
+    $('.ttip').tooltipster({
+        theme: 'tooltipster-noir'
+    });
+});
+
+// TOOLTIPSTER

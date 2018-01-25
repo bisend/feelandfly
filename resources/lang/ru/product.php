@@ -15,5 +15,6 @@ return [
     'review' => 'Отзыв',
     'save' => 'Сохранить',
     'pls_rate' => 'Оцените товар',
-    'total_reviews' => 'Всего отзывов'
+    'total_reviews' => 'Всего отзывов',
+    't_reviews' => 'отзывов',
 ];
