@@ -15,8 +15,10 @@ class ImagesSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
         Image::truncate();
         $this->command->info('[images] table truncated...');
-
+        
+        DB::beginTransaction();
         $this->seed();
+        DB::commit();
 
         $this->command->info('[images] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
@@ -99,5 +101,19 @@ class ImagesSeeder extends Seeder
         $image->medium = "/img/product/medium/orange.jpg";
         $image->small = "/img/product/small/orange.jpg";
         $image->save();
+
+        $image = new Image();
+        $image->original = "/img/template/slider/slide-1.jpg";
+        $image->save();
+        
+        $image = new Image();
+        $image->original = "/img/template/slider/slide-3.jpg";
+        $image->save();
+        
+        $image = new Image();
+        $image->original = "/img/template/slider/slide-4.jpg";
+        $image->save();
+        
+        
     }
 }

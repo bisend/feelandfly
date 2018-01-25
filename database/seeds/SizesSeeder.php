@@ -16,7 +16,9 @@ class SizesSeeder extends Seeder
         Size::truncate();
         $this->command->info('[sizes] table truncated...');
 
+        DB::beginTransaction();
         $this->seed();
+        DB::commit();
 
         $this->command->info('[sizes] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');

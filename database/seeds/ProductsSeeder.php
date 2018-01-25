@@ -15,9 +15,11 @@ class ProductsSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
         Product::truncate();
         $this->command->info('[products] table truncated...');
-
+        
+        DB::beginTransaction();
         $this->seed();
-
+        DB::commit();
+        
         $this->command->info('[products] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }

@@ -17,7 +17,9 @@ class ProductSizesSeeder extends Seeder
         ProductSize::truncate();
         $this->command->info('[product_sizes] table truncated...');
 
+        DB::beginTransaction();
         $this->seed();
+        DB::commit();
 
         $this->command->info('[product_sizes] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');

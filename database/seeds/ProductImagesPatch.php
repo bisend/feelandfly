@@ -12,6 +12,8 @@ class ProductImagesPatch extends Seeder
      */
     public function run()
     {
+        DB::beginTransaction();
+        
         $imageId = 311;
         $counter = 1;
         for ($i = 63; $i <= 620; $i++)
@@ -31,5 +33,7 @@ class ProductImagesPatch extends Seeder
             $counter++;
             $imageId++;
         }
+        
+        DB::commit();
     }
 }

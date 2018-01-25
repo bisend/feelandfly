@@ -16,7 +16,9 @@ class ProductPricesSeeder extends Seeder
         ProductPrice::truncate();
         $this->command->info('[product_prices] table truncated...');
 
+        DB::beginTransaction();
         $this->seed();
+        DB::commit();
 
         $this->command->info('[product_prices] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');

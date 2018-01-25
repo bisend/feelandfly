@@ -16,7 +16,9 @@ class ProductStocksSeeder extends Seeder
         ProductStock::truncate();
         $this->command->info('[product_stocks] table truncated...');
 
+        DB::beginTransaction();
         $this->seed();
+        DB::commit();
 
         $this->command->info('[product_stocks] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');

@@ -13,7 +13,10 @@ class ProductsPatch extends Seeder
      */
     public function run()
     {
+        DB::beginTransaction();
         $this->seed();
+        DB::commit();
+        
         $this->command->info('[products_patch] table seeded...');
     }
 

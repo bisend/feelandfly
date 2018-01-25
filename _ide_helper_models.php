@@ -10,6 +10,46 @@
 
 namespace App\DatabaseModels{
 /**
+ * App\DatabaseModels\Blog
+ *
+ * @property int $id
+ * @property int $image_id
+ * @property string $title_ru
+ * @property string $title_uk
+ * @property string $slug
+ * @property string|null $description_ru
+ * @property string|null $description_uk
+ * @property string|null $short_description_ru
+ * @property string|null $short_description_uk
+ * @property int $number_of_views
+ * @property string|null $code_1c
+ * @property int $priority
+ * @property bool $is_visible
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\DatabaseModels\Image $image
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereDescriptionRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereDescriptionUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereImageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereNumberOfViews($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog wherePriority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereShortDescriptionRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereShortDescriptionUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereTitleRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereTitleUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Blog whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	class Blog extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
  * App\DatabaseModels\Category
  *
  * @property int $id
@@ -35,6 +75,12 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property bool $is_visible
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereIsVisible($value)
+ * @property string|null $icon
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereIcon($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Category[] $childs
+ * @property-read \App\DatabaseModels\Category|null $parent
  */
 	class Category extends \Eloquent {}
 }
@@ -114,6 +160,61 @@ namespace App\DatabaseModels{
  * @mixin \Eloquent
  */
 	class Image extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
+ * App\DatabaseModels\MainSlider
+ *
+ * @property int $id
+ * @property int $image_id
+ * @property int $priority
+ * @property bool $is_visible
+ * @property string|null $code_1c
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSlider whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSlider whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSlider whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSlider whereImageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSlider whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSlider wherePriority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSlider whereUpdatedAt($value)
+ * @mixin \Eloquent
+ * @property-read \App\DatabaseModels\Image $image
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\MainSliderMarker[] $markers
+ */
+	class MainSlider extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
+ * App\DatabaseModels\MainSliderMarker
+ *
+ * @property int $id
+ * @property int $slide_id
+ * @property int $product_id
+ * @property int $priority
+ * @property bool $is_visible
+ * @property string|null $code_1c
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSliderMarker whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSliderMarker whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSliderMarker whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSliderMarker whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSliderMarker wherePriority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSliderMarker whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSliderMarker whereSlideId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSliderMarker whereUpdatedAt($value)
+ * @mixin \Eloquent
+ * @property-read \App\DatabaseModels\Product $product
+ * @property int|null $position_x
+ * @property int|null $position_y
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSliderMarker wherePositionX($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSliderMarker wherePositionY($value)
+ */
+	class MainSliderMarker extends \Eloquent {}
 }
 
 namespace App\DatabaseModels{
@@ -279,9 +380,35 @@ namespace App\DatabaseModels{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\ProductPrice[] $price
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\ProductSize[] $product_sizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Property[] $properties
- * @property-read \App\DatabaseModels\Sale $sales
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Promotion[] $promotions
+ * @property bool $is_visible
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereIsVisible($value)
+ * @property-read \App\DatabaseModels\ProductCategory $product_category
  */
 	class Product extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
+ * App\DatabaseModels\ProductCategory
+ *
+ * @property int $id
+ * @property int $product_id
+ * @property int $category_id
+ * @property string|null $code_1c
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Category[] $categories
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Product[] $products
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductCategory whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductCategory whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductCategory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductCategory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductCategory whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductCategory whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	class ProductCategory extends \Eloquent {}
 }
 
 namespace App\DatabaseModels{
@@ -298,6 +425,8 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductGroup whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Product[] $products
+ * @property string|null $name
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductGroup whereName($value)
  */
 	class ProductGroup extends \Eloquent {}
 }
@@ -346,8 +475,35 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPrice whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPrice whereUserTypeId($value)
  * @mixin \Eloquent
+ * @property float|null $old_price
+ * @property int|null $discount
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPrice whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPrice whereOldPrice($value)
  */
 	class ProductPrice extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
+ * App\DatabaseModels\ProductPromotion
+ *
+ * @property int $id
+ * @property int $product_id
+ * @property int $promotion_id
+ * @property int $priority
+ * @property string|null $code_1c
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPromotion whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPromotion whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPromotion whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPromotion wherePriority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPromotion whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPromotion wherePromotionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductPromotion whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	class ProductPromotion extends \Eloquent {}
 }
 
 namespace App\DatabaseModels{
@@ -422,6 +578,31 @@ namespace App\DatabaseModels{
  * @mixin \Eloquent
  */
 	class Profile extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
+ * App\DatabaseModels\Promotion
+ *
+ * @property int $id
+ * @property string $name_ru
+ * @property string $name_uk
+ * @property string $slug
+ * @property int $priority
+ * @property string|null $code_1c
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Promotion whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Promotion whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Promotion whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Promotion whereNameRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Promotion whereNameUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Promotion wherePriority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Promotion whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Promotion whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	class Promotion extends \Eloquent {}
 }
 
 namespace App\DatabaseModels{
@@ -528,17 +709,10 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereUserId($value)
  * @mixin \Eloquent
+ * @property int $is_deleted
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Review whereIsDeleted($value)
  */
 	class Review extends \Eloquent {}
-}
-
-namespace App\DatabaseModels{
-/**
- * App\DatabaseModels\Sale
- *
- * @property-read \App\DatabaseModels\Product $product
- */
-	class Sale extends \Eloquent {}
 }
 
 namespace App\DatabaseModels{

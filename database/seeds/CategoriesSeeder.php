@@ -15,9 +15,11 @@ class CategoriesSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
         Category::truncate();
         $this->command->info('[categories] table truncated...');
-
+        
+        DB::beginTransaction();
         $this->seed();
-
+        DB::commit();
+        
         $this->command->info('[categories] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
@@ -29,6 +31,7 @@ class CategoriesSeeder extends Seeder
         //1
         $category = new Category();
         $category->parent_id = null;
+        $category->icon = '/img/template/category-icon/jacket.png';
         $category->name_ru = 'Верхняя одежда';
         $category->name_uk = 'Верхній одяг';
         $category->slug = URLify::filter('Верхняя одежда');
@@ -39,6 +42,7 @@ class CategoriesSeeder extends Seeder
         //2
         $category = new Category();
         $category->parent_id = null;
+        $category->icon = '/img/template/category-icon/hoodie.png';
         $category->name_ru = 'Свитшоты & толстовки';
         $category->name_uk = 'Світшоти & толстовки';
         $category->slug = URLify::filter('Свитшоты & толстовки');
@@ -49,6 +53,7 @@ class CategoriesSeeder extends Seeder
         //3
         $category = new Category();
         $category->parent_id = null;
+        $category->icon = '/img/template/category-icon/jeans.png';
         $category->name_ru = 'Штаны';
         $category->name_uk = 'Штани';
         $category->slug = URLify::filter('Штаны');
@@ -59,6 +64,7 @@ class CategoriesSeeder extends Seeder
         //4
         $category = new Category();
         $category->parent_id = null;
+        $category->icon = '/img/template/category-icon/shorts.png';
         $category->name_ru = 'Шорты';
         $category->name_uk = 'Шорти';
         $category->slug = URLify::filter('Шорты');
@@ -69,6 +75,7 @@ class CategoriesSeeder extends Seeder
         //5
         $category = new Category();
         $category->parent_id = null;
+        $category->icon = '/img/template/category-icon/backpack.png';
         $category->name_ru = 'Аксессуары';
         $category->name_uk = 'Аксесуари';
         $category->slug = URLify::filter('Аксессуары');

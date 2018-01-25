@@ -16,7 +16,9 @@ class UserTypesSeeder extends Seeder
         UserType::truncate();
         $this->command->info('[user_types] table truncated...');
 
+        DB::beginTransaction();
         $this->seed();
+        DB::commit();
 
         $this->command->info('[user_types] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');

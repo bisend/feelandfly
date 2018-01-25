@@ -13,9 +13,19 @@ class MainSliderSeeder extends Seeder
     public function run()
     {
         DB::beginTransaction();
+        
         $slide = new MainSlider();
-        $slide->image_id;
+        $slide->image_id = 320;
         $slide->save();
+        
+        $slide = new MainSlider();
+        $slide->image_id = 321;
+        $slide->save();
+        
+        $slide = new MainSlider();
+        $slide->image_id = 322;
+        $slide->save();
+        
         DB::commit();
     }
 }

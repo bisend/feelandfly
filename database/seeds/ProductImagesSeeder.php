@@ -17,8 +17,10 @@ class ProductImagesSeeder extends Seeder
         ProductImage::truncate();
         $this->command->info('[product_images] table truncated...');
 
+        DB::beginTransaction();
         $this->seed();
-
+        DB::commit();
+        
         $this->command->info('[product_images] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }

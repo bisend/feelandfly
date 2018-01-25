@@ -12,10 +12,14 @@ class ProductGroupsSeeder extends Seeder
      */
     public function run()
     {
+        DB::beginTransaction();
+        
         for ($i = 1; $i <= 62; $i++)
         {
             $productGroup = new ProductGroup();
             $productGroup->save();
         }
+
+        DB::commit();
     }
 }

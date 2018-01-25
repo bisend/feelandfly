@@ -16,7 +16,9 @@ class ColorsSeeder extends Seeder
         Color::truncate();
         $this->command->info('[colors] table truncated...');
 
+        DB::beginTransaction();
         $this->seed();
+        DB::commit();
 
         $this->command->info('[colors] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
@@ -29,7 +31,7 @@ class ColorsSeeder extends Seeder
         $color->name_ru = 'черный';
         $color->name_uk = 'чорний';
         $color->slug = URLify::filter('черный');
-        $color->html_code = 'rgb(0,0,0);';
+        $color->html_code = 'rgb(0,0,0)';
         $color->save();
 
         //red
@@ -37,7 +39,7 @@ class ColorsSeeder extends Seeder
         $color->name_ru = 'красный';
         $color->name_uk = 'червоний';
         $color->slug = URLify::filter('красный');
-        $color->html_code = 'rgb(255,0,0);';
+        $color->html_code = 'rgb(255,0,0)';
         $color->save();
 
         //green
@@ -45,7 +47,7 @@ class ColorsSeeder extends Seeder
         $color->name_ru = 'зеленый';
         $color->name_uk = 'зелений';
         $color->slug = URLify::filter('зеленый');
-        $color->html_code = 'rgb(0,255,0);';
+        $color->html_code = 'rgb(0,255,0)';
         $color->save();
 
         //blue
@@ -53,7 +55,7 @@ class ColorsSeeder extends Seeder
         $color->name_ru = 'синий';
         $color->name_uk = 'синій';
         $color->slug = URLify::filter('синий');
-        $color->html_code = 'rgb(0,0,255);';
+        $color->html_code = 'rgb(0,0,255)';
         $color->save();
 
         //yellow
@@ -61,7 +63,7 @@ class ColorsSeeder extends Seeder
         $color->name_ru = 'желтый';
         $color->name_uk = 'жовтий';
         $color->slug = URLify::filter('желтый');
-        $color->html_code = 'rgb(255,255,0);';
+        $color->html_code = 'rgb(255,255,0)';
         $color->save();
 
         //lightblue
@@ -69,7 +71,7 @@ class ColorsSeeder extends Seeder
         $color->name_ru = 'голубой';
         $color->name_uk = 'голубий';
         $color->slug = URLify::filter('голубой');
-        $color->html_code = 'rgb(0,255,255);';
+        $color->html_code = 'rgb(0,255,255)';
         $color->save();
 
         //pink
@@ -77,7 +79,7 @@ class ColorsSeeder extends Seeder
         $color->name_ru = 'розовый';
         $color->name_uk = 'рожевий';
         $color->slug = URLify::filter('розовый');
-        $color->html_code = 'rgb(255,0,255);';
+        $color->html_code = 'rgb(255,0,255)';
         $color->save();
 
         //gray
@@ -85,7 +87,7 @@ class ColorsSeeder extends Seeder
         $color->name_ru = 'серый';
         $color->name_uk = 'сірий';
         $color->slug = URLify::filter('серый');
-        $color->html_code = 'rgb(192,192,192);';
+        $color->html_code = 'rgb(192,192,192)';
         $color->save();
 
         //white
@@ -93,7 +95,7 @@ class ColorsSeeder extends Seeder
         $color->name_ru = 'белый';
         $color->name_uk = 'білий';
         $color->slug = URLify::filter('белый');
-        $color->html_code = 'rgb(255,255,255);';
+        $color->html_code = 'rgb(255,255,255)';
         $color->save();
         
         //orange
@@ -101,7 +103,7 @@ class ColorsSeeder extends Seeder
         $color->name_ru = 'оранжевый';
         $color->name_uk = 'помаранчевий';
         $color->slug = URLify::filter('оранжевый');
-        $color->html_code = 'rgb(255,165,0);';
+        $color->html_code = 'rgb(255,165,0)';
         $color->save();
     }
 }

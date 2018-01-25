@@ -16,7 +16,9 @@ class PropertyNamesSeeder extends Seeder
         PropertyName::truncate();
         $this->command->info('[property_names] table truncated...');
 
+        DB::beginTransaction();
         $this->seed();
+        DB::commit();
 
         $this->command->info('[property_names] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
