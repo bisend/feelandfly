@@ -97,11 +97,11 @@
                                             <li v-for="relatedProduct in categoryProductPreview.product.product_group.products">
                                                 <a v-if="relatedProduct.color.id === categoryProductPreview.product.color.id"
                                                    class="active ttip"
-                                                   v-bind:title="'{{ trans('email.color') }}' + ': ' + relatedProduct.color.name"
+                                                   v-bind:title="relatedProduct.color.name"
                                                    :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                    v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
                                                 <a class="ttip"
-                                                   v-bind:title="'{{ trans('email.color') }}' + ': ' + relatedProduct.color.name"
+                                                   v-bind:title="relatedProduct.color.name"
                                                    v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
                                                    v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
                                             </li>
@@ -115,8 +115,6 @@
                                             </div>
                                             <li v-for="(size, index) in categoryProductPreview.product.sizes">
                                                 <a v-on:click.prevent="changeCurrentSizeId(size.id)"
-                                                   class="ttip"
-                                                   v-bind:title="'{{ trans('email.size') }}' + ': ' + size.name"
                                                    :class="{active : categoryProductPreview.currentSizeId == size.id}"
                                                    href="#">
                                                     @{{ size.name }}
@@ -443,12 +441,12 @@
                                                                     <li>
                                                                         @if($categoryProduct->color->id == $relatedProduct->color->id)
                                                                             <a class="active ttip" href="{{ url_product($relatedProduct->slug, $model->language) }}"
-                                                                               title="{{ trans('email.color') }}: {{  $relatedProduct->color->name }}"
+                                                                               title="{{  $relatedProduct->color->name }}"
                                                                                style="background-color: {{ $relatedProduct->color->html_code }}"></a>
                                                                         @else
                                                                             <a href="{{ url_product($relatedProduct->slug, $model->language) }}"
                                                                                class="ttip"
-                                                                               title="{{ trans('email.color') }}: {{  $relatedProduct->color->name }}"
+                                                                               title="{{  $relatedProduct->color->name }}"
                                                                                style="background-color: {{ $relatedProduct->color->html_code }}"></a>
                                                                         @endif
                                                                     </li>
@@ -461,15 +459,11 @@
                                                                         @if($counterSize == 0)
                                                                             <a v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
                                                                                 :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
-                                                                               class="ttip"
-                                                                               title="{{ trans('email.size') }}: {{  $size->name }}"
                                                                                href="#">
                                                                                 {{ $size->name }}
                                                                             </a>
                                                                         @else
                                                                             <a href="#"
-                                                                               class="ttip"
-                                                                               title="{{ trans('email.size') }}: {{  $size->name }}"
                                                                                v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
                                                                                :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}">
                                                                                 {{ $size->name }}

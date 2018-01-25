@@ -88,7 +88,7 @@ $('body').on('click','.drop-menu-select .dropeddown li:not(.select-multi)', func
 
 $(document).ready(function() {
     $('.ttip').tooltipster({
-        theme: 'tooltipster-noir'
+        theme: 'tooltipster-borderless'
     });
 });
 
