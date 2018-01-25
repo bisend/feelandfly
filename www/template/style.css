@@ -5768,12 +5768,12 @@ textarea.incorrect-field:-ms-input-placeholder {
 
 .photo-cat_fit{
     display: block;
-    width: 270px;
+    width: 100%;
     height: 270px;
 }
 
 .photo-cat_fit img{
-    width: 270px;
+    width: 100%;
     height: 270px;
     object-fit: cover;
 }
