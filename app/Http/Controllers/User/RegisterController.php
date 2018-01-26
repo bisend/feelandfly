@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\DatabaseModels\Profile;
 use App\DatabaseModels\User;
+use App\DatabaseModels\UserType;
 use App\Http\Controllers\LayoutController;
 use App\Mail\EmailConfirm;
 use DB;
@@ -51,7 +52,8 @@ class RegisterController extends LayoutController
         $user->name = request('name');
         $user->email = request('email');
         $user->password = bcrypt(request('password'));
-        $user->user_type_id = 1;
+        $userType = UserType::whereIsDefault(true)->first();
+        $user->user_type_id = $userType->id;
         $user->save();
         $confirmationToken = str_random(31) . $user->id;
         $user->confirmation_token = $confirmationToken;

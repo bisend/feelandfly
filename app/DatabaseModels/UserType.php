@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\UserType whereTypeUk($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\UserType whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property bool $is_default
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\UserType whereIsDefault($value)
  */
 class UserType extends Model
 {

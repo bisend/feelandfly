@@ -30,6 +30,7 @@ class UserTypesSeeder extends Seeder
         $userType->type_ru = 'Розничный клиент';
         $userType->type_uk = 'Роздрібний клієнт';
         $userType->slug = URLify::filter('Розничный клиент');
+        $userType->is_default = true;
         $userType->save();
 
         $userType = new UserType();

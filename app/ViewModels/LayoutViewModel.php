@@ -4,6 +4,7 @@ namespace App\ViewModels;
 
 use App\DatabaseModels\Profile;
 use App\DatabaseModels\User;
+use App\DatabaseModels\UserType;
 
 /**
  * Class LayoutViewModel
@@ -52,7 +53,9 @@ abstract class LayoutViewModel
         
         $this->language = $language;
 
-        $this->userTypeId = config('app.defUserTypeId');
+        $userType = UserType::whereIsDefault(true)->first();
+
+        $this->userTypeId = $userType->id;
 
         if (auth()->check())
         {

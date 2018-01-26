@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\DatabaseModels\SocialLogin;
 use App\DatabaseModels\User;
+use App\DatabaseModels\UserType;
 use App\Helpers\Languages;
 use App\Http\Controllers\LayoutController;
 use App\Repositories\ProfileRepository;
@@ -102,7 +103,8 @@ class GoogleLoginController extends LayoutController
                 $user->name = $name;
                 $user->email = $email;
                 $user->password = bcrypt(str_random(8));
-                $user->user_type_id = 1;
+                $userType = UserType::whereIsDefault(true)->first();
+                $user->user_type_id = $userType->id;
                 $user->active = true;
                 $user->save();
                 $confirmationToken = str_random(31) . $user->id;

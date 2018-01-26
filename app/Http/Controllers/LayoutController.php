@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DatabaseModels\Profile;
+use App\DatabaseModels\UserType;
 use App\DatabaseModels\WishList;
 use App\Helpers\Languages;
 use App\Services\ProfileService;
@@ -51,7 +52,8 @@ class LayoutController extends Controller
         else
         {
             $user = null;
-            $userTypeId = 1;
+            $userType = UserType::whereIsDefault(true)->first();
+            $userTypeId = $userType->id;
             $profile = null;
             $wishList = null;
             $wishListItems = [];
