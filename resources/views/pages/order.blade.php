@@ -34,7 +34,7 @@
 
 
                 <!-- Product Details Starts-->
-                <aside class="col-md-7 col-sm-8">
+                <aside class="col-md-7 col-sm-12">
                     <form @submit.prevent="validateBeforeSubmit">
 
                         <div class="profile-item">
@@ -155,7 +155,7 @@
                 </aside>
 
 
-                <div class="col-md-5 col-sm-4">
+                <div class="col-md-5 col-sm-12">
                     <div class="profile-item">
                         <div class="profile-item-header">
                             <span><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>{{ trans('order.your_order') }}
