@@ -39,5 +39,12 @@ class MetaTagsProdsCatsSeeder extends Seeder
             $category->meta_tag_id = $i + 633;
             $category->save();
         }
+
+//        for ($i = 1; $i <= 5; $i++)
+//        {
+//            $category = Category::whereId($i)->first();
+//            $category->meta_tag_id = $i + 13;
+//            $category->save();
+//        }
     }
 }
