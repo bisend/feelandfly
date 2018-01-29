@@ -9,6 +9,7 @@
 namespace App\Services;
 
 use App\Repositories\CategoryRepository;
+use App\Repositories\MetaTagRepository;
 use App\Repositories\ProductRepository;
 
 /**
@@ -22,16 +23,22 @@ class SearchService extends LayoutService
      */
     private $productRepository;
 
+    private $metaTagRepository;
+
     /**
      * SearchService constructor.
      * @param CategoryRepository $categoryRepository
      * @param ProductRepository $productRepository
      */
-    public function __construct(CategoryRepository $categoryRepository, ProductRepository $productRepository)
+    public function __construct(CategoryRepository $categoryRepository,
+                                ProductRepository $productRepository,
+                                MetaTagRepository $metaTagRepository)
     {
         parent::__construct($categoryRepository);
 
         $this->productRepository = $productRepository;
+
+        $this->metaTagRepository = $metaTagRepository;
     }
 
     /**
@@ -44,6 +51,8 @@ class SearchService extends LayoutService
         $this->fillSearchProducts($model);
 
         $this->fillCountSearchProducts($model);
+
+        $this->fillMetaTags($model);
     }
 
     /**
@@ -86,5 +95,14 @@ class SearchService extends LayoutService
     public function fillAjaxSearchProducts($model)
     {
         $model->searchProducts = $this->productRepository->getAjaxSearchProducts($model);
+    }
+
+    private function fillMetaTags($model)
+    {
+        $metaTag = $this->metaTagRepository->getMetaTagByPageName($model);
+        $model->title = $metaTag->title;
+        $model->description = $metaTag->description;
+        $model->keywords = $metaTag->keywords;
+        $model->h1 = $metaTag->h1;
     }
 }

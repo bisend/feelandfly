@@ -53,6 +53,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $is_visible
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereIsVisible($value)
  * @property-read \App\DatabaseModels\ProductCategory $product_category
+ * @property int|null $meta_tag_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaTagId($value)
+ * @property-read \App\DatabaseModels\MetaTag $meta_tag
  */
 class Product extends Model
 {
@@ -98,13 +101,8 @@ class Product extends Model
         return $this->belongsToMany(Promotion::class, 'products_promotions');
     }
 
-//    public function product_category()
-//    {
-//        return $this->belongsTo(ProductCategory::class, 'id', 'product_id');
-//    }
-
-//    public function product_category()
-//    {
-//        return $this->hasMany(ProductCategory::class, 'product_id', 'id');
-//    }
+    public function meta_tag()
+    {
+        return $this->hasOne(MetaTag::class, 'id', 'meta_tag_id');
+    }
 }

@@ -66,6 +66,8 @@ class CategoryFiltersService extends LayoutService
         $this->fillInitialPriceMin($model);
 
         $this->fillInitialPriceMax($model);
+
+        $this->fillMetaTags($model);
     }
 
     /**
@@ -173,5 +175,13 @@ class CategoryFiltersService extends LayoutService
     private function fillInitialPriceMax($model)
     {
         $model->initialPriceMax = $this->productRepository->getPriceMaxForFiltersCategoryProducts($model);
+    }
+
+    private function fillMetaTags($model)
+    {
+        $model->title = $model->currentCategory->meta_tag->title;
+        $model->description = $model->currentCategory->meta_tag->description;
+        $model->keywords = $model->currentCategory->meta_tag->keywords;
+        $model->h1 = $model->currentCategory->meta_tag->h1;
     }
 }

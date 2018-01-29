@@ -70,6 +70,8 @@ class CategoryService extends LayoutService
         $this->fillPriceMin($model);
 
         $this->fillPriceMax($model);
+
+        $this->fillMetaTags($model);
     }
 
     /**
@@ -94,10 +96,10 @@ class CategoryService extends LayoutService
     {
         $userTypeId = $model->userTypeId;
 
-        if ($userTypeId == 4)
-        {
-            $userTypeId = 1;
-        }
+//        if ($userTypeId == 4)
+//        {
+//            $userTypeId = 1;
+//        }
         
         $model->categoryProducts = $this->productRepository->getAllProductsForCategory(
             $model->currentCategory,
@@ -162,5 +164,13 @@ class CategoryService extends LayoutService
     private function fillPriceMax($model)
     {
         $model->priceMax = $this->productRepository->getPriceMaxForCategoryProducts($model);
+    }
+
+    private function fillMetaTags($model)
+    {
+        $model->title = $model->currentCategory->meta_tag->title;
+        $model->description = $model->currentCategory->meta_tag->description;
+        $model->keywords = $model->currentCategory->meta_tag->keywords;
+        $model->h1 = $model->currentCategory->meta_tag->h1;
     }
 }

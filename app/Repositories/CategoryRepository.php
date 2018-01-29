@@ -56,18 +56,24 @@ class CategoryRepository
             ]);
     }
 
-    /**
-     * return current category by slug and language
-     * @param $slug
-     * @param $language
-     * @return \Illuminate\Database\Eloquent\Model|null|static
-     */
     public function getCurrentCategoryBySlug($slug, $language)
     {
-        return Category::whereSlug($slug)->whereIsVisible(true)
+        return Category::with([
+            'meta_tag' => function ($query) use ($language) {
+                $query->select([
+                    'meta_tags.id',
+                    "meta_tags.title_$language as title",
+                    "meta_tags.description_$language as description",
+                    "meta_tags.keywords_$language as keywords",
+                    "meta_tags.h1_$language as h1"
+                ]);
+            }
+        ])
+            ->whereSlug($slug)->whereIsVisible(true)
             ->first([
                 'id',
                 'parent_id',
+                'meta_tag_id',
                 'icon',
                 "name_$language as name",
                 'slug',
@@ -76,11 +82,6 @@ class CategoryRepository
             ]);
     }
 
-    /**
-     * @param $categoryId
-     * @param $language
-     * @return \Illuminate\Database\Eloquent\Model|null|static
-     */
     public function getCurrentCategoryById($categoryId, $language)
     {
         return Category::whereId($categoryId)->whereIsVisible(true)

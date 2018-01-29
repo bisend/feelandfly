@@ -39,7 +39,7 @@ class WishListController extends LayoutController
             return redirect(url_home($language));
         }
 
-        $model = new WishListViewModel('wish-list', $language, 1);
+        $model = new WishListViewModel('profile-wish-list', $language, 1);
 
         $this->profileService->fill($model);
 

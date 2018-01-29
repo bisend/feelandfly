@@ -41,7 +41,7 @@ class PaymentDeliveryController extends LayoutController
             return redirect(url_home($language));
         }
         
-        $model = new PaymentDeliveryViewModel('payment-delivery', $language);
+        $model = new PaymentDeliveryViewModel('profile-payment-delivery', $language);
         
         $this->profileService->fill($model);
 

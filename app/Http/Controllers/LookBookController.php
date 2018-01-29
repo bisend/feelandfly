@@ -21,7 +21,7 @@ class LookBookController extends LayoutController
     
     public function showAllLookBook($language = Languages::DEFAULT_LANGUAGE)
     {
-        $model = new LookBookViewModel('lookbookAll', $language);
+        $model = new LookBookViewModel('lookbook-all', $language);
 
         $this->lookBookService->fill($model);
         

@@ -64,5 +64,9 @@ class DatabaseSeeder extends Seeder
 //        $this->call(MainSliderMarkersSeeder::class);
 //        
 //        $this->call(ProductsPromotionsSeeder::class);
+
+//        $this->call(MetaTagsSeeder::class);
+
+//        $this->call(MetaTagsProdsCatsSeeder::class);
     }
 }

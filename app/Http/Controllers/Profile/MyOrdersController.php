@@ -42,7 +42,7 @@ class MyOrdersController extends LayoutController
             return redirect(url_home($language));
         }
 
-        $model = new MyOrdersViewModel('my-orders', $language, 1);
+        $model = new MyOrdersViewModel('profile-my-orders', $language, 1);
         
         $this->profileService->fill($model);
         

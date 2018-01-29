@@ -31,13 +31,6 @@ class ProductRepository
      */
     protected $likeSeparator = '%';
 
-    /**
-     * return single product by slug and language, userTypeId define prices etc.
-     * @param string $slug
-     * @param string $language
-     * @param integer $userTypeId
-     * @return \Illuminate\Database\Eloquent\Model|null|static
-     */
     public function getProductBySlug($slug, $language, $userTypeId)
     {
         return Product::with([
@@ -81,6 +74,15 @@ class ProductRepository
             'promotions' => function ($query) {
                 $query->orderByRaw('promotions.priority desc');
             },
+            'meta_tag' => function ($query) use ($language) {
+                $query->select([
+                    'meta_tags.id',
+                    "meta_tags.title_$language as title",
+                    "meta_tags.description_$language as description",
+                    "meta_tags.keywords_$language as keywords",
+                    "meta_tags.h1_$language as h1"
+                ]);
+            }
         ])
             ->whereSlug($slug)
             ->whereIsVisible(true)
@@ -91,6 +93,7 @@ class ProductRepository
                 'color_id',
                 'group_id',
                 'category_id',
+                'meta_tag_id',
                 'breadcrumb_category_id',
                 "description_$language as description",
                 'priority',

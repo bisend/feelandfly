@@ -42,7 +42,7 @@ class PersonalInfoController extends LayoutController
             return redirect(url_home($language));
         }
 
-        $model = new PersonalInfoViewModel('personal-info', $language);
+        $model = new PersonalInfoViewModel('profile-personal-info', $language);
         
         $this->profileService->fill($model);
         

@@ -8,8 +8,10 @@
 
 namespace App\Services;
 
+use App\DatabaseModels\MetaTag;
 use App\Repositories\BlogRepository;
 use App\Repositories\CategoryRepository;
+use App\Repositories\MetaTagRepository;
 use App\Repositories\ProductRepository;
 
 /**
@@ -22,6 +24,8 @@ class HomeService extends LayoutService
     
     protected $blogRepository;
 
+    protected $metaTagRepository;
+
     /**
      * HomeService constructor.
      * @param CategoryRepository $categoryRepository
@@ -30,13 +34,16 @@ class HomeService extends LayoutService
      */
     public function __construct(CategoryRepository $categoryRepository,
                                 ProductRepository $productRepository,
-                                BlogRepository $blogRepository)
+                                BlogRepository $blogRepository,
+                                MetaTagRepository $metaTagRepository)
     {
         parent::__construct($categoryRepository);
 
         $this->productRepository = $productRepository;
         
         $this->blogRepository = $blogRepository;
+
+        $this->metaTagRepository = $metaTagRepository;
     }
 
     /**
@@ -63,6 +70,8 @@ class HomeService extends LayoutService
         $this->fillNewIds($model);
         
         $this->fillBlogs($model);
+
+        $this->fillMetaTags($model);
     }
 
     private function fillSalesProducts($model)
@@ -130,5 +139,14 @@ class HomeService extends LayoutService
     private function fillBlogs($model)
     {
         $model->blogs = $this->blogRepository->getBlogsOnHomePage($model);
+    }
+
+    private function fillMetaTags($model)
+    {
+        $metaTag = $this->metaTagRepository->getMetaTagByPageName($model);
+        $model->title = $metaTag->title;
+        $model->description = $metaTag->description;
+        $model->keywords = $metaTag->keywords;
+        $model->h1 = $metaTag->h1;
     }
 }

@@ -55,6 +55,8 @@ class ProductService extends LayoutService
         $this->fillProductProperties($model);
 
         $this->fillSimilarProducts($model);
+
+        $this->fillMetaTags($model);
     }
 
     /**
@@ -65,10 +67,10 @@ class ProductService extends LayoutService
     {
         $userTypeId = $model->userTypeId;
 
-        if ($userTypeId == 4)
-        {
-            $userTypeId = 1;
-        }
+//        if ($userTypeId == 4)
+//        {
+//            $userTypeId = 1;
+//        }
 
         $model->product = $this->productRepository->getProductBySlug($model->slug, $model->language, $userTypeId);
 
@@ -107,15 +109,23 @@ class ProductService extends LayoutService
     {
         $userTypeId = $model->userTypeId;
 
-        if ($userTypeId == 4)
-        {
-            $userTypeId = 1;
-        }
+//        if ($userTypeId == 4)
+//        {
+//            $userTypeId = 1;
+//        }
         
         $model->similarProducts = $this->productRepository->getSimilarProducts(
             $model->product->id, 
             $model->product->category_id, 
             $model->language,
             $userTypeId);
+    }
+
+    private function fillMetaTags($model)
+    {
+        $model->title = $model->product->meta_tag->title;
+        $model->description = $model->product->meta_tag->description;
+        $model->keywords = $model->product->meta_tag->keywords;
+        $model->h1 = $model->product->meta_tag->h1;
     }
 }

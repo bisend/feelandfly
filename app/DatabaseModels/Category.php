@@ -36,6 +36,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereIcon($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Category[] $childs
  * @property-read \App\DatabaseModels\Category|null $parent
+ * @property int|null $meta_tag_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaTagId($value)
+ * @property-read \App\DatabaseModels\MetaTag $meta_tag
  */
 class Category extends Model
 {
@@ -49,5 +52,10 @@ class Category extends Model
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id', 'id');
+    }
+
+    public  function meta_tag()
+    {
+        return $this->hasOne(MetaTag::class, 'id', 'meta_tag_id');
     }
 }

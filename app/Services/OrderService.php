@@ -10,6 +10,7 @@ namespace App\Services;
 
 use App\Repositories\CategoryRepository;
 use App\Repositories\DeliveryRepository;
+use App\Repositories\MetaTagRepository;
 use App\Repositories\OrderProductRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\PaymentRepository;
@@ -40,6 +41,8 @@ class OrderService extends LayoutService
      */
     protected $orderProductRepository;
 
+    protected $metaTagRepository;
+
     /**
      * OrderService constructor.
      * @param CategoryRepository $categoryRepository
@@ -52,7 +55,8 @@ class OrderService extends LayoutService
                                 PaymentRepository $paymentRepository,
                                 DeliveryRepository $deliveryRepository,
                                 OrderRepository $orderRepository, 
-                                OrderProductRepository $orderProductRepository)
+                                OrderProductRepository $orderProductRepository,
+                                MetaTagRepository $metaTagRepository)
     {
         parent::__construct($categoryRepository);
         
@@ -63,6 +67,8 @@ class OrderService extends LayoutService
         $this->orderRepository = $orderRepository;
         
         $this->orderProductRepository = $orderProductRepository;
+
+        $this->metaTagRepository = $metaTagRepository;
     }
 
     /**
@@ -75,6 +81,8 @@ class OrderService extends LayoutService
         $this->fillPayments($model);
         
         $this->fillDeliveries($model);
+
+        $this->fillMetaTags($model);
     }
 
     /**
@@ -116,5 +124,14 @@ class OrderService extends LayoutService
     public function createOrderProducts($model, $cartService)
     {
         $this->orderProductRepository->createOrderProducts($model, $cartService);
+    }
+
+    private function fillMetaTags($model)
+    {
+        $metaTag = $this->metaTagRepository->getMetaTagByPageName($model);
+        $model->title = $metaTag->title;
+        $model->description = $metaTag->description;
+        $model->keywords = $metaTag->keywords;
+        $model->h1 = $metaTag->h1;
     }
 }

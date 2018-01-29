@@ -42,6 +42,14 @@ abstract class LayoutViewModel
      */
     public $profile;
 
+    public $title;
+
+    public $description;
+
+    public $keywords;
+
+    public $h1;
+
     /**
      * LayoutViewModel constructor.
      * @param string $view
