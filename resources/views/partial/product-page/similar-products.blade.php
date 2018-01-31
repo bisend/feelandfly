@@ -186,8 +186,9 @@
                     <figure>
                         <div class="prod-img">
                             <a class="img-hover" href="{{ url_product($similarProduct->slug, $model->language) }}">
-                                <img alt="{{ $similarProduct->name }}" src="{{ $similarProduct->images[0]->big }}">
-
+                                <div class="img-slide-fit">
+                                    <img alt="{{ $similarProduct->name }}" src="{{ $similarProduct->images[0]->big }}">
+                                </div>
                                 @if($similarProduct->promotions != null && $similarProduct->promotions->count() > 0)
                                     @if($similarProduct->promotions[0]->id == 1)
                                         <div class="prod-tag-1 font-2">

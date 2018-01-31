@@ -210,7 +210,9 @@
                                                                         <div class="product_img">
                                                                             <div class="prod-img">
                                                                                 <a class="img-hover" href="{{ url_product($product->slug, $model->language) }}">
-                                                                                    <img alt="{{ $product->name }}" src="{{ $product->images[0]->medium }}">
+                                                                                    <div class="img-slide-fit">
+                                                                                        <img alt="{{ $product->name }}" src="{{ $product->images[0]->medium }}">
+                                                                                    </div>
                                                                                 </a>
 
                                                                                 @if($product->promotions != null && $product->promotions->count() > 0)
@@ -478,8 +480,10 @@
                                         <div class="prod-img">
                                             <a class="img-hover"
                                                href="{{ url_product($saleProduct->slug, $model->language) }}">
-                                                <img alt="{{ $saleProduct->name }}"
-                                                     src="{{ $saleProduct->images[0]->medium }}">
+                                                <div class="img-slide-fit">
+                                                    <img alt="{{ $saleProduct->name }}"
+                                                         src="{{ $saleProduct->images[0]->medium }}">
+                                                    </div>
                                             </a>
                                             <div class="prod-tag-1 font-2">
                                                 <span> -{{ $saleProduct->price[0]->discount }}% </span>
@@ -752,7 +756,10 @@
                                         <figure>
                                             <div class="prod-img">
                                                 <a class="img-hover" href="{{ url_product($topProduct->slug, $model->language) }}">
-                                                    <img alt="{{ $topProduct->name }}" src="{{ $topProduct->images[0]->medium }}">
+                                                    <div class="img-slide-fit">
+                                                        <img alt="{{ $topProduct->name }}" src="{{ $topProduct->images[0]->medium }}">
+                                                    </div>
+
                                                 </a>
                                                 <div class="prod-tag-1 font-2 prod-tag-violet">
                                                     <span> TOP </span>
@@ -977,7 +984,9 @@
                                         <figure>
                                             <div class="prod-img">
                                                 <a class="img-hover" href="{{ url_product($newProduct->slug, $model->language) }}">
-                                                    <img alt="{{ $newProduct->name }}" src="{{ $newProduct->images[0]->medium }}"></a>
+                                                    <div class="img-slide-fit">
+                                                        <img alt="{{ $newProduct->name }}" src="{{ $newProduct->images[0]->medium }}"></a>
+                                                    </div>
                                                 <div class="prod-tag-1 font-2 prod-tag-green">
                                                     <span> NEW </span>
                                                 </div>
