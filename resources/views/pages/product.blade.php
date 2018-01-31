@@ -123,7 +123,12 @@
                                         <li>{{ trans('product.stock') }}:
                                             <span v-cloak v-for="productSize in singleProduct.product.product_sizes"
                                                   v-if="productSize.size_id == singleProduct.sizeId">
-                                                @{{ productSize.stocks[0].stock }}
+                                                <span v-if="productSize.stocks[0].stock > 0" class="product-in-stock">
+                                                    {{ trans('product.product_in_stock') }}
+                                                </span>
+                                                <span v-else class="product-not-in-stock">
+                                                    {{ trans('product.product_not_in_stock') }}
+                                                </span>
                                             </span>
                                         </li>
                                         @foreach($model->productProperties as $productProperty)

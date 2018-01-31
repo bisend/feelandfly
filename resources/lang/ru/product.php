@@ -17,4 +17,7 @@ return [
     'pls_rate' => 'Оцените товар',
     'total_reviews' => 'Всего отзывов',
     't_reviews' => 'отзывов',
+
+    'product_in_stock' => 'В наличии',
+    'product_not_in_stock' => 'Нету в наличии',
 ];
