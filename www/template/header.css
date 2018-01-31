@@ -3988,6 +3988,11 @@ header {
     /*overflow: hidden;*/
 }
 
+.smoll-cart_products .cart-product-item .prod-item_img a{
+    width: 117px;
+    height: 117px;
+}
+
 .lable_smoll{
     overflow: hidden;
 }
@@ -3995,6 +4000,9 @@ header {
 .smoll-cart_products .cart-product-item .prod-item_img img{
     min-width: 117px;
     min-height: 117px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 

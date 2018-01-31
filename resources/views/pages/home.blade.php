@@ -985,8 +985,9 @@
                                             <div class="prod-img">
                                                 <a class="img-hover" href="{{ url_product($newProduct->slug, $model->language) }}">
                                                     <div class="img-slide-fit">
-                                                        <img alt="{{ $newProduct->name }}" src="{{ $newProduct->images[0]->medium }}"></a>
+                                                        <img alt="{{ $newProduct->name }}" src="{{ $newProduct->images[0]->medium }}">
                                                     </div>
+                                                </a>
                                                 <div class="prod-tag-1 font-2 prod-tag-green">
                                                     <span> NEW </span>
                                                 </div>
