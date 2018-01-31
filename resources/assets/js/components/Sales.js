@@ -165,7 +165,7 @@ if (document.getElementById('sales-products'))
                     autoplay: false,
                     autoplayHoverPause: true,
                     smartSpeed: 100,
-                    nav: true,
+                    nav: GLOBAL_DATA.salesProducts.length > 4,
                     margin: 30,
                     responsive: {
                         0: {items: 1},

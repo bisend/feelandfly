@@ -12962,7 +12962,7 @@ if (document.getElementById('similar-product')) {
                     autoplay: false,
                     autoplayHoverPause: true,
                     smartSpeed: 100,
-                    nav: true,
+                    nav: GLOBAL_DATA.similarProducts.length > 4,
                     margin: 30,
                     responsive: {
                         0: { items: 1 },
@@ -15394,7 +15394,7 @@ if (document.getElementById('sales-products')) {
                     autoplay: false,
                     autoplayHoverPause: true,
                     smartSpeed: 100,
-                    nav: true,
+                    nav: GLOBAL_DATA.salesProducts.length > 4,
                     margin: 30,
                     responsive: {
                         0: { items: 1 },
@@ -15951,7 +15951,7 @@ if (document.getElementById('top-products')) {
                     autoplay: false,
                     autoplayHoverPause: true,
                     smartSpeed: 100,
-                    nav: true,
+                    nav: GLOBAL_DATA.topProducts.length > 2,
                     margin: 30,
                     responsive: {
                         0: { items: 1 },
@@ -16507,7 +16507,7 @@ if (document.getElementById('new-products')) {
                     autoplay: false,
                     autoplayHoverPause: true,
                     smartSpeed: 100,
-                    nav: true,
+                    nav: GLOBAL_DATA.newProducts.length > 2,
                     margin: 30,
                     responsive: {
                         0: { items: 1 },
