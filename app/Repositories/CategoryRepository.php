@@ -32,7 +32,7 @@ class CategoryRepository
                         'parent_id',
                         "name_$language as name",
                         'slug'
-                    ])->orderByRaw('priority desc', 'name');
+                    ])->whereIsVisible(true)->orderByRaw('priority desc', 'name');
                     $query->with([
                         'childs' => function ($query) use ($language) {
                             $query->select([
@@ -40,7 +40,7 @@ class CategoryRepository
                                 'parent_id',
                                 "name_$language as name",
                                 'slug'
-                            ])->orderByRaw('priority desc', 'name');
+                            ])->whereIsVisible(true)->orderByRaw('priority desc', 'name');
                         }
                     ]);
                 }
