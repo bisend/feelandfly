@@ -34,7 +34,7 @@
                     <div class="row">
                         <div class="col-md-7 col-sm-12 single-prod-slider sync-sliedr">
                             <!-- Single Products Slider Starts -->
-                            <div class="owl-carousel sync1 pb-25 big-slider">
+                            <div class="owl-carousel sync1 solo-prod pb-25 big-slider">
                                 @foreach($model->product->images as $image)
                                     <div class="item">
                                         <img src="{{ $image->big }}" alt="{{ $model->product->name }}">
@@ -68,7 +68,7 @@
                                 @endforeach
                             </div>
 
-                            <div class="owl-carousel single-prod-thumb sync2 nav-2 item-smoll">
+                            <div class="owl-carousel single-prod-thumb sync2 solo-prod nav-2 item-smoll">
                                 @foreach($model->product->images as $image)
                                     <div class="item">
                                         <img src="{{ $image->small }}" alt="{{ $model->product->name }}">

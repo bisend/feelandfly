@@ -157,6 +157,30 @@ if (document.getElementById('sales-products'))
         el: '#sales-products',
         data: GLOBAL_DATA,
         mounted: function () {
+            /*------------------- Related Product Slider -------------------*/
+            if ($('#sales-prod-slider').length > 0) {
+                $("#sales-prod-slider").owlCarousel({
+                    dots: false,
+                    loop: false,
+                    autoplay: false,
+                    autoplayHoverPause: true,
+                    smartSpeed: 100,
+                    nav: true,
+                    margin: 30,
+                    responsive: {
+                        0: {items: 1},
+                        1200: {items: 4},
+                        992: {items: 3},
+                        768: {items: 2},
+                        568: {items: 1}
+                    },
+                    navText: [
+                        "<i class='fa fa-angle-left'></i>",
+                        "<i class='fa fa-angle-right'></i>"
+                    ]
+                });
+            }
+
             initProductPreviewImagesSliderSales();
 
             destroyProductPreviewImagesSliderSales();

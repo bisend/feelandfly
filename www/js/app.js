@@ -12818,10 +12818,10 @@ if (document.getElementById('similar-product')) {
             var navSpeedThumbs = 500;
 
             if (!initProductPreviewImagesSliderInited === true) {
-                sync1 = $(".sync1.product-preview-images-big");
-                sync2 = $(".sync2.product-preview-images-small");
-                sliderthumb = $(".single-prod-thumb");
-                homethumb = $(".home-slide-thumb");
+                sync1 = $(".sync1.product-preview-images-big:not(.solo-prod)");
+                sync2 = $(".sync2.product-preview-images-small:not(.solo-prod)");
+                sliderthumb = $(".single-prod-thumb:not(.solo-prod)");
+                homethumb = $(".home-slide-thumb:not(.solo-prod)");
             }
 
             sliderthumb.owlCarousel({
@@ -12954,6 +12954,27 @@ if (document.getElementById('similar-product')) {
         el: '#similar-product',
         data: GLOBAL_DATA,
         mounted: function mounted() {
+            /*------------------- Related Product Slider -------------------*/
+            if ($('#rel-prod-slider').length > 0) {
+                $("#rel-prod-slider").owlCarousel({
+                    dots: false,
+                    loop: false,
+                    autoplay: false,
+                    autoplayHoverPause: true,
+                    smartSpeed: 100,
+                    nav: true,
+                    margin: 30,
+                    responsive: {
+                        0: { items: 1 },
+                        1200: { items: 4 },
+                        992: { items: 3 },
+                        768: { items: 2 },
+                        568: { items: 1 }
+                    },
+                    navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
+                });
+            }
+
             initProductPreviewImagesSliderSimilar();
 
             destroyProductPreviewImagesSliderSimilar();
@@ -15365,6 +15386,27 @@ if (document.getElementById('sales-products')) {
         el: '#sales-products',
         data: GLOBAL_DATA,
         mounted: function mounted() {
+            /*------------------- Related Product Slider -------------------*/
+            if ($('#sales-prod-slider').length > 0) {
+                $("#sales-prod-slider").owlCarousel({
+                    dots: false,
+                    loop: false,
+                    autoplay: false,
+                    autoplayHoverPause: true,
+                    smartSpeed: 100,
+                    nav: true,
+                    margin: 30,
+                    responsive: {
+                        0: { items: 1 },
+                        1200: { items: 4 },
+                        992: { items: 3 },
+                        768: { items: 2 },
+                        568: { items: 1 }
+                    },
+                    navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
+                });
+            }
+
             initProductPreviewImagesSliderSales();
 
             destroyProductPreviewImagesSliderSales();
@@ -15901,6 +15943,26 @@ if (document.getElementById('top-products')) {
         el: '#top-products',
         data: GLOBAL_DATA,
         mounted: function mounted() {
+            /*------------------- Product Slider -------------------*/
+            if ($('#prod-slider-1').length > 0) {
+                $("#prod-slider-1").owlCarousel({
+                    dots: false,
+                    loop: false,
+                    autoplay: false,
+                    autoplayHoverPause: true,
+                    smartSpeed: 100,
+                    nav: true,
+                    margin: 30,
+                    responsive: {
+                        0: { items: 1 },
+                        1201: { items: 2 },
+                        768: { items: 1 },
+                        568: { items: 2 }
+                    },
+                    navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
+                });
+            }
+
             initProductPreviewImagesSliderTop();
 
             destroyProductPreviewImagesSliderTop();
@@ -16437,6 +16499,26 @@ if (document.getElementById('new-products')) {
         el: '#new-products',
         data: GLOBAL_DATA,
         mounted: function mounted() {
+            /*------------------- Product Slider -------------------*/
+            if ($('#prod-slider-2').length > 0) {
+                $("#prod-slider-2").owlCarousel({
+                    dots: false,
+                    loop: false,
+                    autoplay: false,
+                    autoplayHoverPause: true,
+                    smartSpeed: 100,
+                    nav: true,
+                    margin: 30,
+                    responsive: {
+                        0: { items: 1 },
+                        1201: { items: 2 },
+                        768: { items: 1 },
+                        568: { items: 2 }
+                    },
+                    navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
+                });
+            }
+
             initProductPreviewImagesSliderNew();
 
             destroyProductPreviewImagesSliderNew();
@@ -16973,6 +17055,24 @@ if (document.getElementById('main-slider-section')) {
         el: '#main-slider-section',
         data: GLOBAL_DATA,
         mounted: function mounted() {
+            //Main Slider carousel
+            if ($('#main-slider').length > 0) {
+                $("#main-slider").owlCarousel({
+                    //animateOut: 'slideOutDown',
+                    //animateIn: 'flipInX',
+                    autoplay: false,
+                    animateIn: 'fadeInDown',
+                    animateOut: 'slideOutDown',
+                    items: 1,
+                    dots: true,
+                    nav: false,
+                    loop: true,
+                    responsive: {
+                        0: { items: 1 }
+                    }
+                });
+            }
+
             initProductPreviewImagesSliderMainSlider();
 
             destroyProductPreviewImagesSliderMainSlider();

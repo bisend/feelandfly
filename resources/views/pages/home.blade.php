@@ -468,7 +468,7 @@
                     <h2 class="section-title">
                         {{ trans('home.sale') }}
                     </h2>
-                    <div id="rel-prod-slider" class="rel-prod-slider nav-1 padding-own">
+                    <div id="sales-prod-slider" class="rel-prod-slider nav-1 padding-own">
 
                         @php($counter = 0)
                         @foreach($model->salesProducts as $saleProduct)

@@ -386,8 +386,3 @@
     });
 
 });
-
-$(function() {
-    $('.prod-title').matchHeight();
-    $('.topic').matchHeight();
-});
