@@ -8,6 +8,7 @@
 
 namespace App\ViewModels;
 
+use App\DatabaseModels\UserType;
 use App\Helpers\Languages;
 
 /**
@@ -39,7 +40,7 @@ class SearchAjaxViewModel
     /**
      * @var integer should contain id of type user
      */
-    public $userTypeId = 1;
+    public $userTypeId;
 
     /**
      * SearchAjaxViewModel constructor.
@@ -55,6 +56,11 @@ class SearchAjaxViewModel
         if (auth()->check())
         {
             $this->userTypeId = auth()->user()->user_type_id;
+        }
+        else
+        {
+            $userType = UserType::whereIsDefault(true)->first();
+            $this->userTypeId = $userType->id;
         }
     }
 }

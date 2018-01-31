@@ -123,9 +123,19 @@ class ProductService extends LayoutService
 
     private function fillMetaTags($model)
     {
-        $model->title = $model->product->meta_tag->title;
-        $model->description = $model->product->meta_tag->description;
-        $model->keywords = $model->product->meta_tag->keywords;
-        $model->h1 = $model->product->meta_tag->h1;
+        if ($model->product->meta_tag)
+        {
+            $model->title = $model->product->meta_tag->title;
+            $model->description = $model->product->meta_tag->description;
+            $model->keywords = $model->product->meta_tag->keywords;
+            $model->h1 = $model->product->meta_tag->h1;
+        }
+        else
+        {
+            $model->title = 'Feelandfly';
+            $model->description = 'Feelandfly';
+            $model->keywords = 'Feelandfly';
+            $model->h1 = 'Feelandfly';
+        }
     }
 }

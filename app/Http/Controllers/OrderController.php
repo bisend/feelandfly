@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DatabaseModels\UserType;
 use App\Helpers\Languages;
 use App\Mail\OrderReport;
 use App\Mail\OrderReportManager;
@@ -80,7 +81,8 @@ class OrderController extends LayoutController
         else
         {
             $userId = null;
-            $userTypeId = 1;
+            $userType = UserType::whereIsDefault(true)->first();
+            $userTypeId = $userType->id;
         }
 
         $model = new OrderViewModel('order', request('language'));

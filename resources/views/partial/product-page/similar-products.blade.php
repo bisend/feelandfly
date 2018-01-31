@@ -1,3 +1,4 @@
+@if($model->similarProducts && !is_null($model->similarProducts) && $model->similarProducts->count() > 0)
 <div class="block-inline pt-15 similar_prod-section" id="similar-product">
 
     {{--SIMILAR PRODUCT PREVIEW--}}
@@ -260,3 +261,4 @@
         @endforeach
     </div>
 </div>
+@endif
