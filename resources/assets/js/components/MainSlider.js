@@ -157,6 +157,13 @@ if (document.getElementById('main-slider-section'))
         el: '#main-slider-section',
         data: GLOBAL_DATA,
         mounted: function () {
+
+            console.log(111);
+
+            $('.ttip:not(.tooltipstered)').tooltipster({
+                theme: 'tooltipster-borderless'
+            });
+
             //Main Slider carousel
             if ($('#main-slider').length > 0) {
                 $("#main-slider").owlCarousel({

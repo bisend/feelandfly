@@ -22,4 +22,5 @@
 <!--Page JS BEGIN-->
 @stack('js')
 <!--Page JS END-->
-<script defer src="/js/app.js" ></script>
+{{--<script defer src="/js/app.js" ></script>--}}
+<script defer src="{{ mix('/js/app.js') }}"></script>

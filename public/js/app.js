@@ -60,153 +60,478 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ "./node_modules/process/browser.js":
 /***/ (function(module, exports) {
 
-var g;
+// shim for using process in browser
+var process = module.exports = {};
 
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
 
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
 }
 
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
 
-module.exports = g;
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 1 */
+
+/***/ "./node_modules/setimmediate/setImmediate.js":
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(2);
+/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
+    "use strict";
 
+    if (global.setImmediate) {
+        return;
+    }
+
+    var nextHandle = 1; // Spec says greater than zero
+    var tasksByHandle = {};
+    var currentlyRunningATask = false;
+    var doc = global.document;
+    var registerImmediate;
+
+    function setImmediate(callback) {
+      // Callback can either be a function or a string
+      if (typeof callback !== "function") {
+        callback = new Function("" + callback);
+      }
+      // Copy function arguments
+      var args = new Array(arguments.length - 1);
+      for (var i = 0; i < args.length; i++) {
+          args[i] = arguments[i + 1];
+      }
+      // Store and register the task
+      var task = { callback: callback, args: args };
+      tasksByHandle[nextHandle] = task;
+      registerImmediate(nextHandle);
+      return nextHandle++;
+    }
+
+    function clearImmediate(handle) {
+        delete tasksByHandle[handle];
+    }
+
+    function run(task) {
+        var callback = task.callback;
+        var args = task.args;
+        switch (args.length) {
+        case 0:
+            callback();
+            break;
+        case 1:
+            callback(args[0]);
+            break;
+        case 2:
+            callback(args[0], args[1]);
+            break;
+        case 3:
+            callback(args[0], args[1], args[2]);
+            break;
+        default:
+            callback.apply(undefined, args);
+            break;
+        }
+    }
+
+    function runIfPresent(handle) {
+        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+        // So if we're currently running a task, we'll need to delay this invocation.
+        if (currentlyRunningATask) {
+            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+            // "too much recursion" error.
+            setTimeout(runIfPresent, 0, handle);
+        } else {
+            var task = tasksByHandle[handle];
+            if (task) {
+                currentlyRunningATask = true;
+                try {
+                    run(task);
+                } finally {
+                    clearImmediate(handle);
+                    currentlyRunningATask = false;
+                }
+            }
+        }
+    }
+
+    function installNextTickImplementation() {
+        registerImmediate = function(handle) {
+            process.nextTick(function () { runIfPresent(handle); });
+        };
+    }
+
+    function canUsePostMessage() {
+        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
+        // where `global.postMessage` means something completely different and can't be used for this purpose.
+        if (global.postMessage && !global.importScripts) {
+            var postMessageIsAsynchronous = true;
+            var oldOnMessage = global.onmessage;
+            global.onmessage = function() {
+                postMessageIsAsynchronous = false;
+            };
+            global.postMessage("", "*");
+            global.onmessage = oldOnMessage;
+            return postMessageIsAsynchronous;
+        }
+    }
+
+    function installPostMessageImplementation() {
+        // Installs an event handler on `global` for the `message` event: see
+        // * https://developer.mozilla.org/en/DOM/window.postMessage
+        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
+
+        var messagePrefix = "setImmediate$" + Math.random() + "$";
+        var onGlobalMessage = function(event) {
+            if (event.source === global &&
+                typeof event.data === "string" &&
+                event.data.indexOf(messagePrefix) === 0) {
+                runIfPresent(+event.data.slice(messagePrefix.length));
+            }
+        };
+
+        if (global.addEventListener) {
+            global.addEventListener("message", onGlobalMessage, false);
+        } else {
+            global.attachEvent("onmessage", onGlobalMessage);
+        }
+
+        registerImmediate = function(handle) {
+            global.postMessage(messagePrefix + handle, "*");
+        };
+    }
+
+    function installMessageChannelImplementation() {
+        var channel = new MessageChannel();
+        channel.port1.onmessage = function(event) {
+            var handle = event.data;
+            runIfPresent(handle);
+        };
+
+        registerImmediate = function(handle) {
+            channel.port2.postMessage(handle);
+        };
+    }
+
+    function installReadyStateChangeImplementation() {
+        var html = doc.documentElement;
+        registerImmediate = function(handle) {
+            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+            var script = doc.createElement("script");
+            script.onreadystatechange = function () {
+                runIfPresent(handle);
+                script.onreadystatechange = null;
+                html.removeChild(script);
+                script = null;
+            };
+            html.appendChild(script);
+        };
+    }
+
+    function installSetTimeoutImplementation() {
+        registerImmediate = function(handle) {
+            setTimeout(runIfPresent, 0, handle);
+        };
+    }
+
+    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
+    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
+    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
+
+    // Don't get fooled by e.g. browserify environments.
+    if ({}.toString.call(global.process) === "[object process]") {
+        // For Node.js before 0.9
+        installNextTickImplementation();
+
+    } else if (canUsePostMessage()) {
+        // For non-IE10 modern browsers
+        installPostMessageImplementation();
+
+    } else if (global.MessageChannel) {
+        // For web workers, where supported
+        installMessageChannelImplementation();
+
+    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
+        // For IE 6–8
+        installReadyStateChangeImplementation();
+
+    } else {
+        // For older browsers
+        installSetTimeoutImplementation();
+    }
+
+    attachTo.setImmediate = setImmediate;
+    attachTo.clearImmediate = clearImmediate;
+}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/global.js"), __webpack_require__("./node_modules/process/browser.js")))
 
 /***/ }),
-/* 2 */
+
+/***/ "./node_modules/timers-browserify/main.js":
 /***/ (function(module, exports, __webpack_require__) {
 
+/* WEBPACK VAR INJECTION */(function(global) {var apply = Function.prototype.apply;
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+// DOM APIs, for completeness
 
-// require('./bootstrap');
-window.Vue = __webpack_require__(3);
+exports.setTimeout = function() {
+  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+};
+exports.setInterval = function() {
+  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+};
+exports.clearTimeout =
+exports.clearInterval = function(timeout) {
+  if (timeout) {
+    timeout.close();
+  }
+};
 
-// import Vue from 'vue';
-//
-// import VeeValidate from 'vee-validate';
-// import { Validator } from 'vee-validate';
-//
-// import ru from 'vee-validate/dist/locale/ru';
-// import ua from 'vee-validate/dist/locale/ua';
-//
-// if (LANGUAGE == DEFAULT_LANGUAGE)
-// {
-//     Validator.localize('ru', ru);
-// }
-// else {
-//     Validator.localize('ua', ua);
-// }
-//
-// Vue.use(VeeValidate);
+function Timeout(id, clearFn) {
+  this._id = id;
+  this._clearFn = clearFn;
+}
+Timeout.prototype.unref = Timeout.prototype.ref = function() {};
+Timeout.prototype.close = function() {
+  this._clearFn.call(window, this._id);
+};
 
+// Does not start the time, just sets up the members needed.
+exports.enroll = function(item, msecs) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = msecs;
+};
 
-// Vue.use(VeeValidate, {
-//     locale: 'ru',
-//     dictionary: {
-//         ru: {messages: messagesRU}
-//     }
-// });
+exports.unenroll = function(item) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = -1;
+};
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+exports._unrefActive = exports.active = function(item) {
+  clearTimeout(item._idleTimeoutId);
 
-// Vue.component('example',require('./components/Example.vue'));
+  var msecs = item._idleTimeout;
+  if (msecs >= 0) {
+    item._idleTimeoutId = setTimeout(function onTimeout() {
+      if (item._onTimeout)
+        item._onTimeout();
+    }, msecs);
+  }
+};
 
+// setimmediate attaches itself to the global object
+__webpack_require__("./node_modules/setimmediate/setImmediate.js");
+// On some exotic environments, it's not clear which object `setimmeidate` was
+// able to install onto.  Search each possibility in the same order as the
+// `setimmediate` library.
+exports.setImmediate = (typeof self !== "undefined" && self.setImmediate) ||
+                       (typeof global !== "undefined" && global.setImmediate) ||
+                       (this && this.setImmediate);
+exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
+                         (typeof global !== "undefined" && global.clearImmediate) ||
+                         (this && this.clearImmediate);
 
-// require ('./components/example');
-
-__webpack_require__(7);
-
-__webpack_require__(8);
-
-__webpack_require__(9);
-
-__webpack_require__(10);
-
-__webpack_require__(11);
-
-__webpack_require__(12);
-
-__webpack_require__(13);
-
-__webpack_require__(14);
-
-__webpack_require__(15);
-
-__webpack_require__(16);
-
-__webpack_require__(17);
-
-__webpack_require__(18);
-
-__webpack_require__(19);
-
-__webpack_require__(20);
-
-__webpack_require__(21);
-
-__webpack_require__(22);
-
-__webpack_require__(23);
-
-__webpack_require__(24);
-
-__webpack_require__(25);
-
-__webpack_require__(26);
-
-__webpack_require__(27);
-
-__webpack_require__(28);
-
-__webpack_require__(29);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
-/* 3 */
+
+/***/ "./node_modules/vue/dist/vue.common.js":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
- * Vue.js v2.5.2
+ * Vue.js v2.5.13
  * (c) 2014-2017 Evan You
  * Released under the MIT License.
  */
 
 
 /*  */
+
+var emptyObject = Object.freeze({});
 
 // these helpers produces better vm code in JS engines due to their
 // explicitness and function inlining
@@ -233,6 +558,8 @@ function isPrimitive (value) {
   return (
     typeof value === 'string' ||
     typeof value === 'number' ||
+    // $flow-disable-line
+    typeof value === 'symbol' ||
     typeof value === 'boolean'
   )
 }
@@ -541,6 +868,7 @@ var config = ({
   /**
    * Option merge strategies (used in core/util/options)
    */
+  // $flow-disable-line
   optionMergeStrategies: Object.create(null),
 
   /**
@@ -581,6 +909,7 @@ var config = ({
   /**
    * Custom user key aliases for v-on
    */
+  // $flow-disable-line
   keyCodes: Object.create(null),
 
   /**
@@ -625,8 +954,6 @@ var config = ({
 
 /*  */
 
-var emptyObject = Object.freeze({});
-
 /**
  * Check if a string starts with $ or _
  */
@@ -667,17 +994,20 @@ function parsePath (path) {
 
 /*  */
 
+
 // can we use __proto__?
 var hasProto = '__proto__' in {};
 
 // Browser environment sniffing
 var inBrowser = typeof window !== 'undefined';
+var inWeex = typeof WXEnvironment !== 'undefined' && !!WXEnvironment.platform;
+var weexPlatform = inWeex && WXEnvironment.platform.toLowerCase();
 var UA = inBrowser && window.navigator.userAgent.toLowerCase();
 var isIE = UA && /msie|trident/.test(UA);
 var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
 var isEdge = UA && UA.indexOf('edge/') > 0;
-var isAndroid = UA && UA.indexOf('android') > 0;
-var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
+var isAndroid = (UA && UA.indexOf('android') > 0) || (weexPlatform === 'android');
+var isIOS = (UA && /iphone|ipad|ipod|ios/.test(UA)) || (weexPlatform === 'ios');
 var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
 
 // Firefox has a "watch" function on Object.prototype...
@@ -915,9 +1245,9 @@ var VNode = function VNode (
   this.elm = elm;
   this.ns = undefined;
   this.context = context;
-  this.functionalContext = undefined;
-  this.functionalOptions = undefined;
-  this.functionalScopeId = undefined;
+  this.fnContext = undefined;
+  this.fnOptions = undefined;
+  this.fnScopeId = undefined;
   this.key = data && data.key;
   this.componentOptions = componentOptions;
   this.componentInstance = undefined;
@@ -961,6 +1291,7 @@ function createTextVNode (val) {
 // multiple renders, cloning them avoids errors when DOM manipulations rely
 // on their elm reference.
 function cloneVNode (vnode, deep) {
+  var componentOptions = vnode.componentOptions;
   var cloned = new VNode(
     vnode.tag,
     vnode.data,
@@ -968,16 +1299,24 @@ function cloneVNode (vnode, deep) {
     vnode.text,
     vnode.elm,
     vnode.context,
-    vnode.componentOptions,
+    componentOptions,
     vnode.asyncFactory
   );
   cloned.ns = vnode.ns;
   cloned.isStatic = vnode.isStatic;
   cloned.key = vnode.key;
   cloned.isComment = vnode.isComment;
+  cloned.fnContext = vnode.fnContext;
+  cloned.fnOptions = vnode.fnOptions;
+  cloned.fnScopeId = vnode.fnScopeId;
   cloned.isCloned = true;
-  if (deep && vnode.children) {
-    cloned.children = cloneVNodes(vnode.children);
+  if (deep) {
+    if (vnode.children) {
+      cloned.children = cloneVNodes(vnode.children, true);
+    }
+    if (componentOptions && componentOptions.children) {
+      componentOptions.children = cloneVNodes(componentOptions.children, true);
+    }
   }
   return cloned
 }
@@ -1005,8 +1344,7 @@ var arrayMethods = Object.create(arrayProto);[
   'splice',
   'sort',
   'reverse'
-]
-.forEach(function (method) {
+].forEach(function (method) {
   // cache original method
   var original = arrayProto[method];
   def(arrayMethods, method, function mutator () {
@@ -1210,7 +1548,7 @@ function set (target, key, val) {
     target.splice(key, 1, val);
     return val
   }
-  if (hasOwn(target, key)) {
+  if (key in target && !(key in Object.prototype)) {
     target[key] = val;
     return val
   }
@@ -1338,18 +1676,18 @@ function mergeDataOrFn (
     // it has to be a function to pass previous merges.
     return function mergedDataFn () {
       return mergeData(
-        typeof childVal === 'function' ? childVal.call(this) : childVal,
-        typeof parentVal === 'function' ? parentVal.call(this) : parentVal
+        typeof childVal === 'function' ? childVal.call(this, this) : childVal,
+        typeof parentVal === 'function' ? parentVal.call(this, this) : parentVal
       )
     }
-  } else if (parentVal || childVal) {
+  } else {
     return function mergedInstanceDataFn () {
       // instance merge
       var instanceData = typeof childVal === 'function'
-        ? childVal.call(vm)
+        ? childVal.call(vm, vm)
         : childVal;
       var defaultData = typeof parentVal === 'function'
-        ? parentVal.call(vm)
+        ? parentVal.call(vm, vm)
         : parentVal;
       if (instanceData) {
         return mergeData(instanceData, defaultData)
@@ -1376,7 +1714,7 @@ strats.data = function (
 
       return parentVal
     }
-    return mergeDataOrFn.call(this, parentVal, childVal)
+    return mergeDataOrFn(parentVal, childVal)
   }
 
   return mergeDataOrFn(parentVal, childVal, vm)
@@ -1501,13 +1839,23 @@ var defaultStrat = function (parentVal, childVal) {
  */
 function checkComponents (options) {
   for (var key in options.components) {
-    var lower = key.toLowerCase();
-    if (isBuiltInTag(lower) || config.isReservedTag(lower)) {
-      warn(
-        'Do not use built-in or reserved HTML elements as component ' +
-        'id: ' + key
-      );
-    }
+    validateComponentName(key);
+  }
+}
+
+function validateComponentName (name) {
+  if (!/^[a-zA-Z][\w-]*$/.test(name)) {
+    warn(
+      'Invalid component name: "' + name + '". Component names ' +
+      'can only contain alphanumeric characters and the hyphen, ' +
+      'and must start with a letter.'
+    );
+  }
+  if (isBuiltInTag(name) || config.isReservedTag(name)) {
+    warn(
+      'Do not use built-in or reserved HTML elements as component ' +
+      'id: ' + name
+    );
   }
 }
 
@@ -1554,6 +1902,7 @@ function normalizeProps (options, vm) {
  */
 function normalizeInject (options, vm) {
   var inject = options.inject;
+  if (!inject) { return }
   var normalized = options.inject = {};
   if (Array.isArray(inject)) {
     for (var i = 0; i < inject.length; i++) {
@@ -1566,7 +1915,7 @@ function normalizeInject (options, vm) {
         ? extend({ from: key }, val)
         : { from: val };
     }
-  } else if ("development" !== 'production' && inject) {
+  } else if (true) {
     warn(
       "Invalid value for option \"inject\": expected an Array or an Object, " +
       "but got " + (toRawType(inject)) + ".",
@@ -1708,7 +2057,9 @@ function validateProp (
     observe(value);
     observerState.shouldConvert = prevShouldConvert;
   }
-  if (true) {
+  if (
+    true
+  ) {
     assertProp(prop, key, value, vm, absent);
   }
   return value
@@ -1886,7 +2237,7 @@ function logError (err, vm, info) {
     warn(("Error in " + info + ": \"" + (err.toString()) + "\""), vm);
   }
   /* istanbul ignore else */
-  if (inBrowser && typeof console !== 'undefined') {
+  if ((inBrowser || inWeex) && typeof console !== 'undefined') {
     console.error(err);
   } else {
     throw err
@@ -2110,6 +2461,43 @@ if (true) {
 
 /*  */
 
+var seenObjects = new _Set();
+
+/**
+ * Recursively traverse an object to evoke all converted
+ * getters, so that every nested property inside the object
+ * is collected as a "deep" dependency.
+ */
+function traverse (val) {
+  _traverse(val, seenObjects);
+  seenObjects.clear();
+}
+
+function _traverse (val, seen) {
+  var i, keys;
+  var isA = Array.isArray(val);
+  if ((!isA && !isObject(val)) || Object.isFrozen(val)) {
+    return
+  }
+  if (val.__ob__) {
+    var depId = val.__ob__.dep.id;
+    if (seen.has(depId)) {
+      return
+    }
+    seen.add(depId);
+  }
+  if (isA) {
+    i = val.length;
+    while (i--) { _traverse(val[i], seen); }
+  } else {
+    keys = Object.keys(val);
+    i = keys.length;
+    while (i--) { _traverse(val[keys[i]], seen); }
+  }
+}
+
+/*  */
+
 var normalizeEvent = cached(function (name) {
   var passive = name.charAt(0) === '&';
   name = passive ? name.slice(1) : name;
@@ -2151,11 +2539,12 @@ function updateListeners (
   remove$$1,
   vm
 ) {
-  var name, cur, old, event;
+  var name, def, cur, old, event;
   for (name in on) {
-    cur = on[name];
+    def = cur = on[name];
     old = oldOn[name];
     event = normalizeEvent(name);
+    /* istanbul ignore if */
     if (isUndef(cur)) {
       "development" !== 'production' && warn(
         "Invalid handler for event \"" + (event.name) + "\": got " + String(cur),
@@ -2165,7 +2554,7 @@ function updateListeners (
       if (isUndef(cur.fns)) {
         cur = on[name] = createFnInvoker(cur);
       }
-      add(event.name, cur, event.once, event.capture, event.passive);
+      add(event.name, cur, event.once, event.capture, event.passive, event.params);
     } else if (cur !== old) {
       old.fns = cur;
       on[name] = old;
@@ -2182,6 +2571,9 @@ function updateListeners (
 /*  */
 
 function mergeVNodeHook (def, hookKey, hook) {
+  if (def instanceof VNode) {
+    def = def.data.hook || (def.data.hook = {});
+  }
   var invoker;
   var oldHook = def[hookKey];
 
@@ -2549,6 +2941,7 @@ function updateComponentListeners (
 ) {
   target = vm;
   updateListeners(listeners, oldListeners || {}, add, remove$1, vm);
+  target = undefined;
 }
 
 function eventsMixin (Vue) {
@@ -2604,7 +2997,7 @@ function eventsMixin (Vue) {
     if (!cbs) {
       return vm
     }
-    if (arguments.length === 1) {
+    if (!fn) {
       vm._events[event] = null;
       return vm
     }
@@ -2655,6 +3048,8 @@ function eventsMixin (Vue) {
 
 /*  */
 
+
+
 /**
  * Runtime helper for resolving raw children VNodes into a slot object.
  */
@@ -2666,7 +3061,6 @@ function resolveSlots (
   if (!children) {
     return slots
   }
-  var defaultSlot = [];
   for (var i = 0, l = children.length; i < l; i++) {
     var child = children[i];
     var data = child.data;
@@ -2676,29 +3070,31 @@ function resolveSlots (
     }
     // named slots should only be respected if the vnode was rendered in the
     // same context.
-    if ((child.context === context || child.functionalContext === context) &&
+    if ((child.context === context || child.fnContext === context) &&
       data && data.slot != null
     ) {
-      var name = child.data.slot;
+      var name = data.slot;
       var slot = (slots[name] || (slots[name] = []));
       if (child.tag === 'template') {
-        slot.push.apply(slot, child.children);
+        slot.push.apply(slot, child.children || []);
       } else {
         slot.push(child);
       }
     } else {
-      defaultSlot.push(child);
+      (slots.default || (slots.default = [])).push(child);
     }
   }
-  // ignore whitespace
-  if (!defaultSlot.every(isWhitespace)) {
-    slots.default = defaultSlot;
+  // ignore slots that contains only whitespace
+  for (var name$1 in slots) {
+    if (slots[name$1].every(isWhitespace)) {
+      delete slots[name$1];
+    }
   }
   return slots
 }
 
 function isWhitespace (node) {
-  return node.isComment || node.text === ' '
+  return (node.isComment && !node.asyncFactory) || node.text === ' '
 }
 
 function resolveScopedSlots (
@@ -2894,7 +3290,10 @@ function mountComponent (
     };
   }
 
-  vm._watcher = new Watcher(vm, updateComponent, noop);
+  // we set this to vm._watcher inside the watcher's constructor
+  // since the watcher's initial patch may call $forceUpdate (e.g. inside child
+  // component's mounted hook), which relies on vm._watcher being already defined
+  new Watcher(vm, updateComponent, noop, null, true /* isRenderWatcher */);
   hydrating = false;
 
   // manually mounted instance, call mounted on self
@@ -3181,9 +3580,13 @@ var Watcher = function Watcher (
   vm,
   expOrFn,
   cb,
-  options
+  options,
+  isRenderWatcher
 ) {
   this.vm = vm;
+  if (isRenderWatcher) {
+    vm._watcher = this;
+  }
   vm._watchers.push(this);
   // options
   if (options) {
@@ -3377,40 +3780,6 @@ Watcher.prototype.teardown = function teardown () {
   }
 };
 
-/**
- * Recursively traverse an object to evoke all converted
- * getters, so that every nested property inside the object
- * is collected as a "deep" dependency.
- */
-var seenObjects = new _Set();
-function traverse (val) {
-  seenObjects.clear();
-  _traverse(val, seenObjects);
-}
-
-function _traverse (val, seen) {
-  var i, keys;
-  var isA = Array.isArray(val);
-  if ((!isA && !isObject(val)) || !Object.isExtensible(val)) {
-    return
-  }
-  if (val.__ob__) {
-    var depId = val.__ob__.dep.id;
-    if (seen.has(depId)) {
-      return
-    }
-    seen.add(depId);
-  }
-  if (isA) {
-    i = val.length;
-    while (i--) { _traverse(val[i], seen); }
-  } else {
-    keys = Object.keys(val);
-    i = keys.length;
-    while (i--) { _traverse(val[keys[i]], seen); }
-  }
-}
-
 /*  */
 
 var sharedPropertyDefinition = {
@@ -3548,6 +3917,7 @@ function getData (data, vm) {
 var computedWatcherOptions = { lazy: true };
 
 function initComputed (vm, computed) {
+  // $flow-disable-line
   var watchers = vm._computedWatchers = Object.create(null);
   // computed properties are just getters during SSR
   var isSSR = isServerRendering();
@@ -3778,11 +4148,11 @@ function resolveInject (inject, vm) {
     // inject is :any because flow is not smart enough to figure out cached
     var result = Object.create(null);
     var keys = hasSymbol
-        ? Reflect.ownKeys(inject).filter(function (key) {
-          /* istanbul ignore next */
-          return Object.getOwnPropertyDescriptor(inject, key).enumerable
-        })
-        : Object.keys(inject);
+      ? Reflect.ownKeys(inject).filter(function (key) {
+        /* istanbul ignore next */
+        return Object.getOwnPropertyDescriptor(inject, key).enumerable
+      })
+      : Object.keys(inject);
 
     for (var i = 0; i < keys.length; i++) {
       var key = keys[i];
@@ -3856,6 +4226,7 @@ function renderSlot (
   bindObject
 ) {
   var scopedSlotFn = this.$scopedSlots[name];
+  var nodes;
   if (scopedSlotFn) { // scoped slot
     props = props || {};
     if (bindObject) {
@@ -3867,19 +4238,28 @@ function renderSlot (
       }
       props = extend(extend({}, bindObject), props);
     }
-    return scopedSlotFn(props) || fallback
+    nodes = scopedSlotFn(props) || fallback;
   } else {
     var slotNodes = this.$slots[name];
     // warn duplicate slot usage
-    if (slotNodes && "development" !== 'production') {
-      slotNodes._rendered && warn(
-        "Duplicate presence of slot \"" + name + "\" found in the same render tree " +
-        "- this will likely cause render errors.",
-        this
-      );
+    if (slotNodes) {
+      if ("development" !== 'production' && slotNodes._rendered) {
+        warn(
+          "Duplicate presence of slot \"" + name + "\" found in the same render tree " +
+          "- this will likely cause render errors.",
+          this
+        );
+      }
       slotNodes._rendered = true;
     }
-    return slotNodes || fallback
+    nodes = slotNodes || fallback;
+  }
+
+  var target = props && props.slot;
+  if (target) {
+    return this.$createElement('template', { slot: target }, nodes)
+  } else {
+    return nodes
   }
 }
 
@@ -3980,10 +4360,7 @@ function renderStatic (
   index,
   isInFor
 ) {
-  // static trees can be rendered once and cached on the contructor options
-  // so every instance shares the same cached trees
-  var renderFns = this.$options.staticRenderFns;
-  var cached = renderFns.cached || (renderFns.cached = []);
+  var cached = this._staticTrees || (this._staticTrees = []);
   var tree = cached[index];
   // if has already-rendered static tree and not inside v-for,
   // we can reuse the same tree by doing a shallow clone.
@@ -3993,7 +4370,11 @@ function renderStatic (
       : cloneVNode(tree)
   }
   // otherwise, render a fresh tree.
-  tree = cached[index] = renderFns[index].call(this._renderProxy, null, this);
+  tree = cached[index] = this.$options.staticRenderFns[index].call(
+    this._renderProxy,
+    null,
+    this // for render fns generated for functional component templates
+  );
   markStatic(tree, ("__static__" + index), false);
   return tree
 }
@@ -4111,8 +4492,8 @@ function FunctionalRenderContext (
     this._c = function (a, b, c, d) {
       var vnode = createElement(contextVm, a, b, c, d, needNormalization);
       if (vnode) {
-        vnode.functionalScopeId = options._scopeId;
-        vnode.functionalContext = parent;
+        vnode.fnScopeId = options._scopeId;
+        vnode.fnContext = parent;
       }
       return vnode
     };
@@ -4153,8 +4534,8 @@ function createFunctionalComponent (
   var vnode = options.render.call(null, renderContext._c, renderContext);
 
   if (vnode instanceof VNode) {
-    vnode.functionalContext = contextVm;
-    vnode.functionalOptions = options;
+    vnode.fnContext = contextVm;
+    vnode.fnOptions = options;
     if (data.slot) {
       (vnode.data || (vnode.data = {})).slot = data.slot;
     }
@@ -4168,6 +4549,25 @@ function mergeProps (to, from) {
     to[camelize(key)] = from[key];
   }
 }
+
+/*  */
+
+
+
+
+// Register the component hook to weex native render engine.
+// The hook will be triggered by native, not javascript.
+
+
+// Updates the state of the component to weex native render engine.
+
+/*  */
+
+// https://github.com/Hanks10100/weex-native-directive/tree/master/component
+
+// listening on native callback
+
+/*  */
 
 /*  */
 
@@ -4336,6 +4736,11 @@ function createComponent (
     { Ctor: Ctor, propsData: propsData, listeners: listeners, tag: tag, children: children },
     asyncFactory
   );
+
+  // Weex specific: invoke recycle-list optimized @render function for
+  // extracting cell-slot template.
+  // https://github.com/Hanks10100/weex-native-directive/tree/master/component
+  /* istanbul ignore if */
   return vnode
 }
 
@@ -4345,15 +4750,10 @@ function createComponentInstanceForVnode (
   parentElm,
   refElm
 ) {
-  var vnodeComponentOptions = vnode.componentOptions;
   var options = {
     _isComponent: true,
     parent: parent,
-    propsData: vnodeComponentOptions.propsData,
-    _componentTag: vnodeComponentOptions.tag,
     _parentVnode: vnode,
-    _parentListeners: vnodeComponentOptions.listeners,
-    _renderChildren: vnodeComponentOptions.children,
     _parentElm: parentElm || null,
     _refElm: refElm || null
   };
@@ -4363,7 +4763,7 @@ function createComponentInstanceForVnode (
     options.render = inlineTemplate.render;
     options.staticRenderFns = inlineTemplate.staticRenderFns;
   }
-  return new vnodeComponentOptions.Ctor(options)
+  return new vnode.componentOptions.Ctor(options)
 }
 
 function mergeHooks (data) {
@@ -4451,11 +4851,13 @@ function _createElement (
   if ("development" !== 'production' &&
     isDef(data) && isDef(data.key) && !isPrimitive(data.key)
   ) {
-    warn(
-      'Avoid using non-primitive value as key, ' +
-      'use string/number value instead.',
-      context
-    );
+    {
+      warn(
+        'Avoid using non-primitive value as key, ' +
+        'use string/number value instead.',
+        context
+      );
+    }
   }
   // support single function children as default scoped slot
   if (Array.isArray(children) &&
@@ -4525,6 +4927,7 @@ function applyNS (vnode, ns, force) {
 
 function initRender (vm) {
   vm._vnode = null; // the root of the child tree
+  vm._staticTrees = null; // v-once cached trees
   var options = vm.$options;
   var parentVnode = vm.$vnode = options._parentVnode; // the placeholder node in parent tree
   var renderContext = parentVnode && parentVnode.context;
@@ -4576,7 +4979,9 @@ function renderMixin (Vue) {
       // last render. They need to be cloned to ensure "freshness" for this render.
       for (var key in vm.$slots) {
         var slot = vm.$slots[key];
-        if (slot._rendered) {
+        // _rendered is a flag added by renderSlot, but may not be present
+        // if the slot is passed from manually written render functions
+        if (slot._rendered || (slot[0] && slot[0].elm)) {
           vm.$slots[key] = cloneVNodes(slot, true /* deep */);
         }
       }
@@ -4694,14 +5099,18 @@ function initMixin (Vue) {
 function initInternalComponent (vm, options) {
   var opts = vm.$options = Object.create(vm.constructor.options);
   // doing this because it's faster than dynamic enumeration.
+  var parentVnode = options._parentVnode;
   opts.parent = options.parent;
-  opts.propsData = options.propsData;
-  opts._parentVnode = options._parentVnode;
-  opts._parentListeners = options._parentListeners;
-  opts._renderChildren = options._renderChildren;
-  opts._componentTag = options._componentTag;
+  opts._parentVnode = parentVnode;
   opts._parentElm = options._parentElm;
   opts._refElm = options._refElm;
+
+  var vnodeComponentOptions = parentVnode.componentOptions;
+  opts.propsData = vnodeComponentOptions.propsData;
+  opts._parentListeners = vnodeComponentOptions.listeners;
+  opts._renderChildren = vnodeComponentOptions.children;
+  opts._componentTag = vnodeComponentOptions.tag;
+
   if (options.render) {
     opts.render = options.render;
     opts.staticRenderFns = options.staticRenderFns;
@@ -4835,14 +5244,8 @@ function initExtend (Vue) {
     }
 
     var name = extendOptions.name || Super.options.name;
-    if (true) {
-      if (!/^[a-zA-Z][\w-]*$/.test(name)) {
-        warn(
-          'Invalid component name: "' + name + '". Component names ' +
-          'can only contain alphanumeric characters and the hyphen, ' +
-          'and must start with a letter.'
-        );
-      }
+    if ("development" !== 'production' && name) {
+      validateComponentName(name);
     }
 
     var Sub = function VueComponent (options) {
@@ -4924,13 +5327,8 @@ function initAssetRegisters (Vue) {
         return this.options[type + 's'][id]
       } else {
         /* istanbul ignore if */
-        if (true) {
-          if (type === 'component' && config.isReservedTag(id)) {
-            warn(
-              'Do not use built-in or reserved HTML elements as component ' +
-              'id: ' + id
-            );
-          }
+        if ("development" !== 'production' && type === 'component') {
+          validateComponentName(id);
         }
         if (type === 'component' && isPlainObject(definition)) {
           definition.name = definition.name || id;
@@ -4986,7 +5384,7 @@ function pruneCacheEntry (
   current
 ) {
   var cached$$1 = cache[key];
-  if (cached$$1 && cached$$1 !== current) {
+  if (cached$$1 && (!current || cached$$1.tag !== current.tag)) {
     cached$$1.componentInstance.$destroy();
   }
   cache[key] = null;
@@ -5028,21 +5426,27 @@ var KeepAlive = {
   },
 
   render: function render () {
-    var vnode = getFirstComponentChild(this.$slots.default);
+    var slot = this.$slots.default;
+    var vnode = getFirstComponentChild(slot);
     var componentOptions = vnode && vnode.componentOptions;
     if (componentOptions) {
       // check pattern
       var name = getComponentName(componentOptions);
-      if (name && (
-        (this.include && !matches(this.include, name)) ||
-        (this.exclude && matches(this.exclude, name))
-      )) {
+      var ref = this;
+      var include = ref.include;
+      var exclude = ref.exclude;
+      if (
+        // not included
+        (include && (!name || !matches(include, name))) ||
+        // excluded
+        (exclude && name && matches(exclude, name))
+      ) {
         return vnode
       }
 
-      var ref = this;
-      var cache = ref.cache;
-      var keys = ref.keys;
+      var ref$1 = this;
+      var cache = ref$1.cache;
+      var keys = ref$1.keys;
       var key = vnode.key == null
         // same constructor may get registered as different local components
         // so cid alone is not enough (#3269)
@@ -5064,7 +5468,7 @@ var KeepAlive = {
 
       vnode.data.keepAlive = true;
     }
-    return vnode
+    return vnode || (slot && slot[0])
   }
 };
 
@@ -5131,7 +5535,7 @@ Object.defineProperty(Vue$3.prototype, '$ssrContext', {
   }
 });
 
-Vue$3.version = '2.5.2';
+Vue$3.version = '2.5.13';
 
 /*  */
 
@@ -5183,12 +5587,12 @@ function genClassForVnode (vnode) {
   var childNode = vnode;
   while (isDef(childNode.componentInstance)) {
     childNode = childNode.componentInstance._vnode;
-    if (childNode.data) {
+    if (childNode && childNode.data) {
       data = mergeClassData(childNode.data, data);
     }
   }
   while (isDef(parentNode = parentNode.parent)) {
-    if (parentNode.data) {
+    if (parentNode && parentNode.data) {
       data = mergeClassData(data, parentNode.data);
     }
   }
@@ -5558,7 +5962,23 @@ function createPatchFunction (backend) {
     }
   }
 
-  var inPre = 0;
+  function isUnknownElement$$1 (vnode, inVPre) {
+    return (
+      !inVPre &&
+      !vnode.ns &&
+      !(
+        config.ignoredElements.length &&
+        config.ignoredElements.some(function (ignore) {
+          return isRegExp(ignore)
+            ? ignore.test(vnode.tag)
+            : ignore === vnode.tag
+        })
+      ) &&
+      config.isUnknownElement(vnode.tag)
+    )
+  }
+
+  var creatingElmInVPre = 0;
   function createElm (vnode, insertedVnodeQueue, parentElm, refElm, nested) {
     vnode.isRootInsert = !nested; // for transition enter check
     if (createComponent(vnode, insertedVnodeQueue, parentElm, refElm)) {
@@ -5571,21 +5991,9 @@ function createPatchFunction (backend) {
     if (isDef(tag)) {
       if (true) {
         if (data && data.pre) {
-          inPre++;
+          creatingElmInVPre++;
         }
-        if (
-          !inPre &&
-          !vnode.ns &&
-          !(
-            config.ignoredElements.length &&
-            config.ignoredElements.some(function (ignore) {
-              return isRegExp(ignore)
-                ? ignore.test(tag)
-                : ignore === tag
-            })
-          ) &&
-          config.isUnknownElement(tag)
-        ) {
+        if (isUnknownElement$$1(vnode, creatingElmInVPre)) {
           warn(
             'Unknown custom element: <' + tag + '> - did you ' +
             'register the component correctly? For recursive components, ' +
@@ -5609,7 +6017,7 @@ function createPatchFunction (backend) {
       }
 
       if ("development" !== 'production' && data && data.pre) {
-        inPre--;
+        creatingElmInVPre--;
       }
     } else if (isTrue(vnode.isComment)) {
       vnode.elm = nodeOps.createComment(vnode.text);
@@ -5695,11 +6103,14 @@ function createPatchFunction (backend) {
 
   function createChildren (vnode, children, insertedVnodeQueue) {
     if (Array.isArray(children)) {
+      if (true) {
+        checkDuplicateKeys(children);
+      }
       for (var i = 0; i < children.length; ++i) {
         createElm(children[i], insertedVnodeQueue, vnode.elm, null, true);
       }
     } else if (isPrimitive(vnode.text)) {
-      nodeOps.appendChild(vnode.elm, nodeOps.createTextNode(vnode.text));
+      nodeOps.appendChild(vnode.elm, nodeOps.createTextNode(String(vnode.text)));
     }
   }
 
@@ -5726,7 +6137,7 @@ function createPatchFunction (backend) {
   // of going through the normal attribute patching process.
   function setScope (vnode) {
     var i;
-    if (isDef(i = vnode.functionalScopeId)) {
+    if (isDef(i = vnode.fnScopeId)) {
       nodeOps.setAttribute(vnode.elm, i, '');
     } else {
       var ancestor = vnode;
@@ -5740,7 +6151,7 @@ function createPatchFunction (backend) {
     // for slot content they should also get the scopeId from the host instance.
     if (isDef(i = activeInstance) &&
       i !== vnode.context &&
-      i !== vnode.functionalContext &&
+      i !== vnode.fnContext &&
       isDef(i = i.$options._scopeId)
     ) {
       nodeOps.setAttribute(vnode.elm, i, '');
@@ -5826,6 +6237,10 @@ function createPatchFunction (backend) {
     // during leaving transitions
     var canMove = !removeOnly;
 
+    if (true) {
+      checkDuplicateKeys(newCh);
+    }
+
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
       if (isUndef(oldStartVnode)) {
         oldStartVnode = oldCh[++oldStartIdx]; // Vnode has been moved left
@@ -5858,13 +6273,6 @@ function createPatchFunction (backend) {
           createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm);
         } else {
           vnodeToMove = oldCh[idxInOld];
-          /* istanbul ignore if */
-          if ("development" !== 'production' && !vnodeToMove) {
-            warn(
-              'It seems there are duplicate keys that is causing an update error. ' +
-              'Make sure each v-for item has a unique key.'
-            );
-          }
           if (sameVnode(vnodeToMove, newStartVnode)) {
             patchVnode(vnodeToMove, newStartVnode, insertedVnodeQueue);
             oldCh[idxInOld] = undefined;
@@ -5882,6 +6290,24 @@ function createPatchFunction (backend) {
       addVnodes(parentElm, refElm, newCh, newStartIdx, newEndIdx, insertedVnodeQueue);
     } else if (newStartIdx > newEndIdx) {
       removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
+    }
+  }
+
+  function checkDuplicateKeys (children) {
+    var seenKeys = {};
+    for (var i = 0; i < children.length; i++) {
+      var vnode = children[i];
+      var key = vnode.key;
+      if (isDef(key)) {
+        if (seenKeys[key]) {
+          warn(
+            ("Duplicate keys detected: '" + key + "'. This may cause an update error."),
+            vnode.context
+          );
+        } else {
+          seenKeys[key] = true;
+        }
+      }
     }
   }
 
@@ -5964,27 +6390,32 @@ function createPatchFunction (backend) {
     }
   }
 
-  var bailed = false;
+  var hydrationBailed = false;
   // list of modules that can skip create hook during hydration because they
   // are already rendered on the client or has no need for initialization
-  var isRenderedModule = makeMap('attrs,style,class,staticClass,staticStyle,key');
+  // Note: style is excluded because it relies on initial clone for future
+  // deep updates (#7063).
+  var isRenderedModule = makeMap('attrs,class,staticClass,staticStyle,key');
 
   // Note: this is a browser-only function so we can assume elms are DOM nodes.
-  function hydrate (elm, vnode, insertedVnodeQueue) {
-    if (isTrue(vnode.isComment) && isDef(vnode.asyncFactory)) {
-      vnode.elm = elm;
-      vnode.isAsyncPlaceholder = true;
-      return true
-    }
-    if (true) {
-      if (!assertNodeMatch(elm, vnode)) {
-        return false
-      }
-    }
-    vnode.elm = elm;
+  function hydrate (elm, vnode, insertedVnodeQueue, inVPre) {
+    var i;
     var tag = vnode.tag;
     var data = vnode.data;
     var children = vnode.children;
+    inVPre = inVPre || (data && data.pre);
+    vnode.elm = elm;
+
+    if (isTrue(vnode.isComment) && isDef(vnode.asyncFactory)) {
+      vnode.isAsyncPlaceholder = true;
+      return true
+    }
+    // assert node match
+    if (true) {
+      if (!assertNodeMatch(elm, vnode, inVPre)) {
+        return false
+      }
+    }
     if (isDef(data)) {
       if (isDef(i = data.hook) && isDef(i = i.init)) { i(vnode, true /* hydrating */); }
       if (isDef(i = vnode.componentInstance)) {
@@ -6005,9 +6436,9 @@ function createPatchFunction (backend) {
               /* istanbul ignore if */
               if ("development" !== 'production' &&
                 typeof console !== 'undefined' &&
-                !bailed
+                !hydrationBailed
               ) {
-                bailed = true;
+                hydrationBailed = true;
                 console.warn('Parent: ', elm);
                 console.warn('server innerHTML: ', i);
                 console.warn('client innerHTML: ', elm.innerHTML);
@@ -6019,7 +6450,7 @@ function createPatchFunction (backend) {
             var childrenMatch = true;
             var childNode = elm.firstChild;
             for (var i$1 = 0; i$1 < children.length; i$1++) {
-              if (!childNode || !hydrate(childNode, children[i$1], insertedVnodeQueue)) {
+              if (!childNode || !hydrate(childNode, children[i$1], insertedVnodeQueue, inVPre)) {
                 childrenMatch = false;
                 break
               }
@@ -6031,9 +6462,9 @@ function createPatchFunction (backend) {
               /* istanbul ignore if */
               if ("development" !== 'production' &&
                 typeof console !== 'undefined' &&
-                !bailed
+                !hydrationBailed
               ) {
-                bailed = true;
+                hydrationBailed = true;
                 console.warn('Parent: ', elm);
                 console.warn('Mismatching childNodes vs. VNodes: ', elm.childNodes, children);
               }
@@ -6043,11 +6474,17 @@ function createPatchFunction (backend) {
         }
       }
       if (isDef(data)) {
+        var fullInvoke = false;
         for (var key in data) {
           if (!isRenderedModule(key)) {
+            fullInvoke = true;
             invokeCreateHooks(vnode, insertedVnodeQueue);
             break
           }
+        }
+        if (!fullInvoke && data['class']) {
+          // ensure collecting deps for deep class bindings for future updates
+          traverse(data['class']);
         }
       }
     } else if (elm.data !== vnode.text) {
@@ -6056,10 +6493,10 @@ function createPatchFunction (backend) {
     return true
   }
 
-  function assertNodeMatch (node, vnode) {
+  function assertNodeMatch (node, vnode, inVPre) {
     if (isDef(vnode.tag)) {
-      return (
-        vnode.tag.indexOf('vue-component') === 0 ||
+      return vnode.tag.indexOf('vue-component') === 0 || (
+        !isUnknownElement$$1(vnode, inVPre) &&
         vnode.tag.toLowerCase() === (node.tagName && node.tagName.toLowerCase())
       )
     } else {
@@ -6112,9 +6549,12 @@ function createPatchFunction (backend) {
           // create an empty node and replace it
           oldVnode = emptyNodeAt(oldVnode);
         }
+
         // replacing existing element
         var oldElm = oldVnode.elm;
         var parentElm$1 = nodeOps.parentNode(oldElm);
+
+        // create new node
         createElm(
           vnode,
           insertedVnodeQueue,
@@ -6125,9 +6565,8 @@ function createPatchFunction (backend) {
           nodeOps.nextSibling(oldElm)
         );
 
+        // update parent placeholder node element, recursively
         if (isDef(vnode.parent)) {
-          // component root element replaced.
-          // update parent placeholder node element, recursively
           var ancestor = vnode.parent;
           var patchable = isPatchable(vnode);
           while (ancestor) {
@@ -6156,6 +6595,7 @@ function createPatchFunction (backend) {
           }
         }
 
+        // destroy old node
         if (isDef(parentElm$1)) {
           removeVnodes(parentElm$1, [oldVnode], 0, 0);
         } else if (isDef(oldVnode.tag)) {
@@ -6221,14 +6661,14 @@ function _update (oldVnode, vnode) {
       }
     };
     if (isCreate) {
-      mergeVNodeHook(vnode.data.hook || (vnode.data.hook = {}), 'insert', callInsert);
+      mergeVNodeHook(vnode, 'insert', callInsert);
     } else {
       callInsert();
     }
   }
 
   if (dirsWithPostpatch.length) {
-    mergeVNodeHook(vnode.data.hook || (vnode.data.hook = {}), 'postpatch', function () {
+    mergeVNodeHook(vnode, 'postpatch', function () {
       for (var i = 0; i < dirsWithPostpatch.length; i++) {
         callHook$1(dirsWithPostpatch[i], 'componentUpdated', vnode, oldVnode);
       }
@@ -6253,17 +6693,20 @@ function normalizeDirectives$1 (
 ) {
   var res = Object.create(null);
   if (!dirs) {
+    // $flow-disable-line
     return res
   }
   var i, dir;
   for (i = 0; i < dirs.length; i++) {
     dir = dirs[i];
     if (!dir.modifiers) {
+      // $flow-disable-line
       dir.modifiers = emptyModifiers;
     }
     res[getRawDirName(dir)] = dir;
     dir.def = resolveAsset(vm.$options, 'directives', dir.name, true);
   }
+  // $flow-disable-line
   return res
 }
 
@@ -6316,7 +6759,7 @@ function updateAttrs (oldVnode, vnode) {
   // #4391: in IE9, setting type can reset value for input[type=radio]
   // #6666: IE/Edge forces progress value down to 1 before setting a max
   /* istanbul ignore if */
-  if ((isIE9 || isEdge) && attrs.value !== oldAttrs.value) {
+  if ((isIE || isEdge) && attrs.value !== oldAttrs.value) {
     setAttr(elm, 'value', attrs.value);
   }
   for (key in oldAttrs) {
@@ -6356,6 +6799,23 @@ function setAttr (el, key, value) {
     if (isFalsyAttrValue(value)) {
       el.removeAttribute(key);
     } else {
+      // #7138: IE10 & 11 fires input event when setting placeholder on
+      // <textarea>... block the first input event and remove the blocker
+      // immediately.
+      /* istanbul ignore if */
+      if (
+        isIE && !isIE9 &&
+        el.tagName === 'TEXTAREA' &&
+        key === 'placeholder' && !el.__ieph
+      ) {
+        var blocker = function (e) {
+          e.stopImmediatePropagation();
+          el.removeEventListener('input', blocker);
+        };
+        el.addEventListener('input', blocker);
+        // $flow-disable-line
+        el.__ieph = true; /* IE placeholder patched */
+      }
       el.setAttribute(key, value);
     }
   }
@@ -6519,10 +6979,18 @@ function pluckModuleFunction (
 
 function addProp (el, name, value) {
   (el.props || (el.props = [])).push({ name: name, value: value });
+  el.plain = false;
 }
 
 function addAttr (el, name, value) {
   (el.attrs || (el.attrs = [])).push({ name: name, value: value });
+  el.plain = false;
+}
+
+// add a raw attr (use this in preTransforms)
+function addRawAttr (el, name, value) {
+  el.attrsMap[name] = value;
+  el.attrsList.push({ name: name, value: value });
 }
 
 function addDirective (
@@ -6534,6 +7002,7 @@ function addDirective (
   modifiers
 ) {
   (el.directives || (el.directives = [])).push({ name: name, rawName: rawName, value: value, arg: arg, modifiers: modifiers });
+  el.plain = false;
 }
 
 function addHandler (
@@ -6544,39 +7013,59 @@ function addHandler (
   important,
   warn
 ) {
+  modifiers = modifiers || emptyObject;
   // warn prevent and passive modifier
   /* istanbul ignore if */
   if (
     "development" !== 'production' && warn &&
-    modifiers && modifiers.prevent && modifiers.passive
+    modifiers.prevent && modifiers.passive
   ) {
     warn(
       'passive and prevent can\'t be used together. ' +
       'Passive handler can\'t prevent default event.'
     );
   }
+
   // check capture modifier
-  if (modifiers && modifiers.capture) {
+  if (modifiers.capture) {
     delete modifiers.capture;
     name = '!' + name; // mark the event as captured
   }
-  if (modifiers && modifiers.once) {
+  if (modifiers.once) {
     delete modifiers.once;
     name = '~' + name; // mark the event as once
   }
   /* istanbul ignore if */
-  if (modifiers && modifiers.passive) {
+  if (modifiers.passive) {
     delete modifiers.passive;
     name = '&' + name; // mark the event as passive
   }
+
+  // normalize click.right and click.middle since they don't actually fire
+  // this is technically browser-specific, but at least for now browsers are
+  // the only target envs that have right/middle clicks.
+  if (name === 'click') {
+    if (modifiers.right) {
+      name = 'contextmenu';
+      delete modifiers.right;
+    } else if (modifiers.middle) {
+      name = 'mouseup';
+    }
+  }
+
   var events;
-  if (modifiers && modifiers.native) {
+  if (modifiers.native) {
     delete modifiers.native;
     events = el.nativeEvents || (el.nativeEvents = {});
   } else {
     events = el.events || (el.events = {});
   }
-  var newHandler = { value: value, modifiers: modifiers };
+
+  var newHandler = { value: value };
+  if (modifiers !== emptyObject) {
+    newHandler.modifiers = modifiers;
+  }
+
   var handlers = events[name];
   /* istanbul ignore if */
   if (Array.isArray(handlers)) {
@@ -6586,6 +7075,8 @@ function addHandler (
   } else {
     events[name] = newHandler;
   }
+
+  el.plain = false;
 }
 
 function getBindingAttr (
@@ -6852,11 +7343,11 @@ function genCheckboxModel (
   var falseValueBinding = getBindingAttr(el, 'false-value') || 'false';
   addProp(el, 'checked',
     "Array.isArray(" + value + ")" +
-      "?_i(" + value + "," + valueBinding + ")>-1" + (
-        trueValueBinding === 'true'
-          ? (":(" + value + ")")
-          : (":_q(" + value + "," + trueValueBinding + ")")
-      )
+    "?_i(" + value + "," + valueBinding + ")>-1" + (
+      trueValueBinding === 'true'
+        ? (":(" + value + ")")
+        : (":_q(" + value + "," + trueValueBinding + ")")
+    )
   );
   addHandler(el, 'change',
     "var $$a=" + value + "," +
@@ -6873,9 +7364,9 @@ function genCheckboxModel (
 }
 
 function genRadioModel (
-    el,
-    value,
-    modifiers
+  el,
+  value,
+  modifiers
 ) {
   var number = modifiers && modifiers.number;
   var valueBinding = getBindingAttr(el, 'value') || 'null';
@@ -6885,9 +7376,9 @@ function genRadioModel (
 }
 
 function genSelect (
-    el,
-    value,
-    modifiers
+  el,
+  value,
+  modifiers
 ) {
   var number = modifiers && modifiers.number;
   var selectedVal = "Array.prototype.filter" +
@@ -6907,6 +7398,19 @@ function genDefaultModel (
   modifiers
 ) {
   var type = el.attrsMap.type;
+
+  // warn if v-bind:value conflicts with v-model
+  if (true) {
+    var value$1 = el.attrsMap['v-bind:value'] || el.attrsMap[':value'];
+    if (value$1) {
+      var binding = el.attrsMap['v-bind:value'] ? 'v-bind:value' : ':value';
+      warn$1(
+        binding + "=\"" + value$1 + "\" conflicts with v-model on the same element " +
+        'because the latter already expands to a value binding internally'
+      );
+    }
+  }
+
   var ref = modifiers || {};
   var lazy = ref.lazy;
   var number = ref.number;
@@ -7013,6 +7517,7 @@ function updateDOMListeners (oldVnode, vnode) {
   target$1 = vnode.elm;
   normalizeEvents(on);
   updateListeners(on, oldOn, add$1, remove$2, vnode.context);
+  target$1 = undefined;
 }
 
 var events = {
@@ -7076,12 +7581,12 @@ function updateDOMProps (oldVnode, vnode) {
 function shouldUpdateValue (elm, checkVal) {
   return (!elm.composing && (
     elm.tagName === 'OPTION' ||
-    isDirty(elm, checkVal) ||
-    isInputChanged(elm, checkVal)
+    isNotInFocusAndDirty(elm, checkVal) ||
+    isDirtyWithModifiers(elm, checkVal)
   ))
 }
 
-function isDirty (elm, checkVal) {
+function isNotInFocusAndDirty (elm, checkVal) {
   // return true when textbox (.number and .trim) loses focus and its value is
   // not equal to the updated value
   var notInFocus = true;
@@ -7091,14 +7596,20 @@ function isDirty (elm, checkVal) {
   return notInFocus && elm.value !== checkVal
 }
 
-function isInputChanged (elm, newVal) {
+function isDirtyWithModifiers (elm, newVal) {
   var value = elm.value;
   var modifiers = elm._vModifiers; // injected by v-model runtime
-  if (isDef(modifiers) && modifiers.number) {
-    return toNumber(value) !== toNumber(newVal)
-  }
-  if (isDef(modifiers) && modifiers.trim) {
-    return value.trim() !== newVal.trim()
+  if (isDef(modifiers)) {
+    if (modifiers.lazy) {
+      // inputs with lazy should only be updated when not in focus
+      return false
+    }
+    if (modifiers.number) {
+      return toNumber(value) !== toNumber(newVal)
+    }
+    if (modifiers.trim) {
+      return value.trim() !== newVal.trim()
+    }
   }
   return value !== newVal
 }
@@ -7156,7 +7667,10 @@ function getStyle (vnode, checkChild) {
     var childNode = vnode;
     while (childNode.componentInstance) {
       childNode = childNode.componentInstance._vnode;
-      if (childNode.data && (styleData = normalizeStyleData(childNode.data))) {
+      if (
+        childNode && childNode.data &&
+        (styleData = normalizeStyleData(childNode.data))
+      ) {
         extend(res, styleData);
       }
     }
@@ -7618,7 +8132,7 @@ function enter (vnode, toggleDisplay) {
 
   if (!vnode.data.show) {
     // remove pending leave element on enter by injecting an insert hook
-    mergeVNodeHook(vnode.data.hook || (vnode.data.hook = {}), 'insert', function () {
+    mergeVNodeHook(vnode, 'insert', function () {
       var parent = el.parentNode;
       var pendingNode = parent && parent._pending && parent._pending[vnode.key];
       if (pendingNode &&
@@ -7669,12 +8183,12 @@ function leave (vnode, rm) {
   }
 
   var data = resolveTransition(vnode.data.transition);
-  if (isUndef(data)) {
+  if (isUndef(data) || el.nodeType !== 1) {
     return rm()
   }
 
   /* istanbul ignore if */
-  if (isDef(el._leaveCb) || el.nodeType !== 1) {
+  if (isDef(el._leaveCb)) {
     return
   }
 
@@ -7857,10 +8371,17 @@ if (isIE9) {
   });
 }
 
-var model$1 = {
-  inserted: function inserted (el, binding, vnode) {
+var directive = {
+  inserted: function inserted (el, binding, vnode, oldVnode) {
     if (vnode.tag === 'select') {
-      setSelected(el, binding, vnode.context);
+      // #6903
+      if (oldVnode.elm && !oldVnode.elm._vOptions) {
+        mergeVNodeHook(vnode, 'postpatch', function () {
+          directive.componentUpdated(el, binding, vnode);
+        });
+      } else {
+        setSelected(el, binding, vnode.context);
+      }
       el._vOptions = [].map.call(el.options, getValue);
     } else if (vnode.tag === 'textarea' || isTextInputType(el.type)) {
       el._vModifiers = binding.modifiers;
@@ -7881,6 +8402,7 @@ var model$1 = {
       }
     }
   },
+
   componentUpdated: function componentUpdated (el, binding, vnode) {
     if (vnode.tag === 'select') {
       setSelected(el, binding, vnode.context);
@@ -8039,7 +8561,7 @@ var show = {
 };
 
 var platformDirectives = {
-  model: model$1,
+  model: directive,
   show: show
 };
 
@@ -8121,7 +8643,7 @@ var Transition = {
   render: function render (h) {
     var this$1 = this;
 
-    var children = this.$options._renderChildren;
+    var children = this.$slots.default;
     if (!children) {
       return
     }
@@ -8200,7 +8722,9 @@ var Transition = {
       oldChild &&
       oldChild.data &&
       !isSameChild(child, oldChild) &&
-      !isAsyncPlaceholder(oldChild)
+      !isAsyncPlaceholder(oldChild) &&
+      // #6687 component root is a comment node
+      !(oldChild.componentInstance && oldChild.componentInstance._vnode.isComment)
     ) {
       // replace old child transition data with fresh one
       // important for dynamic transitions!
@@ -8302,7 +8826,7 @@ var TransitionGroup = {
       this._vnode,
       this.kept,
       false, // hydrating
-      true // removeOnly (!important, avoids unnecessary moves)
+      true // removeOnly (!important avoids unnecessary moves)
     );
     this._vnode = this.kept;
   },
@@ -8456,19 +8980,6 @@ Vue$3.nextTick(function () {
 
 /*  */
 
-// check whether current browser encodes a char inside attribute values
-function shouldDecode (content, encoded) {
-  var div = document.createElement('div');
-  div.innerHTML = "<div a=\"" + content + "\"/>";
-  return div.innerHTML.indexOf(encoded) > 0
-}
-
-// #3663
-// IE encodes newlines inside attribute values while other browsers don't
-var shouldDecodeNewlines = inBrowser ? shouldDecode('\n', '&#10;') : false;
-
-/*  */
-
 var defaultTagRE = /\{\{((?:.|\n)+?)\}\}/g;
 var regexEscapeRE = /[-.*+?^${}()|[\]\/\\]/g;
 
@@ -8477,6 +8988,8 @@ var buildRegex = cached(function (delimiters) {
   var close = delimiters[1].replace(regexEscapeRE, '\\$&');
   return new RegExp(open + '((?:.|\\n)+?)' + close, 'g')
 });
+
+
 
 function parseText (
   text,
@@ -8487,23 +9000,30 @@ function parseText (
     return
   }
   var tokens = [];
+  var rawTokens = [];
   var lastIndex = tagRE.lastIndex = 0;
-  var match, index;
+  var match, index, tokenValue;
   while ((match = tagRE.exec(text))) {
     index = match.index;
     // push text token
     if (index > lastIndex) {
-      tokens.push(JSON.stringify(text.slice(lastIndex, index)));
+      rawTokens.push(tokenValue = text.slice(lastIndex, index));
+      tokens.push(JSON.stringify(tokenValue));
     }
     // tag token
     var exp = parseFilters(match[1].trim());
     tokens.push(("_s(" + exp + ")"));
+    rawTokens.push({ '@binding': exp });
     lastIndex = index + match[0].length;
   }
   if (lastIndex < text.length) {
-    tokens.push(JSON.stringify(text.slice(lastIndex)));
+    rawTokens.push(tokenValue = text.slice(lastIndex));
+    tokens.push(JSON.stringify(tokenValue));
   }
-  return tokens.join('+')
+  return {
+    expression: tokens.join('+'),
+    tokens: rawTokens
+  }
 }
 
 /*  */
@@ -8512,8 +9032,8 @@ function transformNode (el, options) {
   var warn = options.warn || baseWarn;
   var staticClass = getAndRemoveAttr(el, 'class');
   if ("development" !== 'production' && staticClass) {
-    var expression = parseText(staticClass, options.delimiters);
-    if (expression) {
+    var res = parseText(staticClass, options.delimiters);
+    if (res) {
       warn(
         "class=\"" + staticClass + "\": " +
         'Interpolation inside attributes has been removed. ' +
@@ -8556,8 +9076,8 @@ function transformNode$1 (el, options) {
   if (staticStyle) {
     /* istanbul ignore if */
     if (true) {
-      var expression = parseText(staticStyle, options.delimiters);
-      if (expression) {
+      var res = parseText(staticStyle, options.delimiters);
+      if (res) {
         warn(
           "style=\"" + staticStyle + "\": " +
           'Interpolation inside attributes has been removed. ' +
@@ -8665,10 +9185,11 @@ var decodingMap = {
   '&gt;': '>',
   '&quot;': '"',
   '&amp;': '&',
-  '&#10;': '\n'
+  '&#10;': '\n',
+  '&#9;': '\t'
 };
 var encodedAttr = /&(?:lt|gt|quot|amp);/g;
-var encodedAttrWithNewLines = /&(?:lt|gt|quot|amp|#10);/g;
+var encodedAttrWithNewLines = /&(?:lt|gt|quot|amp|#10|#9);/g;
 
 // #5992
 var isIgnoreNewlineTag = makeMap('pre,textarea', true);
@@ -8859,12 +9380,12 @@ function parseHTML (html, options) {
         if (args[5] === '') { delete args[5]; }
       }
       var value = args[3] || args[4] || args[5] || '';
+      var shouldDecodeNewlines = tagName === 'a' && args[1] === 'href'
+        ? options.shouldDecodeNewlinesForHref
+        : options.shouldDecodeNewlines;
       attrs[i] = {
         name: args[1],
-        value: decodeAttr(
-          value,
-          options.shouldDecodeNewlines
-        )
+        value: decodeAttr(value, shouldDecodeNewlines)
       };
     }
 
@@ -8938,7 +9459,8 @@ function parseHTML (html, options) {
 var onRE = /^@|^v-on:/;
 var dirRE = /^v-|^@|^:/;
 var forAliasRE = /(.*?)\s+(?:in|of)\s+(.*)/;
-var forIteratorRE = /\((\{[^}]*\}|[^,]*),([^,]*)(?:,([^,]*))?\)/;
+var forIteratorRE = /,([^,\}\]]*)(?:,([^,\}\]]*))?$/;
+var stripParensRE = /^\(|\)$/g;
 
 var argRE = /:(.*)$/;
 var bindRE = /^:|^v-bind:/;
@@ -9007,13 +9529,17 @@ function parse (
     }
   }
 
-  function endPre (element) {
+  function closeElement (element) {
     // check pre state
     if (element.pre) {
       inVPre = false;
     }
     if (platformIsPreTag(element.tag)) {
       inPre = false;
+    }
+    // apply post-transforms
+    for (var i = 0; i < postTransforms.length; i++) {
+      postTransforms[i](element, options);
     }
   }
 
@@ -9023,6 +9549,7 @@ function parse (
     isUnaryTag: options.isUnaryTag,
     canBeLeftOpenTag: options.canBeLeftOpenTag,
     shouldDecodeNewlines: options.shouldDecodeNewlines,
+    shouldDecodeNewlinesForHref: options.shouldDecodeNewlinesForHref,
     shouldKeepComment: options.comments,
     start: function start (tag, attrs, unary) {
       // check namespace.
@@ -9126,11 +9653,7 @@ function parse (
         currentParent = element;
         stack.push(element);
       } else {
-        endPre(element);
-      }
-      // apply post-transforms
-      for (var i$1 = 0; i$1 < postTransforms.length; i$1++) {
-        postTransforms[i$1](element, options);
+        closeElement(element);
       }
     },
 
@@ -9144,7 +9667,7 @@ function parse (
       // pop stack
       stack.length -= 1;
       currentParent = stack[stack.length - 1];
-      endPre(element);
+      closeElement(element);
     },
 
     chars: function chars (text) {
@@ -9176,11 +9699,12 @@ function parse (
         // only preserve whitespace if its not right after a starting tag
         : preserveWhitespace && children.length ? ' ' : '';
       if (text) {
-        var expression;
-        if (!inVPre && text !== ' ' && (expression = parseText(text, delimiters))) {
+        var res;
+        if (!inVPre && text !== ' ' && (res = parseText(text, delimiters))) {
           children.push({
             type: 2,
-            expression: expression,
+            expression: res.expression,
+            tokens: res.tokens,
             text: text
           });
         } else if (text !== ' ' || !children.length || children[children.length - 1].text !== ' ') {
@@ -9261,26 +9785,34 @@ function processRef (el) {
 function processFor (el) {
   var exp;
   if ((exp = getAndRemoveAttr(el, 'v-for'))) {
-    var inMatch = exp.match(forAliasRE);
-    if (!inMatch) {
-      "development" !== 'production' && warn$2(
+    var res = parseFor(exp);
+    if (res) {
+      extend(el, res);
+    } else if (true) {
+      warn$2(
         ("Invalid v-for expression: " + exp)
       );
-      return
-    }
-    el.for = inMatch[2].trim();
-    var alias = inMatch[1].trim();
-    var iteratorMatch = alias.match(forIteratorRE);
-    if (iteratorMatch) {
-      el.alias = iteratorMatch[1].trim();
-      el.iterator1 = iteratorMatch[2].trim();
-      if (iteratorMatch[3]) {
-        el.iterator2 = iteratorMatch[3].trim();
-      }
-    } else {
-      el.alias = alias;
     }
   }
+}
+
+function parseFor (exp) {
+  var inMatch = exp.match(forAliasRE);
+  if (!inMatch) { return }
+  var res = {};
+  res.for = inMatch[2].trim();
+  var alias = inMatch[1].trim().replace(stripParensRE, '');
+  var iteratorMatch = alias.match(forIteratorRE);
+  if (iteratorMatch) {
+    res.alias = alias.replace(forIteratorRE, '');
+    res.iterator1 = iteratorMatch[1].trim();
+    if (iteratorMatch[2]) {
+      res.iterator2 = iteratorMatch[2].trim();
+    }
+  } else {
+    res.alias = alias;
+  }
+  return res
 }
 
 function processIf (el) {
@@ -9374,6 +9906,15 @@ function processSlot (el) {
       }
       el.slotScope = slotScope || getAndRemoveAttr(el, 'slot-scope');
     } else if ((slotScope = getAndRemoveAttr(el, 'slot-scope'))) {
+      /* istanbul ignore if */
+      if ("development" !== 'production' && el.attrsMap['v-for']) {
+        warn$2(
+          "Ambiguous combined usage of slot-scope and v-for on <" + (el.tag) + "> " +
+          "(v-for takes higher priority). Use a wrapper <template> for the " +
+          "scoped slot to make it clearer.",
+          true
+        );
+      }
       el.slotScope = slotScope;
     }
     var slotTarget = getBindingAttr(el, 'slot');
@@ -9381,7 +9922,7 @@ function processSlot (el) {
       el.slotTarget = slotTarget === '""' ? '"default"' : slotTarget;
       // preserve slot as an attribute for native shadow DOM compat
       // only for non-scoped slots.
-      if (!el.slotScope) {
+      if (el.tag !== 'template' && !el.slotScope) {
         addAttr(el, 'slot', slotTarget);
       }
     }
@@ -9459,8 +10000,8 @@ function processAttrs (el) {
     } else {
       // literal attribute
       if (true) {
-        var expression = parseText(value, delimiters);
-        if (expression) {
+        var res = parseText(value, delimiters);
+        if (res) {
           warn$2(
             name + "=\"" + value + "\": " +
             'Interpolation inside attributes has been removed. ' +
@@ -9470,6 +10011,13 @@ function processAttrs (el) {
         }
       }
       addAttr(el, name, JSON.stringify(value));
+      // #6887 firefox doesn't update muted state if set via attribute
+      // even immediately after element creation
+      if (!el.component &&
+          name === 'muted' &&
+          platformMustUseProp(el.tag, el.attrsMap.type, name)) {
+        addProp(el, name, 'true');
+      }
     }
   }
 }
@@ -9574,6 +10122,8 @@ function preTransformNode (el, options) {
       var typeBinding = getBindingAttr(el, 'type');
       var ifCondition = getAndRemoveAttr(el, 'v-if', true);
       var ifConditionExtra = ifCondition ? ("&&(" + ifCondition + ")") : "";
+      var hasElse = getAndRemoveAttr(el, 'v-else', true) != null;
+      var elseIfCondition = getAndRemoveAttr(el, 'v-else-if', true);
       // 1. checkbox
       var branch0 = cloneASTElement(el);
       // process for on the main node
@@ -9604,6 +10154,13 @@ function preTransformNode (el, options) {
         exp: ifCondition,
         block: branch2
       });
+
+      if (hasElse) {
+        branch0.else = true;
+      } else if (elseIfCondition) {
+        branch0.elseif = elseIfCondition;
+      }
+
       return branch0
     }
   }
@@ -9611,11 +10168,6 @@ function preTransformNode (el, options) {
 
 function cloneASTElement (el) {
   return createASTElement(el.tag, el.attrsList.slice(), el.parent)
-}
-
-function addRawAttr (el, name, value) {
-  el.attrsMap[name] = value;
-  el.attrsList.push({ name: name, value: value });
 }
 
 var model$2 = {
@@ -9835,18 +10387,7 @@ function genHandlers (
 ) {
   var res = isNative ? 'nativeOn:{' : 'on:{';
   for (var name in events) {
-    var handler = events[name];
-    // #5330: warn click.right, since right clicks do not actually fire click events.
-    if ("development" !== 'production' &&
-      name === 'click' &&
-      handler && handler.modifiers && handler.modifiers.right
-    ) {
-      warn(
-        "Use \"contextmenu\" instead of \"click.right\" since right clicks " +
-        "do not actually fire \"click\" events."
-      );
-    }
-    res += "\"" + name + "\":" + (genHandler(name, handler)) + ",";
+    res += "\"" + name + "\":" + (genHandler(name, events[name])) + ",";
   }
   return res.slice(0, -1) + '}'
 }
@@ -9867,9 +10408,11 @@ function genHandler (
   var isFunctionExpression = fnExpRE.test(handler.value);
 
   if (!handler.modifiers) {
-    return isMethodPath || isFunctionExpression
-      ? handler.value
-      : ("function($event){" + (handler.value) + "}") // inline statement
+    if (isMethodPath || isFunctionExpression) {
+      return handler.value
+    }
+    /* istanbul ignore if */
+    return ("function($event){" + (handler.value) + "}") // inline statement
   } else {
     var code = '';
     var genModifierCode = '';
@@ -9905,6 +10448,7 @@ function genHandler (
       : isFunctionExpression
         ? ("(" + (handler.value) + ")($event)")
         : handler.value;
+    /* istanbul ignore if */
     return ("function($event){" + code + handlerCode + "}")
   }
 }
@@ -10382,7 +10926,10 @@ function genProps (props) {
   var res = '';
   for (var i = 0; i < props.length; i++) {
     var prop = props[i];
-    res += "\"" + (prop.name) + "\":" + (transformSpecialNewlines(prop.value)) + ",";
+    /* istanbul ignore if */
+    {
+      res += "\"" + (prop.name) + "\":" + (transformSpecialNewlines(prop.value)) + ",";
+    }
   }
   return res.slice(0, -1)
 }
@@ -10408,9 +10955,6 @@ var prohibitedKeywordRE = new RegExp('\\b' + (
 var unaryOperatorsRE = new RegExp('\\b' + (
   'delete,typeof,void'
 ).split(',').join('\\s*\\([^\\)]*\\)|\\b') + '\\s*\\([^\\)]*\\)');
-
-// check valid identifier for v-for
-var identRE = /[A-Za-z_$][\w$]*/;
 
 // strip strings in expressions
 var stripStringRE = /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*\$\{|\}(?:[^`\\]|\\.)*`|`(?:[^`\\]|\\.)*`/g;
@@ -10469,9 +11013,18 @@ function checkFor (node, text, errors) {
   checkIdentifier(node.iterator2, 'v-for iterator', text, errors);
 }
 
-function checkIdentifier (ident, type, text, errors) {
-  if (typeof ident === 'string' && !identRE.test(ident)) {
-    errors.push(("invalid " + type + " \"" + ident + "\" in expression: " + (text.trim())));
+function checkIdentifier (
+  ident,
+  type,
+  text,
+  errors
+) {
+  if (typeof ident === 'string') {
+    try {
+      new Function(("var " + ident + "=_"));
+    } catch (e) {
+      errors.push(("invalid " + type + " \"" + ident + "\" in expression: " + (text.trim())));
+    }
   }
 }
 
@@ -10616,7 +11169,7 @@ function createCompilerCreator (baseCompile) {
         // merge custom directives
         if (options.directives) {
           finalOptions.directives = extend(
-            Object.create(baseOptions.directives),
+            Object.create(baseOptions.directives || null),
             options.directives
           );
         }
@@ -10654,7 +11207,9 @@ var createCompiler = createCompilerCreator(function baseCompile (
   options
 ) {
   var ast = parse(template.trim(), options);
-  optimize(ast, options);
+  if (options.optimize !== false) {
+    optimize(ast, options);
+  }
   var code = generate(ast, options);
   return {
     ast: ast,
@@ -10667,6 +11222,21 @@ var createCompiler = createCompilerCreator(function baseCompile (
 
 var ref$1 = createCompiler(baseOptions);
 var compileToFunctions = ref$1.compileToFunctions;
+
+/*  */
+
+// check whether current browser encodes a char inside attribute values
+var div;
+function getShouldDecode (href) {
+  div = div || document.createElement('div');
+  div.innerHTML = href ? "<a href=\"\n\"/>" : "<div a=\"\n\"/>";
+  return div.innerHTML.indexOf('&#10;') > 0
+}
+
+// #3663: IE encodes newlines inside attribute values while other browsers don't
+var shouldDecodeNewlines = inBrowser ? getShouldDecode(false) : false;
+// #6828: chrome encodes content in a[href]
+var shouldDecodeNewlinesForHref = inBrowser ? getShouldDecode(true) : false;
 
 /*  */
 
@@ -10725,6 +11295,7 @@ Vue$3.prototype.$mount = function (
 
       var ref = compileToFunctions(template, {
         shouldDecodeNewlines: shouldDecodeNewlines,
+        shouldDecodeNewlinesForHref: shouldDecodeNewlinesForHref,
         delimiters: options.delimiters,
         comments: options.comments
       }, this);
@@ -10761,452 +11332,382 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(4).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/global.js"), __webpack_require__("./node_modules/timers-browserify/main.js").setImmediate))
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
 
-var apply = Function.prototype.apply;
+/***/ "./node_modules/webpack/buildin/global.js":
+/***/ (function(module, exports) {
 
-// DOM APIs, for completeness
+var g;
 
-exports.setTimeout = function() {
-  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
-};
-exports.setInterval = function() {
-  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
-};
-exports.clearTimeout =
-exports.clearInterval = function(timeout) {
-  if (timeout) {
-    timeout.close();
-  }
-};
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
 
-function Timeout(id, clearFn) {
-  this._id = id;
-  this._clearFn = clearFn;
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
 }
-Timeout.prototype.unref = Timeout.prototype.ref = function() {};
-Timeout.prototype.close = function() {
-  this._clearFn.call(window, this._id);
-};
 
-// Does not start the time, just sets up the members needed.
-exports.enroll = function(item, msecs) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = msecs;
-};
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
 
-exports.unenroll = function(item) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = -1;
-};
-
-exports._unrefActive = exports.active = function(item) {
-  clearTimeout(item._idleTimeoutId);
-
-  var msecs = item._idleTimeout;
-  if (msecs >= 0) {
-    item._idleTimeoutId = setTimeout(function onTimeout() {
-      if (item._onTimeout)
-        item._onTimeout();
-    }, msecs);
-  }
-};
-
-// setimmediate attaches itself to the global object
-__webpack_require__(5);
-exports.setImmediate = setImmediate;
-exports.clearImmediate = clearImmediate;
+module.exports = g;
 
 
 /***/ }),
-/* 5 */
+
+/***/ "./resources/assets/js/app.js":
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
-    "use strict";
 
-    if (global.setImmediate) {
-        return;
-    }
+/**
+ * First we will load all of this project's JavaScript dependencies which
+ * includes Vue and other libraries. It is a great starting point when
+ * building robust, powerful web applications using Vue and Laravel.
+ */
 
-    var nextHandle = 1; // Spec says greater than zero
-    var tasksByHandle = {};
-    var currentlyRunningATask = false;
-    var doc = global.document;
-    var registerImmediate;
+// require('./bootstrap');
+window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 
-    function setImmediate(callback) {
-      // Callback can either be a function or a string
-      if (typeof callback !== "function") {
-        callback = new Function("" + callback);
-      }
-      // Copy function arguments
-      var args = new Array(arguments.length - 1);
-      for (var i = 0; i < args.length; i++) {
-          args[i] = arguments[i + 1];
-      }
-      // Store and register the task
-      var task = { callback: callback, args: args };
-      tasksByHandle[nextHandle] = task;
-      registerImmediate(nextHandle);
-      return nextHandle++;
-    }
+// import Vue from 'vue';
+//
+// import VeeValidate from 'vee-validate';
+// import { Validator } from 'vee-validate';
+//
+// import ru from 'vee-validate/dist/locale/ru';
+// import ua from 'vee-validate/dist/locale/ua';
+//
+// if (LANGUAGE == DEFAULT_LANGUAGE)
+// {
+//     Validator.localize('ru', ru);
+// }
+// else {
+//     Validator.localize('ua', ua);
+// }
+//
+// Vue.use(VeeValidate);
 
-    function clearImmediate(handle) {
-        delete tasksByHandle[handle];
-    }
 
-    function run(task) {
-        var callback = task.callback;
-        var args = task.args;
-        switch (args.length) {
-        case 0:
-            callback();
-            break;
-        case 1:
-            callback(args[0]);
-            break;
-        case 2:
-            callback(args[0], args[1]);
-            break;
-        case 3:
-            callback(args[0], args[1], args[2]);
-            break;
-        default:
-            callback.apply(undefined, args);
-            break;
-        }
-    }
+// Vue.use(VeeValidate, {
+//     locale: 'ru',
+//     dictionary: {
+//         ru: {messages: messagesRU}
+//     }
+// });
 
-    function runIfPresent(handle) {
-        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
-        // So if we're currently running a task, we'll need to delay this invocation.
-        if (currentlyRunningATask) {
-            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
-            // "too much recursion" error.
-            setTimeout(runIfPresent, 0, handle);
-        } else {
-            var task = tasksByHandle[handle];
-            if (task) {
-                currentlyRunningATask = true;
-                try {
-                    run(task);
-                } finally {
-                    clearImmediate(handle);
-                    currentlyRunningATask = false;
+/**
+ * Next, we will create a fresh Vue application instance and attach it to
+ * the page. Then, you may begin adding components to this application
+ * or customize the JavaScript scaffolding to fit your unique needs.
+ */
+
+// Vue.component('example',require('./components/Example.vue'));
+
+
+// require ('./components/example');
+
+__webpack_require__("./resources/assets/js/components/CategoryProduct.js");
+
+__webpack_require__("./resources/assets/js/components/ProductDetail.js");
+
+__webpack_require__("./resources/assets/js/components/BigCart.js");
+
+__webpack_require__("./resources/assets/js/components/MiniCart.js");
+
+__webpack_require__("./resources/assets/js/components/Filters.js");
+
+__webpack_require__("./resources/assets/js/components/SelectedFilters.js");
+
+__webpack_require__("./resources/assets/js/components/SimilarProduct.js");
+
+__webpack_require__("./resources/assets/js/components/Search.js");
+
+__webpack_require__("./resources/assets/js/components/Register.js");
+
+__webpack_require__("./resources/assets/js/components/Login.js");
+
+__webpack_require__("./resources/assets/js/components/SocialEmail.js");
+
+__webpack_require__("./resources/assets/js/components/Order.js");
+
+__webpack_require__("./resources/assets/js/components/PersonalInfo.js");
+
+__webpack_require__("./resources/assets/js/components/ChangePassword.js");
+
+__webpack_require__("./resources/assets/js/components/RestorePassword.js");
+
+__webpack_require__("./resources/assets/js/components/PaymentDelivery.js");
+
+__webpack_require__("./resources/assets/js/components/WishList.js");
+
+__webpack_require__("./resources/assets/js/components/MyOrders.js");
+
+__webpack_require__("./resources/assets/js/components/Review.js");
+
+__webpack_require__("./resources/assets/js/components/Sales.js");
+
+__webpack_require__("./resources/assets/js/components/TopProducts.js");
+
+__webpack_require__("./resources/assets/js/components/NewProducts.js");
+
+__webpack_require__("./resources/assets/js/components/MainSlider.js");
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/BigCart.js":
+/***/ (function(module, exports) {
+
+new Vue({
+    el: '#big-cart',
+    data: GLOBAL_DATA,
+    methods: {
+        findWhere: function findWhere(list, props) {
+            var idx = 0;
+            var len = list.length;
+            var match = false;
+            var item, item_k, item_v, prop_k, prop_val;
+            for (; idx < len; idx++) {
+                item = list[idx];
+                for (prop_k in props) {
+                    // If props doesn't own the property, skip it.
+                    if (!props.hasOwnProperty(prop_k)) continue;
+                    // If item doesn't have the property, no match;
+                    if (!item.hasOwnProperty(prop_k)) {
+                        match = false;
+                        break;
+                    }
+                    if (props[prop_k] === item[prop_k]) {
+                        // We have a match…so far.
+                        match = true;
+                    } else {
+                        // No match.
+                        match = false;
+                        // Don't compare more properties.
+                        break;
+                    }
+                }
+                // We've iterated all of props' properties, and we still match!
+                // Return that item!
+                if (match) return item;
+            }
+            // No matches
+            return null;
+        },
+        //method handles onChange count input
+        toInteger: function toInteger(productId, sizeId, count) {
+            var _this = this;
+
+            if (count < 1 || count == '') {
+                count = 1;
+            }
+
+            if (count > 99) {
+                count = 99;
+            }
+            //check if current page single product
+            if (document.getElementById('product-details')) {
+                if (GLOBAL_DATA.singleProduct.productId == productId && GLOBAL_DATA.singleProduct.sizeId == sizeId) {
+                    GLOBAL_DATA.singleProduct.count = count;
+                }
+            }
+
+            //then update cart
+            if (_this.timer) {
+                clearTimeout(_this.timer);
+                _this.timer = undefined;
+            }
+            _this.timer = setTimeout(function () {
+
+                _this.updateCart(productId, sizeId, count);
+            }, 400);
+        },
+        //method handles updating cart, change count
+        updateCart: function updateCart(productId, sizeId, count) {
+            if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                return false;
+            }
+
+            GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+            var obj = {
+                productId: parseInt(productId),
+                sizeId: parseInt(sizeId),
+                count: parseInt(count)
+            },
+                _this = this;
+
+            showLoader();
+
+            //ajax
+            $.ajax({
+                type: 'post',
+                url: '/cart/update-cart',
+                data: {
+                    productId: obj.productId,
+                    sizeId: obj.sizeId,
+                    count: obj.count,
+                    language: LANGUAGE,
+                    userTypeId: GLOBAL_DATA.userTypeId
+                },
+                success: function success(data) {
+                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                    hideLoader();
+                    GLOBAL_DATA.cartItems = data.cart;
+                    GLOBAL_DATA.totalCount = data.totalCount;
+                    GLOBAL_DATA.totalAmount = data.totalAmount;
+                },
+                error: function error(_error) {
+                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                    hideLoader();
+                    console.log(_error);
+                }
+            });
+        },
+        deleteFromCart: function deleteFromCart(productId, sizeId) {
+            if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                return false;
+            }
+
+            GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+            showLoader();
+
+            $.ajax({
+                type: 'post',
+                url: '/cart/delete-from-cart',
+                data: {
+                    productId: productId,
+                    sizeId: sizeId,
+                    language: LANGUAGE,
+                    userTypeId: GLOBAL_DATA.userTypeId
+                },
+                success: function success(data) {
+                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                    hideLoader();
+                    GLOBAL_DATA.cartItems = data.cart;
+                    GLOBAL_DATA.totalCount = data.totalCount;
+                    GLOBAL_DATA.totalAmount = data.totalAmount;
+
+                    if (GLOBAL_DATA.cartItems.length < 1) {
+                        $('#big-cart').modal('hide');
+                    }
+                },
+                error: function error(_error2) {
+                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                    hideLoader();
+                    console.log(_error2);
+                }
+            });
+        },
+        //method handles + button incrementing value
+        increment: function increment(productId, sizeId) {
+            var searchObj = {
+                productId: productId,
+                sizeId: sizeId
+            },
+                _this = this;
+
+            var oldCount;
+            var newCount = 1;
+
+            GLOBAL_DATA.cartItems.forEach(function (item) {
+                if (item.productId == productId && item.sizeId == sizeId) {
+                    oldCount = item.count;
+
+                    item.count++;
+
+                    if (item.count > 99) {
+                        item.count = 99;
+                    }
+
+                    newCount = item.count;
+                }
+            });
+
+            //check if current page single product
+            if (document.getElementById('product-details')) {
+                if (GLOBAL_DATA.singleProduct.productId == productId && GLOBAL_DATA.singleProduct.sizeId == sizeId) {
+                    GLOBAL_DATA.singleProduct.count = newCount;
+                }
+            }
+
+            //check if size id in cart
+            if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
+                //check if old count != new count
+                if (oldCount != newCount) {
+                    //then send update ajax
+                    if (_this.timer) {
+                        clearTimeout(_this.timer);
+                        _this.timer = undefined;
+                    }
+                    _this.timer = setTimeout(function () {
+
+                        _this.updateCart(searchObj.productId, searchObj.sizeId, newCount);
+                    }, 400);
+                }
+            }
+        },
+        //method handles - button decrementing value
+        decrement: function decrement(productId, sizeId) {
+            var searchObj = {
+                productId: productId,
+                sizeId: sizeId
+            },
+                _this = this;
+            var oldCount;
+            var newCount = 1;
+
+            GLOBAL_DATA.cartItems.forEach(function (item) {
+                if (item.productId == productId && item.sizeId == sizeId) {
+                    oldCount = item.count;
+
+                    item.count--;
+
+                    if (item.count < 1) {
+                        item.count = 1;
+                    }
+
+                    newCount = item.count;
+                }
+            });
+
+            //check if current page single product
+            if (document.getElementById('product-details')) {
+                if (GLOBAL_DATA.singleProduct.productId == productId && GLOBAL_DATA.singleProduct.sizeId == sizeId) {
+                    GLOBAL_DATA.singleProduct.count = newCount;
+                }
+            }
+
+            //check if size id in cart
+            if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
+                //check if old count != new count
+                if (oldCount != newCount) {
+                    //then send update ajax
+                    if (_this.timer) {
+                        clearTimeout(_this.timer);
+                        _this.timer = undefined;
+                    }
+                    _this.timer = setTimeout(function () {
+
+                        _this.updateCart(searchObj.productId, searchObj.sizeId, newCount);
+                    }, 400);
                 }
             }
         }
     }
-
-    function installNextTickImplementation() {
-        registerImmediate = function(handle) {
-            process.nextTick(function () { runIfPresent(handle); });
-        };
-    }
-
-    function canUsePostMessage() {
-        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
-        // where `global.postMessage` means something completely different and can't be used for this purpose.
-        if (global.postMessage && !global.importScripts) {
-            var postMessageIsAsynchronous = true;
-            var oldOnMessage = global.onmessage;
-            global.onmessage = function() {
-                postMessageIsAsynchronous = false;
-            };
-            global.postMessage("", "*");
-            global.onmessage = oldOnMessage;
-            return postMessageIsAsynchronous;
-        }
-    }
-
-    function installPostMessageImplementation() {
-        // Installs an event handler on `global` for the `message` event: see
-        // * https://developer.mozilla.org/en/DOM/window.postMessage
-        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
-
-        var messagePrefix = "setImmediate$" + Math.random() + "$";
-        var onGlobalMessage = function(event) {
-            if (event.source === global &&
-                typeof event.data === "string" &&
-                event.data.indexOf(messagePrefix) === 0) {
-                runIfPresent(+event.data.slice(messagePrefix.length));
-            }
-        };
-
-        if (global.addEventListener) {
-            global.addEventListener("message", onGlobalMessage, false);
-        } else {
-            global.attachEvent("onmessage", onGlobalMessage);
-        }
-
-        registerImmediate = function(handle) {
-            global.postMessage(messagePrefix + handle, "*");
-        };
-    }
-
-    function installMessageChannelImplementation() {
-        var channel = new MessageChannel();
-        channel.port1.onmessage = function(event) {
-            var handle = event.data;
-            runIfPresent(handle);
-        };
-
-        registerImmediate = function(handle) {
-            channel.port2.postMessage(handle);
-        };
-    }
-
-    function installReadyStateChangeImplementation() {
-        var html = doc.documentElement;
-        registerImmediate = function(handle) {
-            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
-            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
-            var script = doc.createElement("script");
-            script.onreadystatechange = function () {
-                runIfPresent(handle);
-                script.onreadystatechange = null;
-                html.removeChild(script);
-                script = null;
-            };
-            html.appendChild(script);
-        };
-    }
-
-    function installSetTimeoutImplementation() {
-        registerImmediate = function(handle) {
-            setTimeout(runIfPresent, 0, handle);
-        };
-    }
-
-    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
-    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
-    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
-
-    // Don't get fooled by e.g. browserify environments.
-    if ({}.toString.call(global.process) === "[object process]") {
-        // For Node.js before 0.9
-        installNextTickImplementation();
-
-    } else if (canUsePostMessage()) {
-        // For non-IE10 modern browsers
-        installPostMessageImplementation();
-
-    } else if (global.MessageChannel) {
-        // For web workers, where supported
-        installMessageChannelImplementation();
-
-    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
-        // For IE 6–8
-        installReadyStateChangeImplementation();
-
-    } else {
-        // For older browsers
-        installSetTimeoutImplementation();
-    }
-
-    attachTo.setImmediate = setImmediate;
-    attachTo.clearImmediate = clearImmediate;
-}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(6)))
+});
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports) {
 
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-/* 7 */
+/***/ "./resources/assets/js/components/CategoryProduct.js":
 /***/ (function(module, exports) {
 
 if (document.getElementById('grid-view')) {
@@ -11898,7 +12399,2164 @@ if (document.getElementById('grid-view')) {
 }
 
 /***/ }),
-/* 8 */
+
+/***/ "./resources/assets/js/components/ChangePassword.js":
+/***/ (function(module, exports) {
+
+if (document.getElementById('change-password')) {
+    var profileOldPasswordValidator, profileNewPasswordValidator, profileConfirmNewPasswordValidator;
+
+    new Vue({
+        el: '#change-password',
+        data: {
+            oldPassword: '',
+            newPassword: '',
+            confirmNewPassword: ''
+        },
+        mounted: function mounted() {
+            var _this = this;
+            // `this` указывает на экземпляр vm
+            profileOldPasswordValidator = new RegExValidatingInput($('[data-profile-old-password]'), {
+                expression: RegularExpressions.PASSWORD,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            profileNewPasswordValidator = new RegExValidatingInput($('[data-profile-new-password]'), {
+                expression: RegularExpressions.PASSWORD,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            profileConfirmNewPasswordValidator = new RegExValidatingInput($('[data-profile-confirm-new-password]'), {
+                expression: RegularExpressions.PASSWORD,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+        },
+        methods: {
+            validateBeforeSubmit: function validateBeforeSubmit() {
+                var _this = this;
+
+                var isValid = true;
+
+                profileOldPasswordValidator.Validate();
+                if (!profileOldPasswordValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                profileNewPasswordValidator.Validate();
+                if (isValid && !profileNewPasswordValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                profileConfirmNewPasswordValidator.Validate();
+                if (isValid && !profileConfirmNewPasswordValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                if (_this.newPassword != _this.confirmNewPassword) {
+                    $('[data-profile-new-password]').addClass(INCORRECT_FIELD_CLASS);
+                    $('[data-profile-confirm-new-password]').addClass(INCORRECT_FIELD_CLASS);
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    _this.changePassword();
+                }
+            },
+            changePassword: function changePassword() {
+                var _this = this;
+
+                showLoader();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/profile/change-password',
+                    data: {
+                        oldPassword: _this.oldPassword,
+                        newPassword: _this.newPassword,
+                        language: LANGUAGE
+                    },
+                    success: function success(data) {
+                        hideLoader();
+
+                        if (data.status == 'success') {
+                            if (data.message == 'goodPass') {
+                                showPopup(PASSWORD_CHANGED_MESSAGE);
+
+                                window.location.reload(true);
+                            }
+                        }
+
+                        if (data.status == 'error') {
+                            if (data.message == 'badPass') {
+                                showPopup(WRONG_OLD_PASSWORD);
+                            }
+                        }
+                    },
+                    error: function error(_error) {
+                        hideLoader();
+                        showPopup(SERVER_ERROR);
+                        console.log(_error);
+                    }
+                });
+            }
+        }
+    });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Filters.js":
+/***/ (function(module, exports) {
+
+if (document.getElementById('sidebar-filters')) {
+    var FILTERS = window.FFShop.filters;
+
+    var SHOW_APPLY_BTN = {};
+
+    for (var fName in FILTERS) {
+        SHOW_APPLY_BTN[fName] = false;
+    }
+
+    var FILTERS_DATA = {
+        filters: FILTERS,
+        isStateChanged: false,
+        show_btn: SHOW_APPLY_BTN,
+        categorySlug: window.FFShop.categorySlug,
+        filterUrl: '',
+        initialPriceMin: parseFloat(window.FFShop.priceMin),
+        initialPriceMax: parseFloat(window.FFShop.priceMax),
+        priceMin: parseFloat(window.FFShop.priceMin),
+        priceMax: parseFloat(window.FFShop.priceMax)
+    };
+
+    new Vue({
+        el: '#sidebar-filters',
+        data: FILTERS_DATA,
+        mounted: function mounted() {
+            var _this = this;
+
+            this.$nextTick(function () {
+                /*------------------- Sidebar Filter Range -------------------*/
+                var priceSliderRange = $('#price-range');
+                if ($.ui) {
+                    if ($(priceSliderRange).length) {
+                        $(priceSliderRange).slider({
+                            range: true,
+                            min: FILTERS_DATA.priceMin,
+                            max: FILTERS_DATA.priceMax,
+                            values: [FILTERS_DATA.priceMin, FILTERS_DATA.priceMax],
+                            slide: function slide(event, ui) {
+                                //$("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+                                $("#price-min").html(ui.values[0] + " грн");
+                                $("#price-max").html(ui.values[1] + " грн");
+                                // console.log(ui.values);
+                                FILTERS_DATA.priceMin = ui.values[0];
+                                FILTERS_DATA.priceMax = ui.values[1];
+
+                                _this.buildSelectedFiltersArray();
+                            }
+                        });
+                        $("#price-min").html($("#price-range").slider("values", 0) + " грн");
+                        $("#price-max").html($("#price-range").slider("values", 1) + " грн");
+                    }
+                }
+            });
+        },
+        methods: {
+            setCheck: function setCheck(filterName, valueCounter) {
+                var _this = this;
+
+                _this.isStateChanged = false;
+
+                FILTERS[filterName][valueCounter].isChecked = !FILTERS[filterName][valueCounter].isChecked;
+
+                SHOW_APPLY_BTN[[filterName]] = false;
+
+                for (var fName in FILTERS) {
+                    FILTERS[fName].forEach(function (fValue) {
+
+                        if (fValue.isChecked) {
+                            _this.isStateChanged = true;
+                            SHOW_APPLY_BTN[[fName]] = true;
+                        }
+                    });
+                }
+
+                _this.buildSelectedFiltersArray();
+            },
+            isCheckSelected: function isCheckSelected(filterName) {
+                return SHOW_APPLY_BTN[[filterName]] ? true : false;
+            },
+            buildSelectedFiltersArray: function buildSelectedFiltersArray() {
+                var _this = this;
+                var url = '/category/' + _this.categorySlug + '/';
+                var arrayOfPairs = [];
+
+                for (var fName in FILTERS) {
+                    var values = [];
+
+                    var valuesStr = '';
+
+                    var filterName = '';
+
+                    FILTERS[fName].forEach(function (fValue) {
+                        if (fValue.isChecked) {
+                            filterName = fValue.filter_name_slug;
+                            values.push(fValue.filter_value_slug);
+                        }
+                    });
+
+                    valuesStr = values.join();
+
+                    if (valuesStr.length > 0) {
+                        arrayOfPairs.push(filterName + '=' + valuesStr);
+                    }
+                }
+
+                url += arrayOfPairs.join(';');
+
+                if (FILTERS_DATA.initialPriceMin != FILTERS_DATA.priceMin || FILTERS_DATA.initialPriceMax != FILTERS_DATA.priceMax) {
+                    if (arrayOfPairs.length > 0) {
+                        url += ';price-range=' + FILTERS_DATA.priceMin + ',' + FILTERS_DATA.priceMax;
+                    } else {
+                        url += 'price-range=' + FILTERS_DATA.priceMin + ',' + FILTERS_DATA.priceMax;
+                    }
+                }
+
+                if (LANGUAGE != DEFAULT_LANGUAGE) {
+                    url += '/' + LANGUAGE;
+                }
+
+                _this.filterUrl = url;
+            }
+        }
+    });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Login.js":
+/***/ (function(module, exports) {
+
+if (document.getElementById('login-popup')) {
+
+    new Vue({
+        el: '#login-popup',
+        data: {
+            email: '',
+            password: ''
+        },
+        mounted: function mounted() {
+            var _this = this;
+            // `this` указывает на экземпляр vm
+
+            emailValidator = new RegExValidatingInput($('[data-login-email]'), {
+                expression: RegularExpressions.EMAIL,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            passwordValidator = new RegExValidatingInput($('[data-login-password]'), {
+                expression: RegularExpressions.PASSWORD,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+        },
+        methods: {
+            validateBeforeSubmit: function validateBeforeSubmit() {
+                var _this = this;
+
+                var isValid = true;
+
+                emailValidator.Validate();
+                if (!emailValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                passwordValidator.Validate();
+                if (isValid && !passwordValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    _this.loginUser();
+                }
+            },
+
+            loginUser: function loginUser() {
+                var _this = this;
+
+                showLoader();
+
+                $.ajax({
+                    type: 'get',
+                    url: '/user/login',
+                    data: {
+                        email: _this.email,
+                        password: _this.password,
+                        language: LANGUAGE
+                    },
+                    success: function success(data) {
+                        hideLoader();
+
+                        var LOADED = true;
+
+                        if (data.status == 'success') {
+                            window.location.reload(true);
+                        }
+
+                        if (data.status == 'error') {
+                            if (data.failed == 'email') {
+                                $('#login-popup').modal('hide');
+
+                                $('#login-popup').on('hidden.bs.modal', function () {
+                                    if (LOADED) {
+                                        showPopup(EMAIL_NOT_EXISTS);
+                                        LOADED = false;
+                                    }
+                                });
+                            }
+
+                            if (data.failed == 'active') {
+                                $('#login-popup').modal('hide');
+
+                                $('#login-popup').on('hidden.bs.modal', function () {
+                                    if (LOADED) {
+                                        showPopup(EMAIL_CONFIRM_NOT_VALID);
+                                        LOADED = false;
+                                    }
+                                });
+                            }
+
+                            if (data.failed == 'password') {
+                                $('[data-login-password]').val('').addClass(INCORRECT_FIELD_CLASS).attr("placeholder", INCORRECT_FIELD_TEXT);
+                            }
+                        }
+                    },
+                    error: function error(_error) {
+                        hideLoader();
+
+                        $('#login-popup').modal('hide');
+
+                        var LOADED = true;
+
+                        $('#login-popup').on('hidden.bs.modal', function () {
+                            if (LOADED) {
+                                showPopup(SERVER_ERROR);
+                                LOADED = false;
+                            }
+                        });
+
+                        console.log(_error);
+                    }
+                });
+            }
+        }
+    });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/MainSlider.js":
+/***/ (function(module, exports) {
+
+/**
+ * Created by vlad_ on 18.01.2018.
+ */
+
+if (document.getElementById('main-slider-section')) {
+    var initProductPreviewImagesSliderMainSlider = function initProductPreviewImagesSliderMainSlider() {
+        //Resize carousels in modal
+        if ($('.sync2.product-preview-images-small').length > 0) {
+            $(document).on('shown.bs.modal', function () {
+                $(this).find('.sync1.product-preview-images-big, .sync2.product-preview-images-small').each(function () {
+                    $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
+                });
+            });
+
+            var navSpeedThumbs = 500;
+
+            if (!initProductPreviewImagesSliderInited === true) {
+                sync1 = $(".sync1.product-preview-images-big");
+                sync2 = $(".sync2.product-preview-images-small");
+                sliderthumb = $(".single-prod-thumb");
+                homethumb = $(".home-slide-thumb");
+            }
+
+            sliderthumb.owlCarousel({
+                rtl: false,
+                items: 3,
+                //loop: true,
+                nav: true,
+                margin: 20,
+                navSpeed: navSpeedThumbs,
+                responsive: {
+                    992: { items: 3 },
+                    767: { items: 4 },
+                    480: { items: 3 },
+                    320: { items: 2 }
+                },
+                responsiveRefreshRate: 200,
+                navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
+            });
+
+            sync1.owlCarousel({
+                rtl: false,
+                items: 1,
+                navSpeed: 1000,
+                nav: false,
+                onChanged: syncPosition,
+                responsiveRefreshRate: 200
+
+            });
+
+            homethumb.owlCarousel({
+                rtl: false,
+                items: 5,
+                nav: true,
+                //loop: true,
+                navSpeed: navSpeedThumbs,
+                responsive: {
+                    1500: { items: 5 },
+                    1024: { items: 4 },
+                    768: { items: 3 },
+                    600: { items: 4 },
+                    480: { items: 3 },
+                    320: { items: 2,
+                        nav: false
+                    }
+                },
+                responsiveRefreshRate: 200,
+                navText: ["<i class='fa fa-long-arrow-left'></i>", "<i class='fa fa-long-arrow-right'></i>"]
+            });
+
+            if (!initProductPreviewImagesSliderInited) {
+                initProductPreviewImagesSliderInited = true;
+            }
+        }
+
+        function syncPosition(el) {
+            var current = this._current;
+            $(".sync2.product-preview-images-small").find(".owl-item").removeClass("synced").eq(current).addClass("synced");
+            center(current);
+        }
+
+        $(".sync2.product-preview-images-small").on("click", ".owl-item", function (e) {
+            e.preventDefault();
+            var number = $(this).index();
+            sync1.trigger("to.owl.carousel", [number, 1000]);
+            return false;
+        });
+
+        function center(num) {
+
+            var sync2visible = sync2.find('.owl-item.active').map(function () {
+                return $(this).index();
+            });
+
+            if ($.inArray(num, sync2visible) === -1) {
+                if (num > sync2visible[sync2visible.length - 1]) {
+                    sync2.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
+                } else {
+                    sync2.trigger("to.owl.carousel", Math.max(0, num - 1));
+                }
+            } else if (num === sync2visible[sync2visible.length - 1]) {
+                sync2.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
+            } else if (num === sync2visible[0]) {
+                sync2.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
+            }
+        }
+    };
+
+    var destroyProductPreviewImagesSliderMainSlider = function destroyProductPreviewImagesSliderMainSlider() {
+        if (initProductPreviewImagesSliderInited === true) {
+            sync1.trigger('destroy.owl.carousel');
+            sliderthumb.trigger('destroy.owl.carousel');
+            homethumb.trigger('destroy.owl.carousel');
+
+            sync1.find('.owl-stage-outer').children().unwrap();
+            sync1.removeClass("owl-center owl-loaded owl-text-select-on");
+
+            sync2.find('.owl-stage-outer').children().unwrap();
+            sync2.removeClass("owl-center owl-loaded owl-text-select-on");
+
+            sliderthumb.find('.owl-stage-outer').children().unwrap();
+            sliderthumb.removeClass("owl-center owl-loaded owl-text-select-on");
+
+            homethumb.find('.owl-stage-outer').children().unwrap();
+            homethumb.removeClass("owl-center owl-loaded owl-text-select-on");
+        }
+    };
+
+    var initProductPreviewImagesSliderInited = false,
+        sync1,
+        sync2,
+        sliderthumb,
+        homethumb;
+
+    GLOBAL_DATA.mainSliderProducts = window.FFShop.mainSliderProducts;
+
+    GLOBAL_DATA.mainSliderPreview.product = GLOBAL_DATA.mainSliderProducts[0];
+
+    GLOBAL_DATA.mainSliderPreview.rel = 'prettyPhoto[main-slider-' + GLOBAL_DATA.mainSliderProducts[0].id + ']';
+
+    GLOBAL_DATA.mainSliderPreview.currentSizeId = GLOBAL_DATA.mainSliderPreview.product.sizes[0].id;
+
+    //init category product preview count
+    GLOBAL_DATA.mainSliderPreview.count = 1;
+
+    new Vue({
+        el: '#main-slider-section',
+        data: GLOBAL_DATA,
+        mounted: function mounted() {
+
+            console.log(111);
+
+            $('.ttip:not(.tooltipstered)').tooltipster({
+                theme: 'tooltipster-borderless'
+            });
+
+            //Main Slider carousel
+            if ($('#main-slider').length > 0) {
+                $("#main-slider").owlCarousel({
+                    //animateOut: 'slideOutDown',
+                    //animateIn: 'flipInX',
+                    autoplay: false,
+                    animateIn: 'fadeInDown',
+                    animateOut: 'slideOutDown',
+                    items: 1,
+                    dots: true,
+                    nav: false,
+                    loop: true,
+                    responsive: {
+                        0: { items: 1 }
+                    }
+                });
+            }
+
+            initProductPreviewImagesSliderMainSlider();
+
+            destroyProductPreviewImagesSliderMainSlider();
+
+            $("a[rel^='prettyPhoto[main-slider-" + GLOBAL_DATA.mainSliderPreview.product.id + "]']").prettyPhoto({
+                theme: 'facebook',
+                slideshow: 5000,
+                autoplay_slideshow: false,
+                social_tools: false,
+                deeplinking: false,
+                ajaxcallback: function ajaxcallback() {
+                    var PRETTY_LOADED = true;
+                    $('#main-slider-preview').modal('hide');
+                    $('#main-slider-preview').on('hidden.bs.modal', function () {
+                        if (PRETTY_LOADED) {
+                            $('body').addClass('modal-open').css('padding-right', '17px');
+                            PRETTY_LOADED = false;
+                        }
+                    });
+                },
+                callback: function callback() {
+                    $('body').removeClass('modal-open').css('padding-right', 0);
+                }
+            });
+        },
+        methods: {
+            //check if props in list
+            findWhere: function findWhere(list, props) {
+                var idx = 0;
+                var len = list.length;
+                var match = false;
+                var item, item_k, item_v, prop_k, prop_val;
+                for (; idx < len; idx++) {
+                    item = list[idx];
+                    for (prop_k in props) {
+                        // If props doesn't own the property, skip it.
+                        if (!props.hasOwnProperty(prop_k)) continue;
+                        // If item doesn't have the property, no match;
+                        if (!item.hasOwnProperty(prop_k)) {
+                            match = false;
+                            break;
+                        }
+                        if (props[prop_k] === item[prop_k]) {
+                            // We have a match…so far.
+                            match = true;
+                        } else {
+                            // No match.
+                            match = false;
+                            // Don't compare more properties.
+                            break;
+                        }
+                    }
+                    // We've iterated all of props' properties, and we still match!
+                    // Return that item!
+                    if (match) return item;
+                }
+                // No matches
+                return null;
+            },
+            changeMainSliderProductPreview: function changeMainSliderProductPreview(counter) {
+                destroyProductPreviewImagesSliderMainSlider();
+
+                GLOBAL_DATA.mainSliderPreview.product = GLOBAL_DATA.mainSliderProducts[counter];
+
+                GLOBAL_DATA.mainSliderPreview.rel = 'prettyPhoto[main-slider-' + GLOBAL_DATA.mainSliderPreview.product.id + ']';
+
+                GLOBAL_DATA.mainSliderPreview.currentSizeId = GLOBAL_DATA.mainSliderPreview.product.sizes[0].id;
+
+                //init count checking if current preview in cart
+                if (this.findWhere(GLOBAL_DATA.cartItems, {
+                    productId: GLOBAL_DATA.mainSliderPreview.product.id,
+                    sizeId: GLOBAL_DATA.mainSliderPreview.currentSizeId
+                })) {
+                    //looping cartItems
+                    GLOBAL_DATA.cartItems.forEach(function (item) {
+                        //check if current active size id in cart
+                        if (item.productId == GLOBAL_DATA.mainSliderPreview.product.id && item.sizeId == GLOBAL_DATA.mainSliderPreview.currentSizeId) {
+                            //then setting count
+                            GLOBAL_DATA.mainSliderPreview.count = item.count;
+                        }
+                    });
+                } else {
+                    GLOBAL_DATA.mainSliderPreview.count = 1;
+                }
+
+                //container with preview
+                var $container = $('#main-slider-preview');
+
+                $container.modal();
+
+                setTimeout(function () {
+                    initProductPreviewImagesSliderMainSlider();
+
+                    $("a[rel^='prettyPhoto[main-slider-" + GLOBAL_DATA.mainSliderPreview.product.id + "]']").prettyPhoto({
+                        theme: 'facebook',
+                        slideshow: 5000,
+                        autoplay_slideshow: false,
+                        social_tools: false,
+                        deeplinking: false,
+                        ajaxcallback: function ajaxcallback() {
+                            var PRETTY_LOADED = true;
+                            $container.modal('hide');
+                            $container.on('hidden.bs.modal', function () {
+                                if (PRETTY_LOADED) {
+                                    $('body').addClass('modal-open').css('padding-right', '17px');
+                                    PRETTY_LOADED = false;
+                                }
+                            });
+                        },
+                        callback: function callback() {
+                            $('body').removeClass('modal-open').css('padding-right', 0);
+                        }
+                    });
+                }, 500);
+            },
+
+            //method handles onChange count input
+            toInteger: function toInteger(count) {
+                var searchObj = {
+                    productId: GLOBAL_DATA.mainSliderPreview.product.id,
+                    sizeId: GLOBAL_DATA.mainSliderPreview.currentSizeId
+                },
+                    _this = this;
+
+                if (count < 1 || count == '') {
+                    GLOBAL_DATA.mainSliderPreview.count = 1;
+                }
+
+                if (count > 99) {
+                    GLOBAL_DATA.mainSliderPreview.count = 99;
+                }
+
+                //if prod size in cart
+                if (this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
+                    //then update cart
+                    if (_this.timer) {
+                        clearTimeout(_this.timer);
+                        _this.timer = undefined;
+                    }
+                    _this.timer = setTimeout(function () {
+
+                        _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.mainSliderPreview.count);
+                    }, 400);
+                }
+            },
+            //method handles add to cart
+            addToCart: function addToCart(productId, sizeId, count) {
+                var obj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId),
+                    count: parseInt(count)
+                },
+                    searchObj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId)
+                },
+                    _this = this;
+
+                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
+                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                        return false;
+                    }
+
+                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                    showLoader();
+
+                    //ajax
+                    $.ajax({
+                        type: 'post',
+                        url: '/cart/add-to-cart',
+                        data: {
+                            productId: obj.productId,
+                            sizeId: obj.sizeId,
+                            count: obj.count,
+                            language: LANGUAGE,
+                            userTypeId: GLOBAL_DATA.userTypeId
+                        },
+                        success: function success(data) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                            GLOBAL_DATA.cartItems = data.cart;
+                            GLOBAL_DATA.totalCount = data.totalCount;
+                            GLOBAL_DATA.totalAmount = data.totalAmount;
+
+                            var LOADED = true;
+                            $('#main-slider-preview').modal('hide');
+                            $('#main-slider-preview').on('hidden.bs.modal', function () {
+                                if (LOADED) {
+                                    $('#big-cart').modal();
+                                    // $('body').addClass('modal-open').css('padding-right', '17px');
+                                    LOADED = false;
+                                }
+                            });
+                        },
+                        error: function error(_error) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                            console.log(_error);
+                        }
+                    });
+                } else {
+                    // $('#prod-preview-test').modal('hide');
+                    // $('#big-cart').modal();
+
+                    var LOADED = true;
+                    $('#main-slider-preview').modal('hide');
+                    $('#main-slider-preview').on('hidden.bs.modal', function () {
+                        if (LOADED) {
+                            $('#big-cart').modal();
+                            // $('body').addClass('modal-open').css('padding-right', '17px');
+                            LOADED = false;
+                        }
+                    });
+                }
+            },
+            addToWishList: function addToWishList(productId, sizeId, wishListId) {
+                var obj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId)
+                },
+                    _this = this;
+
+                if (_this.findWhere(GLOBAL_DATA.wishListItems, obj) == null) {
+                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                        return false;
+                    }
+
+                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                    showLoader();
+
+                    //ajax
+                    $.ajax({
+                        type: 'post',
+                        url: '/profile/add-to-wish-list',
+                        data: {
+                            productId: obj.productId,
+                            sizeId: obj.sizeId,
+                            wishListId: wishListId,
+                            language: LANGUAGE,
+                            userTypeId: GLOBAL_DATA.userTypeId
+                        },
+                        success: function success(data) {
+                            hideLoader();
+
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                            GLOBAL_DATA.wishListItems = data.wishListItems;
+                        },
+                        error: function error(_error2) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                            console.log(_error2);
+                        }
+                    });
+                }
+            },
+            //changing current sizeId in preview
+            changeCurrentSizeId: function changeCurrentSizeId(sizeId) {
+                GLOBAL_DATA.mainSliderPreview.currentSizeId = sizeId;
+
+                if (this.findWhere(GLOBAL_DATA.cartItems, {
+                    productId: GLOBAL_DATA.mainSliderPreview.product.id,
+                    sizeId: GLOBAL_DATA.mainSliderPreview.currentSizeId
+                })) {
+                    //looping cartItems
+                    GLOBAL_DATA.cartItems.forEach(function (item) {
+                        //check if current active size id in cart
+                        if (item.productId == GLOBAL_DATA.mainSliderPreview.product.id && item.sizeId == GLOBAL_DATA.mainSliderPreview.currentSizeId) {
+                            //then setting count
+                            GLOBAL_DATA.mainSliderPreview.count = item.count;
+                        }
+                    });
+                } else {
+                    GLOBAL_DATA.mainSliderPreview.count = 1;
+                }
+            },
+            //method handles updating cart, change count
+            updateCart: function updateCart(productId, sizeId, count) {
+                if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                    return false;
+                }
+
+                GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                var obj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId),
+                    count: parseInt(count)
+                },
+                    _this = this;
+
+                showLoader();
+
+                //ajax
+                $.ajax({
+                    type: 'post',
+                    url: '/cart/update-cart',
+                    data: {
+                        productId: obj.productId,
+                        sizeId: obj.sizeId,
+                        count: obj.count,
+                        language: LANGUAGE,
+                        userTypeId: GLOBAL_DATA.userTypeId
+                    },
+                    success: function success(data) {
+                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                        hideLoader();
+                        GLOBAL_DATA.cartItems = data.cart;
+                        GLOBAL_DATA.totalCount = data.totalCount;
+                        GLOBAL_DATA.totalAmount = data.totalAmount;
+                    },
+                    error: function error(_error3) {
+                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                        hideLoader();
+                        console.log(_error3);
+                    }
+                });
+            },
+            //method handles + button incrementing value
+            increment: function increment() {
+                var searchObj = {
+                    productId: GLOBAL_DATA.mainSliderPreview.product.id,
+                    sizeId: GLOBAL_DATA.mainSliderPreview.currentSizeId
+                },
+                    _this = this;
+
+                var oldCount = GLOBAL_DATA.mainSliderPreview.count;
+
+                GLOBAL_DATA.mainSliderPreview.count++;
+
+                if (GLOBAL_DATA.mainSliderPreview.count > 99) {
+                    GLOBAL_DATA.mainSliderPreview.count = 99;
+                }
+
+                //check if size id in cart
+                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
+                    //check if old count != new count
+                    if (oldCount != GLOBAL_DATA.mainSliderPreview.count) {
+                        //then send update ajax
+                        if (_this.timer) {
+                            clearTimeout(_this.timer);
+                            _this.timer = undefined;
+                        }
+                        _this.timer = setTimeout(function () {
+
+                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.mainSliderPreview.count);
+                        }, 400);
+                    }
+                }
+            },
+            //method handles - button decrementing value
+            decrement: function decrement() {
+                var searchObj = {
+                    productId: GLOBAL_DATA.mainSliderPreview.product.id,
+                    sizeId: GLOBAL_DATA.mainSliderPreview.currentSizeId
+                },
+                    _this = this;
+
+                var oldCount = GLOBAL_DATA.mainSliderPreview.count;
+
+                GLOBAL_DATA.mainSliderPreview.count--;
+
+                if (GLOBAL_DATA.mainSliderPreview.count < 1) {
+                    GLOBAL_DATA.mainSliderPreview.count = 1;
+                }
+
+                //check if size id in cart
+                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
+                    //check if old count != new count
+                    if (oldCount != GLOBAL_DATA.mainSliderPreview.count) {
+                        //then send update ajax
+                        if (_this.timer) {
+                            clearTimeout(_this.timer);
+                            _this.timer = undefined;
+                        }
+                        _this.timer = setTimeout(function () {
+
+                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.mainSliderPreview.count);
+                        }, 400);
+                    }
+                }
+            }
+        }
+    });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/MiniCart.js":
+/***/ (function(module, exports) {
+
+new Vue({
+    el: '#mini-cart',
+    data: GLOBAL_DATA,
+    watch: {
+        totalCount: function totalCount() {
+            var _this = this;
+
+            // if (GLOBAL_DATA.totalCount < 1)
+            // {
+            //     $('.smol-cart-content').stop(100,100).fadeOut(100);
+            // }
+        }
+    },
+    methods: {
+        deleteFromCart: function deleteFromCart(productId, sizeId) {
+            if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                return false;
+            }
+
+            GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+            showLoader();
+
+            $.ajax({
+                type: 'post',
+                url: '/cart/delete-from-cart',
+                data: {
+                    productId: productId,
+                    sizeId: sizeId,
+                    language: LANGUAGE,
+                    userTypeId: GLOBAL_DATA.userTypeId
+                },
+                success: function success(data) {
+                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                    hideLoader();
+                    GLOBAL_DATA.cartItems = data.cart;
+                    GLOBAL_DATA.totalCount = data.totalCount;
+                    GLOBAL_DATA.totalAmount = data.totalAmount;
+
+                    if (GLOBAL_DATA.cartItems.length < 1) {
+                        $('#big-cart').modal('hide');
+                    }
+                },
+                error: function error(_error) {
+                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                    hideLoader();
+                    console.log(_error);
+                }
+            });
+        },
+        showMiniCart: function showMiniCart() {
+            if (GLOBAL_DATA.totalCount > 0) {
+                // $('.dropdown_cart_smoll').hover(function () {
+                //     $('.smol-cart-content').stop(100,100).fadeIn(100);
+                // });
+            }
+        }
+    }
+});
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/MyOrders.js":
+/***/ (function(module, exports) {
+
+if (document.getElementById('profile-my-orders')) {
+    new Vue({
+        el: '#profile-my-orders',
+        data: {
+            orders: window.FFShop.orders,
+            page: window.FFShop.page,
+            currentOrder: null,
+            payments: window.FFShop.payments,
+            deliveries: window.FFShop.deliveries,
+            totalOrdersCount: window.FFShop.totalOrdersCount,
+            myOrdersPages: [],
+            isPrev: false,
+            isNext: false
+        },
+        mounted: function mounted() {
+            var _this = this;
+            _this.currentOrder = window.FFShop.orders[0];
+            _this.myOrdersPages = _this.createPagination(_this.page, 5, _this.totalOrdersCount);
+        },
+        watch: {
+            page: function page() {
+                var _this = this;
+
+                _this.myOrdersPages = _this.createPagination(_this.page, 5, _this.totalOrdersCount);
+
+                _this.getOrders();
+            }
+        },
+        methods: {
+            setOrderProducts: function setOrderProducts(order) {
+                var _this = this;
+
+                _this.currentOrder = order;
+
+                $('#orderDetails').modal();
+            },
+            setPage: function setPage(page) {
+                var _this = this;
+
+                _this.page = page;
+            },
+            range: function range(low, high, step) {
+                var matrix = [];
+                var inival, endval, plus;
+                var walker = step || 1;
+                var chars = false;
+
+                if (!isNaN(low) && !isNaN(high)) {
+                    inival = low;
+                    endval = high;
+                } else if (isNaN(low) && isNaN(high)) {
+                    chars = true;
+                    inival = low.charCodeAt(0);
+                    endval = high.charCodeAt(0);
+                } else {
+                    inival = isNaN(low) ? 0 : low;
+                    endval = isNaN(high) ? 0 : high;
+                }
+
+                plus = inival > endval ? false : true;
+                if (plus) {
+                    while (inival <= endval) {
+                        matrix.push(chars ? String.fromCharCode(inival) : inival);
+                        inival += walker;
+                    }
+                } else {
+                    while (inival >= endval) {
+                        matrix.push(chars ? String.fromCharCode(inival) : inival);
+                        inival -= walker;
+                    }
+                }
+
+                return matrix;
+            },
+            createPagination: function createPagination(page, itemsPerPage, totalItemsCount) {
+                var _this = this;
+                var maxElements = 7;
+                var pages = [];
+                var lastPage = Math.ceil(totalItemsCount / itemsPerPage);
+                var minMiddle;
+                var maxMiddle;
+                var pagesPerBothSides;
+                var min;
+                var max;
+                var pagesPerLeftSide;
+                var pagesPerRightSide;
+
+                if (maxElements >= lastPage) {
+                    pages = _this.range(1, lastPage);
+                } else {
+                    minMiddle = Math.ceil(maxElements / 2);
+                    maxMiddle = Math.ceil(lastPage - maxElements / 2);
+
+                    if (page > minMiddle) {
+                        pages.push(1);
+                        pages.push('...');
+                    }
+
+                    if (page > minMiddle && page < maxMiddle) {
+                        pagesPerBothSides = Math.floor(maxElements / 4);
+                        min = page - pagesPerBothSides;
+                        max = page + pagesPerBothSides;
+                        for (var i = min; i <= max; i++) {
+                            pages.push(i);
+                        }
+                    } else if (page <= minMiddle) {
+                        pagesPerLeftSide = maxElements - 2;
+                        for (i = 1; i <= pagesPerLeftSide; i++) {
+                            pages.push(i);
+                        }
+                    } else if (page >= maxMiddle) {
+                        pagesPerRightSide = maxElements - 3;
+                        min = lastPage - pagesPerRightSide;
+                        for (i = min; i <= lastPage; i++) {
+                            pages.push(i);
+                        }
+                    }
+
+                    if (page < maxMiddle) {
+                        pages.push('...');
+                        pages.push(lastPage);
+                    }
+                }
+
+                if (page == 1) {
+                    pages.unshift(false);
+                } else {
+                    pages.unshift(true);
+                }
+
+                if (page == lastPage) {
+                    pages.push(false);
+                } else {
+                    pages.push(true);
+                }
+
+                /////////
+                _this.isPrev = pages.shift();
+                _this.isNext = pages.pop();
+
+                return pages;
+            },
+            getOrders: function getOrders() {
+                var _this = this;
+
+                showLoader();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/profile/my-orders',
+                    data: {
+                        page: _this.page,
+                        language: LANGUAGE
+                    },
+                    success: function success(data) {
+                        _this.orders = data.orders;
+                        hideLoader();
+                    },
+                    error: function error(data) {
+                        hideLoader();
+                        showPopup(SERVER_ERROR);
+                    }
+                });
+            }
+        }
+    });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/NewProducts.js":
+/***/ (function(module, exports) {
+
+/**
+ * Created by vlad_ on 16.01.2018.
+ */
+
+if (document.getElementById('new-products')) {
+    var initProductPreviewImagesSliderNew = function initProductPreviewImagesSliderNew() {
+        //Resize carousels in modal
+        if ($('.sync2.product-preview-images-small').length > 0) {
+            $(document).on('shown.bs.modal', function () {
+                $(this).find('.sync1.product-preview-images-big, .sync2.product-preview-images-small').each(function () {
+                    $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
+                });
+            });
+
+            var navSpeedThumbs = 500;
+
+            if (!initProductPreviewImagesSliderInited === true) {
+                sync1 = $(".sync1.product-preview-images-big");
+                sync2 = $(".sync2.product-preview-images-small");
+                sliderthumb = $(".single-prod-thumb");
+                homethumb = $(".home-slide-thumb");
+            }
+
+            sliderthumb.owlCarousel({
+                rtl: false,
+                items: 3,
+                //loop: true,
+                nav: true,
+                margin: 20,
+                navSpeed: navSpeedThumbs,
+                responsive: {
+                    992: { items: 3 },
+                    767: { items: 4 },
+                    480: { items: 3 },
+                    320: { items: 2 }
+                },
+                responsiveRefreshRate: 200,
+                navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
+            });
+
+            sync1.owlCarousel({
+                rtl: false,
+                items: 1,
+                navSpeed: 1000,
+                nav: false,
+                onChanged: syncPosition,
+                responsiveRefreshRate: 200
+
+            });
+
+            homethumb.owlCarousel({
+                rtl: false,
+                items: 5,
+                nav: true,
+                //loop: true,
+                navSpeed: navSpeedThumbs,
+                responsive: {
+                    1500: { items: 5 },
+                    1024: { items: 4 },
+                    768: { items: 3 },
+                    600: { items: 4 },
+                    480: { items: 3 },
+                    320: { items: 2,
+                        nav: false
+                    }
+                },
+                responsiveRefreshRate: 200,
+                navText: ["<i class='fa fa-long-arrow-left'></i>", "<i class='fa fa-long-arrow-right'></i>"]
+            });
+
+            if (!initProductPreviewImagesSliderInited) {
+                initProductPreviewImagesSliderInited = true;
+            }
+        }
+
+        function syncPosition(el) {
+            var current = this._current;
+            $(".sync2.product-preview-images-small").find(".owl-item").removeClass("synced").eq(current).addClass("synced");
+            center(current);
+        }
+
+        $(".sync2.product-preview-images-small").on("click", ".owl-item", function (e) {
+            e.preventDefault();
+            var number = $(this).index();
+            sync1.trigger("to.owl.carousel", [number, 1000]);
+            return false;
+        });
+
+        function center(num) {
+
+            var sync2visible = sync2.find('.owl-item.active').map(function () {
+                return $(this).index();
+            });
+
+            if ($.inArray(num, sync2visible) === -1) {
+                if (num > sync2visible[sync2visible.length - 1]) {
+                    sync2.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
+                } else {
+                    sync2.trigger("to.owl.carousel", Math.max(0, num - 1));
+                }
+            } else if (num === sync2visible[sync2visible.length - 1]) {
+                sync2.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
+            } else if (num === sync2visible[0]) {
+                sync2.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
+            }
+        }
+    };
+
+    var destroyProductPreviewImagesSliderNew = function destroyProductPreviewImagesSliderNew() {
+        if (initProductPreviewImagesSliderInited === true) {
+            sync1.trigger('destroy.owl.carousel');
+            sliderthumb.trigger('destroy.owl.carousel');
+            homethumb.trigger('destroy.owl.carousel');
+
+            sync1.find('.owl-stage-outer').children().unwrap();
+            sync1.removeClass("owl-center owl-loaded owl-text-select-on");
+
+            sync2.find('.owl-stage-outer').children().unwrap();
+            sync2.removeClass("owl-center owl-loaded owl-text-select-on");
+
+            sliderthumb.find('.owl-stage-outer').children().unwrap();
+            sliderthumb.removeClass("owl-center owl-loaded owl-text-select-on");
+
+            homethumb.find('.owl-stage-outer').children().unwrap();
+            homethumb.removeClass("owl-center owl-loaded owl-text-select-on");
+        }
+    };
+
+    var initProductPreviewImagesSliderInited = false,
+        sync1,
+        sync2,
+        sliderthumb,
+        homethumb;
+
+    GLOBAL_DATA.newProducts = window.FFShop.newProducts;
+
+    GLOBAL_DATA.newProductPreview.product = GLOBAL_DATA.newProducts[0];
+
+    GLOBAL_DATA.newProductPreview.rel = 'prettyPhoto[new-' + GLOBAL_DATA.newProducts[0].id + ']';
+
+    GLOBAL_DATA.newProductPreview.currentSizeId = GLOBAL_DATA.newProductPreview.product.sizes[0].id;
+
+    //init category product preview count
+    GLOBAL_DATA.newProductPreview.count = 1;
+
+    new Vue({
+        el: '#new-products',
+        data: GLOBAL_DATA,
+        mounted: function mounted() {
+            /*------------------- Product Slider -------------------*/
+            if ($('#prod-slider-2').length > 0) {
+                $("#prod-slider-2").owlCarousel({
+                    dots: false,
+                    loop: false,
+                    autoplay: false,
+                    autoplayHoverPause: true,
+                    smartSpeed: 100,
+                    nav: GLOBAL_DATA.newProducts.length > 2,
+                    margin: 30,
+                    responsive: {
+                        0: { items: 1 },
+                        1201: { items: 2 },
+                        768: { items: 1 },
+                        568: { items: 2 }
+                    },
+                    navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
+                });
+            }
+
+            initProductPreviewImagesSliderNew();
+
+            destroyProductPreviewImagesSliderNew();
+
+            $("a[rel^='prettyPhoto[new-" + GLOBAL_DATA.newProductPreview.product.id + "]']").prettyPhoto({
+                theme: 'facebook',
+                slideshow: 5000,
+                autoplay_slideshow: false,
+                social_tools: false,
+                deeplinking: false,
+                ajaxcallback: function ajaxcallback() {
+                    var PRETTY_LOADED = true;
+                    $('#new-preview').modal('hide');
+                    $('#new-preview').on('hidden.bs.modal', function () {
+                        if (PRETTY_LOADED) {
+                            $('body').addClass('modal-open').css('padding-right', '17px');
+                            PRETTY_LOADED = false;
+                        }
+                    });
+                },
+                callback: function callback() {
+                    $('body').removeClass('modal-open').css('padding-right', 0);
+                }
+            });
+        },
+        methods: {
+            //check if props in list
+            findWhere: function findWhere(list, props) {
+                var idx = 0;
+                var len = list.length;
+                var match = false;
+                var item, item_k, item_v, prop_k, prop_val;
+                for (; idx < len; idx++) {
+                    item = list[idx];
+                    for (prop_k in props) {
+                        // If props doesn't own the property, skip it.
+                        if (!props.hasOwnProperty(prop_k)) continue;
+                        // If item doesn't have the property, no match;
+                        if (!item.hasOwnProperty(prop_k)) {
+                            match = false;
+                            break;
+                        }
+                        if (props[prop_k] === item[prop_k]) {
+                            // We have a match…so far.
+                            match = true;
+                        } else {
+                            // No match.
+                            match = false;
+                            // Don't compare more properties.
+                            break;
+                        }
+                    }
+                    // We've iterated all of props' properties, and we still match!
+                    // Return that item!
+                    if (match) return item;
+                }
+                // No matches
+                return null;
+            },
+            changeNewProductPreview: function changeNewProductPreview(counter) {
+                destroyProductPreviewImagesSliderNew();
+
+                GLOBAL_DATA.newProductPreview.product = GLOBAL_DATA.newProducts[counter];
+
+                GLOBAL_DATA.newProductPreview.rel = 'prettyPhoto[new-' + GLOBAL_DATA.newProductPreview.product.id + ']';
+
+                GLOBAL_DATA.newProductPreview.currentSizeId = GLOBAL_DATA.newProductPreview.product.sizes[0].id;
+
+                //init count checking if current preview in cart
+                if (this.findWhere(GLOBAL_DATA.cartItems, { productId: GLOBAL_DATA.newProductPreview.product.id, sizeId: GLOBAL_DATA.newProductPreview.currentSizeId })) {
+                    //looping cartItems
+                    GLOBAL_DATA.cartItems.forEach(function (item) {
+                        //check if current active size id in cart
+                        if (item.productId == GLOBAL_DATA.newProductPreview.product.id && item.sizeId == GLOBAL_DATA.newProductPreview.currentSizeId) {
+                            //then setting count
+                            GLOBAL_DATA.newProductPreview.count = item.count;
+                        }
+                    });
+                } else {
+                    GLOBAL_DATA.newProductPreview.count = 1;
+                }
+
+                //container with preview
+                var $container = $('#new-preview');
+
+                $container.modal();
+
+                setTimeout(function () {
+                    initProductPreviewImagesSliderNew();
+
+                    $("a[rel^='prettyPhoto[new-" + GLOBAL_DATA.newProductPreview.product.id + "]']").prettyPhoto({
+                        theme: 'facebook',
+                        slideshow: 5000,
+                        autoplay_slideshow: false,
+                        social_tools: false,
+                        deeplinking: false,
+                        ajaxcallback: function ajaxcallback() {
+                            var PRETTY_LOADED = true;
+                            $container.modal('hide');
+                            $container.on('hidden.bs.modal', function () {
+                                if (PRETTY_LOADED) {
+                                    $('body').addClass('modal-open').css('padding-right', '17px');
+                                    PRETTY_LOADED = false;
+                                }
+                            });
+                        },
+                        callback: function callback() {
+                            $('body').removeClass('modal-open').css('padding-right', 0);
+                        }
+                    });
+                }, 500);
+            },
+
+            //method handles onChange count input
+            toInteger: function toInteger(count) {
+                var searchObj = {
+                    productId: GLOBAL_DATA.newProductPreview.product.id,
+                    sizeId: GLOBAL_DATA.newProductPreview.currentSizeId
+                },
+                    _this = this;
+
+                if (count < 1 || count == '') {
+                    GLOBAL_DATA.newProductPreview.count = 1;
+                }
+
+                if (count > 99) {
+                    GLOBAL_DATA.newProductPreview.count = 99;
+                }
+
+                //if prod size in cart
+                if (this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
+                    //then update cart
+                    if (_this.timer) {
+                        clearTimeout(_this.timer);
+                        _this.timer = undefined;
+                    }
+                    _this.timer = setTimeout(function () {
+
+                        _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.newProductPreview.count);
+                    }, 400);
+                }
+            },
+            //method handles add to cart
+            addToCart: function addToCart(productId, sizeId, count) {
+                var obj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId),
+                    count: parseInt(count)
+                },
+                    searchObj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId)
+                },
+                    _this = this;
+
+                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
+                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                        return false;
+                    }
+
+                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                    showLoader();
+
+                    //ajax
+                    $.ajax({
+                        type: 'post',
+                        url: '/cart/add-to-cart',
+                        data: {
+                            productId: obj.productId,
+                            sizeId: obj.sizeId,
+                            count: obj.count,
+                            language: LANGUAGE,
+                            userTypeId: GLOBAL_DATA.userTypeId
+                        },
+                        success: function success(data) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                            GLOBAL_DATA.cartItems = data.cart;
+                            GLOBAL_DATA.totalCount = data.totalCount;
+                            GLOBAL_DATA.totalAmount = data.totalAmount;
+
+                            var LOADED = true;
+                            $('#new-preview').modal('hide');
+                            $('#new-preview').on('hidden.bs.modal', function () {
+                                if (LOADED) {
+                                    $('#big-cart').modal();
+                                    // $('body').addClass('modal-open').css('padding-right', '17px');
+                                    LOADED = false;
+                                }
+                            });
+                        },
+                        error: function error(_error) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                            console.log(_error);
+                        }
+                    });
+                } else {
+                    // $('#prod-preview-test').modal('hide');
+                    // $('#big-cart').modal();
+
+                    var LOADED = true;
+                    $('#new-preview').modal('hide');
+                    $('#new-preview').on('hidden.bs.modal', function () {
+                        if (LOADED) {
+                            $('#big-cart').modal();
+                            // $('body').addClass('modal-open').css('padding-right', '17px');
+                            LOADED = false;
+                        }
+                    });
+                }
+            },
+            addToWishList: function addToWishList(productId, sizeId, wishListId) {
+                var obj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId)
+                },
+                    _this = this;
+
+                if (_this.findWhere(GLOBAL_DATA.wishListItems, obj) == null) {
+                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                        return false;
+                    }
+
+                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                    showLoader();
+
+                    //ajax
+                    $.ajax({
+                        type: 'post',
+                        url: '/profile/add-to-wish-list',
+                        data: {
+                            productId: obj.productId,
+                            sizeId: obj.sizeId,
+                            wishListId: wishListId,
+                            language: LANGUAGE,
+                            userTypeId: GLOBAL_DATA.userTypeId
+                        },
+                        success: function success(data) {
+                            hideLoader();
+
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                            GLOBAL_DATA.wishListItems = data.wishListItems;
+                        },
+                        error: function error(_error2) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                            console.log(_error2);
+                        }
+                    });
+                }
+            },
+            //changing current sizeId in preview
+            changeCurrentSizeId: function changeCurrentSizeId(sizeId) {
+                GLOBAL_DATA.newProductPreview.currentSizeId = sizeId;
+
+                if (this.findWhere(GLOBAL_DATA.cartItems, { productId: GLOBAL_DATA.newProductPreview.product.id, sizeId: GLOBAL_DATA.newProductPreview.currentSizeId })) {
+                    //looping cartItems
+                    GLOBAL_DATA.cartItems.forEach(function (item) {
+                        //check if current active size id in cart
+                        if (item.productId == GLOBAL_DATA.newProductPreview.product.id && item.sizeId == GLOBAL_DATA.newProductPreview.currentSizeId) {
+                            //then setting count
+                            GLOBAL_DATA.newProductPreview.count = item.count;
+                        }
+                    });
+                } else {
+                    GLOBAL_DATA.newProductPreview.count = 1;
+                }
+            },
+            //method handles updating cart, change count
+            updateCart: function updateCart(productId, sizeId, count) {
+                if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                    return false;
+                }
+
+                GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                var obj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId),
+                    count: parseInt(count)
+                },
+                    _this = this;
+
+                showLoader();
+
+                //ajax
+                $.ajax({
+                    type: 'post',
+                    url: '/cart/update-cart',
+                    data: {
+                        productId: obj.productId,
+                        sizeId: obj.sizeId,
+                        count: obj.count,
+                        language: LANGUAGE,
+                        userTypeId: GLOBAL_DATA.userTypeId
+                    },
+                    success: function success(data) {
+                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                        hideLoader();
+                        GLOBAL_DATA.cartItems = data.cart;
+                        GLOBAL_DATA.totalCount = data.totalCount;
+                        GLOBAL_DATA.totalAmount = data.totalAmount;
+                    },
+                    error: function error(_error3) {
+                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                        hideLoader();
+                        console.log(_error3);
+                    }
+                });
+            },
+            //method handles + button incrementing value
+            increment: function increment() {
+                var searchObj = {
+                    productId: GLOBAL_DATA.newProductPreview.product.id,
+                    sizeId: GLOBAL_DATA.newProductPreview.currentSizeId
+                },
+                    _this = this;
+
+                var oldCount = GLOBAL_DATA.newProductPreview.count;
+
+                GLOBAL_DATA.newProductPreview.count++;
+
+                if (GLOBAL_DATA.newProductPreview.count > 99) {
+                    GLOBAL_DATA.newProductPreview.count = 99;
+                }
+
+                //check if size id in cart
+                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
+                    //check if old count != new count
+                    if (oldCount != GLOBAL_DATA.newProductPreview.count) {
+                        //then send update ajax
+                        if (_this.timer) {
+                            clearTimeout(_this.timer);
+                            _this.timer = undefined;
+                        }
+                        _this.timer = setTimeout(function () {
+
+                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.newProductPreview.count);
+                        }, 400);
+                    }
+                }
+            },
+            //method handles - button decrementing value
+            decrement: function decrement() {
+                var searchObj = {
+                    productId: GLOBAL_DATA.newProductPreview.product.id,
+                    sizeId: GLOBAL_DATA.newProductPreview.currentSizeId
+                },
+                    _this = this;
+
+                var oldCount = GLOBAL_DATA.newProductPreview.count;
+
+                GLOBAL_DATA.newProductPreview.count--;
+
+                if (GLOBAL_DATA.newProductPreview.count < 1) {
+                    GLOBAL_DATA.newProductPreview.count = 1;
+                }
+
+                //check if size id in cart
+                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
+                    //check if old count != new count
+                    if (oldCount != GLOBAL_DATA.newProductPreview.count) {
+                        //then send update ajax
+                        if (_this.timer) {
+                            clearTimeout(_this.timer);
+                            _this.timer = undefined;
+                        }
+                        _this.timer = setTimeout(function () {
+
+                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.newProductPreview.count);
+                        }, 400);
+                    }
+                }
+            }
+        }
+    });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Order.js":
+/***/ (function(module, exports) {
+
+if (document.getElementById('order-confirm')) {
+    var orderNameValidator, orderPhoneValidator, orderEmailValidator, orderAddressValidator;
+
+    new Vue({
+        el: '#order-confirm',
+        data: GLOBAL_DATA,
+        mounted: function mounted() {
+            var _this = this;
+            // `this` указывает на экземпляр vm
+            orderNameValidator = new RegExValidatingInput($('[data-order-name]'), {
+                expression: RegularExpressions.FULL_NAME,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            orderPhoneValidator = new RegExValidatingInput($('[data-order-phone]'), {
+                expression: RegularExpressions.PHONE_NUMBER,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            orderEmailValidator = new RegExValidatingInput($('[data-order-email]'), {
+                expression: RegularExpressions.EMAIL,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            orderAddressValidator = new RegExValidatingInput($('[data-order-address]'), {
+                expression: RegularExpressions.MIN_TEXT,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+        },
+        watch: {
+            // эта функция запускается при любом изменении count
+            totalCount: function totalCount() {
+                if (GLOBAL_DATA.totalCount == 0) {
+                    window.location.reload(true);
+                }
+            }
+        },
+        methods: {
+            validateBeforeSubmit: function validateBeforeSubmit() {
+                var _this = this;
+
+                var isValid = true;
+
+                orderNameValidator.Validate();
+                if (!orderNameValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                orderPhoneValidator.Validate();
+                if (isValid && !orderPhoneValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                orderEmailValidator.Validate();
+                if (isValid && !orderEmailValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                orderAddressValidator.Validate();
+                if (isValid && !orderAddressValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                if (GLOBAL_DATA.orderConfirm.deliveryId == '') {
+                    isValid = false;
+                    $('[data-order-delivery]').css('border', '2px solid red');
+                }
+
+                if (GLOBAL_DATA.orderConfirm.paymentId == '') {
+                    isValid = false;
+                    $('[data-order-payment]').css('border', '2px solid red');
+                }
+
+                if (isValid) {
+                    _this.createOrder();
+                }
+            },
+            setDeliveryId: function setDeliveryId(deliveryId) {
+                var _this = this;
+
+                GLOBAL_DATA.orderConfirm.deliveryId = deliveryId;
+            },
+            setPaymentId: function setPaymentId(paymentId) {
+                var _this = this;
+
+                GLOBAL_DATA.orderConfirm.paymentId = paymentId;
+            },
+            createOrder: function createOrder() {
+                var _this = this;
+
+                showLoader();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/order/create',
+                    data: {
+                        name: GLOBAL_DATA.orderConfirm.name,
+                        phone: GLOBAL_DATA.orderConfirm.phone,
+                        email: GLOBAL_DATA.orderConfirm.email,
+                        paymentId: GLOBAL_DATA.orderConfirm.paymentId,
+                        deliveryId: GLOBAL_DATA.orderConfirm.deliveryId,
+                        address: GLOBAL_DATA.orderConfirm.address,
+                        comment: GLOBAL_DATA.orderConfirm.comment,
+                        language: LANGUAGE
+                    },
+                    success: function success(data) {
+                        hideLoader();
+
+                        if (data.status == 'success') {
+                            if (LANGUAGE == 'uk') {
+                                window.location.href = '/uk';
+                            } else {
+                                window.location.href = '/';
+                            }
+                        }
+
+                        if (data.status == 'error') {
+                            showPopup(SERVER_ERROR);
+                        }
+                    },
+                    error: function error(_error) {
+                        hideLoader();
+                        showPopup(SERVER_ERROR);
+                        console.log(_error);
+                    }
+                });
+            }
+        }
+    });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/PaymentDelivery.js":
+/***/ (function(module, exports) {
+
+if (document.getElementById('profile-payment-delivery')) {
+    var profileAddressValidator;
+
+    new Vue({
+        el: '#profile-payment-delivery',
+        data: {
+            selectedPaymentId: window.FFShop.selectedPaymentId,
+            selectedDeliveryId: window.FFShop.selectedDeliveryId,
+            address: window.FFShop.address
+        },
+        mounted: function mounted() {
+            profileAddressValidator = new RegExValidatingInput($('[data-profile-address]'), {
+                expression: RegularExpressions.MIN_TEXT,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+        },
+        methods: {
+            setSelectedPaymentId: function setSelectedPaymentId(paymentId) {
+                var _this = this;
+
+                _this.selectedPaymentId = paymentId;
+            },
+            setSelectedDeliveryId: function setSelectedDeliveryId(deliveryId) {
+                var _this = this;
+
+                _this.selectedDeliveryId = deliveryId;
+            },
+            validateBeforeSubmit: function validateBeforeSubmit() {
+                var _this = this;
+
+                var isValid = true;
+
+                profileAddressValidator.Validate();
+                if (!profileAddressValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                if (_this.selectedPaymentId == null) {
+                    isValid = false;
+                    $('[data-profile-payment]').css('border', '2px solid red');
+                }
+
+                if (_this.selectedDeliveryId == null) {
+                    isValid = false;
+                    $('[data-profile-delivery]').css('border', '2px solid red');
+                }
+
+                if (isValid) {
+                    _this.savePaymentDelivery();
+                }
+            },
+            savePaymentDelivery: function savePaymentDelivery() {
+                var _this = this;
+
+                showLoader();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/profile/save-payment-delivery',
+                    data: {
+                        paymentId: _this.selectedPaymentId,
+                        deliveryId: _this.selectedDeliveryId,
+                        address: _this.address,
+                        language: LANGUAGE
+                    },
+                    success: function success(data) {
+                        hideLoader();
+
+                        if (data.status == 'success') {
+                            showPopup(PERSONAL_INFO_SAVED);
+                        }
+
+                        if (data.status == 'error') {
+                            showPopup(SERVER_ERROR);
+                        }
+                    },
+                    error: function error(_error) {
+                        hideLoader();
+                        showPopup(SERVER_ERROR);
+                        console.log(_error);
+                    }
+                });
+            }
+        }
+    });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/PersonalInfo.js":
+/***/ (function(module, exports) {
+
+if (document.getElementById('personal-info')) {
+    var profileNameValidator, profileEmailValidator, profilePhoneValidator;
+
+    new Vue({
+        el: '#personal-info',
+        data: {
+            name: window.FFShop.auth.user.name,
+            email: window.FFShop.auth.user.email,
+            phone: window.FFShop.auth.profile.phone_number
+        },
+        mounted: function mounted() {
+            var _this = this;
+            // `this` указывает на экземпляр vm
+            profileNameValidator = new RegExValidatingInput($('[data-profile-name]'), {
+                expression: RegularExpressions.FULL_NAME,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            profileEmailValidator = new RegExValidatingInput($('[data-profile-email]'), {
+                expression: RegularExpressions.EMAIL,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+
+            profilePhoneValidator = new RegExValidatingInput($('[data-profile-phone]'), {
+                expression: RegularExpressions.PHONE_NUMBER,
+                ChangeOnValid: function ChangeOnValid(input) {
+                    input.removeClass(INCORRECT_FIELD_CLASS);
+                },
+                ChangeOnInvalid: function ChangeOnInvalid(input) {
+                    input.addClass(INCORRECT_FIELD_CLASS);
+                },
+                showErrors: true,
+                requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                regExErrorMessage: INCORRECT_FIELD_TEXT
+            });
+        },
+        methods: {
+            validateBeforeSubmit: function validateBeforeSubmit() {
+                var _this = this;
+
+                var isValid = true;
+
+                profileNameValidator.Validate();
+                if (!profileNameValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                profileEmailValidator.Validate();
+                if (isValid && !profileEmailValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                profilePhoneValidator.Validate();
+                if (isValid && !profilePhoneValidator.IsValid()) {
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    _this.savePersonalInfo();
+                }
+            },
+            savePersonalInfo: function savePersonalInfo() {
+                var _this = this;
+
+                showLoader();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/profile/save-personal-info',
+                    data: {
+                        name: _this.name,
+                        email: _this.email,
+                        phone: _this.phone,
+                        language: LANGUAGE
+                    },
+                    success: function success(data) {
+                        hideLoader();
+
+                        if (data.status == 'success') {
+                            if (data.emailChanged == true) {
+                                showPopup(EMAIL_CHANGED_MESSAGE);
+                            } else {
+                                showPopup(PERSONAL_INFO_SAVED);
+                                window.location.reload(true);
+                            }
+                        }
+
+                        if (data.status == 'error') {
+                            if (data.isNewEmailValid == false) {
+                                showPopup(EMAIL_NOT_VALID);
+                            }
+
+                            if (data.failed == 'server') {
+                                showPopup(SERVER_ERROR);
+                            }
+                        }
+                    },
+                    error: function error(_error) {
+                        hideLoader();
+                        showPopup(SERVER_ERROR);
+                        console.log(_error);
+                    }
+                });
+            }
+        }
+
+    });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/ProductDetail.js":
 /***/ (function(module, exports) {
 
 if (document.getElementById('product-details')) {
@@ -12231,1230 +14889,8 @@ if (document.getElementById('product-details')) {
 }
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports) {
 
-new Vue({
-    el: '#big-cart',
-    data: GLOBAL_DATA,
-    methods: {
-        findWhere: function findWhere(list, props) {
-            var idx = 0;
-            var len = list.length;
-            var match = false;
-            var item, item_k, item_v, prop_k, prop_val;
-            for (; idx < len; idx++) {
-                item = list[idx];
-                for (prop_k in props) {
-                    // If props doesn't own the property, skip it.
-                    if (!props.hasOwnProperty(prop_k)) continue;
-                    // If item doesn't have the property, no match;
-                    if (!item.hasOwnProperty(prop_k)) {
-                        match = false;
-                        break;
-                    }
-                    if (props[prop_k] === item[prop_k]) {
-                        // We have a match…so far.
-                        match = true;
-                    } else {
-                        // No match.
-                        match = false;
-                        // Don't compare more properties.
-                        break;
-                    }
-                }
-                // We've iterated all of props' properties, and we still match!
-                // Return that item!
-                if (match) return item;
-            }
-            // No matches
-            return null;
-        },
-        //method handles onChange count input
-        toInteger: function toInteger(productId, sizeId, count) {
-            var _this = this;
-
-            if (count < 1 || count == '') {
-                count = 1;
-            }
-
-            if (count > 99) {
-                count = 99;
-            }
-            //check if current page single product
-            if (document.getElementById('product-details')) {
-                if (GLOBAL_DATA.singleProduct.productId == productId && GLOBAL_DATA.singleProduct.sizeId == sizeId) {
-                    GLOBAL_DATA.singleProduct.count = count;
-                }
-            }
-
-            //then update cart
-            if (_this.timer) {
-                clearTimeout(_this.timer);
-                _this.timer = undefined;
-            }
-            _this.timer = setTimeout(function () {
-
-                _this.updateCart(productId, sizeId, count);
-            }, 400);
-        },
-        //method handles updating cart, change count
-        updateCart: function updateCart(productId, sizeId, count) {
-            if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                return false;
-            }
-
-            GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-            var obj = {
-                productId: parseInt(productId),
-                sizeId: parseInt(sizeId),
-                count: parseInt(count)
-            },
-                _this = this;
-
-            showLoader();
-
-            //ajax
-            $.ajax({
-                type: 'post',
-                url: '/cart/update-cart',
-                data: {
-                    productId: obj.productId,
-                    sizeId: obj.sizeId,
-                    count: obj.count,
-                    language: LANGUAGE,
-                    userTypeId: GLOBAL_DATA.userTypeId
-                },
-                success: function success(data) {
-                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                    hideLoader();
-                    GLOBAL_DATA.cartItems = data.cart;
-                    GLOBAL_DATA.totalCount = data.totalCount;
-                    GLOBAL_DATA.totalAmount = data.totalAmount;
-                },
-                error: function error(_error) {
-                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                    hideLoader();
-                    console.log(_error);
-                }
-            });
-        },
-        deleteFromCart: function deleteFromCart(productId, sizeId) {
-            if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                return false;
-            }
-
-            GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-            showLoader();
-
-            $.ajax({
-                type: 'post',
-                url: '/cart/delete-from-cart',
-                data: {
-                    productId: productId,
-                    sizeId: sizeId,
-                    language: LANGUAGE,
-                    userTypeId: GLOBAL_DATA.userTypeId
-                },
-                success: function success(data) {
-                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                    hideLoader();
-                    GLOBAL_DATA.cartItems = data.cart;
-                    GLOBAL_DATA.totalCount = data.totalCount;
-                    GLOBAL_DATA.totalAmount = data.totalAmount;
-
-                    if (GLOBAL_DATA.cartItems.length < 1) {
-                        $('#big-cart').modal('hide');
-                    }
-                },
-                error: function error(_error2) {
-                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                    hideLoader();
-                    console.log(_error2);
-                }
-            });
-        },
-        //method handles + button incrementing value
-        increment: function increment(productId, sizeId) {
-            var searchObj = {
-                productId: productId,
-                sizeId: sizeId
-            },
-                _this = this;
-
-            var oldCount;
-            var newCount = 1;
-
-            GLOBAL_DATA.cartItems.forEach(function (item) {
-                if (item.productId == productId && item.sizeId == sizeId) {
-                    oldCount = item.count;
-
-                    item.count++;
-
-                    if (item.count > 99) {
-                        item.count = 99;
-                    }
-
-                    newCount = item.count;
-                }
-            });
-
-            //check if current page single product
-            if (document.getElementById('product-details')) {
-                if (GLOBAL_DATA.singleProduct.productId == productId && GLOBAL_DATA.singleProduct.sizeId == sizeId) {
-                    GLOBAL_DATA.singleProduct.count = newCount;
-                }
-            }
-
-            //check if size id in cart
-            if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
-                //check if old count != new count
-                if (oldCount != newCount) {
-                    //then send update ajax
-                    if (_this.timer) {
-                        clearTimeout(_this.timer);
-                        _this.timer = undefined;
-                    }
-                    _this.timer = setTimeout(function () {
-
-                        _this.updateCart(searchObj.productId, searchObj.sizeId, newCount);
-                    }, 400);
-                }
-            }
-        },
-        //method handles - button decrementing value
-        decrement: function decrement(productId, sizeId) {
-            var searchObj = {
-                productId: productId,
-                sizeId: sizeId
-            },
-                _this = this;
-            var oldCount;
-            var newCount = 1;
-
-            GLOBAL_DATA.cartItems.forEach(function (item) {
-                if (item.productId == productId && item.sizeId == sizeId) {
-                    oldCount = item.count;
-
-                    item.count--;
-
-                    if (item.count < 1) {
-                        item.count = 1;
-                    }
-
-                    newCount = item.count;
-                }
-            });
-
-            //check if current page single product
-            if (document.getElementById('product-details')) {
-                if (GLOBAL_DATA.singleProduct.productId == productId && GLOBAL_DATA.singleProduct.sizeId == sizeId) {
-                    GLOBAL_DATA.singleProduct.count = newCount;
-                }
-            }
-
-            //check if size id in cart
-            if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
-                //check if old count != new count
-                if (oldCount != newCount) {
-                    //then send update ajax
-                    if (_this.timer) {
-                        clearTimeout(_this.timer);
-                        _this.timer = undefined;
-                    }
-                    _this.timer = setTimeout(function () {
-
-                        _this.updateCart(searchObj.productId, searchObj.sizeId, newCount);
-                    }, 400);
-                }
-            }
-        }
-    }
-});
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-new Vue({
-    el: '#mini-cart',
-    data: GLOBAL_DATA,
-    watch: {
-        totalCount: function totalCount() {
-            var _this = this;
-
-            // if (GLOBAL_DATA.totalCount < 1)
-            // {
-            //     $('.smol-cart-content').stop(100,100).fadeOut(100);
-            // }
-        }
-    },
-    methods: {
-        deleteFromCart: function deleteFromCart(productId, sizeId) {
-            if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                return false;
-            }
-
-            GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-            showLoader();
-
-            $.ajax({
-                type: 'post',
-                url: '/cart/delete-from-cart',
-                data: {
-                    productId: productId,
-                    sizeId: sizeId,
-                    language: LANGUAGE,
-                    userTypeId: GLOBAL_DATA.userTypeId
-                },
-                success: function success(data) {
-                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                    hideLoader();
-                    GLOBAL_DATA.cartItems = data.cart;
-                    GLOBAL_DATA.totalCount = data.totalCount;
-                    GLOBAL_DATA.totalAmount = data.totalAmount;
-
-                    if (GLOBAL_DATA.cartItems.length < 1) {
-                        $('#big-cart').modal('hide');
-                    }
-                },
-                error: function error(_error) {
-                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                    hideLoader();
-                    console.log(_error);
-                }
-            });
-        },
-        showMiniCart: function showMiniCart() {
-            if (GLOBAL_DATA.totalCount > 0) {
-                // $('.dropdown_cart_smoll').hover(function () {
-                //     $('.smol-cart-content').stop(100,100).fadeIn(100);
-                // });
-            }
-        }
-    }
-});
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-if (document.getElementById('sidebar-filters')) {
-    var FILTERS = window.FFShop.filters;
-
-    var SHOW_APPLY_BTN = {};
-
-    for (var fName in FILTERS) {
-        SHOW_APPLY_BTN[fName] = false;
-    }
-
-    var FILTERS_DATA = {
-        filters: FILTERS,
-        isStateChanged: false,
-        show_btn: SHOW_APPLY_BTN,
-        categorySlug: window.FFShop.categorySlug,
-        filterUrl: '',
-        initialPriceMin: parseFloat(window.FFShop.priceMin),
-        initialPriceMax: parseFloat(window.FFShop.priceMax),
-        priceMin: parseFloat(window.FFShop.priceMin),
-        priceMax: parseFloat(window.FFShop.priceMax)
-    };
-
-    new Vue({
-        el: '#sidebar-filters',
-        data: FILTERS_DATA,
-        mounted: function mounted() {
-            var _this = this;
-
-            this.$nextTick(function () {
-                /*------------------- Sidebar Filter Range -------------------*/
-                var priceSliderRange = $('#price-range');
-                if ($.ui) {
-                    if ($(priceSliderRange).length) {
-                        $(priceSliderRange).slider({
-                            range: true,
-                            min: FILTERS_DATA.priceMin,
-                            max: FILTERS_DATA.priceMax,
-                            values: [FILTERS_DATA.priceMin, FILTERS_DATA.priceMax],
-                            slide: function slide(event, ui) {
-                                //$("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
-                                $("#price-min").html(ui.values[0] + " грн");
-                                $("#price-max").html(ui.values[1] + " грн");
-                                // console.log(ui.values);
-                                FILTERS_DATA.priceMin = ui.values[0];
-                                FILTERS_DATA.priceMax = ui.values[1];
-
-                                _this.buildSelectedFiltersArray();
-                            }
-                        });
-                        $("#price-min").html($("#price-range").slider("values", 0) + " грн");
-                        $("#price-max").html($("#price-range").slider("values", 1) + " грн");
-                    }
-                }
-            });
-        },
-        methods: {
-            setCheck: function setCheck(filterName, valueCounter) {
-                var _this = this;
-
-                _this.isStateChanged = false;
-
-                FILTERS[filterName][valueCounter].isChecked = !FILTERS[filterName][valueCounter].isChecked;
-
-                SHOW_APPLY_BTN[[filterName]] = false;
-
-                for (var fName in FILTERS) {
-                    FILTERS[fName].forEach(function (fValue) {
-
-                        if (fValue.isChecked) {
-                            _this.isStateChanged = true;
-                            SHOW_APPLY_BTN[[fName]] = true;
-                        }
-                    });
-                }
-
-                _this.buildSelectedFiltersArray();
-            },
-            isCheckSelected: function isCheckSelected(filterName) {
-                return SHOW_APPLY_BTN[[filterName]] ? true : false;
-            },
-            buildSelectedFiltersArray: function buildSelectedFiltersArray() {
-                var _this = this;
-                var url = '/category/' + _this.categorySlug + '/';
-                var arrayOfPairs = [];
-
-                for (var fName in FILTERS) {
-                    var values = [];
-
-                    var valuesStr = '';
-
-                    var filterName = '';
-
-                    FILTERS[fName].forEach(function (fValue) {
-                        if (fValue.isChecked) {
-                            filterName = fValue.filter_name_slug;
-                            values.push(fValue.filter_value_slug);
-                        }
-                    });
-
-                    valuesStr = values.join();
-
-                    if (valuesStr.length > 0) {
-                        arrayOfPairs.push(filterName + '=' + valuesStr);
-                    }
-                }
-
-                url += arrayOfPairs.join(';');
-
-                if (FILTERS_DATA.initialPriceMin != FILTERS_DATA.priceMin || FILTERS_DATA.initialPriceMax != FILTERS_DATA.priceMax) {
-                    if (arrayOfPairs.length > 0) {
-                        url += ';price-range=' + FILTERS_DATA.priceMin + ',' + FILTERS_DATA.priceMax;
-                    } else {
-                        url += 'price-range=' + FILTERS_DATA.priceMin + ',' + FILTERS_DATA.priceMax;
-                    }
-                }
-
-                if (LANGUAGE != DEFAULT_LANGUAGE) {
-                    url += '/' + LANGUAGE;
-                }
-
-                _this.filterUrl = url;
-            }
-        }
-    });
-}
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-if (document.getElementById('sidebar-selected-filters')) {
-    var FILTERS = window.FFShop.filters;
-
-    var SHOW_APPLY_BTN = {};
-
-    for (var fName in FILTERS) {
-        SHOW_APPLY_BTN[fName] = false;
-    }
-
-    var FILTERS_DATA = {
-        filters: FILTERS,
-        isStateChanged: false,
-        show_btn: SHOW_APPLY_BTN,
-        categorySlug: window.FFShop.categorySlug,
-        filterUrl: '',
-        initialPriceMin: parseFloat(window.FFShop.initialPriceMin),
-        initialPriceMax: parseFloat(window.FFShop.initialPriceMax),
-        oldPriceMin: parseFloat(window.FFShop.priceMin),
-        oldPriceMax: parseFloat(window.FFShop.priceMax),
-        priceMin: parseFloat(window.FFShop.priceMin),
-        priceMax: parseFloat(window.FFShop.priceMax)
-    };
-
-    new Vue({
-        el: '#sidebar-selected-filters',
-        data: FILTERS_DATA,
-        mounted: function mounted() {
-            var _this = this;
-
-            this.$nextTick(function () {
-                /*------------------- Sidebar Filter Range -------------------*/
-                var priceSliderRange = $('#price-range');
-                if ($.ui) {
-                    if ($(priceSliderRange).length) {
-                        $(priceSliderRange).slider({
-                            range: true,
-                            min: FILTERS_DATA.initialPriceMin,
-                            max: FILTERS_DATA.initialPriceMax,
-                            values: [FILTERS_DATA.priceMin ? FILTERS_DATA.priceMin : FILTERS_DATA.initialPriceMin, FILTERS_DATA.priceMax ? FILTERS_DATA.priceMax : FILTERS_DATA.initialPriceMax],
-                            slide: function slide(event, ui) {
-                                //$("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
-                                $("#price-min").html(ui.values[0] + " грн");
-                                $("#price-max").html(ui.values[1] + " грн");
-                                // console.log(ui.values);
-                                FILTERS_DATA.priceMin = ui.values[0];
-                                FILTERS_DATA.priceMax = ui.values[1];
-
-                                _this.buildSelectedFiltersArray();
-                            }
-                        });
-                        $("#price-min").html($("#price-range").slider("values", 0) + " грн");
-                        $("#price-max").html($("#price-range").slider("values", 1) + " грн");
-                    }
-                }
-            });
-        },
-        methods: {
-            setCheck: function setCheck(filterName, valueCounter) {
-                var _this = this;
-
-                _this.isStateChanged = false;
-
-                FILTERS[filterName][valueCounter].isChecked = !FILTERS[filterName][valueCounter].isChecked;
-
-                SHOW_APPLY_BTN[[filterName]] = false;
-
-                for (var fName in FILTERS) {
-                    FILTERS[fName].forEach(function (fValue) {
-
-                        if (fValue.isChecked != fValue.initialState) {
-                            _this.isStateChanged = true;
-                            SHOW_APPLY_BTN[[fName]] = true;
-                        }
-                    });
-                }
-
-                _this.buildSelectedFiltersArray();
-            },
-            isCheckSelected: function isCheckSelected(filterName) {
-                return SHOW_APPLY_BTN[[filterName]] ? true : false;
-            },
-            buildSelectedFiltersArray: function buildSelectedFiltersArray() {
-                var _this = this;
-                var url = '/category/' + _this.categorySlug;
-                var arrayOfPairs = [];
-
-                for (var fName in FILTERS) {
-                    var values = [];
-
-                    var valuesStr = '';
-
-                    var filterName = '';
-
-                    FILTERS[fName].forEach(function (fValue) {
-                        if (fValue.isChecked) {
-                            filterName = fValue.filter_name_slug;
-                            values.push(fValue.filter_value_slug);
-                        }
-                    });
-
-                    valuesStr = values.join();
-
-                    if (valuesStr.length > 0) {
-                        arrayOfPairs.push(filterName + '=' + valuesStr);
-                    }
-                }
-
-                if (arrayOfPairs.length > 0) {
-                    url += '/' + arrayOfPairs.join(';');
-                }
-
-                // if (FILTERS_DATA.initialPriceMin != FILTERS_DATA.priceMin || FILTERS_DATA.initialPriceMax != FILTERS_DATA.priceMax)
-                if (FILTERS_DATA.priceMin && FILTERS_DATA.priceMax && (FILTERS_DATA.initialPriceMin != FILTERS_DATA.priceMin || FILTERS_DATA.initialPriceMax != FILTERS_DATA.priceMax)) {
-                    if (arrayOfPairs.length > 0) {
-                        url += ';price-range=' + FILTERS_DATA.priceMin + ',' + FILTERS_DATA.priceMax;
-                    } else {
-                        url += '/price-range=' + FILTERS_DATA.priceMin + ',' + FILTERS_DATA.priceMax;
-                    }
-                }
-
-                if (LANGUAGE != DEFAULT_LANGUAGE) {
-                    url += '/' + LANGUAGE;
-                }
-
-                _this.filterUrl = url;
-            }
-        }
-    });
-}
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-if (document.getElementById('similar-product')) {
-    var initProductPreviewImagesSliderSimilar = function initProductPreviewImagesSliderSimilar() {
-        //Resize carousels in modal
-        if ($('.sync2.product-preview-images-small').length > 0) {
-            $(document).on('shown.bs.modal', function () {
-                $(this).find('.sync1.product-preview-images-big, .sync2.product-preview-images-small').each(function () {
-                    $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
-                });
-            });
-
-            var navSpeedThumbs = 500;
-
-            if (!initProductPreviewImagesSliderInited === true) {
-                sync1 = $(".sync1.product-preview-images-big:not(.solo-prod)");
-                sync2 = $(".sync2.product-preview-images-small:not(.solo-prod)");
-                sliderthumb = $(".single-prod-thumb:not(.solo-prod)");
-                homethumb = $(".home-slide-thumb:not(.solo-prod)");
-            }
-
-            sliderthumb.owlCarousel({
-                rtl: false,
-                items: 3,
-                //loop: true,
-                nav: true,
-                margin: 20,
-                navSpeed: navSpeedThumbs,
-                responsive: {
-                    992: { items: 3 },
-                    767: { items: 4 },
-                    480: { items: 3 },
-                    320: { items: 2 }
-                },
-                responsiveRefreshRate: 200,
-                navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
-            });
-
-            sync1.owlCarousel({
-                rtl: false,
-                items: 1,
-                navSpeed: 1000,
-                nav: false,
-                onChanged: syncPosition,
-                responsiveRefreshRate: 200
-
-            });
-
-            homethumb.owlCarousel({
-                rtl: false,
-                items: 5,
-                nav: true,
-                //loop: true,
-                navSpeed: navSpeedThumbs,
-                responsive: {
-                    1500: { items: 5 },
-                    1024: { items: 4 },
-                    768: { items: 3 },
-                    600: { items: 4 },
-                    480: { items: 3 },
-                    320: { items: 2,
-                        nav: false
-                    }
-                },
-                responsiveRefreshRate: 200,
-                navText: ["<i class='fa fa-long-arrow-left'></i>", "<i class='fa fa-long-arrow-right'></i>"]
-            });
-
-            if (!initProductPreviewImagesSliderInited) {
-                initProductPreviewImagesSliderInited = true;
-            }
-        }
-
-        function syncPosition(el) {
-            var current = this._current;
-            $(".sync2.product-preview-images-small").find(".owl-item").removeClass("synced").eq(current).addClass("synced");
-            center(current);
-        }
-
-        $(".sync2.product-preview-images-small").on("click", ".owl-item", function (e) {
-            e.preventDefault();
-            var number = $(this).index();
-            sync1.trigger("to.owl.carousel", [number, 1000]);
-            return false;
-        });
-
-        function center(num) {
-
-            var sync2visible = sync2.find('.owl-item.active').map(function () {
-                return $(this).index();
-            });
-
-            if ($.inArray(num, sync2visible) === -1) {
-                if (num > sync2visible[sync2visible.length - 1]) {
-                    sync2.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
-                } else {
-                    sync2.trigger("to.owl.carousel", Math.max(0, num - 1));
-                }
-            } else if (num === sync2visible[sync2visible.length - 1]) {
-                sync2.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
-            } else if (num === sync2visible[0]) {
-                sync2.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
-            }
-        }
-    };
-
-    var destroyProductPreviewImagesSliderSimilar = function destroyProductPreviewImagesSliderSimilar() {
-        if (initProductPreviewImagesSliderInited === true) {
-            sync1.trigger('destroy.owl.carousel');
-            sliderthumb.trigger('destroy.owl.carousel');
-            homethumb.trigger('destroy.owl.carousel');
-
-            sync1.find('.owl-stage-outer').children().unwrap();
-            sync1.removeClass("owl-center owl-loaded owl-text-select-on");
-
-            sync2.find('.owl-stage-outer').children().unwrap();
-            sync2.removeClass("owl-center owl-loaded owl-text-select-on");
-
-            sliderthumb.find('.owl-stage-outer').children().unwrap();
-            sliderthumb.removeClass("owl-center owl-loaded owl-text-select-on");
-
-            homethumb.find('.owl-stage-outer').children().unwrap();
-            homethumb.removeClass("owl-center owl-loaded owl-text-select-on");
-        }
-    };
-
-    var initProductPreviewImagesSliderInited = false,
-        sync1,
-        sync2,
-        sliderthumb,
-        homethumb;
-
-    GLOBAL_DATA.similarProducts = window.FFShop.similarProducts;
-
-    GLOBAL_DATA.similarProducts.forEach(function (item) {
-        item.currentSizeId = item.sizes[0].id;
-    });
-
-    GLOBAL_DATA.similarProductPreview.product = GLOBAL_DATA.similarProducts[0];
-
-    GLOBAL_DATA.similarProductPreview.rel = 'prettyPhoto[similar-product-' + GLOBAL_DATA.similarProducts[0].id + ']';
-
-    GLOBAL_DATA.similarProductPreview.currentSizeId = GLOBAL_DATA.similarProductPreview.product.sizes[0].id;
-
-    //init similar product preview count
-    GLOBAL_DATA.similarProductPreview.count = 1;
-
-    new Vue({
-        el: '#similar-product',
-        data: GLOBAL_DATA,
-        mounted: function mounted() {
-            /*------------------- Related Product Slider -------------------*/
-            if ($('#rel-prod-slider').length > 0) {
-                $("#rel-prod-slider").owlCarousel({
-                    dots: false,
-                    loop: false,
-                    autoplay: false,
-                    autoplayHoverPause: true,
-                    smartSpeed: 100,
-                    nav: GLOBAL_DATA.similarProducts.length > 4,
-                    margin: 30,
-                    responsive: {
-                        0: { items: 1 },
-                        1200: { items: 4 },
-                        992: { items: 3 },
-                        768: { items: 2 },
-                        568: { items: 1 }
-                    },
-                    navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
-                });
-            }
-
-            initProductPreviewImagesSliderSimilar();
-
-            destroyProductPreviewImagesSliderSimilar();
-
-            $("a[rel^='prettyPhoto[similar-product-" + GLOBAL_DATA.similarProductPreview.product.id + "]']").prettyPhoto({
-                theme: 'facebook',
-                slideshow: 5000,
-                autoplay_slideshow: false,
-                social_tools: false,
-                deeplinking: false,
-                ajaxcallback: function ajaxcallback() {
-                    var PRETTY_LOADED = true;
-                    $('#prod-preview-test').modal('hide');
-                    $('#prod-preview-test').on('hidden.bs.modal', function () {
-                        if (PRETTY_LOADED) {
-                            $('body').addClass('modal-open').css('padding-right', '17px');
-                            PRETTY_LOADED = false;
-                        }
-                    });
-                },
-                callback: function callback() {
-                    $('body').removeClass('modal-open').css('padding-right', 0);
-                }
-            });
-        },
-        methods: {
-            //method handles onChange count input
-            toInteger: function toInteger(count) {
-                var searchObj = {
-                    productId: GLOBAL_DATA.similarProductPreview.product.id,
-                    sizeId: GLOBAL_DATA.similarProductPreview.currentSizeId
-                },
-                    _this = this;
-
-                if (count < 1 || count == '') {
-                    GLOBAL_DATA.similarProductPreview.count = 1;
-                }
-
-                if (count > 99) {
-                    GLOBAL_DATA.similarProductPreview.count = 99;
-                }
-
-                //if prod size in cart
-                if (this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
-                    //then update cart
-                    if (_this.timer) {
-                        clearTimeout(_this.timer);
-                        _this.timer = undefined;
-                    }
-                    _this.timer = setTimeout(function () {
-
-                        _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.similarProductPreview.count);
-                    }, 400);
-                }
-            },
-            //check if props in list
-            findWhere: function findWhere(list, props) {
-                var idx = 0;
-                var len = list.length;
-                var match = false;
-                var item, item_k, item_v, prop_k, prop_val;
-                for (; idx < len; idx++) {
-                    item = list[idx];
-                    for (prop_k in props) {
-                        // If props doesn't own the property, skip it.
-                        if (!props.hasOwnProperty(prop_k)) continue;
-                        // If item doesn't have the property, no match;
-                        if (!item.hasOwnProperty(prop_k)) {
-                            match = false;
-                            break;
-                        }
-                        if (props[prop_k] === item[prop_k]) {
-                            // We have a match…so far.
-                            match = true;
-                        } else {
-                            // No match.
-                            match = false;
-                            // Don't compare more properties.
-                            break;
-                        }
-                    }
-                    // We've iterated all of props' properties, and we still match!
-                    // Return that item!
-                    if (match) return item;
-                }
-                // No matches
-                return null;
-            },
-            //method handles add to cart
-            addToCart: function addToCart(productId, sizeId, count) {
-                var obj = {
-                    productId: parseInt(productId),
-                    sizeId: parseInt(sizeId),
-                    count: parseInt(count)
-                },
-                    searchObj = {
-                    productId: parseInt(productId),
-                    sizeId: parseInt(sizeId)
-                },
-                    _this = this;
-
-                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
-                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                        return false;
-                    }
-
-                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                    showLoader();
-
-                    //ajax
-                    $.ajax({
-                        type: 'post',
-                        url: '/cart/add-to-cart',
-                        data: {
-                            productId: obj.productId,
-                            sizeId: obj.sizeId,
-                            count: obj.count,
-                            language: LANGUAGE,
-                            userTypeId: GLOBAL_DATA.userTypeId
-                        },
-                        success: function success(data) {
-                            hideLoader();
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-
-                            GLOBAL_DATA.cartItems = data.cart;
-                            GLOBAL_DATA.totalCount = data.totalCount;
-                            GLOBAL_DATA.totalAmount = data.totalAmount;
-
-                            var LOADED = true;
-                            $('#prod-preview-test').modal('hide');
-                            $('#prod-preview-test').on('hidden.bs.modal', function () {
-                                if (LOADED) {
-                                    $('#big-cart').modal();
-                                    // $('body').addClass('modal-open').css('padding-right', '17px');
-                                    LOADED = false;
-                                }
-                            });
-                        },
-                        error: function error(_error) {
-                            hideLoader();
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                            console.log(_error);
-                        }
-                    });
-                } else {
-                    // $('#prod-preview-test').modal('hide');
-                    // $('#big-cart').modal();
-
-                    var LOADED = true;
-                    $('#prod-preview-test').modal('hide');
-                    $('#prod-preview-test').on('hidden.bs.modal', function () {
-                        if (LOADED) {
-                            $('#big-cart').modal();
-                            // $('body').addClass('modal-open').css('padding-right', '17px');
-                            LOADED = false;
-                        }
-                    });
-                }
-            },
-            //changing current sizeId in preview
-            changeCurrentSizeId: function changeCurrentSizeId(sizeId) {
-                GLOBAL_DATA.similarProductPreview.currentSizeId = sizeId;
-
-                if (this.findWhere(GLOBAL_DATA.cartItems, { productId: GLOBAL_DATA.similarProductPreview.product.id, sizeId: GLOBAL_DATA.similarProductPreview.currentSizeId })) {
-                    //looping cartItems
-                    GLOBAL_DATA.cartItems.forEach(function (item) {
-                        //check if current active size id in cart
-                        if (item.productId == GLOBAL_DATA.similarProductPreview.product.id && item.sizeId == GLOBAL_DATA.similarProductPreview.currentSizeId) {
-                            //then setting count
-                            GLOBAL_DATA.similarProductPreview.count = item.count;
-                        }
-                    });
-                } else {
-                    GLOBAL_DATA.similarProductPreview.count = 1;
-                }
-            },
-            //method handles updating cart, change count
-            updateCart: function updateCart(productId, sizeId, count) {
-                if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                    return false;
-                }
-
-                GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                var obj = {
-                    productId: parseInt(productId),
-                    sizeId: parseInt(sizeId),
-                    count: parseInt(count)
-                },
-                    _this = this;
-
-                showLoader();
-
-                //ajax
-                $.ajax({
-                    type: 'post',
-                    url: '/cart/update-cart',
-                    data: {
-                        productId: obj.productId,
-                        sizeId: obj.sizeId,
-                        count: obj.count,
-                        language: LANGUAGE,
-                        userTypeId: GLOBAL_DATA.userTypeId
-                    },
-                    success: function success(data) {
-                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                        hideLoader();
-                        GLOBAL_DATA.cartItems = data.cart;
-                        GLOBAL_DATA.totalCount = data.totalCount;
-                        GLOBAL_DATA.totalAmount = data.totalAmount;
-                    },
-                    error: function error(_error2) {
-                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                        hideLoader();
-                        console.log(_error2);
-                    }
-                });
-            },
-            //method handles + button incrementing value
-            increment: function increment() {
-                var searchObj = {
-                    productId: GLOBAL_DATA.similarProductPreview.product.id,
-                    sizeId: GLOBAL_DATA.similarProductPreview.currentSizeId
-                },
-                    _this = this;
-
-                var oldCount = GLOBAL_DATA.similarProductPreview.count;
-
-                GLOBAL_DATA.similarProductPreview.count++;
-
-                if (GLOBAL_DATA.similarProductPreview.count > 99) {
-                    GLOBAL_DATA.similarProductPreview.count = 99;
-                }
-
-                //check if size id in cart
-                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
-                    //check if old count != new count
-                    if (oldCount != GLOBAL_DATA.similarProductPreview.count) {
-                        //then send update ajax
-                        if (_this.timer) {
-                            clearTimeout(_this.timer);
-                            _this.timer = undefined;
-                        }
-                        _this.timer = setTimeout(function () {
-
-                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.similarProductPreview.count);
-                        }, 400);
-                    }
-                }
-            },
-            //method handles - button decrementing value
-            decrement: function decrement() {
-                var searchObj = {
-                    productId: GLOBAL_DATA.similarProductPreview.product.id,
-                    sizeId: GLOBAL_DATA.similarProductPreview.currentSizeId
-                },
-                    _this = this;
-
-                var oldCount = GLOBAL_DATA.similarProductPreview.count;
-
-                GLOBAL_DATA.similarProductPreview.count--;
-
-                if (GLOBAL_DATA.similarProductPreview.count < 1) {
-                    GLOBAL_DATA.similarProductPreview.count = 1;
-                }
-
-                //check if size id in cart
-                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
-                    //check if old count != new count
-                    if (oldCount != GLOBAL_DATA.similarProductPreview.count) {
-                        //then send update ajax
-                        if (_this.timer) {
-                            clearTimeout(_this.timer);
-                            _this.timer = undefined;
-                        }
-                        _this.timer = setTimeout(function () {
-
-                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.similarProductPreview.count);
-                        }, 400);
-                    }
-                }
-            },
-            changeSimilarProductPreview: function changeSimilarProductPreview(counter) {
-                destroyProductPreviewImagesSliderSimilar();
-
-                GLOBAL_DATA.similarProductPreview.product = GLOBAL_DATA.similarProducts[counter];
-
-                GLOBAL_DATA.similarProductPreview.rel = 'prettyPhoto[similar-product-' + GLOBAL_DATA.similarProductPreview.product.id + ']';
-
-                GLOBAL_DATA.similarProductPreview.currentSizeId = GLOBAL_DATA.similarProductPreview.product.sizes[0].id;
-
-                //init count checking if current preview in cart
-                if (this.findWhere(GLOBAL_DATA.cartItems, { productId: GLOBAL_DATA.similarProductPreview.product.id, sizeId: GLOBAL_DATA.similarProductPreview.currentSizeId })) {
-                    //looping cartItems
-                    GLOBAL_DATA.cartItems.forEach(function (item) {
-                        //check if current active size id in cart
-                        if (item.productId == GLOBAL_DATA.similarProductPreview.product.id && item.sizeId == GLOBAL_DATA.similarProductPreview.currentSizeId) {
-                            //then setting count
-                            GLOBAL_DATA.similarProductPreview.count = item.count;
-                        }
-                    });
-                } else {
-                    GLOBAL_DATA.similarProductPreview.count = 1;
-                }
-
-                //container with preview
-                var $container = $('#prod-preview-test');
-
-                $container.modal();
-
-                setTimeout(function () {
-                    initProductPreviewImagesSliderSimilar();
-
-                    $("a[rel^='prettyPhoto[similar-product-" + GLOBAL_DATA.similarProductPreview.product.id + "]']").prettyPhoto({
-                        theme: 'facebook',
-                        slideshow: 5000,
-                        autoplay_slideshow: false,
-                        social_tools: false,
-                        deeplinking: false,
-                        ajaxcallback: function ajaxcallback() {
-                            var PRETTY_LOADED = true;
-                            $container.modal('hide');
-                            $container.on('hidden.bs.modal', function () {
-                                if (PRETTY_LOADED) {
-                                    $('body').addClass('modal-open').css('padding-right', '17px');
-                                    PRETTY_LOADED = false;
-                                }
-                            });
-                        },
-                        callback: function callback() {
-                            $('body').removeClass('modal-open').css('padding-right', 0);
-                        }
-                    });
-                }, 500);
-            },
-            addToWishList: function addToWishList(productId, sizeId, wishListId) {
-                var obj = {
-                    productId: parseInt(productId),
-                    sizeId: parseInt(sizeId)
-                },
-                    _this = this;
-
-                if (_this.findWhere(GLOBAL_DATA.wishListItems, obj) == null) {
-                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                        return false;
-                    }
-
-                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                    showLoader();
-
-                    //ajax
-                    $.ajax({
-                        type: 'post',
-                        url: '/profile/add-to-wish-list',
-                        data: {
-                            productId: obj.productId,
-                            sizeId: obj.sizeId,
-                            wishListId: wishListId,
-                            language: LANGUAGE,
-                            userTypeId: GLOBAL_DATA.userTypeId
-                        },
-                        success: function success(data) {
-                            hideLoader();
-
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-
-                            GLOBAL_DATA.wishListItems = data.wishListItems;
-                            GLOBAL_DATA.totalWishListCount = data.totalWishListCount;
-                        },
-                        error: function error(_error3) {
-                            hideLoader();
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                            console.log(_error3);
-                        }
-                    });
-                }
-            }
-        }
-    });
-}
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports) {
-
-if (document.getElementById('search')) {
-    new Vue({
-        el: '#search',
-        data: {
-            showResult: false,
-            showNoResult: false,
-            series: '',
-            url: '/search',
-            urlAjax: '',
-            searchProducts: [],
-            countSearchProducts: 0,
-            timer: undefined
-        },
-        methods: {
-            search: function search() {
-                var _this = this;
-
-                _this.url = '/search';
-
-                if (_this.series != '') {
-                    _this.url += '/' + buildSearchUrl(_this.series);
-
-                    if (LANGUAGE != DEFAULT_LANGUAGE) {
-                        _this.url += '/' + LANGUAGE;
-                    }
-
-                    window.location.href = _this.url;
-                }
-            },
-            searchAjax: function searchAjax() {
-                var _this = this;
-
-                _this.urlAjax = '/search/async';
-
-                _this.url = '/search';
-
-                if (_this.series == '') {
-                    _this.showNoResult = false;
-                    _this.showResult = false;
-                }
-
-                if (_this.series != '') {
-                    _this.urlAjax += '/' + buildSearchUrl(_this.series);
-
-                    if (LANGUAGE != DEFAULT_LANGUAGE) {
-                        _this.urlAjax += '/' + LANGUAGE;
-                    }
-
-                    _this.url += '/' + buildSearchUrl(_this.series);
-
-                    if (LANGUAGE != DEFAULT_LANGUAGE) {
-                        _this.url += '/' + LANGUAGE;
-                    }
-
-                    if (_this.timer) {
-                        clearTimeout(_this.timer);
-                        _this.timer = undefined;
-                    }
-                    _this.timer = setTimeout(function () {
-
-                        _this.showNoResult = false;
-
-                        _this.showResult = false;
-
-                        $.ajax({
-                            type: 'get',
-                            url: _this.urlAjax,
-                            success: function success(data) {
-                                _this.searchProducts = data.searchProducts;
-
-                                _this.countSearchProducts = data.countSearchProducts;
-
-                                _this.showNoResult = true;
-
-                                _this.showResult = true;
-                            },
-                            error: function error(_error) {
-                                _this.showNoResult = true;
-
-                                _this.showResult = true;
-
-                                console.log(_error);
-                            }
-                        });
-                    }, 400);
-                }
-            }
-        }
-    });
-}
-
-/***/ }),
-/* 15 */
+/***/ "./resources/assets/js/components/Register.js":
 /***/ (function(module, exports) {
 
 if (document.getElementById('register-popup')) {
@@ -13639,672 +15075,8 @@ if (document.getElementById('register-popup')) {
 }
 
 /***/ }),
-/* 16 */
-/***/ (function(module, exports) {
 
-if (document.getElementById('login-popup')) {
-
-    new Vue({
-        el: '#login-popup',
-        data: {
-            email: '',
-            password: ''
-        },
-        mounted: function mounted() {
-            var _this = this;
-            // `this` указывает на экземпляр vm
-
-            emailValidator = new RegExValidatingInput($('[data-login-email]'), {
-                expression: RegularExpressions.EMAIL,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-
-            passwordValidator = new RegExValidatingInput($('[data-login-password]'), {
-                expression: RegularExpressions.PASSWORD,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-        },
-        methods: {
-            validateBeforeSubmit: function validateBeforeSubmit() {
-                var _this = this;
-
-                var isValid = true;
-
-                emailValidator.Validate();
-                if (!emailValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                passwordValidator.Validate();
-                if (isValid && !passwordValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                if (isValid) {
-                    _this.loginUser();
-                }
-            },
-
-            loginUser: function loginUser() {
-                var _this = this;
-
-                showLoader();
-
-                $.ajax({
-                    type: 'get',
-                    url: '/user/login',
-                    data: {
-                        email: _this.email,
-                        password: _this.password,
-                        language: LANGUAGE
-                    },
-                    success: function success(data) {
-                        hideLoader();
-
-                        var LOADED = true;
-
-                        if (data.status == 'success') {
-                            window.location.reload(true);
-                        }
-
-                        if (data.status == 'error') {
-                            if (data.failed == 'email') {
-                                $('#login-popup').modal('hide');
-
-                                $('#login-popup').on('hidden.bs.modal', function () {
-                                    if (LOADED) {
-                                        showPopup(EMAIL_NOT_EXISTS);
-                                        LOADED = false;
-                                    }
-                                });
-                            }
-
-                            if (data.failed == 'active') {
-                                $('#login-popup').modal('hide');
-
-                                $('#login-popup').on('hidden.bs.modal', function () {
-                                    if (LOADED) {
-                                        showPopup(EMAIL_CONFIRM_NOT_VALID);
-                                        LOADED = false;
-                                    }
-                                });
-                            }
-
-                            if (data.failed == 'password') {
-                                $('[data-login-password]').val('').addClass(INCORRECT_FIELD_CLASS).attr("placeholder", INCORRECT_FIELD_TEXT);
-                            }
-                        }
-                    },
-                    error: function error(_error) {
-                        hideLoader();
-
-                        $('#login-popup').modal('hide');
-
-                        var LOADED = true;
-
-                        $('#login-popup').on('hidden.bs.modal', function () {
-                            if (LOADED) {
-                                showPopup(SERVER_ERROR);
-                                LOADED = false;
-                            }
-                        });
-
-                        console.log(_error);
-                    }
-                });
-            }
-        }
-    });
-}
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports) {
-
-var socialEmailValidator;
-
-new Vue({
-    el: '[data-social-email]',
-    data: {
-        email: ''
-    },
-    mounted: function mounted() {
-        var _this = this;
-        // `this` указывает на экземпляр vm
-
-        socialEmailValidator = new RegExValidatingInput($('[data-social-email-input]'), {
-            expression: RegularExpressions.EMAIL,
-            ChangeOnValid: function ChangeOnValid(input) {
-                input.removeClass(INCORRECT_FIELD_CLASS);
-            },
-            ChangeOnInvalid: function ChangeOnInvalid(input) {
-                input.addClass(INCORRECT_FIELD_CLASS);
-            },
-            showErrors: true,
-            requiredErrorMessage: REQUIRED_FIELD_TEXT,
-            regExErrorMessage: INCORRECT_FIELD_TEXT
-        });
-    },
-    methods: {
-        validateBeforeSubmit: function validateBeforeSubmit() {
-            var _this = this;
-
-            var isValid = true;
-
-            socialEmailValidator.Validate();
-            if (!socialEmailValidator.IsValid()) {
-                isValid = false;
-            }
-
-            if (isValid) {
-                _this.loginUser();
-            }
-        },
-
-        loginUser: function loginUser() {
-            var _this = this;
-
-            showLoader();
-
-            $.ajax({
-                type: 'post',
-                url: '/user/social-email',
-                data: {
-                    email: _this.email,
-                    language: LANGUAGE
-                },
-                success: function success(data) {
-                    hideLoader();
-
-                    var LOADED = true;
-
-                    if (data.status == 'success') {
-                        $('[data-social-email]').modal('hide');
-
-                        $('[data-social-email]').on('hidden.bs.modal', function () {
-                            if (LOADED) {
-                                showPopup(REGISTER_SUCCESS);
-                                LOADED = false;
-                            }
-                        });
-                    }
-
-                    if (data.status == 'error') {
-                        if (data.failed == 'email') {
-                            $('[data-social-email]').modal('hide');
-
-                            $('[data-social-email]').on('hidden.bs.modal', function () {
-                                if (LOADED) {
-                                    showPopup(EMAIL_NOT_VALID);
-                                    LOADED = false;
-                                }
-                            });
-                        }
-                    }
-                },
-                error: function error(_error) {
-                    hideLoader();
-
-                    $('[data-social-email]').modal('hide');
-
-                    var LOADED = true;
-
-                    $('[data-social-email]').on('hidden.bs.modal', function () {
-                        if (LOADED) {
-                            showPopup(SERVER_ERROR);
-                            LOADED = false;
-                        }
-                    });
-
-                    console.log(_error);
-                }
-            });
-        }
-    }
-});
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-if (document.getElementById('order-confirm')) {
-    var orderNameValidator, orderPhoneValidator, orderEmailValidator, orderAddressValidator;
-
-    new Vue({
-        el: '#order-confirm',
-        data: GLOBAL_DATA,
-        mounted: function mounted() {
-            var _this = this;
-            // `this` указывает на экземпляр vm
-            orderNameValidator = new RegExValidatingInput($('[data-order-name]'), {
-                expression: RegularExpressions.FULL_NAME,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-
-            orderPhoneValidator = new RegExValidatingInput($('[data-order-phone]'), {
-                expression: RegularExpressions.PHONE_NUMBER,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-
-            orderEmailValidator = new RegExValidatingInput($('[data-order-email]'), {
-                expression: RegularExpressions.EMAIL,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-
-            orderAddressValidator = new RegExValidatingInput($('[data-order-address]'), {
-                expression: RegularExpressions.MIN_TEXT,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-        },
-        watch: {
-            // эта функция запускается при любом изменении count
-            totalCount: function totalCount() {
-                if (GLOBAL_DATA.totalCount == 0) {
-                    window.location.reload(true);
-                }
-            }
-        },
-        methods: {
-            validateBeforeSubmit: function validateBeforeSubmit() {
-                var _this = this;
-
-                var isValid = true;
-
-                orderNameValidator.Validate();
-                if (!orderNameValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                orderPhoneValidator.Validate();
-                if (isValid && !orderPhoneValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                orderEmailValidator.Validate();
-                if (isValid && !orderEmailValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                orderAddressValidator.Validate();
-                if (isValid && !orderAddressValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                if (GLOBAL_DATA.orderConfirm.deliveryId == '') {
-                    isValid = false;
-                    $('[data-order-delivery]').css('border', '2px solid red');
-                }
-
-                if (GLOBAL_DATA.orderConfirm.paymentId == '') {
-                    isValid = false;
-                    $('[data-order-payment]').css('border', '2px solid red');
-                }
-
-                if (isValid) {
-                    _this.createOrder();
-                }
-            },
-            setDeliveryId: function setDeliveryId(deliveryId) {
-                var _this = this;
-
-                GLOBAL_DATA.orderConfirm.deliveryId = deliveryId;
-            },
-            setPaymentId: function setPaymentId(paymentId) {
-                var _this = this;
-
-                GLOBAL_DATA.orderConfirm.paymentId = paymentId;
-            },
-            createOrder: function createOrder() {
-                var _this = this;
-
-                showLoader();
-
-                $.ajax({
-                    type: 'post',
-                    url: '/order/create',
-                    data: {
-                        name: GLOBAL_DATA.orderConfirm.name,
-                        phone: GLOBAL_DATA.orderConfirm.phone,
-                        email: GLOBAL_DATA.orderConfirm.email,
-                        paymentId: GLOBAL_DATA.orderConfirm.paymentId,
-                        deliveryId: GLOBAL_DATA.orderConfirm.deliveryId,
-                        address: GLOBAL_DATA.orderConfirm.address,
-                        comment: GLOBAL_DATA.orderConfirm.comment,
-                        language: LANGUAGE
-                    },
-                    success: function success(data) {
-                        hideLoader();
-
-                        if (data.status == 'success') {
-                            if (LANGUAGE == 'uk') {
-                                window.location.href = '/uk';
-                            } else {
-                                window.location.href = '/';
-                            }
-                        }
-
-                        if (data.status == 'error') {
-                            showPopup(SERVER_ERROR);
-                        }
-                    },
-                    error: function error(_error) {
-                        hideLoader();
-                        showPopup(SERVER_ERROR);
-                        console.log(_error);
-                    }
-                });
-            }
-        }
-    });
-}
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports) {
-
-if (document.getElementById('personal-info')) {
-    var profileNameValidator, profileEmailValidator, profilePhoneValidator;
-
-    new Vue({
-        el: '#personal-info',
-        data: {
-            name: window.FFShop.auth.user.name,
-            email: window.FFShop.auth.user.email,
-            phone: window.FFShop.auth.profile.phone_number
-        },
-        mounted: function mounted() {
-            var _this = this;
-            // `this` указывает на экземпляр vm
-            profileNameValidator = new RegExValidatingInput($('[data-profile-name]'), {
-                expression: RegularExpressions.FULL_NAME,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-
-            profileEmailValidator = new RegExValidatingInput($('[data-profile-email]'), {
-                expression: RegularExpressions.EMAIL,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-
-            profilePhoneValidator = new RegExValidatingInput($('[data-profile-phone]'), {
-                expression: RegularExpressions.PHONE_NUMBER,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-        },
-        methods: {
-            validateBeforeSubmit: function validateBeforeSubmit() {
-                var _this = this;
-
-                var isValid = true;
-
-                profileNameValidator.Validate();
-                if (!profileNameValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                profileEmailValidator.Validate();
-                if (isValid && !profileEmailValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                profilePhoneValidator.Validate();
-                if (isValid && !profilePhoneValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                if (isValid) {
-                    _this.savePersonalInfo();
-                }
-            },
-            savePersonalInfo: function savePersonalInfo() {
-                var _this = this;
-
-                showLoader();
-
-                $.ajax({
-                    type: 'post',
-                    url: '/profile/save-personal-info',
-                    data: {
-                        name: _this.name,
-                        email: _this.email,
-                        phone: _this.phone,
-                        language: LANGUAGE
-                    },
-                    success: function success(data) {
-                        hideLoader();
-
-                        if (data.status == 'success') {
-                            if (data.emailChanged == true) {
-                                showPopup(EMAIL_CHANGED_MESSAGE);
-                            } else {
-                                showPopup(PERSONAL_INFO_SAVED);
-                                window.location.reload(true);
-                            }
-                        }
-
-                        if (data.status == 'error') {
-                            if (data.isNewEmailValid == false) {
-                                showPopup(EMAIL_NOT_VALID);
-                            }
-
-                            if (data.failed == 'server') {
-                                showPopup(SERVER_ERROR);
-                            }
-                        }
-                    },
-                    error: function error(_error) {
-                        hideLoader();
-                        showPopup(SERVER_ERROR);
-                        console.log(_error);
-                    }
-                });
-            }
-        }
-
-    });
-}
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports) {
-
-if (document.getElementById('change-password')) {
-    var profileOldPasswordValidator, profileNewPasswordValidator, profileConfirmNewPasswordValidator;
-
-    new Vue({
-        el: '#change-password',
-        data: {
-            oldPassword: '',
-            newPassword: '',
-            confirmNewPassword: ''
-        },
-        mounted: function mounted() {
-            var _this = this;
-            // `this` указывает на экземпляр vm
-            profileOldPasswordValidator = new RegExValidatingInput($('[data-profile-old-password]'), {
-                expression: RegularExpressions.PASSWORD,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-
-            profileNewPasswordValidator = new RegExValidatingInput($('[data-profile-new-password]'), {
-                expression: RegularExpressions.PASSWORD,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-
-            profileConfirmNewPasswordValidator = new RegExValidatingInput($('[data-profile-confirm-new-password]'), {
-                expression: RegularExpressions.PASSWORD,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-        },
-        methods: {
-            validateBeforeSubmit: function validateBeforeSubmit() {
-                var _this = this;
-
-                var isValid = true;
-
-                profileOldPasswordValidator.Validate();
-                if (!profileOldPasswordValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                profileNewPasswordValidator.Validate();
-                if (isValid && !profileNewPasswordValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                profileConfirmNewPasswordValidator.Validate();
-                if (isValid && !profileConfirmNewPasswordValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                if (_this.newPassword != _this.confirmNewPassword) {
-                    $('[data-profile-new-password]').addClass(INCORRECT_FIELD_CLASS);
-                    $('[data-profile-confirm-new-password]').addClass(INCORRECT_FIELD_CLASS);
-                    isValid = false;
-                }
-
-                if (isValid) {
-                    _this.changePassword();
-                }
-            },
-            changePassword: function changePassword() {
-                var _this = this;
-
-                showLoader();
-
-                $.ajax({
-                    type: 'post',
-                    url: '/profile/change-password',
-                    data: {
-                        oldPassword: _this.oldPassword,
-                        newPassword: _this.newPassword,
-                        language: LANGUAGE
-                    },
-                    success: function success(data) {
-                        hideLoader();
-
-                        if (data.status == 'success') {
-                            if (data.message == 'goodPass') {
-                                showPopup(PASSWORD_CHANGED_MESSAGE);
-
-                                window.location.reload(true);
-                            }
-                        }
-
-                        if (data.status == 'error') {
-                            if (data.message == 'badPass') {
-                                showPopup(WRONG_OLD_PASSWORD);
-                            }
-                        }
-                    },
-                    error: function error(_error) {
-                        hideLoader();
-                        showPopup(SERVER_ERROR);
-                        console.log(_error);
-                    }
-                });
-            }
-        }
-    });
-}
-
-/***/ }),
-/* 21 */
+/***/ "./resources/assets/js/components/RestorePassword.js":
 /***/ (function(module, exports) {
 
 var restorePasswordEmailValidator;
@@ -14420,535 +15192,8 @@ new Vue({
 });
 
 /***/ }),
-/* 22 */
-/***/ (function(module, exports) {
 
-if (document.getElementById('profile-payment-delivery')) {
-    var profileAddressValidator;
-
-    new Vue({
-        el: '#profile-payment-delivery',
-        data: {
-            selectedPaymentId: window.FFShop.selectedPaymentId,
-            selectedDeliveryId: window.FFShop.selectedDeliveryId,
-            address: window.FFShop.address
-        },
-        mounted: function mounted() {
-            profileAddressValidator = new RegExValidatingInput($('[data-profile-address]'), {
-                expression: RegularExpressions.MIN_TEXT,
-                ChangeOnValid: function ChangeOnValid(input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function ChangeOnInvalid(input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
-        },
-        methods: {
-            setSelectedPaymentId: function setSelectedPaymentId(paymentId) {
-                var _this = this;
-
-                _this.selectedPaymentId = paymentId;
-            },
-            setSelectedDeliveryId: function setSelectedDeliveryId(deliveryId) {
-                var _this = this;
-
-                _this.selectedDeliveryId = deliveryId;
-            },
-            validateBeforeSubmit: function validateBeforeSubmit() {
-                var _this = this;
-
-                var isValid = true;
-
-                profileAddressValidator.Validate();
-                if (!profileAddressValidator.IsValid()) {
-                    isValid = false;
-                }
-
-                if (_this.selectedPaymentId == null) {
-                    isValid = false;
-                    $('[data-profile-payment]').css('border', '2px solid red');
-                }
-
-                if (_this.selectedDeliveryId == null) {
-                    isValid = false;
-                    $('[data-profile-delivery]').css('border', '2px solid red');
-                }
-
-                if (isValid) {
-                    _this.savePaymentDelivery();
-                }
-            },
-            savePaymentDelivery: function savePaymentDelivery() {
-                var _this = this;
-
-                showLoader();
-
-                $.ajax({
-                    type: 'post',
-                    url: '/profile/save-payment-delivery',
-                    data: {
-                        paymentId: _this.selectedPaymentId,
-                        deliveryId: _this.selectedDeliveryId,
-                        address: _this.address,
-                        language: LANGUAGE
-                    },
-                    success: function success(data) {
-                        hideLoader();
-
-                        if (data.status == 'success') {
-                            showPopup(PERSONAL_INFO_SAVED);
-                        }
-
-                        if (data.status == 'error') {
-                            showPopup(SERVER_ERROR);
-                        }
-                    },
-                    error: function error(_error) {
-                        hideLoader();
-                        showPopup(SERVER_ERROR);
-                        console.log(_error);
-                    }
-                });
-            }
-        }
-    });
-}
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports) {
-
-if (document.getElementById('profile-wish-list')) {
-    new Vue({
-        el: '#profile-wish-list',
-        data: GLOBAL_DATA,
-        mounted: function mounted() {},
-        watch: {
-            totalWishListCount: function totalWishListCount() {
-                var _this = this;
-                console.log(_this.createPagination(GLOBAL_DATA.wishListPagination.page, GLOBAL_DATA.wishListPagination.itemsPerPage, GLOBAL_DATA.totalWishListCount));
-                GLOBAL_DATA.wishListPages = _this.createPagination(GLOBAL_DATA.wishListPagination.page, GLOBAL_DATA.wishListPagination.itemsPerPage, GLOBAL_DATA.totalWishListCount);
-                if (GLOBAL_DATA.wishListCurrentPage > Math.ceil(GLOBAL_DATA.totalWishListCount / GLOBAL_DATA.wishListPagination.itemsPerPage)) {
-                    GLOBAL_DATA.wishListCurrentPage -= 1;
-                    GLOBAL_DATA.wishListPagination.page -= 1;
-                }
-            },
-            wishListCurrentPage: function wishListCurrentPage() {
-                var _this = this;
-                GLOBAL_DATA.wishListPages = _this.createPagination(GLOBAL_DATA.wishListPagination.page, GLOBAL_DATA.wishListPagination.itemsPerPage, GLOBAL_DATA.totalWishListCount);
-
-                _this.setIndexes(GLOBAL_DATA.wishListCurrentPage);
-            }
-        },
-        methods: {
-            //check if props in list
-            findWhere: function findWhere(list, props) {
-                var idx = 0;
-                var len = list.length;
-                var match = false;
-                var item, item_k, item_v, prop_k, prop_val;
-                for (; idx < len; idx++) {
-                    item = list[idx];
-                    for (prop_k in props) {
-                        // If props doesn't own the property, skip it.
-                        if (!props.hasOwnProperty(prop_k)) continue;
-                        // If item doesn't have the property, no match;
-                        if (!item.hasOwnProperty(prop_k)) {
-                            match = false;
-                            break;
-                        }
-                        if (props[prop_k] === item[prop_k]) {
-                            // We have a match…so far.
-                            match = true;
-                        } else {
-                            // No match.
-                            match = false;
-                            // Don't compare more properties.
-                            break;
-                        }
-                    }
-                    // We've iterated all of props' properties, and we still match!
-                    // Return that item!
-                    if (match) return item;
-                }
-                // No matches
-                return null;
-            },
-            //method handles add to cart
-            addToCart: function addToCart(productId, sizeId, count) {
-                var obj = {
-                    productId: parseInt(productId),
-                    sizeId: parseInt(sizeId),
-                    count: parseInt(count)
-                },
-                    searchObj = {
-                    productId: parseInt(productId),
-                    sizeId: parseInt(sizeId)
-                },
-                    _this = this;
-
-                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
-                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                        return false;
-                    }
-
-                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                    showLoader();
-
-                    //ajax
-                    $.ajax({
-                        type: 'post',
-                        url: '/cart/add-to-cart',
-                        data: {
-                            productId: obj.productId,
-                            sizeId: obj.sizeId,
-                            count: obj.count,
-                            language: LANGUAGE,
-                            userTypeId: GLOBAL_DATA.userTypeId
-                        },
-                        success: function success(data) {
-                            hideLoader();
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-
-                            GLOBAL_DATA.cartItems = data.cart;
-                            GLOBAL_DATA.totalCount = data.totalCount;
-                            GLOBAL_DATA.totalAmount = data.totalAmount;
-
-                            $('#big-cart').modal();
-                        },
-                        error: function error(_error) {
-                            hideLoader();
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                            console.log(_error);
-                        }
-                    });
-                } else {
-                    $('#big-cart').modal();
-                }
-            },
-            deleteFromWishList: function deleteFromWishList(wishListProductId) {
-                showLoader();
-
-                //ajax
-                $.ajax({
-                    type: 'post',
-                    url: '/profile/delete-from-wish-list',
-                    data: {
-                        wishListProductId: wishListProductId,
-                        wishListId: GLOBAL_DATA.wishList.id,
-                        language: LANGUAGE,
-                        userTypeId: GLOBAL_DATA.userTypeId
-                    },
-                    success: function success(data) {
-                        hideLoader();
-
-                        GLOBAL_DATA.wishListItems = data.wishListItems;
-                        GLOBAL_DATA.totalWishListCount = data.totalWishListCount;
-                    },
-                    error: function error(_error2) {
-                        hideLoader();
-                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                        console.log(_error2);
-                    }
-                });
-            },
-            range: function range(low, high, step) {
-                var matrix = [];
-                var inival, endval, plus;
-                var walker = step || 1;
-                var chars = false;
-
-                if (!isNaN(low) && !isNaN(high)) {
-                    inival = low;
-                    endval = high;
-                } else if (isNaN(low) && isNaN(high)) {
-                    chars = true;
-                    inival = low.charCodeAt(0);
-                    endval = high.charCodeAt(0);
-                } else {
-                    inival = isNaN(low) ? 0 : low;
-                    endval = isNaN(high) ? 0 : high;
-                }
-
-                plus = inival > endval ? false : true;
-                if (plus) {
-                    while (inival <= endval) {
-                        matrix.push(chars ? String.fromCharCode(inival) : inival);
-                        inival += walker;
-                    }
-                } else {
-                    while (inival >= endval) {
-                        matrix.push(chars ? String.fromCharCode(inival) : inival);
-                        inival -= walker;
-                    }
-                }
-
-                return matrix;
-            },
-            createPagination: function createPagination(page, itemsPerPage, totalItemsCount) {
-                var _this = this;
-                var maxElements = 7;
-                var pages = [];
-                var lastPage = Math.ceil(totalItemsCount / itemsPerPage);
-                var minMiddle;
-                var maxMiddle;
-                var pagesPerBothSides;
-                var min;
-                var max;
-                var pagesPerLeftSide;
-                var pagesPerRightSide;
-
-                if (maxElements >= lastPage) {
-                    pages = _this.range(1, lastPage);
-                } else {
-                    minMiddle = Math.ceil(maxElements / 2);
-                    maxMiddle = Math.ceil(lastPage - maxElements / 2);
-
-                    if (page > minMiddle) {
-                        pages.push(1);
-                        pages.push('...');
-                    }
-
-                    if (page > minMiddle && page < maxMiddle) {
-                        pagesPerBothSides = Math.floor(maxElements / 4);
-                        min = page - pagesPerBothSides;
-                        max = page + pagesPerBothSides;
-                        for (var i = min; i <= max; i++) {
-                            pages.push(i);
-                        }
-                    } else if (page <= minMiddle) {
-                        pagesPerLeftSide = maxElements - 2;
-                        for (i = 1; i <= pagesPerLeftSide; i++) {
-                            pages.push(i);
-                        }
-                    } else if (page >= maxMiddle) {
-                        pagesPerRightSide = maxElements - 3;
-                        min = lastPage - pagesPerRightSide;
-                        for (i = min; i <= lastPage; i++) {
-                            pages.push(i);
-                        }
-                    }
-
-                    if (page < maxMiddle) {
-                        pages.push('...');
-                        pages.push(lastPage);
-                    }
-                }
-
-                if (page == 1) {
-                    pages.unshift(false);
-                } else {
-                    pages.unshift(true);
-                }
-
-                if (page == lastPage) {
-                    pages.push(false);
-                } else {
-                    pages.push(true);
-                }
-
-                /////////
-                GLOBAL_DATA.wishListPagination.isPrev = pages.shift();
-                GLOBAL_DATA.wishListPagination.isNext = pages.pop();
-
-                return pages;
-            },
-            setWishListPage: function setWishListPage(page) {
-                GLOBAL_DATA.wishListPagination.page = page;
-                GLOBAL_DATA.wishListCurrentPage = page;
-            },
-            setIndexes: function setIndexes(page) {
-                if (page == 1) {
-                    GLOBAL_DATA.wishListPagination.startIndex = 0;
-                    GLOBAL_DATA.wishListPagination.endIndex = GLOBAL_DATA.wishListPagination.itemsPerPage;
-                } else {
-                    GLOBAL_DATA.wishListPagination.startIndex = (page - 1) * GLOBAL_DATA.wishListPagination.itemsPerPage;
-                    GLOBAL_DATA.wishListPagination.endIndex = GLOBAL_DATA.wishListPagination.startIndex + GLOBAL_DATA.wishListPagination.itemsPerPage;
-                }
-            }
-        }
-    });
-}
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports) {
-
-if (document.getElementById('profile-my-orders')) {
-    new Vue({
-        el: '#profile-my-orders',
-        data: {
-            orders: window.FFShop.orders,
-            page: window.FFShop.page,
-            currentOrder: null,
-            payments: window.FFShop.payments,
-            deliveries: window.FFShop.deliveries,
-            totalOrdersCount: window.FFShop.totalOrdersCount,
-            myOrdersPages: [],
-            isPrev: false,
-            isNext: false
-        },
-        mounted: function mounted() {
-            var _this = this;
-            _this.currentOrder = window.FFShop.orders[0];
-            _this.myOrdersPages = _this.createPagination(_this.page, 5, _this.totalOrdersCount);
-        },
-        watch: {
-            page: function page() {
-                var _this = this;
-
-                _this.myOrdersPages = _this.createPagination(_this.page, 5, _this.totalOrdersCount);
-
-                _this.getOrders();
-            }
-        },
-        methods: {
-            setOrderProducts: function setOrderProducts(order) {
-                var _this = this;
-
-                _this.currentOrder = order;
-
-                $('#orderDetails').modal();
-            },
-            setPage: function setPage(page) {
-                var _this = this;
-
-                _this.page = page;
-            },
-            range: function range(low, high, step) {
-                var matrix = [];
-                var inival, endval, plus;
-                var walker = step || 1;
-                var chars = false;
-
-                if (!isNaN(low) && !isNaN(high)) {
-                    inival = low;
-                    endval = high;
-                } else if (isNaN(low) && isNaN(high)) {
-                    chars = true;
-                    inival = low.charCodeAt(0);
-                    endval = high.charCodeAt(0);
-                } else {
-                    inival = isNaN(low) ? 0 : low;
-                    endval = isNaN(high) ? 0 : high;
-                }
-
-                plus = inival > endval ? false : true;
-                if (plus) {
-                    while (inival <= endval) {
-                        matrix.push(chars ? String.fromCharCode(inival) : inival);
-                        inival += walker;
-                    }
-                } else {
-                    while (inival >= endval) {
-                        matrix.push(chars ? String.fromCharCode(inival) : inival);
-                        inival -= walker;
-                    }
-                }
-
-                return matrix;
-            },
-            createPagination: function createPagination(page, itemsPerPage, totalItemsCount) {
-                var _this = this;
-                var maxElements = 7;
-                var pages = [];
-                var lastPage = Math.ceil(totalItemsCount / itemsPerPage);
-                var minMiddle;
-                var maxMiddle;
-                var pagesPerBothSides;
-                var min;
-                var max;
-                var pagesPerLeftSide;
-                var pagesPerRightSide;
-
-                if (maxElements >= lastPage) {
-                    pages = _this.range(1, lastPage);
-                } else {
-                    minMiddle = Math.ceil(maxElements / 2);
-                    maxMiddle = Math.ceil(lastPage - maxElements / 2);
-
-                    if (page > minMiddle) {
-                        pages.push(1);
-                        pages.push('...');
-                    }
-
-                    if (page > minMiddle && page < maxMiddle) {
-                        pagesPerBothSides = Math.floor(maxElements / 4);
-                        min = page - pagesPerBothSides;
-                        max = page + pagesPerBothSides;
-                        for (var i = min; i <= max; i++) {
-                            pages.push(i);
-                        }
-                    } else if (page <= minMiddle) {
-                        pagesPerLeftSide = maxElements - 2;
-                        for (i = 1; i <= pagesPerLeftSide; i++) {
-                            pages.push(i);
-                        }
-                    } else if (page >= maxMiddle) {
-                        pagesPerRightSide = maxElements - 3;
-                        min = lastPage - pagesPerRightSide;
-                        for (i = min; i <= lastPage; i++) {
-                            pages.push(i);
-                        }
-                    }
-
-                    if (page < maxMiddle) {
-                        pages.push('...');
-                        pages.push(lastPage);
-                    }
-                }
-
-                if (page == 1) {
-                    pages.unshift(false);
-                } else {
-                    pages.unshift(true);
-                }
-
-                if (page == lastPage) {
-                    pages.push(false);
-                } else {
-                    pages.push(true);
-                }
-
-                /////////
-                _this.isPrev = pages.shift();
-                _this.isNext = pages.pop();
-
-                return pages;
-            },
-            getOrders: function getOrders() {
-                var _this = this;
-
-                showLoader();
-
-                $.ajax({
-                    type: 'post',
-                    url: '/profile/my-orders',
-                    data: {
-                        page: _this.page,
-                        language: LANGUAGE
-                    },
-                    success: function success(data) {
-                        _this.orders = data.orders;
-                        hideLoader();
-                    },
-                    error: function error(data) {
-                        hideLoader();
-                        showPopup(SERVER_ERROR);
-                    }
-                });
-            }
-        }
-    });
-}
-
-/***/ }),
-/* 25 */
+/***/ "./resources/assets/js/components/Review.js":
 /***/ (function(module, exports) {
 
 if (document.getElementById('single-product-review')) {
@@ -15234,7 +15479,8 @@ if (document.getElementById('single-product-review')) {
 }
 
 /***/ }),
-/* 26 */
+
+/***/ "./resources/assets/js/components/Sales.js":
 /***/ (function(module, exports) {
 
 /**
@@ -15791,7 +16037,904 @@ if (document.getElementById('sales-products')) {
 }
 
 /***/ }),
-/* 27 */
+
+/***/ "./resources/assets/js/components/Search.js":
+/***/ (function(module, exports) {
+
+if (document.getElementById('search')) {
+    new Vue({
+        el: '#search',
+        data: {
+            showResult: false,
+            showNoResult: false,
+            series: '',
+            url: '/search',
+            urlAjax: '',
+            searchProducts: [],
+            countSearchProducts: 0,
+            timer: undefined
+        },
+        methods: {
+            search: function search() {
+                var _this = this;
+
+                _this.url = '/search';
+
+                if (_this.series != '') {
+                    _this.url += '/' + buildSearchUrl(_this.series);
+
+                    if (LANGUAGE != DEFAULT_LANGUAGE) {
+                        _this.url += '/' + LANGUAGE;
+                    }
+
+                    window.location.href = _this.url;
+                }
+            },
+            searchAjax: function searchAjax() {
+                var _this = this;
+
+                _this.urlAjax = '/search/async';
+
+                _this.url = '/search';
+
+                if (_this.series == '') {
+                    _this.showNoResult = false;
+                    _this.showResult = false;
+                }
+
+                if (_this.series != '') {
+                    _this.urlAjax += '/' + buildSearchUrl(_this.series);
+
+                    if (LANGUAGE != DEFAULT_LANGUAGE) {
+                        _this.urlAjax += '/' + LANGUAGE;
+                    }
+
+                    _this.url += '/' + buildSearchUrl(_this.series);
+
+                    if (LANGUAGE != DEFAULT_LANGUAGE) {
+                        _this.url += '/' + LANGUAGE;
+                    }
+
+                    if (_this.timer) {
+                        clearTimeout(_this.timer);
+                        _this.timer = undefined;
+                    }
+                    _this.timer = setTimeout(function () {
+
+                        _this.showNoResult = false;
+
+                        _this.showResult = false;
+
+                        $.ajax({
+                            type: 'get',
+                            url: _this.urlAjax,
+                            success: function success(data) {
+                                _this.searchProducts = data.searchProducts;
+
+                                _this.countSearchProducts = data.countSearchProducts;
+
+                                _this.showNoResult = true;
+
+                                _this.showResult = true;
+                            },
+                            error: function error(_error) {
+                                _this.showNoResult = true;
+
+                                _this.showResult = true;
+
+                                console.log(_error);
+                            }
+                        });
+                    }, 400);
+                }
+            }
+        }
+    });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SelectedFilters.js":
+/***/ (function(module, exports) {
+
+if (document.getElementById('sidebar-selected-filters')) {
+    var FILTERS = window.FFShop.filters;
+
+    var SHOW_APPLY_BTN = {};
+
+    for (var fName in FILTERS) {
+        SHOW_APPLY_BTN[fName] = false;
+    }
+
+    var FILTERS_DATA = {
+        filters: FILTERS,
+        isStateChanged: false,
+        show_btn: SHOW_APPLY_BTN,
+        categorySlug: window.FFShop.categorySlug,
+        filterUrl: '',
+        initialPriceMin: parseFloat(window.FFShop.initialPriceMin),
+        initialPriceMax: parseFloat(window.FFShop.initialPriceMax),
+        oldPriceMin: parseFloat(window.FFShop.priceMin),
+        oldPriceMax: parseFloat(window.FFShop.priceMax),
+        priceMin: parseFloat(window.FFShop.priceMin),
+        priceMax: parseFloat(window.FFShop.priceMax)
+    };
+
+    new Vue({
+        el: '#sidebar-selected-filters',
+        data: FILTERS_DATA,
+        mounted: function mounted() {
+            var _this = this;
+
+            this.$nextTick(function () {
+                /*------------------- Sidebar Filter Range -------------------*/
+                var priceSliderRange = $('#price-range');
+                if ($.ui) {
+                    if ($(priceSliderRange).length) {
+                        $(priceSliderRange).slider({
+                            range: true,
+                            min: FILTERS_DATA.initialPriceMin,
+                            max: FILTERS_DATA.initialPriceMax,
+                            values: [FILTERS_DATA.priceMin ? FILTERS_DATA.priceMin : FILTERS_DATA.initialPriceMin, FILTERS_DATA.priceMax ? FILTERS_DATA.priceMax : FILTERS_DATA.initialPriceMax],
+                            slide: function slide(event, ui) {
+                                //$("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+                                $("#price-min").html(ui.values[0] + " грн");
+                                $("#price-max").html(ui.values[1] + " грн");
+                                // console.log(ui.values);
+                                FILTERS_DATA.priceMin = ui.values[0];
+                                FILTERS_DATA.priceMax = ui.values[1];
+
+                                _this.buildSelectedFiltersArray();
+                            }
+                        });
+                        $("#price-min").html($("#price-range").slider("values", 0) + " грн");
+                        $("#price-max").html($("#price-range").slider("values", 1) + " грн");
+                    }
+                }
+            });
+        },
+        methods: {
+            setCheck: function setCheck(filterName, valueCounter) {
+                var _this = this;
+
+                _this.isStateChanged = false;
+
+                FILTERS[filterName][valueCounter].isChecked = !FILTERS[filterName][valueCounter].isChecked;
+
+                SHOW_APPLY_BTN[[filterName]] = false;
+
+                for (var fName in FILTERS) {
+                    FILTERS[fName].forEach(function (fValue) {
+
+                        if (fValue.isChecked != fValue.initialState) {
+                            _this.isStateChanged = true;
+                            SHOW_APPLY_BTN[[fName]] = true;
+                        }
+                    });
+                }
+
+                _this.buildSelectedFiltersArray();
+            },
+            isCheckSelected: function isCheckSelected(filterName) {
+                return SHOW_APPLY_BTN[[filterName]] ? true : false;
+            },
+            buildSelectedFiltersArray: function buildSelectedFiltersArray() {
+                var _this = this;
+                var url = '/category/' + _this.categorySlug;
+                var arrayOfPairs = [];
+
+                for (var fName in FILTERS) {
+                    var values = [];
+
+                    var valuesStr = '';
+
+                    var filterName = '';
+
+                    FILTERS[fName].forEach(function (fValue) {
+                        if (fValue.isChecked) {
+                            filterName = fValue.filter_name_slug;
+                            values.push(fValue.filter_value_slug);
+                        }
+                    });
+
+                    valuesStr = values.join();
+
+                    if (valuesStr.length > 0) {
+                        arrayOfPairs.push(filterName + '=' + valuesStr);
+                    }
+                }
+
+                if (arrayOfPairs.length > 0) {
+                    url += '/' + arrayOfPairs.join(';');
+                }
+
+                // if (FILTERS_DATA.initialPriceMin != FILTERS_DATA.priceMin || FILTERS_DATA.initialPriceMax != FILTERS_DATA.priceMax)
+                if (FILTERS_DATA.priceMin && FILTERS_DATA.priceMax && (FILTERS_DATA.initialPriceMin != FILTERS_DATA.priceMin || FILTERS_DATA.initialPriceMax != FILTERS_DATA.priceMax)) {
+                    if (arrayOfPairs.length > 0) {
+                        url += ';price-range=' + FILTERS_DATA.priceMin + ',' + FILTERS_DATA.priceMax;
+                    } else {
+                        url += '/price-range=' + FILTERS_DATA.priceMin + ',' + FILTERS_DATA.priceMax;
+                    }
+                }
+
+                if (LANGUAGE != DEFAULT_LANGUAGE) {
+                    url += '/' + LANGUAGE;
+                }
+
+                _this.filterUrl = url;
+            }
+        }
+    });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SimilarProduct.js":
+/***/ (function(module, exports) {
+
+if (document.getElementById('similar-product')) {
+    var initProductPreviewImagesSliderSimilar = function initProductPreviewImagesSliderSimilar() {
+        //Resize carousels in modal
+        if ($('.sync2.product-preview-images-small').length > 0) {
+            $(document).on('shown.bs.modal', function () {
+                $(this).find('.sync1.product-preview-images-big, .sync2.product-preview-images-small').each(function () {
+                    $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
+                });
+            });
+
+            var navSpeedThumbs = 500;
+
+            if (!initProductPreviewImagesSliderInited === true) {
+                sync1 = $(".sync1.product-preview-images-big:not(.solo-prod)");
+                sync2 = $(".sync2.product-preview-images-small:not(.solo-prod)");
+                sliderthumb = $(".single-prod-thumb:not(.solo-prod)");
+                homethumb = $(".home-slide-thumb:not(.solo-prod)");
+            }
+
+            sliderthumb.owlCarousel({
+                rtl: false,
+                items: 3,
+                //loop: true,
+                nav: true,
+                margin: 20,
+                navSpeed: navSpeedThumbs,
+                responsive: {
+                    992: { items: 3 },
+                    767: { items: 4 },
+                    480: { items: 3 },
+                    320: { items: 2 }
+                },
+                responsiveRefreshRate: 200,
+                navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
+            });
+
+            sync1.owlCarousel({
+                rtl: false,
+                items: 1,
+                navSpeed: 1000,
+                nav: false,
+                onChanged: syncPosition,
+                responsiveRefreshRate: 200
+
+            });
+
+            homethumb.owlCarousel({
+                rtl: false,
+                items: 5,
+                nav: true,
+                //loop: true,
+                navSpeed: navSpeedThumbs,
+                responsive: {
+                    1500: { items: 5 },
+                    1024: { items: 4 },
+                    768: { items: 3 },
+                    600: { items: 4 },
+                    480: { items: 3 },
+                    320: { items: 2,
+                        nav: false
+                    }
+                },
+                responsiveRefreshRate: 200,
+                navText: ["<i class='fa fa-long-arrow-left'></i>", "<i class='fa fa-long-arrow-right'></i>"]
+            });
+
+            if (!initProductPreviewImagesSliderInited) {
+                initProductPreviewImagesSliderInited = true;
+            }
+        }
+
+        function syncPosition(el) {
+            var current = this._current;
+            $(".sync2.product-preview-images-small").find(".owl-item").removeClass("synced").eq(current).addClass("synced");
+            center(current);
+        }
+
+        $(".sync2.product-preview-images-small").on("click", ".owl-item", function (e) {
+            e.preventDefault();
+            var number = $(this).index();
+            sync1.trigger("to.owl.carousel", [number, 1000]);
+            return false;
+        });
+
+        function center(num) {
+
+            var sync2visible = sync2.find('.owl-item.active').map(function () {
+                return $(this).index();
+            });
+
+            if ($.inArray(num, sync2visible) === -1) {
+                if (num > sync2visible[sync2visible.length - 1]) {
+                    sync2.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
+                } else {
+                    sync2.trigger("to.owl.carousel", Math.max(0, num - 1));
+                }
+            } else if (num === sync2visible[sync2visible.length - 1]) {
+                sync2.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
+            } else if (num === sync2visible[0]) {
+                sync2.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
+            }
+        }
+    };
+
+    var destroyProductPreviewImagesSliderSimilar = function destroyProductPreviewImagesSliderSimilar() {
+        if (initProductPreviewImagesSliderInited === true) {
+            sync1.trigger('destroy.owl.carousel');
+            sliderthumb.trigger('destroy.owl.carousel');
+            homethumb.trigger('destroy.owl.carousel');
+
+            sync1.find('.owl-stage-outer').children().unwrap();
+            sync1.removeClass("owl-center owl-loaded owl-text-select-on");
+
+            sync2.find('.owl-stage-outer').children().unwrap();
+            sync2.removeClass("owl-center owl-loaded owl-text-select-on");
+
+            sliderthumb.find('.owl-stage-outer').children().unwrap();
+            sliderthumb.removeClass("owl-center owl-loaded owl-text-select-on");
+
+            homethumb.find('.owl-stage-outer').children().unwrap();
+            homethumb.removeClass("owl-center owl-loaded owl-text-select-on");
+        }
+    };
+
+    var initProductPreviewImagesSliderInited = false,
+        sync1,
+        sync2,
+        sliderthumb,
+        homethumb;
+
+    GLOBAL_DATA.similarProducts = window.FFShop.similarProducts;
+
+    GLOBAL_DATA.similarProducts.forEach(function (item) {
+        item.currentSizeId = item.sizes[0].id;
+    });
+
+    GLOBAL_DATA.similarProductPreview.product = GLOBAL_DATA.similarProducts[0];
+
+    GLOBAL_DATA.similarProductPreview.rel = 'prettyPhoto[similar-product-' + GLOBAL_DATA.similarProducts[0].id + ']';
+
+    GLOBAL_DATA.similarProductPreview.currentSizeId = GLOBAL_DATA.similarProductPreview.product.sizes[0].id;
+
+    //init similar product preview count
+    GLOBAL_DATA.similarProductPreview.count = 1;
+
+    new Vue({
+        el: '#similar-product',
+        data: GLOBAL_DATA,
+        mounted: function mounted() {
+            /*------------------- Related Product Slider -------------------*/
+            if ($('#rel-prod-slider').length > 0) {
+                $("#rel-prod-slider").owlCarousel({
+                    dots: false,
+                    loop: false,
+                    autoplay: false,
+                    autoplayHoverPause: true,
+                    smartSpeed: 100,
+                    nav: GLOBAL_DATA.similarProducts.length > 4,
+                    margin: 30,
+                    responsive: {
+                        0: { items: 1 },
+                        1200: { items: 4 },
+                        992: { items: 3 },
+                        768: { items: 2 },
+                        568: { items: 1 }
+                    },
+                    navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
+                });
+            }
+
+            initProductPreviewImagesSliderSimilar();
+
+            destroyProductPreviewImagesSliderSimilar();
+
+            $("a[rel^='prettyPhoto[similar-product-" + GLOBAL_DATA.similarProductPreview.product.id + "]']").prettyPhoto({
+                theme: 'facebook',
+                slideshow: 5000,
+                autoplay_slideshow: false,
+                social_tools: false,
+                deeplinking: false,
+                ajaxcallback: function ajaxcallback() {
+                    var PRETTY_LOADED = true;
+                    $('#prod-preview-test').modal('hide');
+                    $('#prod-preview-test').on('hidden.bs.modal', function () {
+                        if (PRETTY_LOADED) {
+                            $('body').addClass('modal-open').css('padding-right', '17px');
+                            PRETTY_LOADED = false;
+                        }
+                    });
+                },
+                callback: function callback() {
+                    $('body').removeClass('modal-open').css('padding-right', 0);
+                }
+            });
+        },
+        methods: {
+            //method handles onChange count input
+            toInteger: function toInteger(count) {
+                var searchObj = {
+                    productId: GLOBAL_DATA.similarProductPreview.product.id,
+                    sizeId: GLOBAL_DATA.similarProductPreview.currentSizeId
+                },
+                    _this = this;
+
+                if (count < 1 || count == '') {
+                    GLOBAL_DATA.similarProductPreview.count = 1;
+                }
+
+                if (count > 99) {
+                    GLOBAL_DATA.similarProductPreview.count = 99;
+                }
+
+                //if prod size in cart
+                if (this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
+                    //then update cart
+                    if (_this.timer) {
+                        clearTimeout(_this.timer);
+                        _this.timer = undefined;
+                    }
+                    _this.timer = setTimeout(function () {
+
+                        _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.similarProductPreview.count);
+                    }, 400);
+                }
+            },
+            //check if props in list
+            findWhere: function findWhere(list, props) {
+                var idx = 0;
+                var len = list.length;
+                var match = false;
+                var item, item_k, item_v, prop_k, prop_val;
+                for (; idx < len; idx++) {
+                    item = list[idx];
+                    for (prop_k in props) {
+                        // If props doesn't own the property, skip it.
+                        if (!props.hasOwnProperty(prop_k)) continue;
+                        // If item doesn't have the property, no match;
+                        if (!item.hasOwnProperty(prop_k)) {
+                            match = false;
+                            break;
+                        }
+                        if (props[prop_k] === item[prop_k]) {
+                            // We have a match…so far.
+                            match = true;
+                        } else {
+                            // No match.
+                            match = false;
+                            // Don't compare more properties.
+                            break;
+                        }
+                    }
+                    // We've iterated all of props' properties, and we still match!
+                    // Return that item!
+                    if (match) return item;
+                }
+                // No matches
+                return null;
+            },
+            //method handles add to cart
+            addToCart: function addToCart(productId, sizeId, count) {
+                var obj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId),
+                    count: parseInt(count)
+                },
+                    searchObj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId)
+                },
+                    _this = this;
+
+                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
+                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                        return false;
+                    }
+
+                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                    showLoader();
+
+                    //ajax
+                    $.ajax({
+                        type: 'post',
+                        url: '/cart/add-to-cart',
+                        data: {
+                            productId: obj.productId,
+                            sizeId: obj.sizeId,
+                            count: obj.count,
+                            language: LANGUAGE,
+                            userTypeId: GLOBAL_DATA.userTypeId
+                        },
+                        success: function success(data) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                            GLOBAL_DATA.cartItems = data.cart;
+                            GLOBAL_DATA.totalCount = data.totalCount;
+                            GLOBAL_DATA.totalAmount = data.totalAmount;
+
+                            var LOADED = true;
+                            $('#prod-preview-test').modal('hide');
+                            $('#prod-preview-test').on('hidden.bs.modal', function () {
+                                if (LOADED) {
+                                    $('#big-cart').modal();
+                                    // $('body').addClass('modal-open').css('padding-right', '17px');
+                                    LOADED = false;
+                                }
+                            });
+                        },
+                        error: function error(_error) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                            console.log(_error);
+                        }
+                    });
+                } else {
+                    // $('#prod-preview-test').modal('hide');
+                    // $('#big-cart').modal();
+
+                    var LOADED = true;
+                    $('#prod-preview-test').modal('hide');
+                    $('#prod-preview-test').on('hidden.bs.modal', function () {
+                        if (LOADED) {
+                            $('#big-cart').modal();
+                            // $('body').addClass('modal-open').css('padding-right', '17px');
+                            LOADED = false;
+                        }
+                    });
+                }
+            },
+            //changing current sizeId in preview
+            changeCurrentSizeId: function changeCurrentSizeId(sizeId) {
+                GLOBAL_DATA.similarProductPreview.currentSizeId = sizeId;
+
+                if (this.findWhere(GLOBAL_DATA.cartItems, { productId: GLOBAL_DATA.similarProductPreview.product.id, sizeId: GLOBAL_DATA.similarProductPreview.currentSizeId })) {
+                    //looping cartItems
+                    GLOBAL_DATA.cartItems.forEach(function (item) {
+                        //check if current active size id in cart
+                        if (item.productId == GLOBAL_DATA.similarProductPreview.product.id && item.sizeId == GLOBAL_DATA.similarProductPreview.currentSizeId) {
+                            //then setting count
+                            GLOBAL_DATA.similarProductPreview.count = item.count;
+                        }
+                    });
+                } else {
+                    GLOBAL_DATA.similarProductPreview.count = 1;
+                }
+            },
+            //method handles updating cart, change count
+            updateCart: function updateCart(productId, sizeId, count) {
+                if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                    return false;
+                }
+
+                GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                var obj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId),
+                    count: parseInt(count)
+                },
+                    _this = this;
+
+                showLoader();
+
+                //ajax
+                $.ajax({
+                    type: 'post',
+                    url: '/cart/update-cart',
+                    data: {
+                        productId: obj.productId,
+                        sizeId: obj.sizeId,
+                        count: obj.count,
+                        language: LANGUAGE,
+                        userTypeId: GLOBAL_DATA.userTypeId
+                    },
+                    success: function success(data) {
+                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                        hideLoader();
+                        GLOBAL_DATA.cartItems = data.cart;
+                        GLOBAL_DATA.totalCount = data.totalCount;
+                        GLOBAL_DATA.totalAmount = data.totalAmount;
+                    },
+                    error: function error(_error2) {
+                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                        hideLoader();
+                        console.log(_error2);
+                    }
+                });
+            },
+            //method handles + button incrementing value
+            increment: function increment() {
+                var searchObj = {
+                    productId: GLOBAL_DATA.similarProductPreview.product.id,
+                    sizeId: GLOBAL_DATA.similarProductPreview.currentSizeId
+                },
+                    _this = this;
+
+                var oldCount = GLOBAL_DATA.similarProductPreview.count;
+
+                GLOBAL_DATA.similarProductPreview.count++;
+
+                if (GLOBAL_DATA.similarProductPreview.count > 99) {
+                    GLOBAL_DATA.similarProductPreview.count = 99;
+                }
+
+                //check if size id in cart
+                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
+                    //check if old count != new count
+                    if (oldCount != GLOBAL_DATA.similarProductPreview.count) {
+                        //then send update ajax
+                        if (_this.timer) {
+                            clearTimeout(_this.timer);
+                            _this.timer = undefined;
+                        }
+                        _this.timer = setTimeout(function () {
+
+                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.similarProductPreview.count);
+                        }, 400);
+                    }
+                }
+            },
+            //method handles - button decrementing value
+            decrement: function decrement() {
+                var searchObj = {
+                    productId: GLOBAL_DATA.similarProductPreview.product.id,
+                    sizeId: GLOBAL_DATA.similarProductPreview.currentSizeId
+                },
+                    _this = this;
+
+                var oldCount = GLOBAL_DATA.similarProductPreview.count;
+
+                GLOBAL_DATA.similarProductPreview.count--;
+
+                if (GLOBAL_DATA.similarProductPreview.count < 1) {
+                    GLOBAL_DATA.similarProductPreview.count = 1;
+                }
+
+                //check if size id in cart
+                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
+                    //check if old count != new count
+                    if (oldCount != GLOBAL_DATA.similarProductPreview.count) {
+                        //then send update ajax
+                        if (_this.timer) {
+                            clearTimeout(_this.timer);
+                            _this.timer = undefined;
+                        }
+                        _this.timer = setTimeout(function () {
+
+                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.similarProductPreview.count);
+                        }, 400);
+                    }
+                }
+            },
+            changeSimilarProductPreview: function changeSimilarProductPreview(counter) {
+                destroyProductPreviewImagesSliderSimilar();
+
+                GLOBAL_DATA.similarProductPreview.product = GLOBAL_DATA.similarProducts[counter];
+
+                GLOBAL_DATA.similarProductPreview.rel = 'prettyPhoto[similar-product-' + GLOBAL_DATA.similarProductPreview.product.id + ']';
+
+                GLOBAL_DATA.similarProductPreview.currentSizeId = GLOBAL_DATA.similarProductPreview.product.sizes[0].id;
+
+                //init count checking if current preview in cart
+                if (this.findWhere(GLOBAL_DATA.cartItems, { productId: GLOBAL_DATA.similarProductPreview.product.id, sizeId: GLOBAL_DATA.similarProductPreview.currentSizeId })) {
+                    //looping cartItems
+                    GLOBAL_DATA.cartItems.forEach(function (item) {
+                        //check if current active size id in cart
+                        if (item.productId == GLOBAL_DATA.similarProductPreview.product.id && item.sizeId == GLOBAL_DATA.similarProductPreview.currentSizeId) {
+                            //then setting count
+                            GLOBAL_DATA.similarProductPreview.count = item.count;
+                        }
+                    });
+                } else {
+                    GLOBAL_DATA.similarProductPreview.count = 1;
+                }
+
+                //container with preview
+                var $container = $('#prod-preview-test');
+
+                $container.modal();
+
+                setTimeout(function () {
+                    initProductPreviewImagesSliderSimilar();
+
+                    $("a[rel^='prettyPhoto[similar-product-" + GLOBAL_DATA.similarProductPreview.product.id + "]']").prettyPhoto({
+                        theme: 'facebook',
+                        slideshow: 5000,
+                        autoplay_slideshow: false,
+                        social_tools: false,
+                        deeplinking: false,
+                        ajaxcallback: function ajaxcallback() {
+                            var PRETTY_LOADED = true;
+                            $container.modal('hide');
+                            $container.on('hidden.bs.modal', function () {
+                                if (PRETTY_LOADED) {
+                                    $('body').addClass('modal-open').css('padding-right', '17px');
+                                    PRETTY_LOADED = false;
+                                }
+                            });
+                        },
+                        callback: function callback() {
+                            $('body').removeClass('modal-open').css('padding-right', 0);
+                        }
+                    });
+                }, 500);
+            },
+            addToWishList: function addToWishList(productId, sizeId, wishListId) {
+                var obj = {
+                    productId: parseInt(productId),
+                    sizeId: parseInt(sizeId)
+                },
+                    _this = this;
+
+                if (_this.findWhere(GLOBAL_DATA.wishListItems, obj) == null) {
+                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                        return false;
+                    }
+
+                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                    showLoader();
+
+                    //ajax
+                    $.ajax({
+                        type: 'post',
+                        url: '/profile/add-to-wish-list',
+                        data: {
+                            productId: obj.productId,
+                            sizeId: obj.sizeId,
+                            wishListId: wishListId,
+                            language: LANGUAGE,
+                            userTypeId: GLOBAL_DATA.userTypeId
+                        },
+                        success: function success(data) {
+                            hideLoader();
+
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                            GLOBAL_DATA.wishListItems = data.wishListItems;
+                            GLOBAL_DATA.totalWishListCount = data.totalWishListCount;
+                        },
+                        error: function error(_error3) {
+                            hideLoader();
+                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                            console.log(_error3);
+                        }
+                    });
+                }
+            }
+        }
+    });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SocialEmail.js":
+/***/ (function(module, exports) {
+
+var socialEmailValidator;
+
+new Vue({
+    el: '[data-social-email]',
+    data: {
+        email: ''
+    },
+    mounted: function mounted() {
+        var _this = this;
+        // `this` указывает на экземпляр vm
+
+        socialEmailValidator = new RegExValidatingInput($('[data-social-email-input]'), {
+            expression: RegularExpressions.EMAIL,
+            ChangeOnValid: function ChangeOnValid(input) {
+                input.removeClass(INCORRECT_FIELD_CLASS);
+            },
+            ChangeOnInvalid: function ChangeOnInvalid(input) {
+                input.addClass(INCORRECT_FIELD_CLASS);
+            },
+            showErrors: true,
+            requiredErrorMessage: REQUIRED_FIELD_TEXT,
+            regExErrorMessage: INCORRECT_FIELD_TEXT
+        });
+    },
+    methods: {
+        validateBeforeSubmit: function validateBeforeSubmit() {
+            var _this = this;
+
+            var isValid = true;
+
+            socialEmailValidator.Validate();
+            if (!socialEmailValidator.IsValid()) {
+                isValid = false;
+            }
+
+            if (isValid) {
+                _this.loginUser();
+            }
+        },
+
+        loginUser: function loginUser() {
+            var _this = this;
+
+            showLoader();
+
+            $.ajax({
+                type: 'post',
+                url: '/user/social-email',
+                data: {
+                    email: _this.email,
+                    language: LANGUAGE
+                },
+                success: function success(data) {
+                    hideLoader();
+
+                    var LOADED = true;
+
+                    if (data.status == 'success') {
+                        $('[data-social-email]').modal('hide');
+
+                        $('[data-social-email]').on('hidden.bs.modal', function () {
+                            if (LOADED) {
+                                showPopup(REGISTER_SUCCESS);
+                                LOADED = false;
+                            }
+                        });
+                    }
+
+                    if (data.status == 'error') {
+                        if (data.failed == 'email') {
+                            $('[data-social-email]').modal('hide');
+
+                            $('[data-social-email]').on('hidden.bs.modal', function () {
+                                if (LOADED) {
+                                    showPopup(EMAIL_NOT_VALID);
+                                    LOADED = false;
+                                }
+                            });
+                        }
+                    }
+                },
+                error: function error(_error) {
+                    hideLoader();
+
+                    $('[data-social-email]').modal('hide');
+
+                    var LOADED = true;
+
+                    $('[data-social-email]').on('hidden.bs.modal', function () {
+                        if (LOADED) {
+                            showPopup(SERVER_ERROR);
+                            LOADED = false;
+                        }
+                    });
+
+                    console.log(_error);
+                }
+            });
+        }
+    }
+});
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/TopProducts.js":
 /***/ (function(module, exports) {
 
 /**
@@ -16347,202 +17490,31 @@ if (document.getElementById('top-products')) {
 }
 
 /***/ }),
-/* 28 */
+
+/***/ "./resources/assets/js/components/WishList.js":
 /***/ (function(module, exports) {
 
-/**
- * Created by vlad_ on 16.01.2018.
- */
-
-if (document.getElementById('new-products')) {
-    var initProductPreviewImagesSliderNew = function initProductPreviewImagesSliderNew() {
-        //Resize carousels in modal
-        if ($('.sync2.product-preview-images-small').length > 0) {
-            $(document).on('shown.bs.modal', function () {
-                $(this).find('.sync1.product-preview-images-big, .sync2.product-preview-images-small').each(function () {
-                    $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
-                });
-            });
-
-            var navSpeedThumbs = 500;
-
-            if (!initProductPreviewImagesSliderInited === true) {
-                sync1 = $(".sync1.product-preview-images-big");
-                sync2 = $(".sync2.product-preview-images-small");
-                sliderthumb = $(".single-prod-thumb");
-                homethumb = $(".home-slide-thumb");
-            }
-
-            sliderthumb.owlCarousel({
-                rtl: false,
-                items: 3,
-                //loop: true,
-                nav: true,
-                margin: 20,
-                navSpeed: navSpeedThumbs,
-                responsive: {
-                    992: { items: 3 },
-                    767: { items: 4 },
-                    480: { items: 3 },
-                    320: { items: 2 }
-                },
-                responsiveRefreshRate: 200,
-                navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
-            });
-
-            sync1.owlCarousel({
-                rtl: false,
-                items: 1,
-                navSpeed: 1000,
-                nav: false,
-                onChanged: syncPosition,
-                responsiveRefreshRate: 200
-
-            });
-
-            homethumb.owlCarousel({
-                rtl: false,
-                items: 5,
-                nav: true,
-                //loop: true,
-                navSpeed: navSpeedThumbs,
-                responsive: {
-                    1500: { items: 5 },
-                    1024: { items: 4 },
-                    768: { items: 3 },
-                    600: { items: 4 },
-                    480: { items: 3 },
-                    320: { items: 2,
-                        nav: false
-                    }
-                },
-                responsiveRefreshRate: 200,
-                navText: ["<i class='fa fa-long-arrow-left'></i>", "<i class='fa fa-long-arrow-right'></i>"]
-            });
-
-            if (!initProductPreviewImagesSliderInited) {
-                initProductPreviewImagesSliderInited = true;
-            }
-        }
-
-        function syncPosition(el) {
-            var current = this._current;
-            $(".sync2.product-preview-images-small").find(".owl-item").removeClass("synced").eq(current).addClass("synced");
-            center(current);
-        }
-
-        $(".sync2.product-preview-images-small").on("click", ".owl-item", function (e) {
-            e.preventDefault();
-            var number = $(this).index();
-            sync1.trigger("to.owl.carousel", [number, 1000]);
-            return false;
-        });
-
-        function center(num) {
-
-            var sync2visible = sync2.find('.owl-item.active').map(function () {
-                return $(this).index();
-            });
-
-            if ($.inArray(num, sync2visible) === -1) {
-                if (num > sync2visible[sync2visible.length - 1]) {
-                    sync2.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
-                } else {
-                    sync2.trigger("to.owl.carousel", Math.max(0, num - 1));
-                }
-            } else if (num === sync2visible[sync2visible.length - 1]) {
-                sync2.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
-            } else if (num === sync2visible[0]) {
-                sync2.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
-            }
-        }
-    };
-
-    var destroyProductPreviewImagesSliderNew = function destroyProductPreviewImagesSliderNew() {
-        if (initProductPreviewImagesSliderInited === true) {
-            sync1.trigger('destroy.owl.carousel');
-            sliderthumb.trigger('destroy.owl.carousel');
-            homethumb.trigger('destroy.owl.carousel');
-
-            sync1.find('.owl-stage-outer').children().unwrap();
-            sync1.removeClass("owl-center owl-loaded owl-text-select-on");
-
-            sync2.find('.owl-stage-outer').children().unwrap();
-            sync2.removeClass("owl-center owl-loaded owl-text-select-on");
-
-            sliderthumb.find('.owl-stage-outer').children().unwrap();
-            sliderthumb.removeClass("owl-center owl-loaded owl-text-select-on");
-
-            homethumb.find('.owl-stage-outer').children().unwrap();
-            homethumb.removeClass("owl-center owl-loaded owl-text-select-on");
-        }
-    };
-
-    var initProductPreviewImagesSliderInited = false,
-        sync1,
-        sync2,
-        sliderthumb,
-        homethumb;
-
-    GLOBAL_DATA.newProducts = window.FFShop.newProducts;
-
-    GLOBAL_DATA.newProductPreview.product = GLOBAL_DATA.newProducts[0];
-
-    GLOBAL_DATA.newProductPreview.rel = 'prettyPhoto[new-' + GLOBAL_DATA.newProducts[0].id + ']';
-
-    GLOBAL_DATA.newProductPreview.currentSizeId = GLOBAL_DATA.newProductPreview.product.sizes[0].id;
-
-    //init category product preview count
-    GLOBAL_DATA.newProductPreview.count = 1;
-
+if (document.getElementById('profile-wish-list')) {
     new Vue({
-        el: '#new-products',
+        el: '#profile-wish-list',
         data: GLOBAL_DATA,
-        mounted: function mounted() {
-            /*------------------- Product Slider -------------------*/
-            if ($('#prod-slider-2').length > 0) {
-                $("#prod-slider-2").owlCarousel({
-                    dots: false,
-                    loop: false,
-                    autoplay: false,
-                    autoplayHoverPause: true,
-                    smartSpeed: 100,
-                    nav: GLOBAL_DATA.newProducts.length > 2,
-                    margin: 30,
-                    responsive: {
-                        0: { items: 1 },
-                        1201: { items: 2 },
-                        768: { items: 1 },
-                        568: { items: 2 }
-                    },
-                    navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
-                });
-            }
-
-            initProductPreviewImagesSliderNew();
-
-            destroyProductPreviewImagesSliderNew();
-
-            $("a[rel^='prettyPhoto[new-" + GLOBAL_DATA.newProductPreview.product.id + "]']").prettyPhoto({
-                theme: 'facebook',
-                slideshow: 5000,
-                autoplay_slideshow: false,
-                social_tools: false,
-                deeplinking: false,
-                ajaxcallback: function ajaxcallback() {
-                    var PRETTY_LOADED = true;
-                    $('#new-preview').modal('hide');
-                    $('#new-preview').on('hidden.bs.modal', function () {
-                        if (PRETTY_LOADED) {
-                            $('body').addClass('modal-open').css('padding-right', '17px');
-                            PRETTY_LOADED = false;
-                        }
-                    });
-                },
-                callback: function callback() {
-                    $('body').removeClass('modal-open').css('padding-right', 0);
+        mounted: function mounted() {},
+        watch: {
+            totalWishListCount: function totalWishListCount() {
+                var _this = this;
+                console.log(_this.createPagination(GLOBAL_DATA.wishListPagination.page, GLOBAL_DATA.wishListPagination.itemsPerPage, GLOBAL_DATA.totalWishListCount));
+                GLOBAL_DATA.wishListPages = _this.createPagination(GLOBAL_DATA.wishListPagination.page, GLOBAL_DATA.wishListPagination.itemsPerPage, GLOBAL_DATA.totalWishListCount);
+                if (GLOBAL_DATA.wishListCurrentPage > Math.ceil(GLOBAL_DATA.totalWishListCount / GLOBAL_DATA.wishListPagination.itemsPerPage)) {
+                    GLOBAL_DATA.wishListCurrentPage -= 1;
+                    GLOBAL_DATA.wishListPagination.page -= 1;
                 }
-            });
+            },
+            wishListCurrentPage: function wishListCurrentPage() {
+                var _this = this;
+                GLOBAL_DATA.wishListPages = _this.createPagination(GLOBAL_DATA.wishListPagination.page, GLOBAL_DATA.wishListPagination.itemsPerPage, GLOBAL_DATA.totalWishListCount);
+
+                _this.setIndexes(GLOBAL_DATA.wishListCurrentPage);
+            }
         },
         methods: {
             //check if props in list
@@ -16577,89 +17549,6 @@ if (document.getElementById('new-products')) {
                 }
                 // No matches
                 return null;
-            },
-            changeNewProductPreview: function changeNewProductPreview(counter) {
-                destroyProductPreviewImagesSliderNew();
-
-                GLOBAL_DATA.newProductPreview.product = GLOBAL_DATA.newProducts[counter];
-
-                GLOBAL_DATA.newProductPreview.rel = 'prettyPhoto[new-' + GLOBAL_DATA.newProductPreview.product.id + ']';
-
-                GLOBAL_DATA.newProductPreview.currentSizeId = GLOBAL_DATA.newProductPreview.product.sizes[0].id;
-
-                //init count checking if current preview in cart
-                if (this.findWhere(GLOBAL_DATA.cartItems, { productId: GLOBAL_DATA.newProductPreview.product.id, sizeId: GLOBAL_DATA.newProductPreview.currentSizeId })) {
-                    //looping cartItems
-                    GLOBAL_DATA.cartItems.forEach(function (item) {
-                        //check if current active size id in cart
-                        if (item.productId == GLOBAL_DATA.newProductPreview.product.id && item.sizeId == GLOBAL_DATA.newProductPreview.currentSizeId) {
-                            //then setting count
-                            GLOBAL_DATA.newProductPreview.count = item.count;
-                        }
-                    });
-                } else {
-                    GLOBAL_DATA.newProductPreview.count = 1;
-                }
-
-                //container with preview
-                var $container = $('#new-preview');
-
-                $container.modal();
-
-                setTimeout(function () {
-                    initProductPreviewImagesSliderNew();
-
-                    $("a[rel^='prettyPhoto[new-" + GLOBAL_DATA.newProductPreview.product.id + "]']").prettyPhoto({
-                        theme: 'facebook',
-                        slideshow: 5000,
-                        autoplay_slideshow: false,
-                        social_tools: false,
-                        deeplinking: false,
-                        ajaxcallback: function ajaxcallback() {
-                            var PRETTY_LOADED = true;
-                            $container.modal('hide');
-                            $container.on('hidden.bs.modal', function () {
-                                if (PRETTY_LOADED) {
-                                    $('body').addClass('modal-open').css('padding-right', '17px');
-                                    PRETTY_LOADED = false;
-                                }
-                            });
-                        },
-                        callback: function callback() {
-                            $('body').removeClass('modal-open').css('padding-right', 0);
-                        }
-                    });
-                }, 500);
-            },
-
-            //method handles onChange count input
-            toInteger: function toInteger(count) {
-                var searchObj = {
-                    productId: GLOBAL_DATA.newProductPreview.product.id,
-                    sizeId: GLOBAL_DATA.newProductPreview.currentSizeId
-                },
-                    _this = this;
-
-                if (count < 1 || count == '') {
-                    GLOBAL_DATA.newProductPreview.count = 1;
-                }
-
-                if (count > 99) {
-                    GLOBAL_DATA.newProductPreview.count = 99;
-                }
-
-                //if prod size in cart
-                if (this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
-                    //then update cart
-                    if (_this.timer) {
-                        clearTimeout(_this.timer);
-                        _this.timer = undefined;
-                    }
-                    _this.timer = setTimeout(function () {
-
-                        _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.newProductPreview.count);
-                    }, 400);
-                }
             },
             //method handles add to cart
             addToCart: function addToCart(productId, sizeId, count) {
@@ -16702,15 +17591,7 @@ if (document.getElementById('new-products')) {
                             GLOBAL_DATA.totalCount = data.totalCount;
                             GLOBAL_DATA.totalAmount = data.totalAmount;
 
-                            var LOADED = true;
-                            $('#new-preview').modal('hide');
-                            $('#new-preview').on('hidden.bs.modal', function () {
-                                if (LOADED) {
-                                    $('#big-cart').modal();
-                                    // $('body').addClass('modal-open').css('padding-right', '17px');
-                                    LOADED = false;
-                                }
-                            });
+                            $('#big-cart').modal();
                         },
                         error: function error(_error) {
                             hideLoader();
@@ -16719,183 +17600,147 @@ if (document.getElementById('new-products')) {
                         }
                     });
                 } else {
-                    // $('#prod-preview-test').modal('hide');
-                    // $('#big-cart').modal();
-
-                    var LOADED = true;
-                    $('#new-preview').modal('hide');
-                    $('#new-preview').on('hidden.bs.modal', function () {
-                        if (LOADED) {
-                            $('#big-cart').modal();
-                            // $('body').addClass('modal-open').css('padding-right', '17px');
-                            LOADED = false;
-                        }
-                    });
+                    $('#big-cart').modal();
                 }
             },
-            addToWishList: function addToWishList(productId, sizeId, wishListId) {
-                var obj = {
-                    productId: parseInt(productId),
-                    sizeId: parseInt(sizeId)
-                },
-                    _this = this;
-
-                if (_this.findWhere(GLOBAL_DATA.wishListItems, obj) == null) {
-                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                        return false;
-                    }
-
-                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                    showLoader();
-
-                    //ajax
-                    $.ajax({
-                        type: 'post',
-                        url: '/profile/add-to-wish-list',
-                        data: {
-                            productId: obj.productId,
-                            sizeId: obj.sizeId,
-                            wishListId: wishListId,
-                            language: LANGUAGE,
-                            userTypeId: GLOBAL_DATA.userTypeId
-                        },
-                        success: function success(data) {
-                            hideLoader();
-
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-
-                            GLOBAL_DATA.wishListItems = data.wishListItems;
-                        },
-                        error: function error(_error2) {
-                            hideLoader();
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                            console.log(_error2);
-                        }
-                    });
-                }
-            },
-            //changing current sizeId in preview
-            changeCurrentSizeId: function changeCurrentSizeId(sizeId) {
-                GLOBAL_DATA.newProductPreview.currentSizeId = sizeId;
-
-                if (this.findWhere(GLOBAL_DATA.cartItems, { productId: GLOBAL_DATA.newProductPreview.product.id, sizeId: GLOBAL_DATA.newProductPreview.currentSizeId })) {
-                    //looping cartItems
-                    GLOBAL_DATA.cartItems.forEach(function (item) {
-                        //check if current active size id in cart
-                        if (item.productId == GLOBAL_DATA.newProductPreview.product.id && item.sizeId == GLOBAL_DATA.newProductPreview.currentSizeId) {
-                            //then setting count
-                            GLOBAL_DATA.newProductPreview.count = item.count;
-                        }
-                    });
-                } else {
-                    GLOBAL_DATA.newProductPreview.count = 1;
-                }
-            },
-            //method handles updating cart, change count
-            updateCart: function updateCart(productId, sizeId, count) {
-                if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                    return false;
-                }
-
-                GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                var obj = {
-                    productId: parseInt(productId),
-                    sizeId: parseInt(sizeId),
-                    count: parseInt(count)
-                },
-                    _this = this;
-
+            deleteFromWishList: function deleteFromWishList(wishListProductId) {
                 showLoader();
 
                 //ajax
                 $.ajax({
                     type: 'post',
-                    url: '/cart/update-cart',
+                    url: '/profile/delete-from-wish-list',
                     data: {
-                        productId: obj.productId,
-                        sizeId: obj.sizeId,
-                        count: obj.count,
+                        wishListProductId: wishListProductId,
+                        wishListId: GLOBAL_DATA.wishList.id,
                         language: LANGUAGE,
                         userTypeId: GLOBAL_DATA.userTypeId
                     },
                     success: function success(data) {
-                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
                         hideLoader();
-                        GLOBAL_DATA.cartItems = data.cart;
-                        GLOBAL_DATA.totalCount = data.totalCount;
-                        GLOBAL_DATA.totalAmount = data.totalAmount;
+
+                        GLOBAL_DATA.wishListItems = data.wishListItems;
+                        GLOBAL_DATA.totalWishListCount = data.totalWishListCount;
                     },
-                    error: function error(_error3) {
-                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                    error: function error(_error2) {
                         hideLoader();
-                        console.log(_error3);
+                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                        console.log(_error2);
                     }
                 });
             },
-            //method handles + button incrementing value
-            increment: function increment() {
-                var searchObj = {
-                    productId: GLOBAL_DATA.newProductPreview.product.id,
-                    sizeId: GLOBAL_DATA.newProductPreview.currentSizeId
-                },
-                    _this = this;
+            range: function range(low, high, step) {
+                var matrix = [];
+                var inival, endval, plus;
+                var walker = step || 1;
+                var chars = false;
 
-                var oldCount = GLOBAL_DATA.newProductPreview.count;
-
-                GLOBAL_DATA.newProductPreview.count++;
-
-                if (GLOBAL_DATA.newProductPreview.count > 99) {
-                    GLOBAL_DATA.newProductPreview.count = 99;
+                if (!isNaN(low) && !isNaN(high)) {
+                    inival = low;
+                    endval = high;
+                } else if (isNaN(low) && isNaN(high)) {
+                    chars = true;
+                    inival = low.charCodeAt(0);
+                    endval = high.charCodeAt(0);
+                } else {
+                    inival = isNaN(low) ? 0 : low;
+                    endval = isNaN(high) ? 0 : high;
                 }
 
-                //check if size id in cart
-                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
-                    //check if old count != new count
-                    if (oldCount != GLOBAL_DATA.newProductPreview.count) {
-                        //then send update ajax
-                        if (_this.timer) {
-                            clearTimeout(_this.timer);
-                            _this.timer = undefined;
-                        }
-                        _this.timer = setTimeout(function () {
-
-                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.newProductPreview.count);
-                        }, 400);
+                plus = inival > endval ? false : true;
+                if (plus) {
+                    while (inival <= endval) {
+                        matrix.push(chars ? String.fromCharCode(inival) : inival);
+                        inival += walker;
+                    }
+                } else {
+                    while (inival >= endval) {
+                        matrix.push(chars ? String.fromCharCode(inival) : inival);
+                        inival -= walker;
                     }
                 }
+
+                return matrix;
             },
-            //method handles - button decrementing value
-            decrement: function decrement() {
-                var searchObj = {
-                    productId: GLOBAL_DATA.newProductPreview.product.id,
-                    sizeId: GLOBAL_DATA.newProductPreview.currentSizeId
-                },
-                    _this = this;
+            createPagination: function createPagination(page, itemsPerPage, totalItemsCount) {
+                var _this = this;
+                var maxElements = 7;
+                var pages = [];
+                var lastPage = Math.ceil(totalItemsCount / itemsPerPage);
+                var minMiddle;
+                var maxMiddle;
+                var pagesPerBothSides;
+                var min;
+                var max;
+                var pagesPerLeftSide;
+                var pagesPerRightSide;
 
-                var oldCount = GLOBAL_DATA.newProductPreview.count;
+                if (maxElements >= lastPage) {
+                    pages = _this.range(1, lastPage);
+                } else {
+                    minMiddle = Math.ceil(maxElements / 2);
+                    maxMiddle = Math.ceil(lastPage - maxElements / 2);
 
-                GLOBAL_DATA.newProductPreview.count--;
+                    if (page > minMiddle) {
+                        pages.push(1);
+                        pages.push('...');
+                    }
 
-                if (GLOBAL_DATA.newProductPreview.count < 1) {
-                    GLOBAL_DATA.newProductPreview.count = 1;
+                    if (page > minMiddle && page < maxMiddle) {
+                        pagesPerBothSides = Math.floor(maxElements / 4);
+                        min = page - pagesPerBothSides;
+                        max = page + pagesPerBothSides;
+                        for (var i = min; i <= max; i++) {
+                            pages.push(i);
+                        }
+                    } else if (page <= minMiddle) {
+                        pagesPerLeftSide = maxElements - 2;
+                        for (i = 1; i <= pagesPerLeftSide; i++) {
+                            pages.push(i);
+                        }
+                    } else if (page >= maxMiddle) {
+                        pagesPerRightSide = maxElements - 3;
+                        min = lastPage - pagesPerRightSide;
+                        for (i = min; i <= lastPage; i++) {
+                            pages.push(i);
+                        }
+                    }
+
+                    if (page < maxMiddle) {
+                        pages.push('...');
+                        pages.push(lastPage);
+                    }
                 }
 
-                //check if size id in cart
-                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
-                    //check if old count != new count
-                    if (oldCount != GLOBAL_DATA.newProductPreview.count) {
-                        //then send update ajax
-                        if (_this.timer) {
-                            clearTimeout(_this.timer);
-                            _this.timer = undefined;
-                        }
-                        _this.timer = setTimeout(function () {
+                if (page == 1) {
+                    pages.unshift(false);
+                } else {
+                    pages.unshift(true);
+                }
 
-                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.newProductPreview.count);
-                        }, 400);
-                    }
+                if (page == lastPage) {
+                    pages.push(false);
+                } else {
+                    pages.push(true);
+                }
+
+                /////////
+                GLOBAL_DATA.wishListPagination.isPrev = pages.shift();
+                GLOBAL_DATA.wishListPagination.isNext = pages.pop();
+
+                return pages;
+            },
+            setWishListPage: function setWishListPage(page) {
+                GLOBAL_DATA.wishListPagination.page = page;
+                GLOBAL_DATA.wishListCurrentPage = page;
+            },
+            setIndexes: function setIndexes(page) {
+                if (page == 1) {
+                    GLOBAL_DATA.wishListPagination.startIndex = 0;
+                    GLOBAL_DATA.wishListPagination.endIndex = GLOBAL_DATA.wishListPagination.itemsPerPage;
+                } else {
+                    GLOBAL_DATA.wishListPagination.startIndex = (page - 1) * GLOBAL_DATA.wishListPagination.itemsPerPage;
+                    GLOBAL_DATA.wishListPagination.endIndex = GLOBAL_DATA.wishListPagination.startIndex + GLOBAL_DATA.wishListPagination.itemsPerPage;
                 }
             }
         }
@@ -16903,564 +17748,13 @@ if (document.getElementById('new-products')) {
 }
 
 /***/ }),
-/* 29 */
-/***/ (function(module, exports) {
 
-/**
- * Created by vlad_ on 18.01.2018.
- */
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
 
-if (document.getElementById('main-slider-section')) {
-    var initProductPreviewImagesSliderMainSlider = function initProductPreviewImagesSliderMainSlider() {
-        //Resize carousels in modal
-        if ($('.sync2.product-preview-images-small').length > 0) {
-            $(document).on('shown.bs.modal', function () {
-                $(this).find('.sync1.product-preview-images-big, .sync2.product-preview-images-small').each(function () {
-                    $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
-                });
-            });
+module.exports = __webpack_require__("./resources/assets/js/app.js");
 
-            var navSpeedThumbs = 500;
-
-            if (!initProductPreviewImagesSliderInited === true) {
-                sync1 = $(".sync1.product-preview-images-big");
-                sync2 = $(".sync2.product-preview-images-small");
-                sliderthumb = $(".single-prod-thumb");
-                homethumb = $(".home-slide-thumb");
-            }
-
-            sliderthumb.owlCarousel({
-                rtl: false,
-                items: 3,
-                //loop: true,
-                nav: true,
-                margin: 20,
-                navSpeed: navSpeedThumbs,
-                responsive: {
-                    992: { items: 3 },
-                    767: { items: 4 },
-                    480: { items: 3 },
-                    320: { items: 2 }
-                },
-                responsiveRefreshRate: 200,
-                navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
-            });
-
-            sync1.owlCarousel({
-                rtl: false,
-                items: 1,
-                navSpeed: 1000,
-                nav: false,
-                onChanged: syncPosition,
-                responsiveRefreshRate: 200
-
-            });
-
-            homethumb.owlCarousel({
-                rtl: false,
-                items: 5,
-                nav: true,
-                //loop: true,
-                navSpeed: navSpeedThumbs,
-                responsive: {
-                    1500: { items: 5 },
-                    1024: { items: 4 },
-                    768: { items: 3 },
-                    600: { items: 4 },
-                    480: { items: 3 },
-                    320: { items: 2,
-                        nav: false
-                    }
-                },
-                responsiveRefreshRate: 200,
-                navText: ["<i class='fa fa-long-arrow-left'></i>", "<i class='fa fa-long-arrow-right'></i>"]
-            });
-
-            if (!initProductPreviewImagesSliderInited) {
-                initProductPreviewImagesSliderInited = true;
-            }
-        }
-
-        function syncPosition(el) {
-            var current = this._current;
-            $(".sync2.product-preview-images-small").find(".owl-item").removeClass("synced").eq(current).addClass("synced");
-            center(current);
-        }
-
-        $(".sync2.product-preview-images-small").on("click", ".owl-item", function (e) {
-            e.preventDefault();
-            var number = $(this).index();
-            sync1.trigger("to.owl.carousel", [number, 1000]);
-            return false;
-        });
-
-        function center(num) {
-
-            var sync2visible = sync2.find('.owl-item.active').map(function () {
-                return $(this).index();
-            });
-
-            if ($.inArray(num, sync2visible) === -1) {
-                if (num > sync2visible[sync2visible.length - 1]) {
-                    sync2.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
-                } else {
-                    sync2.trigger("to.owl.carousel", Math.max(0, num - 1));
-                }
-            } else if (num === sync2visible[sync2visible.length - 1]) {
-                sync2.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
-            } else if (num === sync2visible[0]) {
-                sync2.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
-            }
-        }
-    };
-
-    var destroyProductPreviewImagesSliderMainSlider = function destroyProductPreviewImagesSliderMainSlider() {
-        if (initProductPreviewImagesSliderInited === true) {
-            sync1.trigger('destroy.owl.carousel');
-            sliderthumb.trigger('destroy.owl.carousel');
-            homethumb.trigger('destroy.owl.carousel');
-
-            sync1.find('.owl-stage-outer').children().unwrap();
-            sync1.removeClass("owl-center owl-loaded owl-text-select-on");
-
-            sync2.find('.owl-stage-outer').children().unwrap();
-            sync2.removeClass("owl-center owl-loaded owl-text-select-on");
-
-            sliderthumb.find('.owl-stage-outer').children().unwrap();
-            sliderthumb.removeClass("owl-center owl-loaded owl-text-select-on");
-
-            homethumb.find('.owl-stage-outer').children().unwrap();
-            homethumb.removeClass("owl-center owl-loaded owl-text-select-on");
-        }
-    };
-
-    var initProductPreviewImagesSliderInited = false,
-        sync1,
-        sync2,
-        sliderthumb,
-        homethumb;
-
-    GLOBAL_DATA.mainSliderProducts = window.FFShop.mainSliderProducts;
-
-    GLOBAL_DATA.mainSliderPreview.product = GLOBAL_DATA.mainSliderProducts[0];
-
-    GLOBAL_DATA.mainSliderPreview.rel = 'prettyPhoto[main-slider-' + GLOBAL_DATA.mainSliderProducts[0].id + ']';
-
-    GLOBAL_DATA.mainSliderPreview.currentSizeId = GLOBAL_DATA.mainSliderPreview.product.sizes[0].id;
-
-    //init category product preview count
-    GLOBAL_DATA.mainSliderPreview.count = 1;
-
-    new Vue({
-        el: '#main-slider-section',
-        data: GLOBAL_DATA,
-        mounted: function mounted() {
-            //Main Slider carousel
-            if ($('#main-slider').length > 0) {
-                $("#main-slider").owlCarousel({
-                    //animateOut: 'slideOutDown',
-                    //animateIn: 'flipInX',
-                    autoplay: false,
-                    animateIn: 'fadeInDown',
-                    animateOut: 'slideOutDown',
-                    items: 1,
-                    dots: true,
-                    nav: false,
-                    loop: true,
-                    responsive: {
-                        0: { items: 1 }
-                    }
-                });
-            }
-
-            initProductPreviewImagesSliderMainSlider();
-
-            destroyProductPreviewImagesSliderMainSlider();
-
-            $("a[rel^='prettyPhoto[main-slider-" + GLOBAL_DATA.mainSliderPreview.product.id + "]']").prettyPhoto({
-                theme: 'facebook',
-                slideshow: 5000,
-                autoplay_slideshow: false,
-                social_tools: false,
-                deeplinking: false,
-                ajaxcallback: function ajaxcallback() {
-                    var PRETTY_LOADED = true;
-                    $('#main-slider-preview').modal('hide');
-                    $('#main-slider-preview').on('hidden.bs.modal', function () {
-                        if (PRETTY_LOADED) {
-                            $('body').addClass('modal-open').css('padding-right', '17px');
-                            PRETTY_LOADED = false;
-                        }
-                    });
-                },
-                callback: function callback() {
-                    $('body').removeClass('modal-open').css('padding-right', 0);
-                }
-            });
-        },
-        methods: {
-            //check if props in list
-            findWhere: function findWhere(list, props) {
-                var idx = 0;
-                var len = list.length;
-                var match = false;
-                var item, item_k, item_v, prop_k, prop_val;
-                for (; idx < len; idx++) {
-                    item = list[idx];
-                    for (prop_k in props) {
-                        // If props doesn't own the property, skip it.
-                        if (!props.hasOwnProperty(prop_k)) continue;
-                        // If item doesn't have the property, no match;
-                        if (!item.hasOwnProperty(prop_k)) {
-                            match = false;
-                            break;
-                        }
-                        if (props[prop_k] === item[prop_k]) {
-                            // We have a match…so far.
-                            match = true;
-                        } else {
-                            // No match.
-                            match = false;
-                            // Don't compare more properties.
-                            break;
-                        }
-                    }
-                    // We've iterated all of props' properties, and we still match!
-                    // Return that item!
-                    if (match) return item;
-                }
-                // No matches
-                return null;
-            },
-            changeMainSliderProductPreview: function changeMainSliderProductPreview(counter) {
-                destroyProductPreviewImagesSliderMainSlider();
-
-                GLOBAL_DATA.mainSliderPreview.product = GLOBAL_DATA.mainSliderProducts[counter];
-
-                GLOBAL_DATA.mainSliderPreview.rel = 'prettyPhoto[main-slider-' + GLOBAL_DATA.mainSliderPreview.product.id + ']';
-
-                GLOBAL_DATA.mainSliderPreview.currentSizeId = GLOBAL_DATA.mainSliderPreview.product.sizes[0].id;
-
-                //init count checking if current preview in cart
-                if (this.findWhere(GLOBAL_DATA.cartItems, {
-                    productId: GLOBAL_DATA.mainSliderPreview.product.id,
-                    sizeId: GLOBAL_DATA.mainSliderPreview.currentSizeId
-                })) {
-                    //looping cartItems
-                    GLOBAL_DATA.cartItems.forEach(function (item) {
-                        //check if current active size id in cart
-                        if (item.productId == GLOBAL_DATA.mainSliderPreview.product.id && item.sizeId == GLOBAL_DATA.mainSliderPreview.currentSizeId) {
-                            //then setting count
-                            GLOBAL_DATA.mainSliderPreview.count = item.count;
-                        }
-                    });
-                } else {
-                    GLOBAL_DATA.mainSliderPreview.count = 1;
-                }
-
-                //container with preview
-                var $container = $('#main-slider-preview');
-
-                $container.modal();
-
-                setTimeout(function () {
-                    initProductPreviewImagesSliderMainSlider();
-
-                    $("a[rel^='prettyPhoto[main-slider-" + GLOBAL_DATA.mainSliderPreview.product.id + "]']").prettyPhoto({
-                        theme: 'facebook',
-                        slideshow: 5000,
-                        autoplay_slideshow: false,
-                        social_tools: false,
-                        deeplinking: false,
-                        ajaxcallback: function ajaxcallback() {
-                            var PRETTY_LOADED = true;
-                            $container.modal('hide');
-                            $container.on('hidden.bs.modal', function () {
-                                if (PRETTY_LOADED) {
-                                    $('body').addClass('modal-open').css('padding-right', '17px');
-                                    PRETTY_LOADED = false;
-                                }
-                            });
-                        },
-                        callback: function callback() {
-                            $('body').removeClass('modal-open').css('padding-right', 0);
-                        }
-                    });
-                }, 500);
-            },
-
-            //method handles onChange count input
-            toInteger: function toInteger(count) {
-                var searchObj = {
-                    productId: GLOBAL_DATA.mainSliderPreview.product.id,
-                    sizeId: GLOBAL_DATA.mainSliderPreview.currentSizeId
-                },
-                    _this = this;
-
-                if (count < 1 || count == '') {
-                    GLOBAL_DATA.mainSliderPreview.count = 1;
-                }
-
-                if (count > 99) {
-                    GLOBAL_DATA.mainSliderPreview.count = 99;
-                }
-
-                //if prod size in cart
-                if (this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
-                    //then update cart
-                    if (_this.timer) {
-                        clearTimeout(_this.timer);
-                        _this.timer = undefined;
-                    }
-                    _this.timer = setTimeout(function () {
-
-                        _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.mainSliderPreview.count);
-                    }, 400);
-                }
-            },
-            //method handles add to cart
-            addToCart: function addToCart(productId, sizeId, count) {
-                var obj = {
-                    productId: parseInt(productId),
-                    sizeId: parseInt(sizeId),
-                    count: parseInt(count)
-                },
-                    searchObj = {
-                    productId: parseInt(productId),
-                    sizeId: parseInt(sizeId)
-                },
-                    _this = this;
-
-                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
-                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                        return false;
-                    }
-
-                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                    showLoader();
-
-                    //ajax
-                    $.ajax({
-                        type: 'post',
-                        url: '/cart/add-to-cart',
-                        data: {
-                            productId: obj.productId,
-                            sizeId: obj.sizeId,
-                            count: obj.count,
-                            language: LANGUAGE,
-                            userTypeId: GLOBAL_DATA.userTypeId
-                        },
-                        success: function success(data) {
-                            hideLoader();
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-
-                            GLOBAL_DATA.cartItems = data.cart;
-                            GLOBAL_DATA.totalCount = data.totalCount;
-                            GLOBAL_DATA.totalAmount = data.totalAmount;
-
-                            var LOADED = true;
-                            $('#main-slider-preview').modal('hide');
-                            $('#main-slider-preview').on('hidden.bs.modal', function () {
-                                if (LOADED) {
-                                    $('#big-cart').modal();
-                                    // $('body').addClass('modal-open').css('padding-right', '17px');
-                                    LOADED = false;
-                                }
-                            });
-                        },
-                        error: function error(_error) {
-                            hideLoader();
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                            console.log(_error);
-                        }
-                    });
-                } else {
-                    // $('#prod-preview-test').modal('hide');
-                    // $('#big-cart').modal();
-
-                    var LOADED = true;
-                    $('#main-slider-preview').modal('hide');
-                    $('#main-slider-preview').on('hidden.bs.modal', function () {
-                        if (LOADED) {
-                            $('#big-cart').modal();
-                            // $('body').addClass('modal-open').css('padding-right', '17px');
-                            LOADED = false;
-                        }
-                    });
-                }
-            },
-            addToWishList: function addToWishList(productId, sizeId, wishListId) {
-                var obj = {
-                    productId: parseInt(productId),
-                    sizeId: parseInt(sizeId)
-                },
-                    _this = this;
-
-                if (_this.findWhere(GLOBAL_DATA.wishListItems, obj) == null) {
-                    if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                        return false;
-                    }
-
-                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                    showLoader();
-
-                    //ajax
-                    $.ajax({
-                        type: 'post',
-                        url: '/profile/add-to-wish-list',
-                        data: {
-                            productId: obj.productId,
-                            sizeId: obj.sizeId,
-                            wishListId: wishListId,
-                            language: LANGUAGE,
-                            userTypeId: GLOBAL_DATA.userTypeId
-                        },
-                        success: function success(data) {
-                            hideLoader();
-
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-
-                            GLOBAL_DATA.wishListItems = data.wishListItems;
-                        },
-                        error: function error(_error2) {
-                            hideLoader();
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                            console.log(_error2);
-                        }
-                    });
-                }
-            },
-            //changing current sizeId in preview
-            changeCurrentSizeId: function changeCurrentSizeId(sizeId) {
-                GLOBAL_DATA.mainSliderPreview.currentSizeId = sizeId;
-
-                if (this.findWhere(GLOBAL_DATA.cartItems, {
-                    productId: GLOBAL_DATA.mainSliderPreview.product.id,
-                    sizeId: GLOBAL_DATA.mainSliderPreview.currentSizeId
-                })) {
-                    //looping cartItems
-                    GLOBAL_DATA.cartItems.forEach(function (item) {
-                        //check if current active size id in cart
-                        if (item.productId == GLOBAL_DATA.mainSliderPreview.product.id && item.sizeId == GLOBAL_DATA.mainSliderPreview.currentSizeId) {
-                            //then setting count
-                            GLOBAL_DATA.mainSliderPreview.count = item.count;
-                        }
-                    });
-                } else {
-                    GLOBAL_DATA.mainSliderPreview.count = 1;
-                }
-            },
-            //method handles updating cart, change count
-            updateCart: function updateCart(productId, sizeId, count) {
-                if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                    return false;
-                }
-
-                GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                var obj = {
-                    productId: parseInt(productId),
-                    sizeId: parseInt(sizeId),
-                    count: parseInt(count)
-                },
-                    _this = this;
-
-                showLoader();
-
-                //ajax
-                $.ajax({
-                    type: 'post',
-                    url: '/cart/update-cart',
-                    data: {
-                        productId: obj.productId,
-                        sizeId: obj.sizeId,
-                        count: obj.count,
-                        language: LANGUAGE,
-                        userTypeId: GLOBAL_DATA.userTypeId
-                    },
-                    success: function success(data) {
-                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                        hideLoader();
-                        GLOBAL_DATA.cartItems = data.cart;
-                        GLOBAL_DATA.totalCount = data.totalCount;
-                        GLOBAL_DATA.totalAmount = data.totalAmount;
-                    },
-                    error: function error(_error3) {
-                        GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                        hideLoader();
-                        console.log(_error3);
-                    }
-                });
-            },
-            //method handles + button incrementing value
-            increment: function increment() {
-                var searchObj = {
-                    productId: GLOBAL_DATA.mainSliderPreview.product.id,
-                    sizeId: GLOBAL_DATA.mainSliderPreview.currentSizeId
-                },
-                    _this = this;
-
-                var oldCount = GLOBAL_DATA.mainSliderPreview.count;
-
-                GLOBAL_DATA.mainSliderPreview.count++;
-
-                if (GLOBAL_DATA.mainSliderPreview.count > 99) {
-                    GLOBAL_DATA.mainSliderPreview.count = 99;
-                }
-
-                //check if size id in cart
-                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
-                    //check if old count != new count
-                    if (oldCount != GLOBAL_DATA.mainSliderPreview.count) {
-                        //then send update ajax
-                        if (_this.timer) {
-                            clearTimeout(_this.timer);
-                            _this.timer = undefined;
-                        }
-                        _this.timer = setTimeout(function () {
-
-                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.mainSliderPreview.count);
-                        }, 400);
-                    }
-                }
-            },
-            //method handles - button decrementing value
-            decrement: function decrement() {
-                var searchObj = {
-                    productId: GLOBAL_DATA.mainSliderPreview.product.id,
-                    sizeId: GLOBAL_DATA.mainSliderPreview.currentSizeId
-                },
-                    _this = this;
-
-                var oldCount = GLOBAL_DATA.mainSliderPreview.count;
-
-                GLOBAL_DATA.mainSliderPreview.count--;
-
-                if (GLOBAL_DATA.mainSliderPreview.count < 1) {
-                    GLOBAL_DATA.mainSliderPreview.count = 1;
-                }
-
-                //check if size id in cart
-                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
-                    //check if old count != new count
-                    if (oldCount != GLOBAL_DATA.mainSliderPreview.count) {
-                        //then send update ajax
-                        if (_this.timer) {
-                            clearTimeout(_this.timer);
-                            _this.timer = undefined;
-                        }
-                        _this.timer = setTimeout(function () {
-
-                            _this.updateCart(searchObj.productId, searchObj.sizeId, GLOBAL_DATA.mainSliderPreview.count);
-                        }, 400);
-                    }
-                }
-            }
-        }
-    });
-}
 
 /***/ })
-/******/ ]);
+
+/******/ });

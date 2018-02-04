@@ -87,7 +87,13 @@ $('body').on('click','.drop-menu-select .dropeddown li:not(.select-multi)', func
 // TOOLTIPSTER
 
 $(document).ready(function() {
-    $('.ttip').tooltipster({
+    $('.ttip:not(.tooltipstered)').tooltipster({
+        theme: 'tooltipster-borderless'
+    });
+});
+
+$(window).load(function() {
+    $('.ttip:not(.tooltipstered)').tooltipster({
         theme: 'tooltipster-borderless'
     });
 });
