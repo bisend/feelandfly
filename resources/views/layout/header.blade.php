@@ -11,108 +11,57 @@
         </div>
         <div class="nav-slide-body">
             <ul>
-                <li>
-                    <div class="dropdown-div">
-                        <div class="dropdown-div-btn">
-                            <h2 class="widget-title"><a href="">ВЕРХНЯЯ ОДЕЖДА</a><span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span> </h2>
-                        </div>
-                        <div class="dropdown-div-content">
-                            <ul class="dropdown-list">
-                                <li>
-
-
-                                    <div class="dropdown-div dropdown-div_second">
-                                        <div class="dropdown-div-btn">
-                                            <h2 class="widget-title"><a href="">ВЕРХНЯЯ ОДЕЖДА</a><span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span> </h2>
-                                        </div>
-                                        <div class="dropdown-div-content">
-                                            <ul class="dropdown-list">
-                                                <li>
-                                                    <a href="">Верхній одяг</a>
-                                                </li>
-                                                <li>
-                                                    <a href="">Нижній одяг</a>
-                                                </li>
-                                                <li>
-                                                    <a href="">Взуття</a>
-                                                </li>
-                                                <li>
-                                                    <a href="">Аксесуари</a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                @foreach($model->categories as $category)
+                    <li>
+                        @if($category->hasSecondLevel)
+                            @if($category->hasThirdLevel)
+                                <div class="dropdown-div">
+                                    <div class="dropdown-div-btn">
+                                        <h2 class="widget-title">
+                                            <a href="{{ url_category($category->slug, $model->language) }}">{{ $category->name }}</a>
+                                            <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                                        </h2>
                                     </div>
+                                    <div class="dropdown-div-content">
+                                        <ul class="dropdown-list">
+                                            @foreach($category->childs as $child)
+                                                <li>
+                                                    @if($child->childs->count() > 0)
+                                                        <div class="dropdown-div dropdown-div_second">
+                                                            <div class="dropdown-div-btn">
+                                                                <h2 class="widget-title">
+                                                                    <a href="{{ url_category($child->slug, $model->language) }}">{{ $child->name }}</a>
+                                                                    <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span> </h2>
+                                                            </div>
+                                                            <div class="dropdown-div-content">
+                                                                <ul class="dropdown-list">
+                                                                    @foreach($child->childs as $thirdChild)
+                                                                        <li>
+                                                                            <a href="{{ url_category($thirdChild->slug, $model->language) }}">{{ $thirdChild->name }}</a>
+                                                                        </li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    @else
+                                                        <a href="{{ url_category($child->slug, $model->language) }}">{{ $child->name }}</a>
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            @else
 
-
-
-
-                                </li>
-                                <li>
-                                    <a href="">Нижній одяг</a>
-                                </li>
-                                <li>
-                                    <a href="">Взуття</a>
-                                </li>
-                                <li>
-                                    <a href="">Аксесуари</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
-
-                <li>
-                    <a href="">Аксесуари</a>
-                </li>
-
-                <li>
-                    <div class="dropdown-div">
-                        <div class="dropdown-div-btn">
-                            <h2 class="widget-title"><a href="">ВЕРХНЯЯ ОДЕЖДА</a><span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span> </h2>
-                        </div>
-                        <div class="dropdown-div-content">
-                            <ul class="dropdown-list">
-                                <li>
-                                    <a href="">Верхній одяг</a>
-                                </li>
-                                <li>
-                                    <a href="">Нижній одяг</a>
-                                </li>
-                                <li>
-                                    <a href="">Взуття</a>
-                                </li>
-                                <li>
-                                    <a href="">Аксесуари</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="dropdown-div">
-                        <div class="dropdown-div-btn">
-                            <h2 class="widget-title"><a href="">ВЕРХНЯЯ ОДЕЖДА</a><span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span> </h2>
-                        </div>
-                        <div class="dropdown-div-content">
-                            <ul class="dropdown-list">
-                                <li>
-                                    <a href="">Верхній одяг</a>
-                                </li>
-                                <li>
-                                    <a href="">Нижній одяг</a>
-                                </li>
-                                <li>
-                                    <a href="">Взуття</a>
-                                </li>
-                                <li>
-                                    <a href="">Аксесуари</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
+                            @endif
+                        @else
+                            <a href="{{ url_category($category->slug, $model->language) }}">
+                                {{ $category->name }}
+                            </a>
+                        @endif
+                    </li>
+                @endforeach
             </ul>
-
         </div>
     </div>
     <div class="header-topbar bgcol-top-nav">

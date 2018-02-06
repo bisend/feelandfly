@@ -4377,6 +4377,7 @@ table {
  color: #fff;
     font-size: 16px;
     margin-bottom: 15px;
+    float: right;
 }
 
 .big-cart .modal-footer .cart-total-all-price span{
@@ -4384,6 +4385,12 @@ table {
     font-family: 'Oswald', sans-serif;
     margin-left: 20px;
 }
+
+.floaut-let-btn-cart{
+    float: right;
+}
+
+
 
 .big-cart .modal-footer .cart-total-count{
     color: #fff;
@@ -5213,12 +5220,60 @@ textarea.incorrect-field:-ms-input-placeholder {
     }
 }
 
+@media (max-width: 700px){
+
+    .lookbook-ban-col{
+        width: 93%;
+        margin: auto;
+    }
+
+    .baner-big-home{
+        margin: 5px 0!important;
+    }
+
+    .baner-smoll-home{
+        margin: 5px 0!important;
+    }
+
+    .edit-order-btn{
+        float: none;
+        margin-bottom: 15px;
+    }
+
+    .big-cart .modal-footer .cart-total-all-price{
+        float: none;
+    }
+
+    .floaut-let-btn-cart{
+        float: none;
+        margin-top: 10px;
+    }
+
+    .modal-footer .footer-right{
+        text-align: left;
+    }
+
+    .add-comment .profile-item-save button{
+        line-height: 39px;
+    }
+
+    .smoll-cart_body .smoll-cart_btn a{
+        line-height: 14px;
+    }
+}
+
 @media (max-width: 600px){
     .orderDetails-Modal .modal-dialog{
         width: 400px;
         margin-left: auto;
         margin-right: auto;
     }
+
+
+}
+
+.footer-btn-left{
+    text-align: left;
 }
 
 @media (max-width: 500px){
@@ -5868,4 +5923,8 @@ textarea.incorrect-field:-ms-input-placeholder {
 
 .product-not-in-stock {
     color: red;
+}
+
+.breadcrumb-dis-block{
+    display: block;
 }

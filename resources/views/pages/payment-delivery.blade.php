@@ -7,7 +7,7 @@
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">
             <div class="theme-container container ">
-                <div class="site-breadcumb white-clr">
+                <div class="site-breadcumb white-clr breadcrumb-dis-block">
                     <h2 class="section-title wht fsz-36">{{ trans('profile.my_profile') }}</h2>
                     <ol class="breadcrumb breadcrumb-menubar">
                         <li>

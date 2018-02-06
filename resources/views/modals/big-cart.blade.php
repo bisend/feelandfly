@@ -101,19 +101,21 @@
             </div>
             <div class="modal-footer">
                 <div class="row">
-                    <div class="col-md-6 footer-left">
-                        <div class="cart-total-count">
-                            {{ trans('cart.total') }}: <span>@{{ totalCount }}</span>
-                        </div>
-                        <a data-dismiss="modal" class="theme-btn btn-white small-btn">
-                            {{ trans('cart.continue') }}
-                        </a>
-                    </div>
-                    <div class="col-md-6 footer-right">
+                    <div class="col-md-12 footer-left">
                         <div class="cart-total-all-price">
                             {{ trans('cart.sum') }}: <span>@{{ totalAmount.toFixed(2) }} грн</span>
                         </div>
-                        <a href="{{ url_order($model->language) }}" class="theme-btn btn-white small-btn">
+                        <div class="cart-total-count">
+                            {{ trans('cart.total') }}: <span>@{{ totalCount }}</span>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12 footer-btn-left">
+
+                        <a data-dismiss="modal" class="theme-btn btn-white small-btn">
+                            {{ trans('cart.continue') }}
+                        </a>
+                        <a href="{{ url_order($model->language) }}" class="theme-btn btn-white small-btn floaut-let-btn-cart">
                             {{ trans('cart.confirm') }}
                         </a>
                     </div>
