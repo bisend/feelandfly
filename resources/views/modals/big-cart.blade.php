@@ -16,7 +16,7 @@
                             <div class="big-cart_img big-cart-img-relative">
                                 <a v-bind:href="'/product/' + cartItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
                                     <img v-if="cartItem.product.images.length > 0" v-bind:src="cartItem.product.images[0].small" alt="">
-                                    <img v-else src="/img/product/small/no_photo.jpg" alt="">
+                                    <img v-else src="/img/product/small/no-photo.jpg" alt="cartItem.product.name">
                                 </a>
 
                                 <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1"

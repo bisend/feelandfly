@@ -44,6 +44,7 @@ class FilterRepository
                           ON properties.product_id = products.id AND products.is_visible = true
                         JOIN product_category
                           ON products.id = product_category.product_id AND product_category.category_id = " . $model->currentCategory->id . "
+                          where exists (select * from `product_prices` where `products`.`id` = `product_prices`.`product_id`)
                         GROUP BY properties.property_name_id, properties.property_value_id
                       ) properties
                   JOIN property_names
@@ -130,6 +131,7 @@ class FilterRepository
                         JOIN product_category
                           ON products.id = product_category.product_id AND product_category.category_id = " . $model->currentCategory->id . "
                         " . $activeFiltersQuery . "
+                        where exists (select * from `product_prices` where `products`.`id` = `product_prices`.`product_id`)
                         GROUP BY properties.property_name_id, properties.property_value_id
                       ) properties
                   JOIN property_names

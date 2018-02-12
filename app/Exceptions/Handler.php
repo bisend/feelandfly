@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Helpers\UrlBuilder;
+use App\Helpers\Languages;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -63,25 +63,45 @@ class Handler extends ExceptionHandler
     {
         $language = config('app.locale');
 
+        if ($language == Languages::DEFAULT_LANGUAGE)
+        {
+            $language = '';
+        }
+
         if ($exception instanceof BadRequestHttpException)
         {
-            return redirect(UrlBuilder::error(400, $language));
+            return redirect()->action('ErrorController@index', [
+                'error' => 400,
+                'language' => $language
+            ]);
         }
         else if ($exception instanceof UnauthorizedHttpException)
         {
-            return redirect(UrlBuilder::error(401, $language));
+            return redirect()->action('ErrorController@index', [
+                'error' => 401,
+                'language' => $language
+            ]);
         }
         else if ($exception instanceof AccessDeniedHttpException)
         {
-            return redirect(UrlBuilder::error(403, $language));
+            return redirect()->action('ErrorController@index', [
+                'error' => 403,
+                'language' => $language
+            ]);
         }
         else if($exception instanceof NotFoundHttpException)
         {
-            return redirect(UrlBuilder::error(404, $language));
+            return redirect()->action('ErrorController@index', [
+                'error' => 404,
+                'language' => $language
+            ]);
         }
         else if ($exception instanceof HttpException)
         {
-            return redirect(UrlBuilder::error(500, $language));
+            return redirect()->action('ErrorController@index', [
+                'error' => 500,
+                'language' => $language
+            ]);
         }
         
         return parent::render($request, $exception);

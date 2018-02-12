@@ -121,7 +121,13 @@ class CategoryFiltersViewModel extends LayoutViewModel
         foreach ($nameWithValues as $item)
         {
             $pairNameValues = explode('=', $item);
-            
+
+            //check if we have pair of filters
+            if (!isset($pairNameValues[0]) || !isset($pairNameValues[1]))
+            {
+                abort(404);
+            }
+
             if (str_contains('price-range', $pairNameValues[0]))
             {
                 $priceValues = explode(',', $pairNameValues[1]);

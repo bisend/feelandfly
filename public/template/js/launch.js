@@ -38,6 +38,14 @@ if (window.location.hash && window.location.hash == '#_=_') {
     }
 }
 
+// Force page reload on browser back button click
+if (!!window.performance && window.performance.navigation.type === 2)
+{
+    // value 2 means "The page was accessed by navigating into the history"
+    window.location.reload(); // reload whole page
+}
+
+
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

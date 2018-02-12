@@ -49,10 +49,7 @@ class CategoryFiltersController extends LayoutController
         
         $this->categoryFiltersService->fill($model);
 
-//        if ($model->categoryProducts->count() < 1)
-//        {
-//            abort(404);
-//        }
+        \Debugbar::info($model);
 
         JavaScript::put([
             'products' => $model->categoryProducts,
@@ -63,8 +60,6 @@ class CategoryFiltersController extends LayoutController
             'priceMin' => $model->priceMin,
             'priceMax' => $model->priceMax
         ]);
-
-        \Debugbar::info($model);
 
         return view('pages.category-filters', compact('model'));
     }
@@ -83,10 +78,7 @@ class CategoryFiltersController extends LayoutController
 
         $this->categoryFiltersService->fill($model);
 
-//        if ($model->categoryProducts->count() < 1)
-//        {
-//            abort(404);
-//        }
+        \Debugbar::info($model);
 
         JavaScript::put([
             'products' => $model->categoryProducts,
@@ -115,10 +107,7 @@ class CategoryFiltersController extends LayoutController
 
         $this->categoryFiltersService->fill($model);
 
-//        if ($model->categoryProducts->count() < 1)
-//        {
-//            abort(404);
-//        }
+        \Debugbar::info($model);
 
         JavaScript::put([
             'products' => $model->categoryProducts,
@@ -148,10 +137,7 @@ class CategoryFiltersController extends LayoutController
 
         $this->categoryFiltersService->fill($model);
 
-//        if ($model->categoryProducts->count() < 1)
-//        {
-//            abort(404);
-//        }
+        \Debugbar::info($model);
 
         JavaScript::put([
             'products' => $model->categoryProducts,

@@ -62,11 +62,6 @@ class SearchService extends LayoutService
     private function fillSearchProducts($model)
     {
         $model->searchProducts = $this->productRepository->getAllProductsForSearch($model);
-
-        if (!$model->searchProducts->count())
-        {
-            abort(404);
-        }
     }
 
     /**

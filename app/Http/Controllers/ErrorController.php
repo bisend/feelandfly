@@ -43,6 +43,6 @@ class ErrorController extends LayoutController
 
         $this->errorService->fill($model);
 
-        return view("errors.$error", compact('model'));
+        return response()->view("errors.$error", compact('model'), $error);
     }
 }

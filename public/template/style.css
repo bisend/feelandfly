@@ -5928,3 +5928,7 @@ textarea.incorrect-field:-ms-input-placeholder {
 .breadcrumb-dis-block{
     display: block;
 }
+
+h2.no-products {
+    text-align: center;
+}

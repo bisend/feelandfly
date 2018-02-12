@@ -253,6 +253,8 @@
                         <!-- Product Grid View Starts -->
                         <div id="grid-view" class="tab-pane fade active in" role="tabpanel">
                             <div class="row">
+
+                                @if($model->searchProducts->count() > 0)
                                 @php($counter = 0)
                                 @php($categoryProducts = $model->searchProducts)
                                 @foreach($categoryProducts as $categoryProduct)
@@ -413,6 +415,10 @@
                                     </div>
                                 @php($counter++)
                             @endforeach
+                                @else
+                                    <h2 class="no-products">{{ trans('layout.no_products') }}</h2>
+                                @endif
+
                             <!-- Pagination Starts -->
                             @include('partial.search-page.pagination')
                             <!-- Pagination Ends -->

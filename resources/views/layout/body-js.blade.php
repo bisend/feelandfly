@@ -6,6 +6,7 @@
 <script defer src="/template/plugins/jquery-match-height-master/jquery.matchHeight.min.js"></script>
 <script defer src="/template/plugins/owl.carousel.2/owl.carousel.min.js"></script>
 <script defer src="/template/plugins/waitsync/waitsync.min.js"></script>
+<script defer src="/template/plugins/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
 
 <!--Page JS BEGIN-->
 @stack('js')

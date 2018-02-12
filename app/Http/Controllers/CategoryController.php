@@ -47,11 +47,6 @@ class CategoryController extends LayoutController
         $model = new CategoryViewModel('category', $language, $slug, 1, 'default');
 
         $this->categoryService->fill($model);
-        
-//        if ($model->categoryProducts->count() < 1)
-//        {
-//            abort(404);
-//        }
 
         \Debugbar::info($model);
 
@@ -79,10 +74,7 @@ class CategoryController extends LayoutController
 
         $this->categoryService->fill($model);
 
-        if ($model->categoryProducts->count() < 1)
-        {
-            abort(404);
-        }
+        \Debugbar::info($model);
 
         JavaScript::put([
             'products' => $model->categoryProducts,
@@ -108,10 +100,7 @@ class CategoryController extends LayoutController
 
         $this->categoryService->fill($model);
 
-        if ($model->categoryProducts->count() < 1)
-        {
-            abort(404);
-        }
+        \Debugbar::info($model);
 
         JavaScript::put([
             'products' => $model->categoryProducts,
@@ -138,10 +127,7 @@ class CategoryController extends LayoutController
 
         $this->categoryService->fill($model);
 
-        if ($model->categoryProducts->count() < 1)
-        {
-            abort(404);
-        }
+        \Debugbar::info($model);
 
         JavaScript::put([
             'products' => $model->categoryProducts,

@@ -11,6 +11,7 @@ namespace App\Repositories;
 use App\DatabaseModels\MainSlider;
 use App\DatabaseModels\Product;
 use App\DatabaseModels\Property;
+use App\Helpers\Languages;
 use DB;
 
 /**
@@ -84,6 +85,7 @@ class ProductRepository
                 ]);
             }
         ])
+            ->whereHas('price')
             ->whereSlug($slug)
             ->whereIsVisible(true)
             ->first([
@@ -234,6 +236,7 @@ class ProductRepository
                 $query->on('products.id', '=', 'product_category.product_id')
                     ->where('product_category.category_id', '=', "$currentCategory->id");
             })
+            ->whereHas('price')
             ->whereIsVisible(true)
             ->orderByRaw($orderByRaw)
             ->offset($categoryProductsOffset)
@@ -266,6 +269,7 @@ class ProductRepository
             $query->on('products.id', '=', 'product_category.product_id')
                 ->where('product_category.category_id', '=', "$currentCategory->id");
             })
+            ->whereHas('price')
             ->whereIsVisible(true)
             ->count();
     }
@@ -342,6 +346,7 @@ class ProductRepository
                 });
             }
         ])
+            ->whereHas('price')
             ->whereCategoryId($categoryId)
             ->whereIsVisible(true)
             ->whereNotIn('id', [$productId])
@@ -691,6 +696,7 @@ class ProductRepository
                 $query->on('products.id', '=', 'product_category.product_id')
                     ->where('product_category.category_id', '=', "$currentCategory->id");
             })
+            ->whereHas('price')
             ->whereIsVisible(true)
             ->offset($categoryProductsOffset)
             ->limit($categoryProductsLimit);
@@ -864,7 +870,7 @@ class ProductRepository
                     $query->where("name_uk", 'like', '%' . $series . '%');
                     $query->orWhere("name_uk", 'like', '%' . $seriesReverse . '%');
                     $query->where('is_visible', '=', true);
-                })->count();
+                })->whereHas('price')->count();
     }
 
     /**
@@ -982,7 +988,7 @@ class ProductRepository
         $query->join('product_category', function ($query) use ($model) {
             $query->on('products.id', '=', 'product_category.product_id')
                 ->where('product_category.category_id', '=', "". $model->currentCategory->id . "");
-        })->whereIsVisible(true);
+        })->whereHas('price')->whereIsVisible(true);
 
         return $query->count();
     }

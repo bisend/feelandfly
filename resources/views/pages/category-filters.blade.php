@@ -546,7 +546,7 @@
                         <div class="no_prod-filters">
                             <h1 style="text-align: center">{{ trans('layout.no_products') }}</h1>
                             <div class="no_prod-filters-links">
-                                <a href="{{ redirect()->back()->getTargetUrl() }}">
+                                <a href="{{ redirect()->getUrlGenerator()->previous() }}">
                                     <i class="fa fa-chevron-left" aria-hidden="true"></i> Назад
                                 </a>
                                 <a href="{{ url_home($model->language) }}">
