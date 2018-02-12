@@ -1,6 +1,6 @@
 if (document.getElementById('similar-product'))
 {
-    var initProductPreviewImagesSliderInited = false,
+    let initProductPreviewImagesSliderInited = false,
         sync1, sync2, sliderthumb, homethumb;
 
     function initProductPreviewImagesSliderSimilar () {

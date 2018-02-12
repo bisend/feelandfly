@@ -11,8 +11,17 @@ let mix = require('laravel-mix');
  |
  */
 
-// mix.setPublicPath(path.normalize('www'));
-// mix.setPublicPath('www');
+mix.sass('resources/assets/sass/app.scss', 'css')
+    .options({
+        processCssUrls: false
+    }).version();
+
+mix.scripts([
+    'public/template/js/jclient.validation.js',
+    'public/template/js/launch.js',
+    'public/template/js/theme.js',
+    'public/template/js/header.js',
+    'public/template/js/main.js',
+], 'public/js/custom.js').version();
 
 mix.js('resources/assets/js/app.js', 'js').version();
-   // .sass('resources/assets/sass/app.scss', 'public/css');

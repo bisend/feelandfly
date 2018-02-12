@@ -4,7 +4,7 @@
 
 if (document.getElementById('sales-products'))
 {
-    var initProductPreviewImagesSliderInited = false,
+    let initProductPreviewImagesSliderInited = false,
         sync1, sync2, sliderthumb, homethumb;
 
     function initProductPreviewImagesSliderSales () {

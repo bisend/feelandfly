@@ -4,7 +4,7 @@
 
 if (document.getElementById('main-slider-section'))
 {
-    var initProductPreviewImagesSliderInited = false,
+    let initProductPreviewImagesSliderInited = false,
         sync1, sync2, sliderthumb, homethumb;
 
     function initProductPreviewImagesSliderMainSlider () {
@@ -157,9 +157,6 @@ if (document.getElementById('main-slider-section'))
         el: '#main-slider-section',
         data: GLOBAL_DATA,
         mounted: function () {
-
-            console.log(111);
-
             $('.ttip:not(.tooltipstered)').tooltipster({
                 theme: 'tooltipster-borderless'
             });

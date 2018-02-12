@@ -128,7 +128,3 @@
     </article>
     <!-- / CONTENT AREA -->
 @endsection
-
-@push('js')
-{{--<script defer src="/template/plugins/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>--}}
-@endpush
