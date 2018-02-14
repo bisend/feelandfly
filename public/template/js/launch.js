@@ -20,7 +20,9 @@ var INCORRECT_FIELD_CLASS = 'incorrect-field',
     EMAIL_CHANGED_MESSAGE = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Данные сохранены. Вы изменили e-mail, Вам отправлено письмо для подтверждения нового електронного адреса.' : 'Дані збережено. Ви змінили e-mail, Вам відправлено лист для підтвердження нової електронної адреси.',
     PASSWORD_CHANGED_MESSAGE = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Пароль сохранен.' : 'Пароль змінено.',
     WRONG_OLD_PASSWORD = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Неверный старый пароль.' : 'Неправильний старий пароль.',
-    REVIEW_ADDED = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Спасибо! Модератор пересмотрит Ваш отзыв, после чего он появится на сайте.' : 'Дякуємо! Модератор перегляне Ваш відгук, після чого він з`явиться на сайті.';
+    REVIEW_ADDED = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Спасибо! Модератор пересмотрит Ваш отзыв, после чего он появится на сайте.' : 'Дякуємо! Модератор перегляне Ваш відгук, після чого він з`явиться на сайті.',
+    SHOW_FILTERS_BTN = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Показать фильтры' : 'Показати фільтри',
+    HIDE_FILTERS_BTN = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Скрыть фильтры' : 'Сховати фільтри';
 
 if (window.location.hash && window.location.hash == '#_=_') {
     if (window.history && history.pushState) {
@@ -148,6 +150,7 @@ var GLOBAL_DATA = {
     
     INIT_CART_ENDED: false,
     IS_DATA_PROCESSING: false,
+    isMainSliderProductsInited: false,
     timer: undefined,
     user: null,
     profile: null,
@@ -340,17 +343,13 @@ $(document).ready(function () {
                 });
             }
 
-            wasHidden =! wasHidden
+            wasHidden =! wasHidden;
 
         });
 
-    $('.open-drop-profile-nav').on('focusin', function () {
-            $('.drop-nav-profile').slideDown(300);
-        });
-
-    $('.open-drop-profile-nav').on('focusout', function () {
-            $('.drop-nav-profile').slideUp(300);
-        });
+    $('.open-drop-profile-nav').on('click', function () {
+        $('.drop-nav-profile').stop(true, true).slideToggle(300);
+    });
 
 });
 

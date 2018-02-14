@@ -10,6 +10,7 @@ namespace App\Repositories;
 
 use App\DatabaseModels\MainSlider;
 use App\DatabaseModels\Product;
+use App\DatabaseModels\Promotion;
 use App\DatabaseModels\Property;
 use App\Helpers\Languages;
 use DB;
@@ -1094,6 +1095,8 @@ class ProductRepository
 
     public function getSalesProducts($model)
     {
+        $model->salesPromotion = Promotion::wherePriority(3)->first();
+
         return Product::with([
             'images',
             'color' => function ($query) use ($model) {
@@ -1133,7 +1136,7 @@ class ProductRepository
                 $query->whereUserTypeId($model->userTypeId);
             },
             'promotions' => function ($query) use ($model) {
-                $query->where('products_promotions.promotion_id', '=', 1);
+                $query->where('products_promotions.promotion_id', '=', $model->salesPromotion->id);
             },
             'properties' => function ($query) use ($model) {
                 $query->select([
@@ -1160,7 +1163,8 @@ class ProductRepository
                 ->where('product_prices.user_type_id', '=', $model->userTypeId);
         })
             ->whereHas('promotions', function ($query) use ($model) {
-                $query->where('products_promotions.promotion_id', '=', 1);
+//                $query->where('products_promotions.promotion_id', '=', 1);
+                $query->where('products_promotions.promotion_id', '=', $model->salesPromotion->id);
             })->whereIsVisible(true)
 //            ->orderByRaw($orderByRaw)
 //            ->offset($categoryProductsOffset)
@@ -1184,6 +1188,8 @@ class ProductRepository
     
     public function getTopProducts($model)
     {
+        $model->topPromotion = Promotion::wherePriority(2)->first();
+
         return Product::with([
             'images',
             'color' => function ($query) use ($model) {
@@ -1223,7 +1229,7 @@ class ProductRepository
                 $query->whereUserTypeId($model->userTypeId);
             },
             'promotions' => function ($query) use ($model) {
-                $query->where('products_promotions.promotion_id', '=', 3);
+                $query->where('products_promotions.promotion_id', '=', $model->topPromotion->id);
             },
             'properties' => function ($query) use ($model) {
                 $query->select([
@@ -1250,7 +1256,7 @@ class ProductRepository
                 ->where('product_prices.user_type_id', '=', $model->userTypeId);
         })
             ->whereHas('promotions', function ($query) use ($model) {
-                $query->where('products_promotions.promotion_id', '=', 3);
+                $query->where('products_promotions.promotion_id', '=', $model->topPromotion->id);
             })->whereIsVisible(true)
             ->whereNotIn('products.id', $model->salesIds)
 //            ->orderByRaw($orderByRaw)
@@ -1275,6 +1281,8 @@ class ProductRepository
     
     public function getNewProducts($model)
     {
+        $model->newPromotion = Promotion::wherePriority(1)->first();
+
         return Product::with([
             'images',
             'color' => function ($query) use ($model) {
@@ -1314,7 +1322,7 @@ class ProductRepository
                 $query->whereUserTypeId($model->userTypeId);
             },
             'promotions' => function ($query) use ($model) {
-                $query->where('products_promotions.promotion_id', '=', 2);
+                $query->where('products_promotions.promotion_id', '=', $model->newPromotion->id);
             },
             'properties' => function ($query) use ($model) {
                 $query->select([
@@ -1341,7 +1349,7 @@ class ProductRepository
                 ->where('product_prices.user_type_id', '=', $model->userTypeId);
         })
             ->whereHas('promotions', function ($query) use ($model) {
-                $query->where('products_promotions.promotion_id', '=', 2);
+                $query->where('products_promotions.promotion_id', '=', $model->newPromotion->id);
             })->whereIsVisible(true)
             ->whereNotIn('products.id', $model->topIds)
 //            ->orderByRaw($orderByRaw)
@@ -1370,6 +1378,7 @@ class ProductRepository
             'image',
             'markers' => function ($query) use ($model) {
                 $query->orderByRaw('priority desc');
+                $query->whereIsVisible(true);
             },
             'markers.product' => function ($query) use ($model) {
                 $query->select([
@@ -1454,6 +1463,12 @@ class ProductRepository
             ->whereHas('markers.product', function ($query) {
             $query->where('is_visible', '=', true);
         })
-            ->whereIsVisible(true)->get();
+            ->whereIsVisible(true)->get([
+                'main_slider.id',
+                'main_slider.image_id',
+                "main_slider.url_$model->language as url",
+                'main_slider.priority',
+                'main_slider.is_visible'
+            ]);
     }
 }

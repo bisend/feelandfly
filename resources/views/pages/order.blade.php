@@ -171,15 +171,16 @@
                                                     <img v-bind:src="cartItem.product.images[0].small" alt="">
                                                 </a>
 
-                                                <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1"
+                                                <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].priority == 3"
                                                      class="prod-tag-1 font-2">
-                                                    <span> -@{{ cartItem.product.price[0].discount }}% </span>
+                                                    {{--<span> -@{{ cartItem.product.price[0].discount }}% </span>--}}
+                                                    <span> SALE </span>
                                                 </div>
-                                                <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 2"
+                                                <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].priority == 1"
                                                      class="prod-tag-1 font-2 prod-tag-green">
                                                     <span> NEW </span>
                                                 </div>
-                                                <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 3"
+                                                <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].priority == 2"
                                                      class="prod-tag-1 font-2 prod-tag-violet">
                                                     <span> TOP </span>
                                                 </div>
@@ -214,7 +215,7 @@
                                                     <span class="fw-300 gray-clr">
                                                         <span>@{{ cartItem.count }}</span> <sub>X</sub>
                                                     </span> @{{ cartItem.product.price[0].price }} грн
-                                                    <del v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1">
+                                                    <del v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].priority == 3">
                                                         @{{ cartItem.product.price[0].old_price }} грн
                                                     </del>
                                                 </p>

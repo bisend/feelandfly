@@ -1,1 +1,1557 @@
-function RegExValidatingInput(e,t){var i=this;this.input=e,this.options=t,this.isValid=!0,this.memoryValue=void 0,this.initialPlaceHolder=void 0,this.initialValue=this.input.val(),this.Init=function(){i.CheckOptions(),i.input.focusout(function(){i.GetValue().length>0&&i.options.autoValidating&&i.Validate()}),i.input.on("keyup",function(){0==i.GetValue().length&&(i.input.attr("placeholder",i.initialPlaceHolder),void 0!=i.options.ChangeOnValid&&i.options.ChangeOnValid(i.input)),i.memoryValue=i.input.val()}),i.input.focusin(function(){1==i.options.showErrors&&void 0!=i.memoryValue&&void 0!=i.memoryValue&&i.input.val(i.memoryValue),void 0!=i.options.ChangeOnValid&&i.options.ChangeOnValid(i.input),i.input.attr("placeholder",i.initialPlaceHolder)}),i.initialPlaceHolder=i.input.attr("placeholder"),i.initialPlaceHolder=void 0!=i.initialPlaceHolder?i.initialPlaceHolder:""},this.Validate=function(){var e=i.input.val();i.options.required?i.IsValueCorrect(e,i.options.expression)?i.SetValidState():i.SetInvalidState():""!=e?i.IsValueCorrect(e,i.options.expression)?i.SetValidState():i.SetInvalidState():i.SetValidState()},this.IdleValidate=function(){var e=i.input.val();i.options.required?i.IsValueCorrect(e,i.options.expression)?i.isValid=!0:i.isValid=!1:""!=e?i.IsValueCorrect(e,i.options.expression)?i.isValid=!0:i.isValid=!1:i.isValid=!0},this.SetValidState=function(){i.isValid=!0,i.memoryValue=void 0,void 0!=i.options.ChangeOnValid&&i.options.ChangeOnValid(i.input)},this.SetInvalidState=function(){i.isValid=!1,1==i.options.showErrors&&(void 0==i.memoryValue&&(i.memoryValue=i.input.val()),""!=i.input.val()||i.HasMemorized()?i.input.attr("placeholder",i.options.regExErrorMessage):i.input.attr("placeholder",i.options.requiredErrorMessage),i.SetValue("")),void 0!=i.options.ChangeOnInvalid&&i.options.ChangeOnInvalid(i.input)},this.GetValue=function(){return i.input.val()},this.SetValue=function(e){i.input.val(e)},this.IsValid=function(){return i.isValid},this.IsValueCorrect=function(e,t){return-1!==e.search(t)},this.CheckOptions=function(){void 0==i.options.expression&&(i.options.expression=RegularExpressions.LETTERS_ONLY),void 0==i.options.isValidateInRealTime&&(i.options.isValidateInRealTime=!1),void 0==i.options.showErrors&&(i.options.showErrors=!1),void 0==i.options.requiredErrorMessage&&(i.options.requiredErrorMessage="Required field"),void 0==i.options.regExErrorMessage&&(i.options.regExErrorMessage="Incorrect data"),void 0==i.options.required&&(i.options.required=!0),void 0==i.options.autoValidating&&(i.options.autoValidating=!0)},this.HasMemorized=function(){return void 0!==i.memoryValue&&""!==i.memoryValue},this.ResetToDefault=function(){i.input.attr("placeholder",i.initialPlaceHolder),i.input.val(i.initialValue),void 0!=i.options.ChangeOnValid&&i.options.ChangeOnValid(i.input)},this.Init()}function EqualValidatingInput(e,t){var i=this;this.input=e,this.options=t,this.isValid=!1,this.memoryValue=void 0,this.initialPlaceHolder=void 0,this.initialValue=this.input.val(),this.Init=function(){i.CheckOptions(),i.input.focusout(function(){i.GetValue().length>0&&i.options.autoValidating&&i.Validate()}),i.input.on("keyup",function(){0==i.GetValue().length&&i.ResetToDefault(),i.memoryValue=i.input.val()}),i.input.focusin(function(){1==i.options.showErrors&&void 0!=i.memoryValue&&void 0!=i.memoryValue&&i.input.val(i.memoryValue),void 0!=i.options.ChangeOnValid&&i.options.ChangeOnValid(i.input),i.input.attr("placeholder",i.initialPlaceHolder)}),i.initialPlaceHolder=i.input.attr("placeholder")},this.Validate=function(){var e=i.input.val();i.options.required?i.options.compareValue==e?i.SetValidState():i.SetInvalidState():""!=e?i.IsValueCorrect(e,i.options.expression)?i.SetValidState():i.SetInvalidState():i.SetValidState()},this.SetValidState=function(){i.isValid=!0,i.memoryValue=void 0,void 0!=i.options.ChangeOnValid&&i.options.ChangeOnValid(i.input)},this.SetInvalidState=function(){i.isValid=!1,1==i.options.showErrors&&(void 0==i.memoryValue&&(i.memoryValue=i.input.val()),""!=i.input.val()||i.HasMemorized()?i.input.attr("placeholder",i.options.errorMessage):i.input.attr("placeholder",i.options.requiredErrorMessage),i.SetValue("")),void 0!=i.options.ChangeOnInvalid&&i.options.ChangeOnInvalid(i.input)},this.GetValue=function(){return i.input.val()},this.SetValue=function(e){i.input.val(e)},this.IsValid=function(){return i.isValid},this.CheckOptions=function(){void 0==i.options.showErrors&&(i.options.showErrors=!1),void 0==i.options.requiredErrorMessage&&(i.options.requiredErrorMessage="Required field"),void 0==i.options.errorMessage&&(i.options.errorMessage="Data not equal"),void 0==i.options.required&&(i.options.required=!0),void 0==i.options.autoValidating&&(i.options.autoValidating=!0)},this.HasMemorized=function(){return void 0==i.memoryValue||""==i.memoryValue},this.ResetToDefault=function(){i.input.attr("placeholder",i.initialPlaceHolder),i.input.val(i.initialValue),void 0!=i.options.ChangeOnValid&&i.options.ChangeOnValid(i.input)},this.SetCompareValue=function(e){i.options.compareValue=e},this.Init()}function initCart(){INIT_CART_WS=new WaitSync(function(){if(GLOBAL_DATA.IS_DATA_PROCESSING)return!1;GLOBAL_DATA.IS_DATA_PROCESSING=!0,$.ajax({type:"post",url:"/cart/init-cart",data:{language:LANGUAGE,userTypeId:GLOBAL_DATA.userTypeId},success:function(e){GLOBAL_DATA.IS_DATA_PROCESSING=!1,GLOBAL_DATA.INIT_CART_ENDED=!0,GLOBAL_DATA.cartItems=e.cart,GLOBAL_DATA.totalCount=e.totalCount,GLOBAL_DATA.totalAmount=e.totalAmount},error:function(e){GLOBAL_DATA.IS_DATA_PROCESSING=!1,GLOBAL_DATA.INIT_CART_ENDED=!0,console.log(e)}})})}function getUser(){$.ajax({type:"post",url:"/get-user",data:{language:LANGUAGE},success:INIT_CART_WS.wrap("initCart",function(e){GLOBAL_DATA.user=e.user,GLOBAL_DATA.userTypeId=e.userTypeId,GLOBAL_DATA.profile=e.profile,GLOBAL_DATA.wishList=e.wishList,GLOBAL_DATA.wishListItems=e.wishListItems,GLOBAL_DATA.totalWishListCount=e.totalWishListCount,GLOBAL_DATA.user&&(GLOBAL_DATA.orderConfirm.name=GLOBAL_DATA.user.name,GLOBAL_DATA.orderConfirm.email=GLOBAL_DATA.user.email,GLOBAL_DATA.orderConfirm.phone=e.profile.phone_number,GLOBAL_DATA.orderConfirm.address=e.profile.address_delivery,null!=e.profile.payment_id&&(GLOBAL_DATA.orderConfirm.paymentId=e.profile.payment_id),null!=e.profile.delivery_id&&(GLOBAL_DATA.orderConfirm.deliveryId=e.profile.delivery_id),GLOBAL_DATA.review.name=GLOBAL_DATA.user.name,GLOBAL_DATA.review.email=GLOBAL_DATA.user.email)}),error:INIT_CART_WS.wrap("initCart",function(e){console.log(e)})})}function buildSearchUrl(e){return e=e.toLowerCase().replace(/[^a-zA-Zа-яА-ЯїЇіІьЬєЄэЭъЪёЁґҐ0-9 ]/gi," ").replace(/\s+/g," ").trim().replace(/\s/g,"+")}function showLoader(){$("[data-big-loader]").fadeIn(400)}function hideLoader(){$("[data-big-loader]").fadeOut(400)}function showPopup(e){var t=$("[data-popup]");$("[data-popup-text]").text(e),t.modal()}function hidePopup(){$("[data-popup]");$("[data-popup-text]").text("")}function openNav(e){$("body").css("overflow-x","hidden"),$(".nav-bg").fadeIn(300),$("#mySidenav").animate({marginLeft:"0px"},250,"swing")}function closeNav(e){$("body").css("overflow-x","auto"),$(".nav-bg").fadeOut(300),$("#mySidenav").animate({marginLeft:"-290px"},250,"swing")}function openNavRight(e){$("body").css("overflow-x","hidden"),$("body").animate(300),$(".nav-bg").fadeIn(300),$("#mySidenavRight").animate({marginRight:"0px"},250,"swing")}function closeNavRight(e){$("body").css("overflow-x","auto"),$(".nav-bg").fadeOut(300),$("#mySidenavRight").animate({marginRight:"-290px"},250,"swing")}var RegularExpressions={NAME:/^[а-яА-ЯёЁіІїЇa-zA-Z]{2,30}$/,FULL_NAME:/^[а-яА-ЯёЁіІїЇa-zA-Z'`\s,.-]{2,100}$/,PASSWORD:/^\S{6,20}$/,SIMPLE_PASSWORD:/^[\w.]{6,20}$/,EMAIL:/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,PHONE_NUMBER:/^[0-9\-\(\)\+ ]{5,30}$/,URL_LINK:/^http:+|https:+.+$/,LETTERS_ONLY:/^[а-яА-ЯёЁіІїЇa-zA-Z]+$/,SIMPLE_TEXT:/.{2,}\s*/,MIN_TEXT:/.{1,}\s*/,FILE_PATH:/^[а-яА-ЯёЁіІїЇa-zA-Z]{2,200}$/,DATE_TIME_R:/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/,DATE_RANGE:/^([0-9]{2}\/[0-9]{2}\/[0-9]{4})|([0-9]{2}\/[0-9]{2}\/[0-9]{4} \- [0-9]{2}\/[0-9]{2}\/[0-9]{4})$/,OKPO_CODE:/.{2,}\s*/,POSITIVE_DIGITS:/^[1-9][0-9]*$/,DIGITS_ONLY:/^[0-9]{1,20}$/},LANGUAGE=$("html").attr("lang"),DEFAULT_LANGUAGE="ru",INIT_CART_WS,INCORRECT_FIELD_CLASS="incorrect-field",REQUIRED_FIELD_TEXT=LANGUAGE==DEFAULT_LANGUAGE?"Обязательное поле":"Обов`язкове поле",INCORRECT_FIELD_TEXT=LANGUAGE==DEFAULT_LANGUAGE?"Неправильные данные":"Невірно введені дані",SERVER_ERROR=LANGUAGE==DEFAULT_LANGUAGE?"Произошла ошибка, попробуйте еще.":"Сталася помилка, спробуйте ще.",EMAIL_NOT_VALID=LANGUAGE==DEFAULT_LANGUAGE?"Пользователь c таким e-mail уже существует.":"Користувач з таким e-mail вже існує.",EMAIL_CONFIRM_NOT_VALID=LANGUAGE==DEFAULT_LANGUAGE?"E-mail не подтвержден.":"E-mail не підтверджено.",EMAIL_NOT_EXISTS=LANGUAGE==DEFAULT_LANGUAGE?"Такой e-mail не существует.":"Такого e-mail не існує.",REGISTER_SUCCESS=LANGUAGE==DEFAULT_LANGUAGE?"Регистрация прошла успешно, на указанный e-mail отправлено письмо для подтверждения.":"Реєстрація пройшла успішно, на вказаний e-mail відправлено лист для підтвердження.",RESTORE_SUCCESS=LANGUAGE==DEFAULT_LANGUAGE?"На ваш e-mail отправлено письмо с паролем для входа.":"На ваш e-mail відправлено лист з паролем для входу.",ORDER_CREATED_MESSAGE=LANGUAGE==DEFAULT_LANGUAGE?"Заказ принят. Скоро с вами свяжется наш менеджер.":"Замовлення прийнято. Незабаром з вами зв'яжеться наш менеджер.",PERSONAL_INFO_SAVED=LANGUAGE==DEFAULT_LANGUAGE?"Данные сохранены.":"Дані збережено.",EMAIL_CHANGED_MESSAGE=LANGUAGE==DEFAULT_LANGUAGE?"Данные сохранены. Вы изменили e-mail, Вам отправлено письмо для подтверждения нового електронного адреса.":"Дані збережено. Ви змінили e-mail, Вам відправлено лист для підтвердження нової електронної адреси.",PASSWORD_CHANGED_MESSAGE=LANGUAGE==DEFAULT_LANGUAGE?"Пароль сохранен.":"Пароль змінено.",WRONG_OLD_PASSWORD=LANGUAGE==DEFAULT_LANGUAGE?"Неверный старый пароль.":"Неправильний старий пароль.",REVIEW_ADDED=LANGUAGE==DEFAULT_LANGUAGE?"Спасибо! Модератор пересмотрит Ваш отзыв, после чего он появится на сайте.":"Дякуємо! Модератор перегляне Ваш відгук, після чого він з`явиться на сайті.";if(window.location.hash&&"#_=_"==window.location.hash)if(window.history&&history.pushState)window.history.pushState("",document.title,window.location.pathname);else{var scroll={top:document.body.scrollTop,left:document.body.scrollLeft};window.location.hash="",document.body.scrollTop=scroll.top,document.body.scrollLeft=scroll.left}window.performance&&2===window.performance.navigation.type&&window.location.reload(),$.ajaxSetup({headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")}});var GLOBAL_DATA={singleProduct:{product:[],productId:"",sizeId:"",count:1},cartItems:[],categoryProducts:[],categoryProductPreview:{product:[],currentSizeId:"",count:"",rel:""},similarProducts:[],similarProductPreview:{product:[],currentSizeId:"",count:"",rel:""},orderConfirm:{name:"",phone:"",email:"",address:"",comment:"",paymentId:"",deliveryId:""},wishListItems:[],wishListPagination:{page:1,itemsPerPage:5,startIndex:0,endIndex:5,isPrev:!1,isNext:!1},review:{rating:0,hoverRating:0,tempRating:0,validatedFalse:!1,name:"",email:"",text:""},wishListPages:[],wishListCurrentPage:1,totalCount:0,totalAmount:0,totalWishListCount:0,reviewsPages:[],reviewIsPrev:!1,reviewIsNext:!1,totalReviewsCount:0,reviewsCurrentPage:1,reviews:[],mainSliderPreview:{product:[],currentSizeId:"",count:"",rel:""},mainSliderProducts:[],saleProductPreview:{product:[],currentSizeId:"",count:"",rel:""},salesProducts:[],topProductPreview:{product:[],currentSizeId:"",count:"",rel:""},topProducts:[],newProductPreview:{product:[],currentSizeId:"",count:"",rel:""},newProducts:[],INIT_CART_ENDED:!1,IS_DATA_PROCESSING:!1,timer:void 0,user:null,profile:null,wishList:null,userTypeId:1};initCart(),getUser(),$("body").on("click","[data-popup-close]",function(){hidePopup()}),$("body").on("click","[data-popup]",function(e){$(e.target).hasClass("pop-up-messege")&&hidePopup()}),$("#sort-select").on("changed.bs.select",function(e,t){window.location.href=$(e.currentTarget[t]).attr("data-url")}),$("body").on("click","[data-restore-password-button]",function(e){var t=!0;$("#login-popup").modal("hide"),$("#login-popup").on("hidden.bs.modal",function(){t&&$("[data-restore-password]").modal(),t=!1})}),$(document).ready(function(){var e=!1;$(".open-search").click(function(){var t=$(this).find("i");e?(t.removeClass("fa-times").addClass("fa-search"),$(".profile-search-smoll").animate({width:"0"},function(){$(".navbar-nav").show(50),$(".open-search-this-none").fadeIn(100),$(".profile-search-smoll").stop().hide(),$(".open-search").css("border","none")})):($(".open-search").css("border","2px solid #000"),$(".navbar-nav").hide(50),$(".profile-search-smoll").stop().show().animate({width:"600px"}),$(".profile-search-smoll input").focus(),t.removeClass("fa-search").addClass("fa-times")),e=!e}),$(".open-drop-profile-nav").on("focusin",function(){$(".drop-nav-profile").slideDown(300)}),$(".open-drop-profile-nav").on("focusout",function(){$(".drop-nav-profile").slideUp(300)})}),$(window).load(function(){$(function(){$(".prod-title").matchHeight(),$(".topic").matchHeight()}),window.FFShop&&window.FFShop.social_email&&0==window.FFShop.social_email.isEmail&&$("[data-social-email]").modal(),window.FFShop&&window.FFShop.isOrderCreated&&1==window.FFShop.isOrderCreated&&showPopup(ORDER_CREATED_MESSAGE)}),$(window).load(function(){if($(window).width()<767&&($(".header-wrap").length>0&&$(".navigation").mCustomScrollbar({theme:"dark-2",scrollButtons:{enable:!1}}),$(".cate-wrap").length>0&&$(".cate-wrap > nav").mCustomScrollbar({theme:"dark-2",scrollButtons:{enable:!1}}),$(".product-table").length>0&&$(".product-table").mCustomScrollbar({theme:"dark-2",axis:"x",scrollButtons:{enable:!1}})),$(".isotope-item").length>0){if($().isotope){var e=$(".isotope");e.isotope({itemSelector:".isotope-item"}),$(".filtrable a").on("click",function(){var t=$(this).attr("data-filter");return $(".filtrable li").removeClass("active"),$(this).parent().addClass("active"),e.isotope({filter:t}),!1}),e.isotope("layout")}$(window).resize(function(){$().isotope&&$(".row.isotope").isotope("layout")}),$("#product-filter").isotope({filter:".tab-1"})}}),$(document).ready(function(){function e(e){var i=this._current;$(".sync2").find(".owl-item").removeClass("synced").eq(i).addClass("synced"),t(i)}function t(e){var t=o.find(".owl-item.active").map(function(){return $(this).index()});-1===$.inArray(e,t)?e>t[t.length-1]?o.trigger("to.owl.carousel",[e-t.length+2,s,!0]):o.trigger("to.owl.carousel",Math.max(0,e-1)):e===t[t.length-1]?o.trigger("to.owl.carousel",[t[1],s,!0]):e===t[0]&&o.trigger("to.owl.carousel",[Math.max(0,e-1),s,!0])}if($(".wrapper > header").length>0&&($(window).width()>767&&$("ul.primary-navbar li li").mouseover(function(){if(1==$(this).children("ul").length){var e=$(this),t=$(this).children("ul");$(e).offset().left+$(e).width()+$(t).width()>$(window).width()?$(t).css("left","-"+$(e).width()+"px"):$(t).css("left",$(e).width()+"px")}}),$(window).width()<767&&($(".nav-trigger").on("click",function(e){return e.stopPropagation(),$(".header-wrap .navigation").toggleClass("off-canvas"),!1}),$(".cate-toggle").on("click",function(){return $(".cate-wrap").slideToggle(),!1})),$(".mega-dropdown-slider").owlCarousel({dots:!1,loop:!0,autoplay:!1,autoplayHoverPause:!0,smartSpeed:100,nav:!0,margin:30,responsive:{0:{items:1},1200:{items:2},992:{items:2},768:{items:2},568:{items:2}},navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]})),$("#deal-slider, #prod-featured-slider").length>0&&$("#deal-slider, #prod-featured-slider").owlCarousel({dots:!1,autoplay:!0,autoplayHoverPause:!0,smartSpeed:100,nav:!0,margin:30,responsive:{0:{items:1},1201:{items:4},1024:{items:3},768:{items:2},568:{items:2}},navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]}),$("#testimonial-1").length>0&&$("#testimonial-1").owlCarousel({dots:!0,loop:!0,autoplay:!1,autoplayHoverPause:!0,smartSpeed:100,nav:!1,margin:30,responsive:{0:{items:1}}}),$("#brand-slider").length>0&&$("#brand-slider").owlCarousel({dots:!0,loop:!0,autoplay:!0,autoplayHoverPause:!0,smartSpeed:100,nav:!1,margin:30,responsive:{0:{items:1},1200:{items:6},992:{items:5},480:{items:3}}}),$("#blog-slider-1").length>0&&$("#blog-slider-1").owlCarousel({dots:!0,loop:!0,autoplay:!0,autoplayHoverPause:!0,smartSpeed:100,nav:!0,margin:30,responsive:{0:{items:1},1200:{items:3},992:{items:2},568:{items:2}},navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]}),$("#rel-blog-slider").length>0&&$("#rel-blog-slider").owlCarousel({dots:!0,loop:!0,autoplay:!1,autoplayHoverPause:!0,smartSpeed:100,nav:!1,margin:30,responsive:{0:{items:1},1024:{items:2},768:{items:1},568:{items:2}}}),$("#brand-slider-2").length>0&&$("#brand-slider-2").owlCarousel({dots:!1,loop:!0,autoplay:!0,autoplayHoverPause:!0,smartSpeed:100,nav:!1,margin:30,responsive:{0:{items:1},992:{items:5},768:{items:4},568:{items:3},380:{items:2}}}),$("#widget-best-seller").length>0&&$("#widget-best-seller").owlCarousel({dots:!1,loop:!0,autoplay:!1,autoplayHoverPause:!0,smartSpeed:100,nav:!0,margin:30,responsive:{0:{items:1},600:{items:2},768:{items:1}},navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]}),$(".sync2:not(.product-preview-images-small)").length>0){$(document).on("shown.bs.modal",function(){$(this).find(".sync1, .sync2").each(function(){$(this).data("owlCarousel")&&$(this).data("owlCarousel").onResize()})});var i=$(".sync1"),o=$(".sync2"),a=$(".single-prod-thumb"),n=$(".home-slide-thumb"),s=500;a.owlCarousel({rtl:!1,items:3,nav:!0,margin:20,navSpeed:s,responsive:{992:{items:3},767:{items:4},480:{items:3},320:{items:2}},responsiveRefreshRate:200,navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]}),i.owlCarousel({rtl:!1,items:1,navSpeed:1e3,nav:!1,onChanged:e,responsiveRefreshRate:200}),n.owlCarousel({rtl:!1,items:5,nav:!0,navSpeed:s,responsive:{1500:{items:5},1024:{items:4},768:{items:3},600:{items:4},480:{items:3},320:{items:2,nav:!1}},responsiveRefreshRate:200,navText:["<i class='fa fa-long-arrow-left'></i>","<i class='fa fa-long-arrow-right'></i>"]})}$(".sync2:not(.product-preview-images-small)").on("click",".owl-item",function(e){e.preventDefault();var t=$(this).index();return i.trigger("to.owl.carousel",[t,1e3]),!1}),$("#subscribe-popups").length>0&&$("#subscribe-popups").subscribeBetter({trigger:"onidle",animation:"flyInDown",delay:0,showOnce:!0,autoClose:!1,scrollableModal:!1}),$("#to-top").on("click",function(){return $("html, body").animate({scrollTop:0},800),!1}),$(".caption-link").length>0&&$("a[rel^='prettyPhoto[single-product]']").prettyPhoto({theme:"facebook",slideshow:5e3,autoplay_slideshow:!1,social_tools:!1,deeplinking:!1})}),$(window).scroll(function(){0===$("#headerstyle").length&&($(this).scrollTop()>5?$(".main-header").addClass("is-sticky"):$(".main-header").removeClass("is-sticky")),$(this).scrollTop()>100?$("#to-top").css({bottom:"55px"}):$("#to-top").css({bottom:"-150px"})}),$("#lookbook-slider").length>0&&$("#lookbook-slider").owlCarousel({dots:!0,loop:!0,autoplay:!0,autoplayHoverPause:!0,smartSpeed:300,nav:!0,margin:30,responsive:{0:{items:1},1200:{items:1},992:{items:1},568:{items:1}},navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]}),$("#slider-category").length>0&&$("#slider-category").owlCarousel({dots:!0,loop:!0,autoplay:!0,autoplayHoverPause:!0,smartSpeed:100,nav:!0,margin:30,responsive:{0:{items:1},1200:{items:4},992:{items:3},568:{items:2},400:{items:1}},navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]}),$(document).ready(function(){var e=!1;$("body").on("click","[data-menu-open-link]",function(t){t.stopPropagation(),openNav(t),e=!0}),$("body").on("click","[data-menu-close-link]",function(t){t.stopPropagation(),closeNav(t),e=!1}),$(document).on("click","body",function(t){var i=$(t.target);e&&"mySidenav"!=i.attr("id")&&0===i.closest("#mySidenav").length&&(closeNav(t),e=!1)})}),$(document).ready(function(){var e=!1;$("body").on("click","[data-menu-open-link-right]",function(t){t.stopPropagation(),openNavRight(t),e=!0}),$("body").on("click","[data-menu-close-link-right]",function(t){t.stopPropagation(),closeNavRight(t),e=!1}),$(document).on("click","body",function(t){var i=$(t.target);e&&"mySidenavRight"!=i.attr("id")&&0===i.closest("#mySidenavRight").length&&(closeNavRight(t),e=!1)})}),$(document).ready(function(){}),$(document).ready(function(){var e=$(".header-main"),t=$(e).offset().top;$(window).scroll(function(){$(window).scrollTop()>t?$(".header-topbar").slideUp(200,function(){$(e).addClass("topWindow")}):($(".header-topbar").slideDown(400),$(e).removeClass("topWindow"))})}),$(document).ready(function(){$(".general-leng").click(function(){$(".ather-lang").stop(100,100).fadeToggle(100)})}),$("body").on("click",".dropdown-div-btn",function(){var e=$(this).find(".plus-icon"),t=$(this).next().css("display");switch(e.css("lineHeight","17px"),t){case"none":e.html("-"),e.css("lineHeight","17px");break;case"block":e.html("+"),e.css("lineHeight","20px")}$(this).next().stop().slideToggle(300)}),$("body").on("click",".drop-menu-select:not(.disableDiv)",function(){if($(this).find("#mu-list").length>0&&$("#data-values #GoodId").val()>0)return event.preventDefault(),!1;$(this).attr("tabindex",1).focus(),$(this).toggleClass("active"),$(this).find(".dropeddown").stop(!0,!0).slideToggle(300),$(this).css({color:"#555",fontWeight:"500",border:"2px solid #000"})}),$("body").on("focusout",".drop-menu-select",function(){$(this).removeClass("active"),$(this).find(".dropeddown").stop(!0,!0).slideUp(300)}),$("body").on("click",".drop-menu-select .dropeddown li:not(.select-multi)",function(){$(this).parents(".drop-menu-select").find(".select span").text($(this).text()),$(this).parents(".drop-menu-select").find("input").attr("value",$(this).attr("id"))}),$(document).ready(function(){$(".ttip:not(.tooltipstered)").tooltipster({theme:"tooltipster-borderless"})}),$(window).load(function(){$(".ttip:not(.tooltipstered)").tooltipster({theme:"tooltipster-borderless"})});
+﻿// JClientValidation library created by Mukola Shabarovskiy in 2014.
+// This library was created for inputs validation
+
+// Regular expressions for validated inputs
+// You can to add new item and use it in parameters
+var RegularExpressions = {
+	NAME: /^[а-яА-ЯёЁіІїЇa-zA-Z]{2,30}$/,                                             // For example "Nicholas" (one word)
+	FULL_NAME: /^[а-яА-ЯёЁіІїЇa-zA-Z'`\s,.-]{2,100}$/,                                  // For example "Nicholas Brick" (two words)
+	PASSWORD: /^\S{6,20}$/,															// For example word.pass123123 (difficult password)
+	SIMPLE_PASSWORD: /^[\w.]{6,20}$/,                                               // For example 123123 (similar password)
+	EMAIL: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,	 // For example nicholas.brick@mail.com
+	PHONE_NUMBER: /^[0-9\-\(\)\+ ]{5,30}$/,											// For example +38(012) 345-67-89
+	URL_LINK: /^http:+|https:+.+$/,                                                 // For example http://fs.to
+	LETTERS_ONLY: /^[а-яА-ЯёЁіІїЇa-zA-Z]+$/,                                          // Letters only
+	SIMPLE_TEXT: /.{2,}\s*/,                                                        // Just simple text (more than two symbols)
+	MIN_TEXT: /.{1,}\s*/,                                                           // Just simple text (more than one symbol)
+	FILE_PATH: /^[а-яА-ЯёЁіІїЇa-zA-Z]{2,200}$/,                                       // For example drive:\dir\dir\file.ext
+	DATE_TIME_R: /^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/,         // For example 2016-04-13 09:41:46
+	DATE_RANGE: /^([0-9]{2}\/[0-9]{2}\/[0-9]{4})|([0-9]{2}\/[0-9]{2}\/[0-9]{4} \- [0-9]{2}\/[0-9]{2}\/[0-9]{4})$/, // For example 04/25/2016 or 04/25/2016 - 05/26/2017
+	OKPO_CODE: /.{2,}\s*/,                                                          // OKPO code
+	POSITIVE_DIGITS: /^[1-9][0-9]*$/,												// Digits greater than 0.
+	DIGITS_ONLY: /^[0-9]{1,20}$/                                                    // For digits only
+};
+
+// options = {
+//      expression : RegExp,                                // Regular expression for validation
+//      ChangeOnValid : func(input),                        // Performs when state has been changed on valid
+//      ChangeOnInvalid : func(input),                      // Performs when state has been changed on invalid
+//      showErrors : boolean,                               // Show errors in placeholder 
+//      requiredErrorMessage : string,
+//      regExErrorMessage : string,
+//      required : boolean                                  // If an input is required
+//      autoValidating : boolean                            // Validation on focus out ( blur )
+//}
+function RegExValidatingInput(input, options) {
+	// The context of this object
+	var context = this;
+
+	// Input for validation
+	this.input = input;
+
+	// Settings object
+	this.options = options;
+
+	// Input validation state
+	this.isValid = true;
+
+	// Value in memory (for place holder validation)
+	this.memoryValue = undefined;
+
+	// Initial placeholder for restore
+	this.initialPlaceHolder = undefined;
+
+	// Initial input value for restore
+	this.initialValue = this.input.val();
+
+	// Constructor function (initialize object)
+	this.Init = function () {
+		// Sets default values if they are not set
+		context.CheckOptions();
+
+		// FocusOut handler
+		context.input.focusout(function () {
+			if (context.GetValue().length > 0 && context.options.autoValidating) {
+				context.Validate();
+			}
+		});
+
+		// KeyUp handler
+		context.input.on('keyup', function () {
+			if (context.GetValue().length == 0) {
+				context.input.attr("placeholder", context.initialPlaceHolder);
+				if (context.options.ChangeOnValid != undefined) {
+					context.options.ChangeOnValid(context.input);
+				}
+			}
+			context.memoryValue = context.input.val();
+		});
+
+		// FocusIn handler
+		context.input.focusin(function () {
+			if (context.options.showErrors == true) {
+				if (context.memoryValue != undefined) {
+					if (context.memoryValue != undefined) {
+						context.input.val(context.memoryValue);
+					}
+				}
+			}
+			if (context.options.ChangeOnValid != undefined) {
+				context.options.ChangeOnValid(context.input);
+			}
+			context.input.attr("placeholder", context.initialPlaceHolder);
+		});
+
+		// Sets initial placeholder
+		context.initialPlaceHolder = context.input.attr("placeholder");
+		context.initialPlaceHolder = (context.initialPlaceHolder != undefined ? context.initialPlaceHolder : "");
+	};
+
+	// General validation function
+	this.Validate = function () {
+		// Gets value of input
+		var value = context.input.val();
+
+		if (context.options.required) {
+			if (context.IsValueCorrect(value, context.options.expression)) {
+				context.SetValidState();
+			} else {
+				context.SetInvalidState();
+			}
+		} else {
+			if (value != "") {
+				if (context.IsValueCorrect(value, context.options.expression)) {
+					context.SetValidState();
+				} else {
+					context.SetInvalidState();
+				}
+			} else {
+				context.SetValidState();
+			}
+		}
+	};
+
+	// Idle validation function ( without callbacks )
+	this.IdleValidate = function () {
+		// Gets value of input
+		var value = context.input.val();
+
+		if (context.options.required) {
+			if (context.IsValueCorrect(value, context.options.expression)) {
+				context.isValid = true;
+			} else {
+				context.isValid = false;
+			}
+		} else {
+			if (value != "") {
+				if (context.IsValueCorrect(value, context.options.expression)) {
+					context.isValid = true;
+				} else {
+					context.isValid = false;
+				}
+			} else {
+				context.isValid = true;
+			}
+		}
+	};
+
+	// Sets valid state of input
+	this.SetValidState = function () {
+		// Sets valid state
+		context.isValid = true;
+		// Clears memory value
+		context.memoryValue = undefined;
+		// Performs handler for valid state
+		if (context.options.ChangeOnValid != undefined) {
+			context.options.ChangeOnValid(context.input);
+		}
+	};
+
+	// Sets invalid state of input
+	this.SetInvalidState = function () {
+		// Sets invalid state
+		context.isValid = false;
+
+		// If placeholder mode enabled, we add the message
+		if (context.options.showErrors == true) {
+			// Sets value to memory
+			if (context.memoryValue == undefined) {
+				context.memoryValue = context.input.val();
+			}
+
+			if (context.input.val() == "" && !context.HasMemorized()) {
+				context.input.attr("placeholder", context.options.requiredErrorMessage);
+			} else {
+				context.input.attr("placeholder", context.options.regExErrorMessage);
+			}
+			context.SetValue("");
+		}
+
+		// Performs handler for invalid state
+		if (context.options.ChangeOnInvalid != undefined) {
+			context.options.ChangeOnInvalid(context.input);
+		}
+	};
+
+	// Gets value from input
+	this.GetValue = function () {
+		return context.input.val();
+	};
+
+	// Sets value in input
+	this.SetValue = function (value) {
+		context.input.val(value);
+	};
+
+	// Returns validation state
+	this.IsValid = function () {
+		return context.isValid;
+	};
+
+	// Validate value by regular expression
+	this.IsValueCorrect = function (value, regExp) {
+		if (value.search(regExp) !== -1) {
+			return true;
+		}
+		return false;
+	};
+
+	// Checks options and sets default
+	this.CheckOptions = function () {
+		if (context.options.expression == undefined) {
+			context.options.expression = RegularExpressions.LETTERS_ONLY;
+		}
+		if (context.options.isValidateInRealTime == undefined) {
+			context.options.isValidateInRealTime = false;
+		}
+		if (context.options.showErrors == undefined) {
+			context.options.showErrors = false;
+		}
+		if (context.options.requiredErrorMessage == undefined) {
+			context.options.requiredErrorMessage = "Required field";
+		}
+		if (context.options.regExErrorMessage == undefined) {
+			context.options.regExErrorMessage = "Incorrect data";
+		}
+		if (context.options.required == undefined) {
+			context.options.required = true;
+		}
+		if (context.options.autoValidating == undefined) {
+			context.options.autoValidating = true;
+		}
+	};
+
+	// Checks memorized value
+	this.HasMemorized = function () {
+		return (context.memoryValue !== undefined && context.memoryValue !== "");
+	};
+
+	// Sets input state to default
+	this.ResetToDefault = function () {
+		context.input.attr("placeholder", context.initialPlaceHolder);
+		context.input.val(context.initialValue);
+		if (context.options.ChangeOnValid != undefined) {
+			context.options.ChangeOnValid(context.input);
+		}
+	};
+
+	// Performs method of initialization
+	this.Init();
+}
+
+// options = {
+//      compareValue : string,                              // The value for compare
+//      ChangeOnValid : func(input),                        // Performs when state has been changed on valid
+//      ChangeOnInvalid : func(input),                      // Performs when state has been changed on invalid
+//      showErrors : boolean,                               // Show errors in placeholder 
+//      requiredErrorMessage : string,
+//      errorMessage : string,
+//      required : boolean                                  // If an input is required
+//      autoValidating : boolean                            // Validation on focus out or blur
+//}
+function EqualValidatingInput(input, options) {
+	// The context of this object
+	var context = this;
+
+	// Input for validation
+	this.input = input;
+
+	// Settings object
+	this.options = options;
+
+	// Input validation state
+	this.isValid = false;
+
+	// Value in memory (for place holder validation)
+	this.memoryValue = undefined;
+
+	// Initial placeholder for restore
+	this.initialPlaceHolder = undefined;
+
+	// Initial input value for restore
+	this.initialValue = this.input.val();
+
+	// Constructor function (initialize object)
+	this.Init = function () {
+		// Sets default values if they are not set
+		context.CheckOptions();
+
+		// FocusOut handler
+		context.input.focusout(function () {
+			if (context.GetValue().length > 0 && context.options.autoValidating) {
+				context.Validate();
+			}
+		});
+
+		// KeyUp handler
+		context.input.on('keyup', function () {
+			if (context.GetValue().length == 0) {
+				context.ResetToDefault();
+			}
+			context.memoryValue = context.input.val();
+		});
+
+		// FocusIn handler
+		context.input.focusin(function () {
+			if (context.options.showErrors == true) {
+				if (context.memoryValue != undefined) {
+					if (context.memoryValue != undefined) {
+						context.input.val(context.memoryValue);
+					}
+				}
+			}
+			if (context.options.ChangeOnValid != undefined) {
+				context.options.ChangeOnValid(context.input);
+			}
+			context.input.attr("placeholder", context.initialPlaceHolder);
+		});
+
+		// Sets initial placeholder
+		context.initialPlaceHolder = context.input.attr("placeholder");
+	};
+
+	// General validation function
+	this.Validate = function () {
+		// Gets value of input
+		var value = context.input.val();
+
+		if (context.options.required) {
+			if (context.options.compareValue == value) {
+				context.SetValidState();
+			} else {
+				context.SetInvalidState();
+			}
+		} else {
+			if (value != "") {
+				if (context.IsValueCorrect(value, context.options.expression)) {
+					context.SetValidState();
+				} else {
+					context.SetInvalidState();
+				}
+			} else {
+				context.SetValidState();
+			}
+		}
+	};
+
+	// Sets valid state of input
+	this.SetValidState = function () {
+		// Sets valid state
+		context.isValid = true;
+		// Clears memory value
+		context.memoryValue = undefined;
+		// Performs handler for valid state
+		if (context.options.ChangeOnValid != undefined) {
+			context.options.ChangeOnValid(context.input);
+		}
+	};
+
+	// Sets invalid state of input
+	this.SetInvalidState = function () {
+		// Sets invalid state
+		context.isValid = false;
+
+		// If placeholder mode enabled, we add the message
+		if (context.options.showErrors == true) {
+			// Sets value to memory
+			if (context.memoryValue == undefined) {
+				context.memoryValue = context.input.val();
+			}
+
+			if (context.input.val() == "" && !context.HasMemorized()) {
+				context.input.attr("placeholder", context.options.requiredErrorMessage);
+			} else {
+				context.input.attr("placeholder", context.options.errorMessage);
+			}
+			context.SetValue("");
+		}
+
+		// Performs handler for invalid state
+		if (context.options.ChangeOnInvalid != undefined) {
+			context.options.ChangeOnInvalid(context.input);
+		}
+	};
+
+	// Gets value from input
+	this.GetValue = function () {
+		return context.input.val();
+	};
+
+	// Sets value in input
+	this.SetValue = function (value) {
+		context.input.val(value);
+	};
+
+	// Returns validation state
+	this.IsValid = function () {
+		return context.isValid;
+	};
+
+	// Checks options and sets default
+	this.CheckOptions = function () {
+		if (context.options.showErrors == undefined) {
+			context.options.showErrors = false;
+		}
+		if (context.options.requiredErrorMessage == undefined) {
+			context.options.requiredErrorMessage = "Required field";
+		}
+		if (context.options.errorMessage == undefined) {
+			context.options.errorMessage = "Data not equal";
+		}
+		if (context.options.required == undefined) {
+			context.options.required = true;
+		}
+		if (context.options.autoValidating == undefined) {
+			context.options.autoValidating = true;
+		}
+	};
+
+	// Checks memorized value
+	this.HasMemorized = function () {
+		return (context.memoryValue == undefined || context.memoryValue == "");
+	};
+
+	// Sets input state to default
+	this.ResetToDefault = function () {
+		context.input.attr("placeholder", context.initialPlaceHolder);
+		context.input.val(context.initialValue);
+		if (context.options.ChangeOnValid != undefined) {
+			context.options.ChangeOnValid(context.input);
+		}
+	};
+
+	// Sets compare value
+	this.SetCompareValue = function (value) {
+		context.options.compareValue = value;
+	};
+
+	// Performs method of initialization
+	this.Init();
+}
+
+/**
+ * Created by vlad_ on 13.10.2017.
+ */
+var LANGUAGE = $('html').attr('lang'),
+    DEFAULT_LANGUAGE = 'ru';
+
+var INIT_CART_WS;
+
+var INCORRECT_FIELD_CLASS = 'incorrect-field',
+    REQUIRED_FIELD_TEXT = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Обязательное поле' : 'Обов`язкове поле',
+    INCORRECT_FIELD_TEXT = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Неправильные данные' : 'Невірно введені дані',
+    SERVER_ERROR = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Произошла ошибка, попробуйте еще.' : 'Сталася помилка, спробуйте ще.',
+    EMAIL_NOT_VALID = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Пользователь c таким e-mail уже существует.' : 'Користувач з таким e-mail вже існує.',
+    EMAIL_CONFIRM_NOT_VALID = (LANGUAGE == DEFAULT_LANGUAGE) ? 'E-mail не подтвержден.' : 'E-mail не підтверджено.',
+    EMAIL_NOT_EXISTS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Такой e-mail не существует.' : 'Такого e-mail не існує.',
+    REGISTER_SUCCESS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Регистрация прошла успешно, на указанный e-mail отправлено письмо для подтверждения.' : 'Реєстрація пройшла успішно, на вказаний e-mail відправлено лист для підтвердження.',
+    RESTORE_SUCCESS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'На ваш e-mail отправлено письмо с паролем для входа.' : 'На ваш e-mail відправлено лист з паролем для входу.',
+    ORDER_CREATED_MESSAGE = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Заказ принят. Скоро с вами свяжется наш менеджер.' : 'Замовлення прийнято. Незабаром з вами зв\'яжеться наш менеджер.',
+    PERSONAL_INFO_SAVED = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Данные сохранены.' : 'Дані збережено.',
+    EMAIL_CHANGED_MESSAGE = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Данные сохранены. Вы изменили e-mail, Вам отправлено письмо для подтверждения нового електронного адреса.' : 'Дані збережено. Ви змінили e-mail, Вам відправлено лист для підтвердження нової електронної адреси.',
+    PASSWORD_CHANGED_MESSAGE = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Пароль сохранен.' : 'Пароль змінено.',
+    WRONG_OLD_PASSWORD = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Неверный старый пароль.' : 'Неправильний старий пароль.',
+    REVIEW_ADDED = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Спасибо! Модератор пересмотрит Ваш отзыв, после чего он появится на сайте.' : 'Дякуємо! Модератор перегляне Ваш відгук, після чого він з`явиться на сайті.',
+    SHOW_FILTERS_BTN = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Показать фильтры' : 'Показати фільтри',
+    HIDE_FILTERS_BTN = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Скрыть фильтры' : 'Сховати фільтри';
+
+if (window.location.hash && window.location.hash == '#_=_') {
+    if (window.history && history.pushState) {
+        window.history.pushState("", document.title, window.location.pathname);
+    } else {
+        // Prevent scrolling by storing the page's current scroll offset
+        var scroll = {
+            top: document.body.scrollTop,
+            left: document.body.scrollLeft
+        };
+        window.location.hash = '';
+        // Restore the scroll offset, should be flicker free
+        document.body.scrollTop = scroll.top;
+        document.body.scrollLeft = scroll.left;
+    }
+}
+
+// Force page reload on browser back button click
+if (!!window.performance && window.performance.navigation.type === 2)
+{
+    // value 2 means "The page was accessed by navigating into the history"
+    window.location.reload(); // reload whole page
+}
+
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+var GLOBAL_DATA = {
+    singleProduct: {
+        product: [],
+        productId: '',
+        sizeId: '',
+        count: 1
+    },
+    cartItems: [],
+    categoryProducts: [],
+    categoryProductPreview: {
+        product: [],
+        currentSizeId: '',
+        count: '',
+        rel: ''
+    },
+    similarProducts: [],
+    similarProductPreview: {
+        product: [],
+        currentSizeId: '',
+        count: '',
+        rel: ''
+    },
+    orderConfirm: {
+        name: '',
+        phone: '',
+        email: '',
+        address: '',
+        comment: '',
+        paymentId: '',
+        deliveryId: ''
+    },
+    wishListItems: [],
+    wishListPagination: {
+        page: 1,
+        itemsPerPage: 5,
+        startIndex: 0,
+        endIndex: 5,
+        isPrev: false,
+        isNext: false
+    },
+    review: {
+        rating: 0,
+        hoverRating: 0,
+        tempRating: 0,
+        validatedFalse: false,
+        name: '',
+        email: '',
+        text: ''
+    },
+    wishListPages: [],
+    wishListCurrentPage: 1,
+    totalCount: 0,
+    totalAmount: 0,
+    totalWishListCount: 0,
+    
+    reviewsPages: [],
+    reviewIsPrev: false,
+    reviewIsNext: false,
+    totalReviewsCount: 0,
+    reviewsCurrentPage: 1,
+    reviews: [],
+
+    mainSliderPreview: {
+        product: [],
+        currentSizeId: '',
+        count: '',
+        rel: ''
+    },
+    mainSliderProducts: [],
+
+    saleProductPreview: {
+        product: [],
+        currentSizeId: '',
+        count: '',
+        rel: ''
+    },
+    salesProducts: [],
+    
+    topProductPreview: {
+        product: [],
+        currentSizeId: '',
+        count: '',
+        rel: ''
+    },
+    topProducts: [],
+    
+    newProductPreview: {
+        product: [],
+        currentSizeId: '',
+        count: '',
+        rel: ''
+    },
+    newProducts: [],
+    
+    INIT_CART_ENDED: false,
+    IS_DATA_PROCESSING: false,
+    isMainSliderProductsInited: false,
+    timer: undefined,
+    user: null,
+    profile: null,
+    wishList: null,
+    userTypeId: 1
+};
+
+function initCart() {
+
+    INIT_CART_WS = new WaitSync(function () {
+
+        if (GLOBAL_DATA.IS_DATA_PROCESSING)
+        {
+            return false;
+        }
+
+        GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+        $.ajax({
+            type: 'post',
+            url: '/cart/init-cart',
+            data: {
+                language: LANGUAGE,
+                userTypeId: GLOBAL_DATA.userTypeId
+            },
+            success: function (data) {
+                GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                GLOBAL_DATA.INIT_CART_ENDED = true;
+                GLOBAL_DATA.cartItems = data.cart;
+                GLOBAL_DATA.totalCount = data.totalCount;
+                GLOBAL_DATA.totalAmount = data.totalAmount;
+            },
+            error: function (error) {
+                GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                GLOBAL_DATA.INIT_CART_ENDED = true;
+                console.log(error);
+            }
+        });
+    });
+}
+
+initCart();
+
+function getUser() {
+    $.ajax({
+        type: 'post',
+        url: '/get-user',
+        data: {
+            language: LANGUAGE
+        },
+        success: INIT_CART_WS.wrap(
+            'initCart',
+            function (data) {
+                GLOBAL_DATA.user = data.user;
+                GLOBAL_DATA.userTypeId = data.userTypeId;
+                GLOBAL_DATA.profile = data.profile;
+                GLOBAL_DATA.wishList = data.wishList;
+                GLOBAL_DATA.wishListItems = data.wishListItems;
+                GLOBAL_DATA.totalWishListCount = data.totalWishListCount;
+
+                if (GLOBAL_DATA.user)
+                {
+                    GLOBAL_DATA.orderConfirm.name = GLOBAL_DATA.user.name;
+                    GLOBAL_DATA.orderConfirm.email = GLOBAL_DATA.user.email;
+                    GLOBAL_DATA.orderConfirm.phone = data.profile.phone_number;
+                    GLOBAL_DATA.orderConfirm.address = data.profile.address_delivery;
+
+                    if (data.profile.payment_id != null)
+                    {
+                        GLOBAL_DATA.orderConfirm.paymentId = data.profile.payment_id;
+                    }
+
+                    if (data.profile.delivery_id != null)
+                    {
+                        GLOBAL_DATA.orderConfirm.deliveryId = data.profile.delivery_id;
+                    }
+
+                    GLOBAL_DATA.review.name = GLOBAL_DATA.user.name;
+                    GLOBAL_DATA.review.email = GLOBAL_DATA.user.email;
+                }
+            }
+        ),
+        error: INIT_CART_WS.wrap(
+            'initCart',
+            function (error) {
+                console.log(error);
+            }
+        )
+    });
+}
+
+getUser();
+
+//URL FOR SEARCH
+function buildSearchUrl(series)
+{
+    series = series
+        .toLowerCase()
+        .replace(/[^a-zA-Zа-яА-ЯїЇіІьЬєЄэЭъЪёЁґҐ0-9 ]/gi, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .replace(/\s/g, '+');
+
+    return series;
+}
+
+
+function showLoader() {
+    // $('body').addClass('modal-open').css('padding-right', '17px');
+    $('[data-big-loader]').fadeIn(400);
+}
+
+function hideLoader() {
+    $('[data-big-loader]').fadeOut(400);
+    // $('[data-big-loader]').hide();
+    // $('body').removeClass('modal-open').css('padding-right', 0);
+}
+
+function showPopup(message) {
+    var popup = $('[data-popup]'),
+        popupMessage = $('[data-popup-text]');
+    popupMessage.text(message);
+    popup.modal();
+}
+
+function hidePopup() {
+    var popup = $('[data-popup]'),
+        popupMessage = $('[data-popup-text]');
+    // popup.modal('hide');
+    popupMessage.text('');
+}
+
+$('body').on('click', '[data-popup-close]', function () {
+    hidePopup();
+});
+
+$('body').on('click', '[data-popup]', function (e) {
+    if ($(e.target).hasClass('pop-up-messege'))
+    {
+        hidePopup();
+    }
+});
+
+$('#sort-select').on('changed.bs.select', function (e, clickedIndex) {
+    // do something...
+    window.location.href = $(e.currentTarget[clickedIndex]).attr('data-url');
+});
+
+$('body').on('click', '[data-restore-password-button]', function (e) {
+    var RESTORE_PASS_CLICKED = true;
+
+    $('#login-popup').modal('hide');
+
+    $('#login-popup').on('hidden.bs.modal', function () {
+        if (RESTORE_PASS_CLICKED)
+        {
+            $('[data-restore-password]').modal();
+        }
+        RESTORE_PASS_CLICKED = false;
+    });
+});
+
+
+
+$(document).ready(function () {
+    var wasHidden = false;
+    $('.open-search').click(function() {
+            var i = $(this).find('i');
+            if (!wasHidden)
+            {
+                $('.open-search').css('border', '2px solid #000');
+                $('.navbar-nav').hide(50);
+                $('.profile-search-smoll').stop().show().animate({
+                    width: '600px'
+                });
+                $('.profile-search-smoll input').focus();
+
+                i.removeClass('fa-search').addClass('fa-times');
+            }
+            else
+            {
+                i.removeClass('fa-times').addClass('fa-search');
+                $('.profile-search-smoll').animate({
+                    width: '0'
+                }, function(){
+                    $('.navbar-nav').show(50);
+                    $('.open-search-this-none').fadeIn(100);
+                    $('.profile-search-smoll').stop().hide();
+                    $('.open-search').css('border', 'none');
+                });
+            }
+
+            wasHidden =! wasHidden;
+
+        });
+
+    $('.open-drop-profile-nav').on('click', function () {
+        $('.drop-nav-profile').stop(true, true).slideToggle(300);
+    });
+
+});
+
+$(window).load(function () {
+    $(function() {
+        $('.prod-title').matchHeight();
+        $('.topic').matchHeight();
+    });
+
+    if (window.FFShop && window.FFShop.social_email && window.FFShop.social_email.isEmail == false)
+    {
+        $('[data-social-email]').modal();
+        // $('[data-popup]').modal();
+    }
+
+    if (window.FFShop && window.FFShop.isOrderCreated && window.FFShop.isOrderCreated == true)
+    {
+        showPopup(ORDER_CREATED_MESSAGE);
+    }
+});
+
+
+'use strict';
+
+$(window).load(function ()
+{
+    //Custom Scroll Style
+    if ($(window).width() < 767) {
+        if ($(".header-wrap").length > 0) {
+            $(".navigation").mCustomScrollbar({
+                theme: "dark-2",
+                scrollButtons: {
+                    enable: false
+                }
+            });
+        }
+        if ($(".cate-wrap").length > 0) {
+            $(".cate-wrap > nav").mCustomScrollbar({
+                theme: "dark-2",
+                scrollButtons: {
+                    enable: false
+                }
+            });
+        }
+        if ($(".product-table").length > 0) {
+            $(".product-table").mCustomScrollbar({
+                theme: "dark-2",
+                axis: "x",
+                scrollButtons: {
+                    enable: false
+                }
+            });
+        }
+    }
+});
+
+$(document).ready(function ()
+{
+    /*------------------- Menu JS Starts  -------------------*/
+    if ($('.wrapper > header').length > 0) {
+
+        // Submenu Position Change on window size
+        if ($(window).width() > 767) {
+            $("ul.primary-navbar li li").mouseover(function () {
+                if ($(this).children('ul').length == 1) {
+                    var parent = $(this);
+                    var child_menu = $(this).children('ul');
+                    if ($(parent).offset().left + $(parent).width() + $(child_menu).width() > $(window).width()) {
+                        $(child_menu).css('left', '-' + $(parent).width() + 'px');
+                    } else {
+                        $(child_menu).css('left', $(parent).width() + 'px');
+                    }
+                }
+            });
+        }
+
+
+        if ($(window).width() < 767) {
+            /*------------------- Header Offcanvas Add  -------------------*/
+            $(".nav-trigger").on("click", function (e) {
+                e.stopPropagation();
+                $(".header-wrap .navigation").toggleClass("off-canvas");
+                return false;
+            });
+
+            /*------------------- Category Menu -------------------*/
+            $('.cate-toggle').on('click', function () {
+                $('.cate-wrap').slideToggle();
+                return false;
+            });
+        }
+
+        $(".mega-dropdown-slider").owlCarousel({
+            dots: false,
+            loop: true,
+            autoplay: false,
+            autoplayHoverPause: true,
+            smartSpeed: 100,
+            nav: true,
+            margin: 30,
+            responsive: {
+                0: {items: 1},
+                1200: {items: 2},
+                992: {items: 2},
+                768: {items: 2},
+                568: {items: 2}
+            },
+            navText: [
+                "<i class='fa fa-angle-left'></i>",
+                "<i class='fa fa-angle-right'></i>"
+            ]
+        });
+
+
+    }
+    /*------------------- Menu JS Ends  -------------------*/
+
+
+// owlCarousel Slider //
+
+
+    /*------------------- Product Slider -------------------*/
+    // if ($('#prod-slider-1, #prod-slider-2').length > 0) {
+    //     $("#prod-slider-1, #prod-slider-2").owlCarousel({
+    //         dots: false,
+    //         loop: false,
+    //         autoplay: false,
+    //         autoplayHoverPause: true,
+    //         smartSpeed: 100,
+    //         nav: true,
+    //         margin: 30,
+    //         responsive: {
+    //             0: {items: 1},
+    //             1201: {items: 2},
+    //             768: {items: 1},
+    //             568: {items: 2}
+    //         },
+    //         navText: [
+    //             "<i class='fa fa-angle-left'></i>",
+    //             "<i class='fa fa-angle-right'></i>"
+    //         ]
+    //     });
+    // }
+
+    /*------------------- Product  Slider -------------------*/
+    if ($('#deal-slider, #prod-featured-slider').length > 0) {
+        $("#deal-slider, #prod-featured-slider").owlCarousel({
+            dots: false,
+            //loop: true,
+            autoplay: true,
+            autoplayHoverPause: true,
+            smartSpeed: 100,
+            nav: true,
+            margin: 30,
+            responsive: {
+                0: {items: 1},
+                1201: {items: 4},
+                1024: {items: 3},
+                768: {items: 2},
+                568: {items: 2}
+            },
+            navText: [
+                "<i class='fa fa-angle-left'></i>",
+                "<i class='fa fa-angle-right'></i>"
+            ]
+        });
+    }
+
+    /*------------------- Testimonial Slider -------------------*/
+    if ($('#testimonial-1').length > 0) {
+        $("#testimonial-1").owlCarousel({
+            dots: true,
+            loop: true,
+            autoplay: false,
+            autoplayHoverPause: true,
+            smartSpeed: 100,
+            nav: false,
+            margin: 30,
+            responsive: {
+                0: {items: 1}
+            }
+        });
+    }
+
+    /*------------------- Brand Slider -------------------*/
+    if ($('#brand-slider').length > 0) {
+        $("#brand-slider").owlCarousel({
+            dots: true,
+            loop: true,
+            autoplay: true,
+            autoplayHoverPause: true,
+            smartSpeed: 100,
+            nav: false,
+            margin: 30,
+            responsive: {
+                0: {items: 1},
+                1200: {items: 6},
+                992: {items: 5},
+                480: {items: 3}
+            }
+        });
+    }
+
+    /*------------------- Blog Slider -------------------*/
+    if ($('#blog-slider-1').length > 0) {
+        $("#blog-slider-1").owlCarousel({
+            dots: true,
+            loop: true,
+            autoplay: true,
+            autoplayHoverPause: true,
+            smartSpeed: 100,
+            nav: true,
+            margin: 30,
+            responsive: {
+                0: {items: 1},
+                1200: {items: 3},
+                992: {items: 2},
+                568: {items: 2}
+            },
+            navText: [
+                "<i class='fa fa-angle-left'></i>",
+                "<i class='fa fa-angle-right'></i>"
+            ]
+        });
+    }
+
+    /*------------------- Realated Blog Slider -------------------*/
+    if ($('#rel-blog-slider').length > 0) {
+        $("#rel-blog-slider").owlCarousel({
+            dots: true,
+            loop: true,
+            autoplay: false,
+            autoplayHoverPause: true,
+            smartSpeed: 100,
+            nav: false,
+            margin: 30,
+            responsive: {
+                0: {items: 1},
+                1024: {items: 2},
+                768: {items: 1},
+                568: {items: 2}
+            }
+        });
+    }
+
+    /*------------------- Brand Slider -------------------*/
+    if ($('#brand-slider-2').length > 0) {
+        $("#brand-slider-2").owlCarousel({
+            dots: false,
+            loop: true,
+            autoplay: true,
+            autoplayHoverPause: true,
+            smartSpeed: 100,
+            nav: false,
+            margin: 30,
+            responsive: {
+                0: {items: 1},
+                992: {items: 5},
+                768: {items: 4},
+                568: {items: 3},
+                380: {items: 2}
+            }
+        });
+    }
+
+    /*------------------- Related Product Slider -------------------*/
+    // if ($('#rel-prod-slider').length > 0) {
+    //     $("#rel-prod-slider").owlCarousel({
+    //         dots: false,
+    //         loop: false,
+    //         autoplay: false,
+    //         autoplayHoverPause: true,
+    //         smartSpeed: 100,
+    //         nav: true,
+    //         margin: 30,
+    //         responsive: {
+    //             0: {items: 1},
+    //             1200: {items: 4},
+    //             992: {items: 3},
+    //             768: {items: 2},
+    //             568: {items: 1}
+    //         },
+    //         navText: [
+    //             "<i class='fa fa-angle-left'></i>",
+    //             "<i class='fa fa-angle-right'></i>"
+    //         ]
+    //     });
+    // }
+
+    /*------------------- Widget Slider -------------------*/
+    if ($('#widget-best-seller').length > 0) {
+        $("#widget-best-seller").owlCarousel({
+            dots: false,
+            loop: true,
+            autoplay: false,
+            autoplayHoverPause: true,
+            smartSpeed: 100,
+            nav: true,
+            margin: 30,
+            responsive: {
+                0: {items: 1},
+                600: {items: 2},
+                768: {items: 1}
+            },
+            navText: [
+                "<i class='fa fa-angle-left'></i>",
+                "<i class='fa fa-angle-right'></i>"
+            ]
+        });
+    }
+
+    //Resize carousels in modal
+    if ($('.sync2:not(.product-preview-images-small)').length > 0) {
+        $(document).on('shown.bs.modal', function () {
+            $(this).find('.sync1, .sync2').each(function () {
+                $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
+            });
+        });
+
+        var sync1 = $(".sync1");
+        var sync2 = $(".sync2");
+        var sliderthumb = $(".single-prod-thumb");
+        var homethumb = $(".home-slide-thumb");
+        var navSpeedThumbs = 500;
+
+        sliderthumb.owlCarousel({
+            rtl: false,
+            items: 3,
+            //loop: true,
+            nav: true,
+            margin: 20,
+            navSpeed: navSpeedThumbs,
+            responsive: {
+                992: {items: 3},
+                767: {items: 4},
+                480: {items: 3},
+                320: {items: 2}
+            },
+            responsiveRefreshRate: 200,
+            navText: [
+                "<i class='fa fa-angle-left'></i>",
+                "<i class='fa fa-angle-right'></i>"
+            ]
+        });
+
+        sync1.owlCarousel({
+            rtl: false,
+            items: 1,
+            navSpeed: 1000,
+            nav: false,
+            onChanged: syncPosition,
+            responsiveRefreshRate: 200
+
+        });
+
+        homethumb.owlCarousel({
+            rtl: false,
+            items: 5,
+            nav: true,
+            //loop: true,
+            navSpeed: navSpeedThumbs,
+            responsive: {
+                1500: {items: 5},
+                1024: {items: 4},
+                768: {items: 3},
+                600: {items: 4},
+                480: {items: 3},
+                320: {items: 2,
+                    nav: false
+                }
+            },
+            responsiveRefreshRate: 200,
+            navText: [
+                "<i class='fa fa-long-arrow-left'></i>",
+                "<i class='fa fa-long-arrow-right'></i>"
+            ]
+        });
+    }
+
+    function syncPosition(el) {
+        var current = this._current;
+        $(".sync2")
+                .find(".owl-item")
+                .removeClass("synced")
+                .eq(current)
+                .addClass("synced");
+        center(current);
+    }
+
+    $(".sync2:not(.product-preview-images-small)").on("click", ".owl-item", function (e) {
+        e.preventDefault();
+        var number = $(this).index();
+        sync1.trigger("to.owl.carousel", [number, 1000]);
+        return false;
+    });
+
+    function center(num) {
+
+        var sync2visible = sync2.find('.owl-item.active').map(function () {
+            return $(this).index();
+        });
+
+        if ($.inArray(num, sync2visible) === -1) {
+            if (num > sync2visible[sync2visible.length - 1]) {
+                sync2.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
+            } else {
+                sync2.trigger("to.owl.carousel", Math.max(0, num - 1));
+            }
+        } else if (num === sync2visible[sync2visible.length - 1]) {
+            sync2.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
+        } else if (num === sync2visible[0]) {
+            sync2.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
+        }
+    }
+
+// owlCarousel Slider End //
+
+    /*------------------- Subscribe Popup   -------------------*/
+    if ($('#subscribe-popups').length > 0) {
+        $("#subscribe-popups").subscribeBetter({
+            trigger: "onidle", // You can choose which kind of trigger you want for the subscription modal to appear. Available triggers are "atendpage" which will display when the user scrolls to the bottom of the page, "onload" which will display once the page is loaded, and "onidle" which will display after you've scrolled.
+            animation: "flyInDown", // You can set the entrance animation here. Available options are "fade", "flyInRight", "flyInLeft", "flyInUp", and "flyInDown". The default value is "fade".
+            delay: 0, // You can set the delay between the trigger and the appearance of the modal window. This works on all triggers. The value should be in milliseconds. The default value is 0.
+            showOnce: true, // Toggle this to false if you hate your users. :)
+            autoClose: false, // Toggle this to true to automatically close the modal window when the user continue to scroll to make it less intrusive. The default value is false.
+            scrollableModal: false      //  If the modal window is long and you need the ability for the form to be scrollable, toggle this to true. The default value is false.
+        });
+    }
+
+    /*------------------- Scroll To Top Animate -------------------*/
+    $('#to-top').on('click', function () {
+        $('html, body').animate({scrollTop: 0}, 800);
+        return false;
+    });
+
+    // /*------------------- Sidebar Filter Range -------------------*/
+    // var priceSliderRange = $('#price-range');
+    // if ($.ui) {
+    //     if ($(priceSliderRange).length) {
+    //         $(priceSliderRange).slider({
+    //             range: true,
+    //             min: 0,
+    //             max: 1000,
+    //             values: [120, 540],
+    //             slide: function (event, ui) {
+    //                 //$("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+    //                 $("#price-min").html(ui.values[0] + " грн");
+    //                 $("#price-max").html(ui.values[1]+ " грн" );
+    //                 console.log(ui);
+    //             }
+    //         });
+    //         $("#price-min").html($("#price-range").slider("values", 0) + " грн");
+    //         $("#price-max").html($("#price-range").slider("values", 1) + " грн");
+    //     }
+    // }
+
+    // prettyPhoto
+    // ---------------------------------------------------------------------------------------    
+    if ($('.caption-link').length > 0) {
+        $("a[rel^='prettyPhoto[single-product]']").prettyPhoto({
+            theme: 'facebook',
+            slideshow: 5000,
+            autoplay_slideshow: false,
+            social_tools:false,
+            deeplinking:false
+        });
+    }
+
+});
+
+$(window).scroll(function () {
+    /*------------------- Sticky Header Starts  -------------------*/
+    if ($('#headerstyle').length === 0) {
+        if ($(this).scrollTop() > 5) {
+            $('.main-header').addClass('is-sticky');
+        }
+        else {
+            $('.main-header').removeClass('is-sticky');
+        }
+    }
+    
+    /*------------------- Scroll To Top Animate -------------------*/
+    if ($(this).scrollTop() > 100) {
+        $('#to-top').css({bottom: '55px'});
+    }
+    else {
+        $('#to-top').css({bottom: '-150px'});
+    }
+});
+
+
+/*------ 12.01.2018  -------*/
+/*------------------- lookbook Slider -------------------*/
+if ($('#lookbook-slider').length > 0) {
+    $("#lookbook-slider").owlCarousel({
+        dots: true,
+        loop: true,
+        autoplay: true,
+        autoplayHoverPause: true,
+        smartSpeed: 300,
+        nav: true,
+        margin: 30,
+        responsive: {
+            0: {items: 1},
+            1200: {items: 1},
+            992: {items: 1},
+            568: {items: 1}
+        },
+        navText: [
+            "<i class='fa fa-angle-left'></i>",
+            "<i class='fa fa-angle-right'></i>"
+        ]
+    });
+}
+
+/*------------------- category Slider -------------------*/
+if ($('#slider-category').length > 0) {
+    $("#slider-category").owlCarousel({
+        dots: true,
+        loop: true,
+        autoplay: true,
+        autoplayHoverPause: true,
+        smartSpeed: 100,
+        nav: true,
+        margin: 30,
+        responsive: {
+            0: {items: 1},
+            1200: {items: 4},
+            992: {items: 3},
+            568: {items: 2},
+            400: {items: 1}
+        },
+        navText: [
+            "<i class='fa fa-angle-left'></i>",
+            "<i class='fa fa-angle-right'></i>"
+        ]
+    });
+}
+/* left slide bar */
+function openNav(e) {
+    $('body').css('overflow-x', 'hidden');
+    // $('body').animate(300);
+    $('.nav-bg').fadeIn(300);
+
+
+    $('#mySidenav').animate({
+        marginLeft: '0px'
+    }, 250, 'swing');
+}
+
+function closeNav(e) {
+    $('body').css('overflow-x', 'auto');
+    $('.nav-bg').fadeOut(300);
+    $('#mySidenav').animate({
+        marginLeft: '-290px'
+    }, 250, 'swing');
+
+}
+
+$(document).ready(function () {
+    var menuOpenLink = '[data-menu-open-link]',
+        menuCloseLink = '[data-menu-close-link]',
+        isMenuOpened = false;
+
+    $('body').on('click', menuOpenLink, function (e) {
+        e.stopPropagation();
+        openNav(e);
+
+        isMenuOpened = true;
+    });
+
+    $('body').on('click', menuCloseLink, function (e) {
+        e.stopPropagation();
+        closeNav(e);
+
+        isMenuOpened = false;
+    });
+
+    $(document).on('click', 'body', function (e) {
+        var $target = $(e.target);
+
+        if (isMenuOpened && ($target.attr('id') != 'mySidenav' && $target.closest('#mySidenav').length === 0))
+        {
+            closeNav(e);
+            isMenuOpened = false;
+        }
+    });
+});
+/* left slide bar END */
+
+
+
+/* RIGHT slide bar */
+function openNavRight(e) {
+    $('body').css('overflow-x', 'hidden');
+    $('body').animate(300);
+    $('.nav-bg').fadeIn(300);
+
+
+    $('#mySidenavRight').animate({
+        marginRight: '0px'
+    }, 250, 'swing');
+}
+
+function closeNavRight(e) {
+    $('body').css('overflow-x', 'auto');
+    $('.nav-bg').fadeOut(300);
+
+    $('#mySidenavRight').animate({
+        marginRight: '-290px'
+    }, 250, 'swing');
+    // $('body').animate({
+    //         marginLeft: "0px"
+    //      }, 250, 'swing');
+}
+
+$(document).ready(function () {
+    var menuOpenLinkRight = '[data-menu-open-link-right]',
+        menuCloseLinkRight = '[data-menu-close-link-right]',
+        isMenuOpenedRight = false;
+
+    $('body').on('click', menuOpenLinkRight, function (e) {
+        e.stopPropagation();
+        openNavRight(e);
+
+        isMenuOpenedRight = true;
+    });
+
+    $('body').on('click', menuCloseLinkRight, function (e) {
+        e.stopPropagation();
+        closeNavRight(e);
+
+        isMenuOpenedRight = false;
+    });
+
+    $(document).on('click', 'body', function (e) {
+        var $targetR = $(e.target);
+
+        if (isMenuOpenedRight && ($targetR.attr('id') != 'mySidenavRight' && $targetR.closest('#mySidenavRight').length === 0)) {
+
+            closeNavRight(e);
+
+            isMenuOpenedRight = false;
+        }
+    });
+});
+/* RIGHT slide bar END */
+
+
+/*--- SLICK  NAVBAR  ----*/
+$(document).ready(function() {
+    var objToStick = $(".header-main"); //Получаем нужный объект
+    var topOfObjToStick = $(objToStick).offset().top; //Получаем начальное расположение нашего блока
+
+    $(window).scroll(function () {
+        var windowScroll = $(window).scrollTop(); //Получаем величину, показывающую на сколько прокручено окно
+        if (windowScroll > topOfObjToStick)
+        { // Если прокрутили больше, чем расстояние до блока, то приклеиваем его
+            $('.header-topbar').slideUp(200, function() {
+                $(objToStick).addClass("topWindow");
+            });
+        }
+        else
+        {
+            $('.header-topbar').slideDown(400);
+            $(objToStick).removeClass("topWindow");
+        }
+    });
+});
+/*--- SLICK  NAVBAR  END ----*/
+
+/*LANG header*/
+$(document).ready(function() {
+    $('.general-leng').click(function () {
+        $('.ather-lang').stop(100,100).fadeToggle(100);
+    });
+});
+/*LANG cart header END*/
+///////
+$('body').on('click', '.dropdown-div-btn', function () {
+    var i = $(this).find('.plus-icon');
+    var display =  $(this).next().css('display');
+
+    var isFilterBtn = false;
+
+    if ($(this).hasClass('show-filters-btn'))
+    {
+        isFilterBtn = true;
+    }
+
+    i.css('lineHeight', '17px');
+    switch (display){
+        case 'none': {
+            i.html('-');
+            i.css('lineHeight', '17px');
+            if (isFilterBtn)
+            {
+                $(this).html(HIDE_FILTERS_BTN);
+            }
+            break;
+        }
+        case 'block': {
+            i.html('+');
+            i.css('lineHeight', '20px');
+            if (isFilterBtn)
+            {
+                $(this).html(SHOW_FILTERS_BTN);
+            }
+            // $(this).css('borderBottom', 'none')
+            // $(this).html($(this).html().replace('Сховати','Показати'))
+            break
+        }
+        default: {
+            break
+        }
+    }
+    $(this).next().stop().slideToggle(300);
+});
+/* DROPDOWN - BLOCK END*/
+
+/* select  */
+
+$('body').on('click', '.drop-menu-select:not(.disableDiv)', function () {
+
+    if ($(this).find('#mu-list').length > 0 && $('#data-values #GoodId').val() > 0) {
+        event.preventDefault();
+        return false;
+    }
+
+    $(this).attr('tabindex', 1).focus();
+    $(this).toggleClass('active');
+    $(this).find('.dropeddown').stop(true, true).slideToggle(300);
+    $(this).css({
+        color: '#555',
+        fontWeight: '500',
+        border: '2px solid #000'
+    });
+});
+$('body').on('focusout', '.drop-menu-select', function () {
+    $(this).removeClass('active');
+    $(this).find('.dropeddown').stop(true, true).slideUp(300);
+});
+$('body').on('click','.drop-menu-select .dropeddown li:not(.select-multi)', function () {
+    $(this).parents('.drop-menu-select').find('.select span').text($(this).text());
+    $(this).parents('.drop-menu-select').find('input').attr('value', $(this).attr('id'));
+});
+
+/* select end */
+
+// TOOLTIPSTER
+
+$(document).ready(function() {
+    $('.ttip:not(.tooltipstered)').tooltipster({
+        theme: 'tooltipster-borderless'
+    });
+});
+
+$(window).load(function() {
+    $('.ttip:not(.tooltipstered)').tooltipster({
+        theme: 'tooltipster-borderless'
+    });
+});
+
+// TOOLTIPSTER

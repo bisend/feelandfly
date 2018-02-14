@@ -40,17 +40,18 @@
                                         <img src="{{ $image->big }}" alt="{{ $model->product->name }}">
 
                                         @if($model->product->promotions != null && $model->product->promotions->count() > 0)
-                                            @if($model->product->promotions[0]->id == 1)
+                                            @if($model->product->promotions[0]->priority == 3)
                                                 <div class="prod-tag-1 font-2">
-                                                    <span> -{{ $model->product->price[0]->discount }}% </span>
+                                                    {{--<span> -{{ $model->product->price[0]->discount }}% </span>--}}
+                                                    <span> SALE </span>
                                                 </div>
                                             @endif
-                                            @if($model->product->promotions[0]->id == 2)
+                                            @if($model->product->promotions[0]->priority == 1)
                                                 <div class="prod-tag-1 font-2 prod-tag-green">
                                                     <span> NEW </span>
                                                 </div>
                                             @endif
-                                            @if($model->product->promotions[0]->id == 3)
+                                            @if($model->product->promotions[0]->priority == 2)
                                                 <div class="prod-tag-1 font-2 prod-tag-violet">
                                                     <span> TOP </span>
                                                 </div>
@@ -110,7 +111,7 @@
                                     <ins>{{ $model->product->price[0]->price }} грн</ins>
 
                                     @if($model->product->promotions != null && $model->product->promotions->count() > 0)
-                                        @if($model->product->promotions[0]->pivot->promotion_id == 1)
+                                        @if($model->product->promotions[0]->priority == 3)
                                             <del>{{ $model->product->price[0]->old_price }} грн</del>
                                         @endif
                                     @endif

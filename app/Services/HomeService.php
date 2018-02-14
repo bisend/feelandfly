@@ -69,7 +69,7 @@ class HomeService extends LayoutService
 
         $this->fillNewIds($model);
         
-        $this->fillBlogs($model);
+//        $this->fillBlogs($model);
 
         $this->fillMetaTags($model);
     }

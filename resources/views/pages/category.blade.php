@@ -24,15 +24,16 @@
                                     <div class="item" v-for="image in categoryProductPreview.product.images">
                                         <img v-bind:src="image.big" v-bind:alt="categoryProductPreview.product.name">
 
-                                        <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].id == 1"
+                                        <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].priority == 3"
                                              class="prod-tag-1 font-2">
-                                            <span> -@{{ categoryProductPreview.product.price[0].discount }}% </span>
+                                            {{--<span> -@{{ categoryProductPreview.product.price[0].discount }}% </span>--}}
+                                            <span> SALE </span>
                                         </div>
-                                        <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].id == 2"
+                                        <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].priority == 1"
                                              class="prod-tag-1 font-2 prod-tag-green">
                                             <span> NEW </span>
                                         </div>
-                                        <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].id == 3"
+                                        <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].priority == 2"
                                              class="prod-tag-1 font-2 prod-tag-violet">
                                             <span> TOP </span>
                                         </div>
@@ -69,7 +70,7 @@
                                         <div class="prod-price font-2 pull-left fsz-16">
                                             <ins>@{{ categoryProductPreview.product.price[0].price }} грн</ins>
 
-                                            <del v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].id == 1">
+                                            <del v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].priority == 3">
                                                 @{{ categoryProductPreview.product.price[0].old_price }} грн
                                             </del>
 
@@ -198,11 +199,14 @@
         <!--Breadcrumb Section End-->
 
         <!-- Page Starts-->
-        <div class="container theme-container ptb-70">
+        <div class="container theme-container ptb-70 category-product-container">
             <div class="row">
 
                 <!-- Sidebar Starts -->
                 <aside class="col-md-3 col-sm-4 sidebar" id="sidebar-filters">
+                    <button class="dropdown-div-btn show-filters-btn theme-btn btn-black">
+                        {{ trans('layout.show_filters_btn') }}
+                    </button>
                     <div class="widget-wrap">
 
                         @foreach($model->filters as $filterName => $filterValues)
@@ -271,7 +275,7 @@
                 </aside>
                 <!-- Sidebar Ends -->
 
-                <div class="visible-xs pt-70"></div>
+                {{--<div class="visible-xs pt-70"></div>--}}
 
                 <!-- Product Details Starts-->
                 <aside class="col-md-9 col-sm-8">
@@ -343,17 +347,18 @@
                                                         </a>
 
                                                         @if($categoryProduct->promotions != null && $categoryProduct->promotions->count() > 0)
-                                                            @if($categoryProduct->promotions[0]->id == 1)
+                                                            @if($categoryProduct->promotions[0]->priority == 3)
                                                                 <div class="prod-tag-1 font-2">
-                                                                    <span> -{{ $categoryProduct->price[0]->discount }}% </span>
+                                                                    {{--<span> -{{ $categoryProduct->price[0]->discount }}% </span>--}}
+                                                                    <span> SALE </span>
                                                                 </div>
                                                             @endif
-                                                            @if($categoryProduct->promotions[0]->id == 2)
+                                                            @if($categoryProduct->promotions[0]->priority == 1)
                                                                 <div class="prod-tag-1 font-2 prod-tag-green">
                                                                     <span> NEW </span>
                                                                 </div>
                                                             @endif
-                                                            @if($categoryProduct->promotions[0]->id == 3)
+                                                            @if($categoryProduct->promotions[0]->priority == 2)
                                                                 <div class="prod-tag-1 font-2 prod-tag-violet">
                                                                     <span> TOP </span>
                                                                 </div>
@@ -378,7 +383,7 @@
                                                             <ins>{{ $categoryProduct->price[0]->price }} грн</ins>
 
                                                             @if($categoryProduct->promotions != null && $categoryProduct->promotions->count() > 0)
-                                                                @if($categoryProduct->promotions[0]->pivot->promotion_id == 1)
+                                                                @if($categoryProduct->promotions[0]->priority == 3)
                                                                     <del>{{ $categoryProduct->price[0]->old_price }} грн</del>
                                                                 @endif
                                                             @endif

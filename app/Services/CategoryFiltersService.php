@@ -74,7 +74,7 @@ class CategoryFiltersService extends LayoutService
         }
         catch (\Exception $e)
         {
-            abort(500);
+            abort(404);
         }
     }
 
@@ -86,7 +86,7 @@ class CategoryFiltersService extends LayoutService
     {
         $model->currentCategory = $this->categoryRepository->getCurrentCategoryBySlug($model->slug, $model->language);
 
-        if (is_null($model->currentCategory))
+        if (empty($model->currentCategory) || !isset($model->currentCategory) || is_null($model->currentCategory))
         {
             abort(404);
         }

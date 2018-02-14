@@ -15,10 +15,10 @@ if (document.getElementById('sidebar-filters'))
         show_btn: SHOW_APPLY_BTN,
         categorySlug: window.FFShop.categorySlug,
         filterUrl: '',
-        initialPriceMin: parseFloat(window.FFShop.priceMin),
-        initialPriceMax: parseFloat(window.FFShop.priceMax),
-        priceMin: parseFloat(window.FFShop.priceMin),
-        priceMax: parseFloat(window.FFShop.priceMax)
+        initialPriceMin: Math.floor(window.FFShop.priceMin),
+        initialPriceMax: Math.round(window.FFShop.priceMax),
+        priceMin: Math.floor(window.FFShop.priceMin),
+        priceMax: Math.round(window.FFShop.priceMax)
     };
 
     new Vue({

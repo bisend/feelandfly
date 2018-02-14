@@ -1,48 +1,33 @@
-//
-// $(".cart-hover").hover(function () {
-//     $('.cart-hover .pop-up-box').slideToggle(400);
-// });
-
-
-// $( ".dropdown-div-btn" ).click(function() {
-//      var i = $(this).find('.plus-icon');
-//     var display =  $(this).next().css('display');
-//     i.css('lineHeight', '17px');
-//     switch (display){
-//         case 'none': {
-//              i.html('-');
-//              i.css('lineHeight', '17px');
-//             // $(this).html($(this).html().replace('Показати','Сховати'))
-//             break;
-//         }
-//         case 'block': {
-//             i.html('+');
-//             i.css('lineHeight', '20px');
-//             // $(this).css('borderBottom', 'none')
-//             // $(this).html($(this).html().replace('Сховати','Показати'))
-//             break
-//         }
-//         default: {
-//             break
-//         }
-//     }
-//     $(this).next().stop().slideToggle(300);
-// });
-
+///////
 $('body').on('click', '.dropdown-div-btn', function () {
     var i = $(this).find('.plus-icon');
     var display =  $(this).next().css('display');
+
+    var isFilterBtn = false;
+
+    if ($(this).hasClass('show-filters-btn'))
+    {
+        isFilterBtn = true;
+    }
+
     i.css('lineHeight', '17px');
     switch (display){
         case 'none': {
             i.html('-');
             i.css('lineHeight', '17px');
-            // $(this).html($(this).html().replace('Показати','Сховати'))
+            if (isFilterBtn)
+            {
+                $(this).html(HIDE_FILTERS_BTN);
+            }
             break;
         }
         case 'block': {
             i.html('+');
             i.css('lineHeight', '20px');
+            if (isFilterBtn)
+            {
+                $(this).html(SHOW_FILTERS_BTN);
+            }
             // $(this).css('borderBottom', 'none')
             // $(this).html($(this).html().replace('Сховати','Показати'))
             break

@@ -53,15 +53,16 @@
                                         <a v-bind:href="'/product/' + wishListItem.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
                                             <img alt="product" v-bind:src="wishListItem.product.images[0].small">
 
-                                            <div v-if="wishListItem.product.promotions != null && wishListItem.product.promotions.length > 0 && wishListItem.product.promotions[0].id == 1"
+                                            <div v-if="wishListItem.product.promotions != null && wishListItem.product.promotions.length > 0 && wishListItem.product.promotions[0].priority == 3"
                                                  class="prod-tag-1 font-2">
-                                                <span> -@{{ wishListItem.product.price[0].discount }}% </span>
+                                                {{--<span> -@{{ wishListItem.product.price[0].discount }}% </span>--}}
+                                                <span> SALE </span>
                                             </div>
-                                            <div v-if="wishListItem.product.promotions != null && wishListItem.product.promotions.length > 0 && wishListItem.product.promotions[0].id == 2"
+                                            <div v-if="wishListItem.product.promotions != null && wishListItem.product.promotions.length > 0 && wishListItem.product.promotions[0].priority == 1"
                                                  class="prod-tag-1 font-2 prod-tag-green">
                                                 <span> NEW </span>
                                             </div>
-                                            <div v-if="wishListItem.product.promotions != null && wishListItem.product.promotions.length > 0 && wishListItem.product.promotions[0].id == 3"
+                                            <div v-if="wishListItem.product.promotions != null && wishListItem.product.promotions.length > 0 && wishListItem.product.promotions[0].priority == 2"
                                                  class="prod-tag-1 font-2 prod-tag-violet">
                                                 <span> TOP </span>
                                             </div>
@@ -83,7 +84,7 @@
                                                 <div class="prod-price font-2">
                                                     <ins>@{{ wishListItem.product.price[0].price }} грн</ins>
 
-                                                    <del v-if="wishListItem.product.promotions != null && wishListItem.product.promotions.length > 0 && wishListItem.product.promotions[0].id == 1">
+                                                    <del v-if="wishListItem.product.promotions != null && wishListItem.product.promotions.length > 0 && wishListItem.product.promotions[0].priority == 3">
                                                         @{{ wishListItem.product.price[0].old_price }} грн
                                                     </del>
 

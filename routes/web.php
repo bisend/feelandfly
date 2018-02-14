@@ -279,6 +279,6 @@ Route::group(['prefix' => 'blog'], function () {
 
 });
 
-Route::get('/lookbook/all/{language?}', 'LookBookController@showAllLookBook')->where([
-    'language' => '^(uk|ru)?$'
-]);
+//Route::get('/lookbook/all/{language?}', 'LookBookController@showAllLookBook')->where([
+//    'language' => '^(uk|ru)?$'
+//]);

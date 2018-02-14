@@ -62,7 +62,7 @@ class ProductService extends LayoutService
         }
         catch (\Exception $e)
         {
-            abort(500);
+            abort(404);
         }
     }
 
@@ -76,7 +76,7 @@ class ProductService extends LayoutService
 
         $model->product = $this->productRepository->getProductBySlug($model->slug, $model->language, $userTypeId);
 
-        if ($model->product == null)
+        if (is_null($model->product))
         {
             abort(404);
         }
@@ -92,6 +92,11 @@ class ProductService extends LayoutService
             $model->product->category_id,
             $model->language
         );
+
+        if (is_null($model->currentCategory))
+        {
+            abort(404);
+        }
     }
 
     /**

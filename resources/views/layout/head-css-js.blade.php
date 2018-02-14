@@ -15,4 +15,5 @@
 {{--<!-- Custom CSS -->--}}
 {{--<link href="/template/header.css" rel="stylesheet" type="text/css">--}}
 {{--<link href="/template/style.css" rel="stylesheet" type="text/css">--}}
+<link href="https://fonts.googleapis.com/css?family=Oswald|Roboto" rel="stylesheet">
 <link rel="stylesheet" href="{{ mix("/css/app.css") }}">

@@ -52,7 +52,23 @@
                                     </div>
                                 </div>
                             @else
-
+                                <div class="dropdown-div">
+                                    <div class="dropdown-div-btn">
+                                        <h2 class="widget-title">
+                                            <a href="{{ url_category($category->slug, $model->language) }}">{{ $category->name }}</a>
+                                            <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                                        </h2>
+                                    </div>
+                                    <div class="dropdown-div-content">
+                                        <ul class="dropdown-list">
+                                            @foreach($category->childs as $child)
+                                                <li>
+                                                    <a href="{{ url_category($child->slug, $model->language) }}">{{ $child->name }}</a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
                             @endif
                         @else
                             <a href="{{ url_category($category->slug, $model->language) }}">
@@ -80,7 +96,7 @@
                     @if($model->language == 'ru')
                         <li class="general-leng">
                             <span class="link lang-link">
-                                <img src="/img/template/flags/ru.png" alt="">
+                                <img src="/img/template/flags/ru.png" alt="ru">
                                 <span>Русский</span>
                                 <span class="bs-caret">
                                     <span class="caret"></span>
@@ -88,7 +104,7 @@
                             </span>
                             <div class="ather-lang">
                                 <a href="{{ url_current('uk') }}" class="link">
-                                    <img src="/img/template/flags/uk.png" alt="">
+                                    <img src="/img/template/flags/uk.png" alt="uk">
                                     <span>Українська</span>
                                 </a>
                             </div>
@@ -207,15 +223,16 @@
                                                     <img v-bind:src="cartItem.product.images[0].small" v-bind:alt="cartItem.product.name">
                                                     <div class="position_lable">
                                                         <div class="lable_smoll">
-                                                            <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1"
+                                                            <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].priority == 3"
                                                                  class="prod-tag-1 font-2">
-                                                                <span> -@{{ cartItem.product.price[0].discount }}% </span>
+                                                                {{--<span> -@{{ cartItem.product.price[0].discount }}% </span>--}}
+                                                                <span> SALE </span>
                                                             </div>
-                                                            <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 2"
+                                                            <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].priority == 1"
                                                                  class="prod-tag-1 font-2 prod-tag-green">
                                                                 <span> NEW </span>
                                                             </div>
-                                                            <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 3"
+                                                            <div v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].priority == 2"
                                                                  class="prod-tag-1 font-2 prod-tag-violet">
                                                                 <span> TOP </span>
                                                             </div>
@@ -235,7 +252,7 @@
                                                 </span> @{{ cartItem.product.price[0].price }} грн
                                             </p>
                                             <div class="prod-price font-2"
-                                                 v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].id == 1">
+                                                 v-if="cartItem.product.promotions != null && cartItem.product.promotions.length > 0 && cartItem.product.promotions[0].priority == 3">
                                                 <del>
                                                     @{{ cartItem.product.price[0].old_price }} грн
                                                 </del>

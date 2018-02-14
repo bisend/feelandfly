@@ -22,15 +22,16 @@
                                 <div class="item" v-for="image in similarProductPreview.product.images">
                                     <img v-bind:src="image.big">
 
-                                    <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].id == 1"
+                                    <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].priority == 3"
                                          class="prod-tag-1 font-2">
-                                        <span> -@{{ similarProductPreview.product.price[0].discount }}% </span>
+                                        {{--<span> -@{{ similarProductPreview.product.price[0].discount }}% </span>--}}
+                                        <span> SALE </span>
                                     </div>
-                                    <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].id == 2"
+                                    <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].priority == 1"
                                          class="prod-tag-1 font-2 prod-tag-green">
                                         <span> NEW </span>
                                     </div>
-                                    <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].id == 3"
+                                    <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].priority == 2"
                                          class="prod-tag-1 font-2 prod-tag-violet">
                                         <span> TOP </span>
                                     </div>
@@ -67,7 +68,7 @@
                                     <div class="prod-price font-2 pull-left fsz-16">
                                         <ins>@{{ similarProductPreview.product.price[0].price }} грн</ins>
 
-                                        <del v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].id == 1">
+                                        <del v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].priority == 3">
                                             @{{ similarProductPreview.product.price[0].old_price }} грн
                                         </del>
 
@@ -190,17 +191,18 @@
                                     <img alt="{{ $similarProduct->name }}" src="{{ $similarProduct->images[0]->big }}">
                                 </div>
                                 @if($similarProduct->promotions != null && $similarProduct->promotions->count() > 0)
-                                    @if($similarProduct->promotions[0]->id == 1)
+                                    @if($similarProduct->promotions[0]->priority == 3)
                                         <div class="prod-tag-1 font-2">
-                                            <span> -{{ $similarProduct->price[0]->discount }}% </span>
+                                            {{--<span> -{{ $similarProduct->price[0]->discount }}% </span>--}}
+                                            <span> SALE </span>
                                         </div>
                                     @endif
-                                    @if($similarProduct->promotions[0]->id == 2)
+                                    @if($similarProduct->promotions[0]->priority == 1)
                                         <div class="prod-tag-1 font-2 prod-tag-green">
                                             <span> NEW </span>
                                         </div>
                                     @endif
-                                    @if($similarProduct->promotions[0]->id == 3)
+                                    @if($similarProduct->promotions[0]->priority == 2)
                                         <div class="prod-tag-1 font-2 prod-tag-violet">
                                             <span> TOP </span>
                                         </div>
@@ -238,7 +240,7 @@
                                     <ins>{{ $similarProduct->price[0]->price }} грн</ins>
 
                                     @if($similarProduct->promotions != null && $similarProduct->promotions->count() > 0)
-                                        @if($similarProduct->promotions[0]->pivot->promotion_id == 1)
+                                        @if($similarProduct->promotions[0]->priority == 3)
                                             <del>{{ $similarProduct->price[0]->old_price }} грн</del>
                                         @endif
                                     @endif
