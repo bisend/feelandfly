@@ -90,6 +90,12 @@ class CategoryFiltersViewModel extends LayoutViewModel
      */
     public $sortItems;
 
+    public $metaLinkPrev;
+
+    public $metaLinkNext;
+
+    public $setNoIndex = false;
+
     /**
      * CategoryViewModel constructor.
      * @param string $view

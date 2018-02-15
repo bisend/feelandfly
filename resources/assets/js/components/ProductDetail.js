@@ -10,6 +10,11 @@ if (document.getElementById('product-details'))
     new Vue({
         el: '#product-details',
         data: GLOBAL_DATA,
+        mounted: function () {
+            $('#product-details .ttip:not(.tooltipstered)').tooltipster({
+                theme: 'tooltipster-borderless'
+            });
+        },
         watch: {
             // check if INIT CART AJAX ENDED, if true set count from cart
             INIT_CART_ENDED: function (INIT_CART_ENDED) {

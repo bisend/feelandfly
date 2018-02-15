@@ -272,6 +272,10 @@ if (document.getElementById('new-products'))
                     $container.modal();
 
                     setTimeout(function () {
+                        $('#new-products .ttip:not(.tooltipstered)').tooltipster({
+                            theme: 'tooltipster-borderless'
+                        });
+
                         initProductPreviewImagesSliderNew();
 
                         $("a[rel^='prettyPhoto[new-" + GLOBAL_DATA.newProductPreview.product.id + "]']").prettyPhoto({

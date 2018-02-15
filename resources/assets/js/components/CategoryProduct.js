@@ -158,12 +158,14 @@ if (document.getElementById('grid-view'))
         GLOBAL_DATA.categoryProductPreview.count = 1;
 
 
-        var gridView = new Vue({
+        new Vue({
             el: '#grid-view',
             data: GLOBAL_DATA,
-            // mounted: function () {
-
-            // },
+            mounted: function () {
+                $('#grid-view .ttip:not(.tooltipstered)').tooltipster({
+                    theme: 'tooltipster-borderless'
+                });
+            },
             methods: {
                 //check if props in list
                 findWhere: function (list, props) {
@@ -303,13 +305,8 @@ if (document.getElementById('grid-view'))
                 },
                 //changing category product preview
                 changeCategoryProductPreview: function (counter) {
-                    destroyProductPreviewImagesSlider();
 
-                    // for (var i = 0; i < imagesCount; i++) {
-                    //     GLOBAL_DATA.categoryProducts[counter].images.pop();
-                    // }
-                    //
-                    // imagesCount++;
+                    destroyProductPreviewImagesSlider();
 
                     GLOBAL_DATA.categoryProductPreview.product = GLOBAL_DATA.categoryProducts[counter];
 
@@ -342,6 +339,10 @@ if (document.getElementById('grid-view'))
 
                     setTimeout(function () {
                         initProductPreviewImagesSlider();
+
+                        $('#category-product-preview .ttip:not(.tooltipstered)').tooltipster({
+                            theme: 'tooltipster-borderless'
+                        });
                     }, 400);
 
                     $("a[rel^='prettyPhoto[category-" + GLOBAL_DATA.categoryProductPreview.product.id + "]']").prettyPhoto({
@@ -368,7 +369,7 @@ if (document.getElementById('grid-view'))
             }
         });
 
-        var productPreview = new Vue({
+        new Vue({
             el: '#category-product-preview',
             data: GLOBAL_DATA,
             mounted: function () {

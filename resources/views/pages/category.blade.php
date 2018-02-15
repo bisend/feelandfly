@@ -81,7 +81,12 @@
                                             <li>{{ trans('product.stock') }}:
                                                 <span v-cloak v-for="productSize in categoryProductPreview.product.product_sizes"
                                                       v-if="productSize.size_id == categoryProductPreview.currentSizeId">
-                                                    @{{ productSize.stocks[0].stock }}
+                                                    <span v-if="productSize.stocks[0].stock > 0" class="product-in-stock">
+                                                        {{ trans('product.product_in_stock') }}
+                                                    </span>
+                                                    <span v-else class="product-not-in-stock">
+                                                        {{ trans('product.product_not_in_stock') }}
+                                                    </span>
                                                 </span>
                                             </li>
                                             <li v-for="property in categoryProductPreview.product.properties" v-if="property.slug != 'razmer'">
@@ -211,7 +216,7 @@
 
                         @foreach($model->filters as $filterName => $filterValues)
                             <div class="dropdown-div-btn">
-                                <h2 class="widget-title">{{ $filterName }}<span class="plus-icon"> - </span> </h2>
+                                <h2 class="widget-title"><span class="filter-name">{{ $filterName }}</span><span class="plus-icon"> - </span> </h2>
                             </div>
                             <div class="dropdown-div-content">
                                 <div class="widget-box">

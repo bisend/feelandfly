@@ -8,6 +8,7 @@
 
 namespace App\Services;
 
+use App\Helpers\Paginator;
 use App\Repositories\CategoryRepository;
 use App\Repositories\FilterRepository;
 use App\Repositories\ProductRepository;
@@ -75,6 +76,7 @@ class CategoryService extends LayoutService
 
             $this->fillMetaTags($model);
 
+            $this->fillSeoTags($model);
         }
         catch (\Exception $e)
         {
@@ -184,6 +186,35 @@ class CategoryService extends LayoutService
             $model->description = 'Feelandfly';
             $model->keywords = 'Feelandfly';
             $model->h1 = 'Feelandfly';
+        }
+    }
+
+    private function fillSeoTags($model)
+    {
+        $pages = Paginator::createPagination($model->page, $model->categoryProductsLimit, $model->countCategoryProducts);
+
+        $isPrev = array_shift($pages);
+
+        $isNext = array_pop($pages);
+
+        if ($isPrev)
+        {
+            $model->metaLinkPrev = url_category_per_page($model->currentCategory->slug . ($model->sort == 'default' ? '' : '/' . $model->sort), $model->page - 1, $model->language);
+        }
+
+        if ($isNext)
+        {
+            $model->metaLinkNext = url_category_per_page($model->currentCategory->slug . ($model->sort == 'default' ? '' : '/' . $model->sort), $model->page + 1, $model->language);
+        }
+
+        if ((int)$model->page > 1)
+        {
+            $model->setNoIndex = true;
+        }
+
+        if ($model->sort != 'default')
+        {
+            $model->setNoIndex = true;
         }
     }
 }

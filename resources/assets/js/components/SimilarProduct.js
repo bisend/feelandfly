@@ -477,7 +477,6 @@ if (document.getElementById('similar-product'))
                 changeSimilarProductPreview: function (counter) {
                     destroyProductPreviewImagesSliderSimilar();
 
-
                     GLOBAL_DATA.similarProductPreview.product = GLOBAL_DATA.similarProducts[counter];
 
                     GLOBAL_DATA.similarProductPreview.rel = 'prettyPhoto[similar-product-' + GLOBAL_DATA.similarProductPreview.product.id + ']';
@@ -508,6 +507,10 @@ if (document.getElementById('similar-product'))
                     $container.modal();
 
                     setTimeout(function () {
+                        $('#similar-product-preview .ttip:not(.tooltipstered)').tooltipster({
+                            theme: 'tooltipster-borderless'
+                        });
+
                         initProductPreviewImagesSliderSimilar();
 
                         $("a[rel^='prettyPhoto[similar-product-" + GLOBAL_DATA.similarProductPreview.product.id + "]']").prettyPhoto({

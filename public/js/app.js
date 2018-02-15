@@ -11830,12 +11830,14 @@ if (document.getElementById('grid-view')) {
         //init category product preview count
         GLOBAL_DATA.categoryProductPreview.count = 1;
 
-        var gridView = new Vue({
+        new Vue({
             el: '#grid-view',
             data: GLOBAL_DATA,
-            // mounted: function () {
-
-            // },
+            mounted: function mounted() {
+                $('#grid-view .ttip:not(.tooltipstered)').tooltipster({
+                    theme: 'tooltipster-borderless'
+                });
+            },
             methods: {
                 //check if props in list
                 findWhere: function findWhere(list, props) {
@@ -11972,13 +11974,8 @@ if (document.getElementById('grid-view')) {
                 },
                 //changing category product preview
                 changeCategoryProductPreview: function changeCategoryProductPreview(counter) {
-                    destroyProductPreviewImagesSlider();
 
-                    // for (var i = 0; i < imagesCount; i++) {
-                    //     GLOBAL_DATA.categoryProducts[counter].images.pop();
-                    // }
-                    //
-                    // imagesCount++;
+                    destroyProductPreviewImagesSlider();
 
                     GLOBAL_DATA.categoryProductPreview.product = GLOBAL_DATA.categoryProducts[counter];
 
@@ -12010,6 +12007,10 @@ if (document.getElementById('grid-view')) {
 
                     setTimeout(function () {
                         initProductPreviewImagesSlider();
+
+                        $('#category-product-preview .ttip:not(.tooltipstered)').tooltipster({
+                            theme: 'tooltipster-borderless'
+                        });
                     }, 400);
 
                     $("a[rel^='prettyPhoto[category-" + GLOBAL_DATA.categoryProductPreview.product.id + "]']").prettyPhoto({
@@ -12036,7 +12037,7 @@ if (document.getElementById('grid-view')) {
             }
         });
 
-        var productPreview = new Vue({
+        new Vue({
             el: '#category-product-preview',
             data: GLOBAL_DATA,
             mounted: function mounted() {
@@ -12922,10 +12923,6 @@ if (document.getElementById('main-slider-section')) {
         el: '#main-slider-section',
         data: GLOBAL_DATA,
         mounted: function mounted() {
-            $('.ttip:not(.tooltipstered)').tooltipster({
-                theme: 'tooltipster-borderless'
-            });
-
             //Main Slider carousel
             if ($('#main-slider').length > 0) {
                 $("#main-slider").owlCarousel({
@@ -13037,6 +13034,10 @@ if (document.getElementById('main-slider-section')) {
                 $container.modal();
 
                 setTimeout(function () {
+                    $('#main-slider-section .ttip:not(.tooltipstered)').tooltipster({
+                        theme: 'tooltipster-borderless'
+                    });
+
                     initProductPreviewImagesSliderMainSlider();
 
                     $("a[rel^='prettyPhoto[main-slider-" + GLOBAL_DATA.mainSliderPreview.product.id + "]']").prettyPhoto({
@@ -13839,6 +13840,10 @@ if (document.getElementById('new-products')) {
                     $container.modal();
 
                     setTimeout(function () {
+                        $('#new-products .ttip:not(.tooltipstered)').tooltipster({
+                            theme: 'tooltipster-borderless'
+                        });
+
                         initProductPreviewImagesSliderNew();
 
                         $("a[rel^='prettyPhoto[new-" + GLOBAL_DATA.newProductPreview.product.id + "]']").prettyPhoto({
@@ -14552,6 +14557,11 @@ if (document.getElementById('product-details')) {
     new Vue({
         el: '#product-details',
         data: GLOBAL_DATA,
+        mounted: function mounted() {
+            $('#product-details .ttip:not(.tooltipstered)').tooltipster({
+                theme: 'tooltipster-borderless'
+            });
+        },
         watch: {
             // check if INIT CART AJAX ENDED, if true set count from cart
             INIT_CART_ENDED: function INIT_CART_ENDED(_INIT_CART_ENDED) {
@@ -15727,6 +15737,10 @@ if (document.getElementById('sales-products')) {
                     $container.modal();
 
                     setTimeout(function () {
+                        $('#sales-products .ttip:not(.tooltipstered)').tooltipster({
+                            theme: 'tooltipster-borderless'
+                        });
+
                         initProductPreviewImagesSliderSales();
 
                         $("a[rel^='prettyPhoto[sale-" + GLOBAL_DATA.saleProductPreview.product.id + "]']").prettyPhoto({
@@ -16751,6 +16765,10 @@ if (document.getElementById('similar-product')) {
                     $container.modal();
 
                     setTimeout(function () {
+                        $('#similar-product-preview .ttip:not(.tooltipstered)').tooltipster({
+                            theme: 'tooltipster-borderless'
+                        });
+
                         initProductPreviewImagesSliderSimilar();
 
                         $("a[rel^='prettyPhoto[similar-product-" + GLOBAL_DATA.similarProductPreview.product.id + "]']").prettyPhoto({
@@ -17196,6 +17214,10 @@ if (document.getElementById('top-products')) {
                     $container.modal();
 
                     setTimeout(function () {
+                        $('#top-products .ttip:not(.tooltipstered)').tooltipster({
+                            theme: 'tooltipster-borderless'
+                        });
+
                         initProductPreviewImagesSliderTop();
 
                         $("a[rel^='prettyPhoto[top-" + GLOBAL_DATA.topProductPreview.product.id + "]']").prettyPhoto({
@@ -17755,18 +17777,10 @@ if (document.getElementById('profile-wish-list')) {
 
 /***/ }),
 
-/***/ "./resources/assets/sass/app.scss":
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__("./resources/assets/js/app.js");
-module.exports = __webpack_require__("./resources/assets/sass/app.scss");
+module.exports = __webpack_require__("./resources/assets/js/app.js");
 
 
 /***/ })

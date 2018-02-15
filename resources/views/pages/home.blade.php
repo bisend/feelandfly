@@ -88,8 +88,13 @@
                                                         <li>{{ trans('product.stock') }}:
                                                             <span v-cloak v-for="productSize in mainSliderPreview.product.product_sizes"
                                                                   v-if="productSize.size_id == mainSliderPreview.currentSizeId">
-                                                        @{{ productSize.stocks[0].stock }}
-                                                    </span>
+                                                                <span v-if="productSize.stocks[0].stock > 0" class="product-in-stock">
+                                                                    {{ trans('product.product_in_stock') }}
+                                                                </span>
+                                                                <span v-else class="product-not-in-stock">
+                                                                    {{ trans('product.product_not_in_stock') }}
+                                                                </span>
+                                                            </span>
                                                         </li>
                                                         <li v-for="property in mainSliderPreview.product.properties" v-if="property.slug != 'razmer'">
                                                             @{{ property.property_name }}: @{{ property.property_value }}
@@ -378,7 +383,12 @@
                                                     <li>{{ trans('product.stock') }}:
                                                         <span v-cloak v-for="productSize in saleProductPreview.product.product_sizes"
                                                               v-if="productSize.size_id == saleProductPreview.currentSizeId">
-                                                            @{{ productSize.stocks[0].stock }}
+                                                            <span v-if="productSize.stocks[0].stock > 0" class="product-in-stock">
+                                                                {{ trans('product.product_in_stock') }}
+                                                            </span>
+                                                            <span v-else class="product-not-in-stock">
+                                                                {{ trans('product.product_not_in_stock') }}
+                                                            </span>
                                                         </span>
                                                     </li>
                                                     <li v-for="property in saleProductPreview.product.properties" v-if="property.slug != 'razmer'">
@@ -664,7 +674,12 @@
                                                                 <li>{{ trans('product.stock') }}:
                                                                     <span v-cloak v-for="productSize in topProductPreview.product.product_sizes"
                                                                           v-if="productSize.size_id == topProductPreview.currentSizeId">
-                                                                        @{{ productSize.stocks[0].stock }}
+                                                                        <span v-if="productSize.stocks[0].stock > 0" class="product-in-stock">
+                                                                            {{ trans('product.product_in_stock') }}
+                                                                        </span>
+                                                                        <span v-else class="product-not-in-stock">
+                                                                            {{ trans('product.product_not_in_stock') }}
+                                                                        </span>
                                                                     </span>
                                                                 </li>
                                                                 <li v-for="property in topProductPreview.product.properties" v-if="property.slug != 'razmer'">
@@ -895,7 +910,12 @@
                                                                 <li>{{ trans('product.stock') }}:
                                                                     <span v-cloak v-for="productSize in newProductPreview.product.product_sizes"
                                                                           v-if="productSize.size_id == newProductPreview.currentSizeId">
-                                                                        @{{ productSize.stocks[0].stock }}
+                                                                        <span v-if="productSize.stocks[0].stock > 0" class="product-in-stock">
+                                                                            {{ trans('product.product_in_stock') }}
+                                                                        </span>
+                                                                        <span v-else class="product-not-in-stock">
+                                                                            {{ trans('product.product_not_in_stock') }}
+                                                                        </span>
                                                                     </span>
                                                                 </li>
                                                                 <li v-for="property in newProductPreview.product.properties" v-if="property.slug != 'razmer'">

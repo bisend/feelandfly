@@ -68,19 +68,3 @@ $('body').on('click','.drop-menu-select .dropeddown li:not(.select-multi)', func
 });
 
 /* select end */
-
-// TOOLTIPSTER
-
-$(document).ready(function() {
-    $('.ttip:not(.tooltipstered)').tooltipster({
-        theme: 'tooltipster-borderless'
-    });
-});
-
-$(window).load(function() {
-    $('.ttip:not(.tooltipstered)').tooltipster({
-        theme: 'tooltipster-borderless'
-    });
-});
-
-// TOOLTIPSTER

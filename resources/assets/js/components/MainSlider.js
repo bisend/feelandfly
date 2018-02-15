@@ -160,10 +160,6 @@ if (document.getElementById('main-slider-section'))
             el: '#main-slider-section',
             data: GLOBAL_DATA,
             mounted: function () {
-                $('.ttip:not(.tooltipstered)').tooltipster({
-                    theme: 'tooltipster-borderless'
-                });
-
                 //Main Slider carousel
                 if ($('#main-slider').length > 0) {
                     $("#main-slider").owlCarousel({
@@ -277,6 +273,10 @@ if (document.getElementById('main-slider-section'))
                     $container.modal();
 
                     setTimeout(function () {
+                        $('#main-slider-section .ttip:not(.tooltipstered)').tooltipster({
+                            theme: 'tooltipster-borderless'
+                        });
+
                         initProductPreviewImagesSliderMainSlider();
 
                         $("a[rel^='prettyPhoto[main-slider-" + GLOBAL_DATA.mainSliderPreview.product.id + "]']").prettyPhoto({
