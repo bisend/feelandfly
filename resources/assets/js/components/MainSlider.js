@@ -177,7 +177,6 @@ if (document.getElementById('main-slider-section'))
                         }
                     });
                 }
-
                 if (GLOBAL_DATA.isMainSliderProductsInited)
                 {
                     initProductPreviewImagesSliderMainSlider();
@@ -207,6 +206,73 @@ if (document.getElementById('main-slider-section'))
                 }
             },
             methods: {
+                initMarkerPosition: function (counter) {
+                    let owlActive = $('#main-slider .owl-item.active');
+                    let product = owlActive.find('[data-marker-product=' + counter + ']');
+                    let point = owlActive.find('[data-marker-point=' + counter + ']');
+                    let container = product.closest('[data-marker-container]');
+
+                    let defaultY = 50,
+                        defaultX = 50,
+                        translateY = defaultY,
+                        translateX = defaultX,
+                        pointY,
+                        pointX,
+                        containerHeight,
+                        containerWidth,
+                        containerY,
+                        containerX,
+                        productY,
+                        productX,
+                        productHeight,
+                        productWidth;
+
+                    pointY = point.offset().top;
+                    pointX = point.offset().left;
+
+                    containerY = container.offset().top;
+                    containerX = container.offset().left;
+                    containerHeight = container.height();
+                    containerWidth = container.width();
+
+                    productHeight = product.height();
+                    productWidth = product.width();
+                    productY = pointY - (productHeight / 2) + 7.5;
+                    productX = pointX - (productWidth / 2) + 7.5;
+
+                    //Move to up
+                    if((productY + productHeight) >= (containerY + containerHeight)){
+                        let hiddenPixels = (productY + productHeight) - (containerY + containerHeight);
+                        let hiddenPercent = (hiddenPixels * 100) / productHeight;
+                        translateY = Math.round(translateY + hiddenPercent) + 1;
+                    }
+                    //Move to bot
+                    if (productY <= containerY)
+                    {
+                        let hiddenPixels = containerY - productY;
+                        let hiddenPercent = (hiddenPixels * 100) / productHeight;
+                        translateY = Math.round(defaultY - hiddenPercent) - 1;
+                    }
+                    //Move to left
+                    if(productX <= containerX){
+                        let hiddenPixels = containerX - productX;
+                        let hiddenPercent = (hiddenPixels * 100) / productWidth;
+                        translateX = Math.round(defaultX - hiddenPercent) - 1;
+                    }
+                    //Move to right
+                    if((productX + productWidth) >= (containerX + containerWidth)){
+                        let hiddenPixels = (productX + productWidth) - (containerX + containerWidth);
+                        let hiddenPercent = (hiddenPixels * 100) / productWidth;
+                        translateX = Math.round(defaultX + hiddenPercent) + 1;
+                    }
+
+                    product.css('transform', 'translate(-' + translateX + '%, -' + translateY + '%) scale(1)');
+                },
+                resetMarkerPosition: function (counter) {
+                    let owlActive = $('#main-slider .owl-item.active');
+                    let product = owlActive.find('[data-marker-product=' + counter + ']');
+                    product.css('transform', 'translate(-50%, -50%) scale(0)');
+                },
                 //check if props in list
                 findWhere: function (list, props) {
                     var idx = 0;

@@ -12940,7 +12940,6 @@ if (document.getElementById('main-slider-section')) {
                     }
                 });
             }
-
             if (GLOBAL_DATA.isMainSliderProductsInited) {
                 initProductPreviewImagesSliderMainSlider();
 
@@ -12969,6 +12968,72 @@ if (document.getElementById('main-slider-section')) {
             }
         },
         methods: {
+            initMarkerPosition: function initMarkerPosition(counter) {
+                var owlActive = $('#main-slider .owl-item.active');
+                var product = owlActive.find('[data-marker-product=' + counter + ']');
+                var point = owlActive.find('[data-marker-point=' + counter + ']');
+                var container = product.closest('[data-marker-container]');
+
+                var defaultY = 50,
+                    defaultX = 50,
+                    translateY = defaultY,
+                    translateX = defaultX,
+                    pointY = void 0,
+                    pointX = void 0,
+                    containerHeight = void 0,
+                    containerWidth = void 0,
+                    containerY = void 0,
+                    containerX = void 0,
+                    productY = void 0,
+                    productX = void 0,
+                    productHeight = void 0,
+                    productWidth = void 0;
+
+                pointY = point.offset().top;
+                pointX = point.offset().left;
+
+                containerY = container.offset().top;
+                containerX = container.offset().left;
+                containerHeight = container.height();
+                containerWidth = container.width();
+
+                productHeight = product.height();
+                productWidth = product.width();
+                productY = pointY - productHeight / 2 + 7.5;
+                productX = pointX - productWidth / 2 + 7.5;
+
+                //Move to up
+                if (productY + productHeight >= containerY + containerHeight) {
+                    var hiddenPixels = productY + productHeight - (containerY + containerHeight);
+                    var hiddenPercent = hiddenPixels * 100 / productHeight;
+                    translateY = Math.round(translateY + hiddenPercent) + 1;
+                }
+                //Move to bot
+                if (productY <= containerY) {
+                    var _hiddenPixels = containerY - productY;
+                    var _hiddenPercent = _hiddenPixels * 100 / productHeight;
+                    translateY = Math.round(defaultY - _hiddenPercent) - 1;
+                }
+                //Move to left
+                if (productX <= containerX) {
+                    var _hiddenPixels2 = containerX - productX;
+                    var _hiddenPercent2 = _hiddenPixels2 * 100 / productWidth;
+                    translateX = Math.round(defaultX - _hiddenPercent2) - 1;
+                }
+                //Move to right
+                if (productX + productWidth >= containerX + containerWidth) {
+                    var _hiddenPixels3 = productX + productWidth - (containerX + containerWidth);
+                    var _hiddenPercent3 = _hiddenPixels3 * 100 / productWidth;
+                    translateX = Math.round(defaultX + _hiddenPercent3) + 1;
+                }
+
+                product.css('transform', 'translate(-' + translateX + '%, -' + translateY + '%) scale(1)');
+            },
+            resetMarkerPosition: function resetMarkerPosition(counter) {
+                var owlActive = $('#main-slider .owl-item.active');
+                var product = owlActive.find('[data-marker-product=' + counter + ']');
+                product.css('transform', 'translate(-50%, -50%) scale(0)');
+            },
             //check if props in list
             findWhere: function findWhere(list, props) {
                 var idx = 0;

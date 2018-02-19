@@ -201,110 +201,100 @@
                                 <div class="carousel-inner white-mask">
                                     <div class="big-slider-cover">
                                         <img src="{{ $slide->image->original }}" alt="slide{{ $counter }}">
-                                    </div>
-
-                                    <div class="theme-container container">
-                                        <div class="caption-text tbl-wrp row">
-                                            <div class="text-middle">
-                                                <div class="tbl-cell">
-                                                    @if(!is_null($slide->markers) && $slide->markers->count() > 0)
-                                                        @foreach($slide->markers as $marker)
-                                                            @if($marker->product != null)
-                                                                @php($product = $marker->product)
-                                                                <div class="hover-slider-cart-first">
-                                                                    <div class="rel-slider">
-                                                                        <div class="hover-cart" style="left: {{ $marker->position_x }}px; top: {{ $marker->position_y }}px;">
-                                                                            <a class="show-cart pulse"></a>
-                                                                            <div class="prod-wrap-cont hover-slider-cart">
-                                                                                <div class="product_item prod-wrap">
-                                                                                    <div class="product_img">
-                                                                                        <div class="prod-img">
-                                                                                            <a class="img-hover" href="{{ url_product($product->slug, $model->language) }}">
-                                                                                                <div class="img-slide-fit">
-                                                                                                    <img alt="{{ $product->name }}" src="{{ $product->images[0]->medium }}">
-                                                                                                </div>
-                                                                                            </a>
-
-                                                                                            @if($product->promotions != null && $product->promotions->count() > 0)
-                                                                                                @if($product->promotions[0]->priority == 3)
-                                                                                                    <div class="prod-tag-1 font-2">
-                                                                                                        {{--<span> -{{ $product->price[0]->discount }}% </span>--}}
-                                                                                                        <span> SALE </span>
-                                                                                                    </div>
-                                                                                                @endif
-                                                                                                @if($product->promotions[0]->priority == 1)
-                                                                                                    <div class="prod-tag-1 font-2 prod-tag-green">
-                                                                                                        <span> NEW </span>
-                                                                                                    </div>
-                                                                                                @endif
-                                                                                                @if($product->promotions[0]->priority == 2)
-                                                                                                    <div class="prod-tag-1 font-2 prod-tag-violet">
-                                                                                                        <span> TOP </span>
-                                                                                                    </div>
-                                                                                                @endif
-                                                                                            @endif
-
-                                                                                            <a class="caption-link meta-icon"
-                                                                                               href="#"
-                                                                                               v-on:click.prevent="changeMainSliderProductPreview({{$counter}})">
-                                                                                                <span class="fa fa-eye"> </span>
-                                                                                            </a>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="product_info">
-                                                                                        <h2 class="prod-title">
-                                                                                            <a href="{{ url_product($product->slug, $model->language) }}">
-                                                                                                {{ $product->name }}
-                                                                                            </a>
-                                                                                        </h2>
-                                                                                        <div class="block-inline">
-                                                                                            <div class="prod-price font-2">
-                                                                                                <ins>{{ $product->price[0]->price }} грн</ins>
-
-                                                                                                @if($product->promotions != null && $product->promotions->count() > 0)
-                                                                                                    {{--@if($product->promotions[0]->pivot->promotion_id == 1)--}}
-                                                                                                    @if($product->promotions[0]->priority == 3)
-                                                                                                        <del>{{ $product->price[0]->old_price }} грн</del>
-                                                                                                    @endif
-                                                                                                @endif
-                                                                                            </div>
-                                                                                            <div class="rating">
-                                                                                                @for($i = 1; $i <= 5; $i++)
-                                                                                                    @if($product->rating != null)
-                                                                                                        @if($i <= $product->rating)
-                                                                                                            <span class="star active"></span>
-                                                                                                        @else
-                                                                                                            <span class="star"></span>
-                                                                                                        @endif
-                                                                                                    @else
-                                                                                                        <span class="star"></span>
-                                                                                                    @endif
-                                                                                                @endfor
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="block-inline">
-                                                                                            <ul class="prod-meta">
-                                                                                                <li>
-                                                                                                    <a class="theme-btn btn-black min-width-270-px"
-                                                                                                       href="{{ url_product($product->slug, $model->language) }}">
-                                                                                                        {{ trans('home.detail') }}
-                                                                                                    </a>
-                                                                                                </li>
-                                                                                            </ul>
-                                                                                        </div>
-                                                                                    </div>
+                                        @if(!is_null($slide->markers) && $slide->markers->count() > 0)
+                                            <div class="marker-box" data-marker-container>
+                                                @foreach($slide->markers as $marker)
+                                                    @if($marker->product != null)
+                                                        @php($product = $marker->product)
+                                                        <div data-marker-point="{{ $counter }}" class="marker-position" style="left: {{ $marker->position_x }}px; top: {{ $marker->position_y }}px;">
+                                                            <a class="pulse marker" v-on:mouseenter="initMarkerPosition({{$counter}})"></a>
+                                                            <div data-marker-product="{{ $counter }}" v-on:mouseleave="resetMarkerPosition({{$counter}})" class="prod-wrap-cont marker-product">
+                                                                <div class="product_item prod-wrap">
+                                                                    <div class="product_img">
+                                                                        <div class="prod-img">
+                                                                            <a class="img-hover" href="{{ url_product($product->slug, $model->language) }}">
+                                                                                <div class="img-slide-fit">
+                                                                                    <img alt="{{ $product->name }}" src="{{ $product->images[0]->medium }}">
                                                                                 </div>
+                                                                            </a>
+
+                                                                            @if($product->promotions != null && $product->promotions->count() > 0)
+                                                                                @if($product->promotions[0]->priority == 3)
+                                                                                    <div class="prod-tag-1 font-2">
+                                                                                        {{--<span> -{{ $product->price[0]->discount }}% </span>--}}
+                                                                                        <span> SALE </span>
+                                                                                    </div>
+                                                                                @endif
+                                                                                @if($product->promotions[0]->priority == 1)
+                                                                                    <div class="prod-tag-1 font-2 prod-tag-green">
+                                                                                        <span> NEW </span>
+                                                                                    </div>
+                                                                                @endif
+                                                                                @if($product->promotions[0]->priority == 2)
+                                                                                    <div class="prod-tag-1 font-2 prod-tag-violet">
+                                                                                        <span> TOP </span>
+                                                                                    </div>
+                                                                                @endif
+                                                                            @endif
+
+                                                                            <a class="caption-link meta-icon"
+                                                                               href="#"
+                                                                               v-on:click.prevent="changeMainSliderProductPreview({{$counter}})">
+                                                                                <span class="fa fa-eye"> </span>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="product_info">
+                                                                        <h2 class="prod-title">
+                                                                            <a href="{{ url_product($product->slug, $model->language) }}">
+                                                                                {{ $product->name }}
+                                                                            </a>
+                                                                        </h2>
+                                                                        <div class="block-inline">
+                                                                            <div class="prod-price font-2">
+                                                                                <ins>{{ $product->price[0]->price }} грн</ins>
+
+                                                                                @if($product->promotions != null && $product->promotions->count() > 0)
+                                                                                    @if($product->promotions[0]->pivot->promotion_id == 1)
+                                                                                        @if($product->promotions[0]->priority == 3)
+                                                                                            <del>{{ $product->price[0]->old_price }} грн</del>
+                                                                                        @endif
+                                                                                    @endif
+                                                                                @endif
                                                                             </div>
+                                                                            <div class="rating">
+                                                                                @for($i = 1; $i <= 5; $i++)
+                                                                                    @if($product->rating != null)
+                                                                                        @if($i <= $product->rating)
+                                                                                            <span class="star active"></span>
+                                                                                        @else
+                                                                                            <span class="star"></span>
+                                                                                        @endif
+                                                                                    @else
+                                                                                        <span class="star"></span>
+                                                                                    @endif
+                                                                                @endfor
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="block-inline">
+                                                                            <ul class="prod-meta">
+                                                                                <li>
+                                                                                    <a class="theme-btn btn-black min-width-270-px"
+                                                                                       href="{{ url_product($product->slug, $model->language) }}">
+                                                                                        {{ trans('home.detail') }}
+                                                                                    </a>
+                                                                                </li>
+                                                                            </ul>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            @endif
-                                                            @php($counter++)
-                                                        @endforeach
+                                                            </div>
+                                                        </div>
                                                     @endif
-                                                </div>
+                                                    @php($counter++)
+                                                @endforeach
                                             </div>
-                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </a>

@@ -5996,3 +5996,41 @@ h2.no-products {
         display: inline-block;
     }
 }
+
+#main-slider-section .rel-slider {
+    position: static;
+}
+
+#main-slider-section .caption-text {
+    max-width: 100%;
+    margin: 0;
+}
+
+/*slider markers*/
+#main-slider-section .marker-box {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.marker-position {
+    position: absolute;
+    z-index: 2;
+}
+
+.marker {
+    z-index: 3;
+}
+
+#main-slider-section .marker-box .marker-product {
+    background: #fff;
+    z-index: 9999;
+    min-height: 400px;
+    position: absolute;
+    transform: translate(-50%, -50%) scale(0);
+    transition: all 0.3s;
+    margin: -7.5px 0 0 7.5px;
+}
+/*slider markers*/
