@@ -33,9 +33,4 @@ class MainSlider extends Model
     {
         return $this->hasMany(MainSliderMarker::class, 'slide_id', 'id');
     }
-    
-    public function image()
-    {
-        return $this->hasOne(Image::class, 'id', 'image_id');
-    }
 }

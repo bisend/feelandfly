@@ -1161,14 +1161,15 @@ class ProductRepository
         ])->join('product_prices', function ($join) use ($model) {
             $join->on('products.id', '=', 'product_prices.product_id')
                 ->where('product_prices.user_type_id', '=', $model->userTypeId);
+        })->join('products_promotions', function ($join) use ($model) {
+            $join->on('products.id', '=', 'products_promotions.product_id')
+                ->where('products_promotions.promotion_id', '=', $model->salesPromotion->id);
         })
             ->whereHas('promotions', function ($query) use ($model) {
-//                $query->where('products_promotions.promotion_id', '=', 1);
                 $query->where('products_promotions.promotion_id', '=', $model->salesPromotion->id);
             })->whereIsVisible(true)
-//            ->orderByRaw($orderByRaw)
-//            ->offset($categoryProductsOffset)
-//            ->limit($categoryProductsLimit)
+            ->orderByRaw('products_promotions.priority desc')
+            ->limit($model->salesLimit)
             ->get([
                 'products.id',
                 "name_$model->language as name",
@@ -1179,6 +1180,7 @@ class ProductRepository
                 'breadcrumb_category_id',
                 "description_$model->language as description",
                 'products.priority',
+                'products_promotions.priority',
                 'vendor_code',
                 'rating',
                 'number_of_views',
@@ -1375,7 +1377,6 @@ class ProductRepository
     public function getMainSlider($model)
     {
         return MainSlider::with([
-            'image',
             'markers' => function ($query) use ($model) {
                 $query->orderByRaw('priority desc');
                 $query->whereIsVisible(true);
@@ -1460,15 +1461,133 @@ class ProductRepository
                 });
             }
         ])
-            ->whereHas('markers.product', function ($query) {
-            $query->where('is_visible', '=', true);
-        })
             ->whereIsVisible(true)->get([
                 'main_slider.id',
-                'main_slider.image_id',
+                'main_slider.image',
                 "main_slider.url_$model->language as url",
                 'main_slider.priority',
                 'main_slider.is_visible'
             ]);
+    }
+
+    public function getAllSalesProducts($model)
+    {
+        $model->salesPromotion = Promotion::wherePriority(3)->first();
+
+        $orderByRaw = 'name';
+
+        if ($model->sort == 'popularity')
+        {
+            $orderByRaw = 'rating desc, name';
+        }
+        elseif ($model->sort == 'new')
+        {
+            $orderByRaw = 'created_at desc, name';
+        }
+        elseif ($model->sort == 'price-asc')
+        {
+            $orderByRaw = 'price asc, name';
+        }
+        elseif ($model->sort == 'price-desc')
+        {
+            $orderByRaw = 'price desc, name';
+        }
+
+        return Product::with([
+            'images',
+            'color' => function ($query) use ($model) {
+                $query->select([
+                    'colors.id',
+                    "colors.name_$model->language as name",
+                    'colors.slug',
+                    'colors.html_code'
+                ]);
+            },
+            'product_group.products.color' => function ($query) use ($model) {
+                $query->select([
+                    'id',
+                    "name_$model->language as name",
+                    'slug',
+                    'html_code'
+                ]);
+            },
+            'sizes' => function ($query) use ($model) {
+                $query->select([
+                    'sizes.id',
+                    "sizes.name_$model->language as name",
+                    'sizes.slug'
+                ]);
+            },
+            'price' => function ($query) use ($model) {
+                $query->select([
+                    'product_prices.id',
+                    'product_prices.product_id',
+                    'product_prices.user_type_id',
+                    'product_prices.price',
+                    'product_prices.old_price',
+                    'product_prices.discount'
+                ])->whereUserTypeId($model->userTypeId);
+            },
+            'product_sizes.stocks' => function ($query) use ($model) {
+                $query->whereUserTypeId($model->userTypeId);
+            },
+            'promotions' => function ($query) {
+                $query->orderByRaw('promotions.priority desc');
+            },
+            'properties' => function ($query) use ($model) {
+                $query->select([
+                    'properties.id',
+                    'properties.product_id',
+                    'properties.property_name_id',
+                    'properties.property_value_id',
+                    'properties.priority',
+                    'property_names.id',
+                    'property_values.id',
+                    'property_names.slug',
+                    "property_names.name_$model->language as property_name",
+                    "property_values.name_$model->language as property_value",
+                ]);
+                $query->join('property_names', function ($join) {
+                    $join->on('properties.property_name_id', '=', 'property_names.id');
+                });
+                $query->join('property_values', function ($join) {
+                    $join->on('properties.property_value_id', '=', 'property_values.id');
+                });
+            }
+        ])->join('product_prices', function ($join) use ($model) {
+            $join->on('products.id', '=', 'product_prices.product_id')
+                ->where('product_prices.user_type_id', '=', $model->userTypeId);
+        })
+            ->whereHas('promotions', function ($query) use ($model) {
+                $query->where('products_promotions.promotion_id', '=', $model->salesPromotion->id);
+            })
+            ->whereIsVisible(true)
+            ->orderByRaw($orderByRaw)
+            ->offset($model->offset)
+            ->limit($model->limit)
+            ->get([
+                'products.id',
+                "name_$model->language as name",
+                'slug',
+                'color_id',
+                'group_id',
+                'products.category_id',
+                'breadcrumb_category_id',
+                "description_$model->language as description",
+                'products.priority',
+                'vendor_code',
+                'rating',
+                'number_of_views',
+                'products.created_at'
+        ]);
+    }
+
+    public function getCountAllSalesProducts($model)
+    {
+        $model->salesPromotion = Promotion::wherePriority(3)->first();
+
+        return Product::whereHas('promotions', function ($query) use ($model) {
+                $query->where('products_promotions.promotion_id', '=', $model->salesPromotion->id);
+            })->whereIsVisible(true)->count();
     }
 }

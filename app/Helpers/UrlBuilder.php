@@ -58,6 +58,13 @@ class UrlBuilder
     const SEARCH_PAGE = 'search';
 
     /**
+     * Search page
+     *
+     * @var string
+     */
+    const SALE_PAGE = 'sale';
+
+    /**
      * confirm page
      * @var string
      */
@@ -574,6 +581,41 @@ class UrlBuilder
             self::SEARCH_PAGE,
             $series
         ]);
+
+        if ($page > 1) {
+            $url = self::concatParts([$url, $page]);
+        }
+
+        return self::localize($url, $language);
+    }
+
+    public static function sale($language = Languages::DEFAULT_LANGUAGE)
+    {
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::SALE_PAGE
+        ]);
+
+        return self::localize($url, $language);
+    }
+
+    public static function salePerPage($sort = 'default', $page = 1, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        if ($sort == 'default')
+        {
+            $url = self::concatParts([
+                url(self::URL_ROOT),
+                self::SALE_PAGE
+            ]);
+        }
+        else
+        {
+            $url = self::concatParts([
+                url(self::URL_ROOT),
+                self::SALE_PAGE,
+                $sort
+            ]);
+        }
 
         if ($page > 1) {
             $url = self::concatParts([$url, $page]);

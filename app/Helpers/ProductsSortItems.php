@@ -40,6 +40,11 @@ class ProductsSortItems
     public $url_search;
 
     /**
+     * @var string
+     */
+    public $url_sale;
+
+    /**
      * @var bool
      */
     public $isSelected = false;
@@ -84,6 +89,11 @@ class ProductsSortItems
         $this->url_search .= ($sortSlug == 'default' ? '' : ('/' . $sortSlug));
         $this->url_search .= ($page == 1 ? '' : ('/' . $page));
         $this->url_search .= ($language == Languages::DEFAULT_LANGUAGE ? '' : ('/' . $language));
+
+        $this->url_sale = '/sale';
+        $this->url_sale .= ($sortSlug == 'default' ? '' : ('/' . $sortSlug));
+        $this->url_sale .= ($page == 1 ? '' : ('/' . $page));
+        $this->url_sale .= ($language == Languages::DEFAULT_LANGUAGE ? '' : ('/' . $language));
         
         if ($sort == $sortSlug)
         {

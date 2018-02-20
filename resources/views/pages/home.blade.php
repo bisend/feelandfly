@@ -200,7 +200,7 @@
                             <a href="{{ !is_null($slide->url) ? $slide->url : '#' }}">
                                 <div class="carousel-inner white-mask">
                                     <div class="big-slider-cover">
-                                        <img src="{{ $slide->image->original }}" alt="slide{{ $counter }}">
+                                        <img src="{{ $slide->image }}" alt="slide{{ $counter }}">
                                         @if(!is_null($slide->markers) && $slide->markers->count() > 0)
                                             <div class="marker-box" data-marker-container>
                                                 @foreach($slide->markers as $marker)

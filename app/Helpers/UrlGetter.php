@@ -406,6 +406,23 @@ if (!function_exists('url_search_per_page')) {
     }
 }
 
+if (!function_exists('url_sale_per_page')) {
+
+    /**
+     * Get the search(per page) page url
+     *
+     * @param null|string $series
+     * @param int $page
+     * @param string $language
+     *
+     * @return string
+     */
+    function url_sale_per_page($sort = 'default', $page = 1, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::salePerPage($sort, $page, $language);
+    }
+}
+
 // ---------------------------------------------------------------------------------------------------------------------
 /*
  * setting formatted price

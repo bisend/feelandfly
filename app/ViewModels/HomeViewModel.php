@@ -25,6 +25,12 @@ class HomeViewModel extends LayoutViewModel
     public $newIds = [];
     
     public $blogs;
+
+    public $salesLimit = 8;
+
+    public $topLimit = 4;
+
+    public $newLimit = 4;
     /**
      * HomeViewModel constructor.
      * @param string $view

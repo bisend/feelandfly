@@ -6034,3 +6034,16 @@ h2.no-products {
     margin: -7.5px 0 0 7.5px;
 }
 /*slider markers*/
+
+li.sale-link {
+    position: relative;
+}
+
+li.sale-link:before {
+    content: url(/img/saleIcon-red.svg);
+    height: 26px;
+    width: 24px;
+    position: absolute;
+    top: 10px;
+    left: 60px;
+}

@@ -88,6 +88,11 @@
                     <li><a href="#">{{ trans('header.contacts') }}</a></li>
                     <li><a href="#">{{ trans('header.cooperation') }}</a></li>
                     <li><a href="#">{{ trans('header.payment_delivery') }}</a></li>
+                    <li class="sale-link">
+                        <a href="{{ route('saleIndex', ['language' => $model->language == 'uk' ? $model->language : '']) }}">
+                            {{ trans('home.sale') }}
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="topbar-right">

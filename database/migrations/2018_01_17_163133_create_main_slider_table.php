@@ -16,14 +16,11 @@ class CreateMainSliderTable extends Migration
         Schema::create('main_slider', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('image_id')->unsigned();
             $table->integer('priority')->default(1000);
             $table->boolean('is_visible')->default(true);
             $table->string('code_1c', 36)->nullable();
 
             $table->timestamps();
-            
-            $table->foreign('image_id')->references('id')->on('images');
         });
     }
 

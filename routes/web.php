@@ -279,6 +279,30 @@ Route::group(['prefix' => 'blog'], function () {
 
 });
 
+Route::get('/sale/{language?}', 'SaleController@index')
+    ->where([
+        'language' => '^(uk|ru)?$'
+    ])->name('saleIndex');
+
+Route::get('/sale/{sort}/{language?}', 'SaleController@indexSort')
+    ->where([
+        'sort' => '^(popularity|new|price-asc|price-desc)$',
+        'language' => '^(uk|ru)?$'
+    ])->name('saleIndexSort');
+
+Route::get('/sale/{page}/{language?}', 'SaleController@indexPagination')
+    ->where([
+        'page' => '^[2-9]{1}|[1-9]{1}[0-9]+$',
+        'language' => '^(uk|ru)?$'
+    ])->name('saleIndexPagination');
+
+Route::get('/sale/{sort}/{page}/{language?}', 'SaleController@indexPaginationSort')
+    ->where([
+        'sort' => '^(popularity|new|price-asc|price-desc)$',
+        'page' => '^[2-9]{1}|[1-9]{1}[0-9]+$',
+        'language' => '^(uk|ru)?$'
+    ])->name('saleIndexPaginationSort');
+
 //Route::get('/lookbook/all/{language?}', 'LookBookController@showAllLookBook')->where([
 //    'language' => '^(uk|ru)?$'
 //]);
