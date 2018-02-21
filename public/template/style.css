@@ -5946,6 +5946,9 @@ h2.no-products {
     .carousel-inner .big-slider-cover {
         height: 250px;
     }
+    .main-slider .owl-dots {
+        top: 33%;
+    }
 }
 
 @media (max-width: 375px) {

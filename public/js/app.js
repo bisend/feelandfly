@@ -12935,9 +12935,14 @@ if (document.getElementById('main-slider-section')) {
                     dots: true,
                     nav: false,
                     loop: true,
+                    touchDrag: true,
+                    mouseDrag: false,
                     responsive: {
-                        0: { items: 1 }
-                    }
+                        0: { items: 1
+                            // 900: {
+                            //     mouseDrag:false
+                            // }
+                        } }
                 });
             }
             if (GLOBAL_DATA.isMainSliderProductsInited) {
