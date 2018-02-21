@@ -5199,7 +5199,7 @@ textarea.incorrect-field:-ms-input-placeholder {
 }
 
 .orderDetails-Modal .modal-footer a{
-    width: 300px;
+    width: 100%;
 }
 
 
@@ -6078,7 +6078,22 @@ li.sale-link:before {
     }
 }
 
+
+
+@media (max-width: 500px){
+    .order-modal-detail span{
+        left: 138px;
+    }
+
+    .orderDetails-Modal .modal-footer a {
+        width: 100%;
+    }
+}
+
 @media (max-width: 340px){
+    .big-cart .modal-footer .theme-btn {
+        width: 211px;
+    }
     .show-result{
         text-align: left;
     }
