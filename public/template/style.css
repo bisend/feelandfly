@@ -6054,3 +6054,25 @@ li.sale-link:before {
         left: 110px;
     }
 }
+
+@media (max-width: 768px){
+    .sale-section{
+        padding-top: 0;
+    }
+
+    .sale-section-padding{
+        padding-top: 20px;
+    }
+}
+
+@media (max-width: 340px){
+    .show-result{
+        text-align: left;
+    }
+
+    .show-result .search-selectpicker{
+        margin: 0;
+    }
+}
+
+

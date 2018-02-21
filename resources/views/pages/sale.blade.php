@@ -188,11 +188,11 @@
 
 
             <!-- Page Starts-->
-            <div class="container theme-container ptb-70">
+            <div class="container theme-container ptb-70 sale-section">
                 <div class="row">
 
 
-                    <div class="visible-xs pt-70"></div>
+                    <div class="visible-xs pt-70 sale-section-padding"></div>
 
                     <!-- Product Details Starts-->
                     <aside class="col-md-12 col-sm-12">
