@@ -380,7 +380,7 @@
 
                                         @php($relatedProducts = $categoryProduct->product_group->products)
 
-                                        <div class="col-lg-4 col-sm-6 prod-wrap-cont">
+                                        <div class="col-lg-4 col-sm-12 prod-wrap-cont">
                                             <div class="prod-wrap-absolute clearfix">
                                                 <div class="product_item prod-wrap">
                                                     <div class="product_img">
