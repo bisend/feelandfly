@@ -55,20 +55,24 @@ $(document).ready(function() {
     var objToStick = $(".header-main"); //Получаем нужный объект
     var topOfObjToStick = $(objToStick).offset().top; //Получаем начальное расположение нашего блока
 
-    $(window).scroll(function () {
-        var windowScroll = $(window).scrollTop(); //Получаем величину, показывающую на сколько прокручено окно
-        if (windowScroll > topOfObjToStick)
-        { // Если прокрутили больше, чем расстояние до блока, то приклеиваем его
-            $('.header-topbar').slideUp(200, function() {
-                $(objToStick).addClass("topWindow");
-            });
-        }
-        else
-        {
-            $('.header-topbar').slideDown(400);
-            $(objToStick).removeClass("topWindow");
-        }
-    });
+    if (window.matchMedia('(min-width: 992px)').matches) {
+        $(window).scroll(function () {
+            var windowScroll = $(window).scrollTop(); //Получаем величину, показывающую на сколько прокручено окно
+            if (windowScroll > topOfObjToStick)
+            { // Если прокрутили больше, чем расстояние до блока, то приклеиваем его
+                $('.header-topbar').slideUp(200, function() {
+                    $(objToStick).addClass("topWindow");
+                });
+            }
+            else
+            {
+                $('.header-topbar').slideDown(400);
+                $(objToStick).removeClass("topWindow");
+            }
+        });
+    }
+
+
 });
 /*--- SLICK  NAVBAR  END ----*/
 

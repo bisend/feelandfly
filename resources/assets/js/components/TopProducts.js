@@ -168,10 +168,10 @@ if (document.getElementById('top-products'))
                         nav: GLOBAL_DATA.topProducts.length > 2,
                         margin: 30,
                         responsive: {
-                            0: {items: 1},
-                            1201: {items: 2},
-                            768: {items: 1},
-                            568: {items: 2}
+                            0: {items: 1,nav: GLOBAL_DATA.topProducts.length > 1},
+                            1201: {items: 2,nav: GLOBAL_DATA.topProducts.length > 2},
+                            768: {items: 1,nav: GLOBAL_DATA.topProducts.length > 1},
+                            568: {items: 1,nav: GLOBAL_DATA.topProducts.length > 1}
                         },
                         navText: [
                             "<i class='fa fa-angle-left'></i>",

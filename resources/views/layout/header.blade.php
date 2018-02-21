@@ -16,72 +16,173 @@
                         {{ trans('home.sale') }}
                     </a>
                 </li>
-                @foreach($model->categories as $category)
-                    <li>
-                        @if($category->hasSecondLevel)
-                            @if($category->hasThirdLevel)
-                                <div class="dropdown-div">
-                                    <div class="dropdown-div-btn">
-                                        <h2 class="widget-title">
-                                            <a href="{{ url_category($category->slug, $model->language) }}">{{ $category->name }}</a>
-                                            <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
-                                        </h2>
-                                    </div>
-                                    <div class="dropdown-div-content">
-                                        <ul class="dropdown-list">
-                                            @foreach($category->childs as $child)
-                                                <li>
-                                                    @if($child->childs->count() > 0)
-                                                        <div class="dropdown-div dropdown-div_second">
-                                                            <div class="dropdown-div-btn">
-                                                                <h2 class="widget-title">
+
+
+                <li>
+                    <div class="dropdown-div">
+                        <div class="dropdown-div-btn">
+                            <h2 class="widget-title">
+                                <a href="">Категорії</a>
+                                <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                            </h2>
+                        </div>
+                        <div class="dropdown-div-content">
+                            <ul class="dropdown-list">
+                                @foreach($model->categories as $category)
+                                    <li>
+                                        @if($category->hasSecondLevel)
+                                            @if($category->hasThirdLevel)
+                                                <div class="dropdown-div">
+                                                    <div class="dropdown-div-btn">
+                                                        <h2 class="widget-title">
+                                                            <a href="{{ url_category($category->slug, $model->language) }}">{{ $category->name }}</a>
+                                                            <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                                                        </h2>
+                                                    </div>
+                                                    <div class="dropdown-div-content">
+                                                        <ul class="dropdown-list">
+                                                            @foreach($category->childs as $child)
+                                                                <li>
+                                                                    @if($child->childs->count() > 0)
+                                                                        <div class="dropdown-div dropdown-div_second">
+                                                                            <div class="dropdown-div-btn">
+                                                                                <h2 class="widget-title">
+                                                                                    <a href="{{ url_category($child->slug, $model->language) }}">{{ $child->name }}</a>
+                                                                                    <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span> </h2>
+                                                                            </div>
+                                                                            <div class="dropdown-div-content">
+                                                                                <ul class="dropdown-list">
+                                                                                    @foreach($child->childs as $thirdChild)
+                                                                                        <li>
+                                                                                            <a href="{{ url_category($thirdChild->slug, $model->language) }}">{{ $thirdChild->name }}</a>
+                                                                                        </li>
+                                                                                    @endforeach
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    @else
+                                                                        <a href="{{ url_category($child->slug, $model->language) }}">{{ $child->name }}</a>
+                                                                    @endif
+                                                                </li>
+                                                            @endforeach
+
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="dropdown-div">
+                                                    <div class="dropdown-div-btn">
+                                                        <h2 class="widget-title">
+                                                            <a href="{{ url_category($category->slug, $model->language) }}">{{ $category->name }}</a>
+                                                            <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                                                        </h2>
+                                                    </div>
+                                                    <div class="dropdown-div-content">
+                                                        <ul class="dropdown-list">
+                                                            @foreach($category->childs as $child)
+                                                                <li>
                                                                     <a href="{{ url_category($child->slug, $model->language) }}">{{ $child->name }}</a>
-                                                                    <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span> </h2>
-                                                            </div>
-                                                            <div class="dropdown-div-content">
-                                                                <ul class="dropdown-list">
-                                                                    @foreach($child->childs as $thirdChild)
-                                                                        <li>
-                                                                            <a href="{{ url_category($thirdChild->slug, $model->language) }}">{{ $thirdChild->name }}</a>
-                                                                        </li>
-                                                                    @endforeach
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    @else
-                                                        <a href="{{ url_category($child->slug, $model->language) }}">{{ $child->name }}</a>
-                                                    @endif
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            @else
-                                <div class="dropdown-div">
-                                    <div class="dropdown-div-btn">
-                                        <h2 class="widget-title">
-                                            <a href="{{ url_category($category->slug, $model->language) }}">{{ $category->name }}</a>
-                                            <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
-                                        </h2>
-                                    </div>
-                                    <div class="dropdown-div-content">
-                                        <ul class="dropdown-list">
-                                            @foreach($category->childs as $child)
-                                                <li>
-                                                    <a href="{{ url_category($child->slug, $model->language) }}">{{ $child->name }}</a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            @endif
-                        @else
-                            <a href="{{ url_category($category->slug, $model->language) }}">
-                                {{ $category->name }}
-                            </a>
-                        @endif
-                    </li>
-                @endforeach
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @else
+                                            <a href="{{ url_category($category->slug, $model->language) }}">
+                                                {{ $category->name }}
+                                            </a>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <a href="">
+                        Оплата та Доставка
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="">
+                        Про нас
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        Контакти
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        Співпраця
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">Вхід</a>
+                </li>
+                <li>
+                    <a href="">Реєстрація</a>
+                </li>
+
+                <li>
+                    <div class="dropdown-div">
+                        <div class="dropdown-div-btn">
+                            <h2 class="widget-title">
+                                <a class="mobile-nav-left-profile" href=""><i class="fa fa-user" aria-hidden="true"></i> Особистий кабінет</a>
+                                <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                            </h2>
+                        </div>
+                        <div class="dropdown-div-content">
+                            <ul class="dropdown-list">
+
+                                <li>
+                                    <a href="">пункт</a>
+                                </li>
+                                <li>
+                                    <a href="">пункт</a>
+                                </li>
+                                <li>
+                                    <a href="">пункт</a>
+                                </li>
+                                <li>
+                                    <a href="">пункт</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="mobile-nav-lang">
+                    <div class="dropdown-div">
+                        <div class="dropdown-div-btn">
+                            <h2 class="widget-title">
+                                <a href="">Вибір мови</a>
+                                <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                            </h2>
+                        </div>
+                        <div class="dropdown-div-content">
+                            <ul class="dropdown-list">
+
+                                <li>
+                                    <a href="">Укр</a>
+                                </li>
+                                <li>
+                                    <a href="">Рус</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+
             </ul>
         </div>
     </div>

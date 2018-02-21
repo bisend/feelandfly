@@ -5959,6 +5959,10 @@ h2.no-products {
     .carousel-inner .big-slider-cover {
         height: 200px;
     }
+
+    .wishlist-item-btn .prod-meta .theme-btn {
+        min-width: 200px;
+    }
 }
 
 
@@ -6050,6 +6054,16 @@ li.sale-link:before {
     .kab-margin-mob button{
         margin-left: 15px;
     }
+
+    .header-topbar{
+        display: none;
+    }
+
+    .margin-after-header {
+        padding-top: 77px;
+    }
+
+
 }
 
 @media (max-width: 768px){
@@ -6067,7 +6081,9 @@ li.sale-link:before {
     }
 }
 
-
+.mobile-nav-left-profile i{
+    margin-right: 8px;
+}
 
 @media (max-width: 500px){
     .order-modal-detail span{

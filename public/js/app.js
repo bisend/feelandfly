@@ -13810,10 +13810,10 @@ if (document.getElementById('new-products')) {
                         nav: GLOBAL_DATA.newProducts.length > 2,
                         margin: 30,
                         responsive: {
-                            0: { items: 1 },
-                            1201: { items: 2 },
-                            768: { items: 1 },
-                            568: { items: 2 }
+                            0: { items: 1, nav: GLOBAL_DATA.newProducts.length > 1 },
+                            1201: { items: 2, nav: GLOBAL_DATA.newProducts.length > 2 },
+                            768: { items: 1, nav: GLOBAL_DATA.newProducts.length > 1 },
+                            568: { items: 1, nav: GLOBAL_DATA.newProducts.length > 1 }
                         },
                         navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
                     });
@@ -15706,11 +15706,11 @@ if (document.getElementById('sales-products')) {
                         nav: GLOBAL_DATA.salesProducts.length > 4,
                         margin: 30,
                         responsive: {
-                            0: { items: 1 },
-                            1200: { items: 4 },
-                            992: { items: 3 },
-                            768: { items: 2 },
-                            568: { items: 1 }
+                            0: { items: 1, nav: GLOBAL_DATA.salesProducts.length > 1 },
+                            1200: { items: 4, nav: GLOBAL_DATA.salesProducts.length > 4 },
+                            992: { items: 3, nav: GLOBAL_DATA.salesProducts.length > 3 },
+                            768: { items: 2, nav: GLOBAL_DATA.salesProducts.length > 2 },
+                            568: { items: 1, nav: GLOBAL_DATA.salesProducts.length > 1 }
                         },
                         navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
                     });
@@ -17184,10 +17184,10 @@ if (document.getElementById('top-products')) {
                         nav: GLOBAL_DATA.topProducts.length > 2,
                         margin: 30,
                         responsive: {
-                            0: { items: 1 },
-                            1201: { items: 2 },
-                            768: { items: 1 },
-                            568: { items: 2 }
+                            0: { items: 1, nav: GLOBAL_DATA.topProducts.length > 1 },
+                            1201: { items: 2, nav: GLOBAL_DATA.topProducts.length > 2 },
+                            768: { items: 1, nav: GLOBAL_DATA.topProducts.length > 1 },
+                            568: { items: 1, nav: GLOBAL_DATA.topProducts.length > 1 }
                         },
                         navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"]
                     });
