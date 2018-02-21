@@ -86,7 +86,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="profile-item-save">
+                                    <div class="profile-item-save kab-margin-mob">
                                         <button type="submit" class="theme-btn btn-black">
                                             {{ trans('profile.save') }}
                                         </button>
@@ -131,7 +131,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="profile-item-save">
+                                    <div class="profile-item-save kab-margin-mob">
                                         <button type="submit" class="theme-btn btn-black">
                                             {{ trans('profile.save') }}
                                         </button>

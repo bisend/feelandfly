@@ -26,7 +26,7 @@
         <div class="container theme-container ptb-70">
             <div class="row">
                 <!-- Sidebar Starts -->
-                <aside class="col-md-3 col-sm-4 sidebar">
+                <aside class="col-md-3 col-sm-12 sidebar">
                     <div class="widget-wrap">
                         <h2 class="widget-title title-profile-bar">{{ trans('profile.my_profile') }}</h2>
                         <ul class="account-list with-border">
@@ -43,7 +43,7 @@
                 <div class="visible-xs pt-70"></div>
 
                 <!-- Product Details Starts-->
-                <aside class="col-md-9 col-sm-8" id="profile-payment-delivery">
+                <aside class="col-md-9 col-sm-12" id="profile-payment-delivery">
                     <div class="profile-item">
                         <div class="profile-item-header">
                             <span><i class="fa fa-credit-card" aria-hidden="true"></i></span>{{ trans('profile.payment_delivery') }}
@@ -51,7 +51,7 @@
                         <div class="profile-item-body">
                             <div class="row">
                                 <form @submit.prevent="validateBeforeSubmit">
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 kab-margin-mob">
                                         <div class="drop-menu-select" tabindex="1" data-profile-payment style="color: rgb(85, 85, 85); font-weight: 500;">
                                             <div class="select">
                                                 @if($model->selectedPaymentId != null)
@@ -73,7 +73,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 kab-margin-mob">
                                         <div class="drop-menu-select" tabindex="1" data-profile-delivery style="color: rgb(85, 85, 85); font-weight: 500;">
                                             <div class="select">
                                                 @if($model->selectedDeliveryId != null)
@@ -97,7 +97,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 kab-margin-mob">
                                         <div class="form-group">
                                             <input type="text"
                                                    data-profile-address
@@ -106,7 +106,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="profile-item-save">
+                                    <div class="profile-item-save kab-margin-mob">
                                         <button type="submit" class="theme-btn btn-black">
                                             {{ trans('profile.save') }}
                                         </button>
