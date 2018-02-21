@@ -24,7 +24,7 @@ $(document).ready(function () {
         menuCloseLink = '[data-menu-close-link]',
         isMenuOpened = false;
 
-    $('body').on('click', menuOpenLink, function (e) {
+    $('body').on('click touchend', menuOpenLink, function (e) {
         e.stopPropagation();
         openNav(e);
 
@@ -49,65 +49,6 @@ $(document).ready(function () {
     });
 });
 /* left slide bar END */
-
-
-
-/* RIGHT slide bar */
-function openNavRight(e) {
-    $('body').css('overflow-x', 'hidden');
-    $('body').animate(300);
-    $('.nav-bg').fadeIn(300);
-
-
-    $('#mySidenavRight').animate({
-        marginRight: '0px'
-    }, 250, 'swing');
-}
-
-function closeNavRight(e) {
-    $('body').css('overflow-x', 'auto');
-    $('.nav-bg').fadeOut(300);
-
-    $('#mySidenavRight').animate({
-        marginRight: '-290px'
-    }, 250, 'swing');
-    // $('body').animate({
-    //         marginLeft: "0px"
-    //      }, 250, 'swing');
-}
-
-$(document).ready(function () {
-    var menuOpenLinkRight = '[data-menu-open-link-right]',
-        menuCloseLinkRight = '[data-menu-close-link-right]',
-        isMenuOpenedRight = false;
-
-    $('body').on('click', menuOpenLinkRight, function (e) {
-        e.stopPropagation();
-        openNavRight(e);
-
-        isMenuOpenedRight = true;
-    });
-
-    $('body').on('click', menuCloseLinkRight, function (e) {
-        e.stopPropagation();
-        closeNavRight(e);
-
-        isMenuOpenedRight = false;
-    });
-
-    $(document).on('click', 'body', function (e) {
-        var $targetR = $(e.target);
-
-        if (isMenuOpenedRight && ($targetR.attr('id') != 'mySidenavRight' && $targetR.closest('#mySidenavRight').length === 0)) {
-
-            closeNavRight(e);
-
-            isMenuOpenedRight = false;
-        }
-    });
-});
-/* RIGHT slide bar END */
-
 
 /*--- SLICK  NAVBAR  ----*/
 $(document).ready(function() {

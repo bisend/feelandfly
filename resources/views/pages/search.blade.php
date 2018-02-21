@@ -214,7 +214,7 @@
                 <!-- Product Details Starts-->
                 <aside class="col-md-12 col-sm-12">
                     <div class="sorter-bar block-inline">
-                        <div class="col-md-6 col-sm-7 no-padding sorter-date">
+                        <div class="col-md-6 col-sm-6 no-padding sorter-date">
 
 
                             <div class="site-breadcumb white-clr">
@@ -232,7 +232,7 @@
 
                         </div>
 
-                        <div class="col-md-6 col-sm-5 show-result no-padding">
+                        <div class="col-md-6 col-sm-6 show-result no-padding">
                             <label>{{ trans('layout.sort') }}</label>
                             <div class="search-selectpicker selectpicker-wrapper">
                                 @php($selectedSortItem = 'default')
@@ -267,7 +267,7 @@
 
                                     @php($relatedProducts = $categoryProduct->product_group->products)
 
-                                    <div class="col-lg-3 col-sm-3 prod-wrap-cont">
+                                    <div class="col-lg-3 col-sm-6 prod-wrap-cont">
 
                                         <div class="prod-wrap-absolute clearfix">
                                             <div class="product_item prod-wrap">

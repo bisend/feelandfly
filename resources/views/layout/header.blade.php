@@ -11,6 +11,11 @@
         </div>
         <div class="nav-slide-body">
             <ul>
+                <li class="sale-link">
+                    <a href="{{ route('saleIndex', ['language' => $model->language == 'uk' ? $model->language : '']) }}">
+                        {{ trans('home.sale') }}
+                    </a>
+                </li>
                 @foreach($model->categories as $category)
                     <li>
                         @if($category->hasSecondLevel)
