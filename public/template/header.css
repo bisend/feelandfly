@@ -3885,13 +3885,15 @@ header {
     -ms-transition: all 0.3s ease 0s;
 }
 
-.can-show-mini-cart:hover .smol-cart-content {
-    /*display: block;*/
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0px);
-    -webkit-transform: translateY(0px);
-    -ms-transform: translateY(0px);
+@media (min-width: 992px) {
+    .can-show-mini-cart:hover .smol-cart-content {
+        /*display: block;*/
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0px);
+        -webkit-transform: translateY(0px);
+        -ms-transform: translateY(0px);
+    }
 }
 
 /* Show the dropdown menu on hover */

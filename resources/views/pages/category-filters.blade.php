@@ -229,7 +229,7 @@
                                                         <span class="square-box"></span>
                                                     </label>
                                                     <a class="checkbox-inline filter-value-link"
-                                                       href="{{ url_category_filters($model->currentCategory->slug, null, $filterValue->filter_name_slug, $filterValue->filter_value_slug, $model->language)  }}">
+                                                       href="{{ url_category_filters($model->currentCategory->slug, $model->filtersParam, $filterValue->filter_name_slug, $filterValue->filter_value_slug, $model->language)  }}">
                                                     <span class="" :class="{checkactive: filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked}">
                                                         {{ $filterValue->filter_value_title }}
                                                     </span>
@@ -306,7 +306,6 @@
                             </div>
 
                             <div class="col-md-6 col-sm-5 show-result no-padding">
-                                {{--<form action="#" class="form-sorter">--}}
                                     <label> {{ trans('layout.sort') }} </label>
                                     <div class="search-selectpicker selectpicker-wrapper">
                                         @php($selectedSortItem = 'default')
@@ -317,7 +316,7 @@
                                         @endforeach
                                         <select id="sort-select" class="selectpicker input-price"
                                                 data-width="100%" data-toggle="tooltip"
-                                                title="{{ $model->sort == 'default' ? trans('layout.how_to_sort') : $selectedSortItem }}">
+                                                title="{{ $model->sort == 'default' ? trans('layout.default') : $selectedSortItem }}">
                                             @foreach($model->sortItems->items as $sortItem)
                                                 <option data-url="{{ $sortItem->url_filters }}" {{$sortItem->isSelected ? 'disabled' : ''}}>
                                                     {{ $sortItem->name }}
@@ -325,7 +324,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                {{--</form>--}}
                             </div>
                         </div>
 

@@ -84,69 +84,91 @@
                     </li>
                 @endforeach
                 <li>
-                    <a href="">
-                        Оплата та Доставка
-                    </a>
-                </li>
-
-
-                <li>
-                    <a href="">
-                        Про нас
+                    <a href="{{ url_about($model->language) }}">
+                        {{ trans('header.about_us') }}
                     </a>
                 </li>
                 <li>
-                    <a href="">
-                        Контакти
+                    <a href="{{ url_contact($model->language) }}">
+                        {{ trans('header.contacts') }}
                     </a>
                 </li>
                 <li>
-                    <a href="">
-                        Співпраця
+                    <a href="{{ url_cooperation($model->language) }}">
+                        {{ trans('header.cooperation') }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_static_payment_delivery($model->language) }}">
+                        {{ trans('header.payment_delivery') }}
                     </a>
                 </li>
 
-                <li>
-                    <a href="">Вхід</a>
-                </li>
-                <li>
-                    <a href="">Реєстрація</a>
-                </li>
+                @if(auth()->check())
 
-                <li>
-                    <div class="dropdown-div">
-                        <div class="dropdown-div-btn">
-                            <h2 class="widget-title">
-                                <a class="mobile-nav-left-profile" href=""><i class="fa fa-user" aria-hidden="true"></i> Особистий кабінет</a>
-                                <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
-                            </h2>
+                    <li>
+                        <div class="dropdown-div">
+                            <div class="dropdown-div-btn">
+                                <h2 class="widget-title">
+                                    <a class="mobile-nav-left-profile" href="{{ url_personal_info($model->language) }}">
+                                        <i class="fa fa-user" aria-hidden="true"></i>{{ auth()->user()->name }}
+                                    </a>
+                                    <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                                </h2>
+                            </div>
+                            <div class="dropdown-div-content">
+                                <ul class="dropdown-list">
+
+                                    <li>
+                                        <a href="{{ url_personal_info($model->language) }}">
+                                            {{ trans('header.personal_info') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url_payment_delivery($model->language) }}">
+                                            {{ trans('header.payment_delivery') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url_wish_list($model->language) }}">
+                                            {{ trans('header.wish_list') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url_my_orders($model->language) }}">
+                                            {{ trans('header.my_orders') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/user/logout">
+                                            {{ trans('header.log_out') }}
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
                         </div>
-                        <div class="dropdown-div-content">
-                            <ul class="dropdown-list">
+                    </li>
+                @else
+                    <li>
+                        <a data-toggle="modal" data-target="#login-popup" href="#">
+                            {{ trans('header.log_in') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="modal" data-target="#register-popup" href="#">
+                            {{ trans('header.register') }}
+                        </a>
+                    </li>
+                @endif
 
-                                <li>
-                                    <a href="">пункт</a>
-                                </li>
-                                <li>
-                                    <a href="">пункт</a>
-                                </li>
-                                <li>
-                                    <a href="">пункт</a>
-                                </li>
-                                <li>
-                                    <a href="">пункт</a>
-                                </li>
 
-                            </ul>
-                        </div>
-                    </div>
-                </li>
 
                 <li class="mobile-nav-lang">
                     <div class="dropdown-div">
                         <div class="dropdown-div-btn">
                             <h2 class="widget-title">
-                                <a href="">Вибір мови</a>
+                                <a href="javascript:void(0);">{{ trans('layout.choose_lang') }}</a>
                                 <span class="minus-icon" style="line-height: 17px;"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
                             </h2>
                         </div>
@@ -154,10 +176,10 @@
                             <ul class="dropdown-list">
 
                                 <li>
-                                    <a href="">Укр</a>
+                                    <a href="{{ url_current('ru') }}">Рус</a>
                                 </li>
                                 <li>
-                                    <a href="">Рус</a>
+                                    <a href="{{ url_current('uk') }}">Укр</a>
                                 </li>
 
                             </ul>
@@ -173,10 +195,10 @@
         <div class="container">
             <div class="topbar-left topbar-left-nav">
                 <ul>
-                    <li><a href="#">{{ trans('header.about_us') }}</a></li>
-                    <li><a href="#">{{ trans('header.contacts') }}</a></li>
-                    <li><a href="#">{{ trans('header.cooperation') }}</a></li>
-                    <li><a href="#">{{ trans('header.payment_delivery') }}</a></li>
+                    <li><a href="{{ url_about($model->language) }}">{{ trans('header.about_us') }}</a></li>
+                    <li><a href="{{ url_contact($model->language) }}">{{ trans('header.contacts') }}</a></li>
+                    <li><a href="{{ url_cooperation($model->language) }}">{{ trans('header.cooperation') }}</a></li>
+                    <li><a href="{{ url_static_payment_delivery($model->language) }}">{{ trans('header.payment_delivery') }}</a></li>
                     <li class="sale-link">
                         <a href="{{ route('saleIndex', ['language' => $model->language == 'uk' ? $model->language : '']) }}">
                             {{ trans('home.sale') }}
@@ -291,7 +313,7 @@
                     </div>
                 </div>
 
-                <div class="div_smoll-cart" id="mini-cart" :class="{'can-show-mini-cart': totalCount > 0}">
+                <div class="div_smoll-cart" id="mini-cart" @click="showMiniCart" :class="{'can-show-mini-cart': totalCount > 0}">
                     <div class="dropdown_cart_smoll">
                         <a class="show_cart">
                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>

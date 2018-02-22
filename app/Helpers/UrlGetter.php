@@ -466,3 +466,35 @@ if (!function_exists('url_all_lookbook'))
         return UrlBuilder::lookbookAllPage($language);
     }
 }
+
+if (!function_exists('url_about'))
+{
+    function url_about($language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::about($language);
+    }
+}
+
+if (!function_exists('url_contact'))
+{
+    function url_contact($language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::contact($language);
+    }
+}
+
+if (!function_exists('url_cooperation'))
+{
+    function url_cooperation($language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::cooperation($language);
+    }
+}
+
+if (!function_exists('url_static_payment_delivery'))
+{
+    function url_static_payment_delivery($language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::static_payment_delivery($language);
+    }
+}

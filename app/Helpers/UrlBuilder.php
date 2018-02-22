@@ -41,7 +41,7 @@ class UrlBuilder
      *
      * @var string
      */
-    const CONTACTS_PAGE = 'contacts';
+    const CONTACTS_PAGE = 'contact';
 
     /**
      * About page
@@ -207,6 +207,10 @@ class UrlBuilder
 
     const LOOKBOOK_ALL_PAGE = 'lookbook/all';
 
+    const COOPERATION_PAGE = 'cooperation';
+
+    const STATIC_PAYMENT_DELIVERY_PAGE = 'payment-delivery';
+
 
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -220,6 +224,46 @@ class UrlBuilder
     public static function home($language = Languages::DEFAULT_LANGUAGE)
     {
         return self::localize(url(self::URL_ROOT), $language);
+    }
+
+    public static function about($language = Languages::DEFAULT_LANGUAGE)
+    {
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::ABOUT_PAGE
+        ]);
+
+        return self::localize($url, $language);
+    }
+
+    public static function contact($language = Languages::DEFAULT_LANGUAGE)
+    {
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::CONTACTS_PAGE
+        ]);
+
+        return self::localize($url, $language);
+    }
+
+    public static function cooperation($language = Languages::DEFAULT_LANGUAGE)
+    {
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::COOPERATION_PAGE
+        ]);
+
+        return self::localize($url, $language);
+    }
+
+    public static function static_payment_delivery($language = Languages::DEFAULT_LANGUAGE)
+    {
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::STATIC_PAYMENT_DELIVERY_PAGE
+        ]);
+
+        return self::localize($url, $language);
     }
     
     // -----------------------------------------------------------------------------------------------------------------

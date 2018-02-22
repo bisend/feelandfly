@@ -243,7 +243,7 @@
                                 @endforeach
                                 <select id="sort-select" class="selectpicker input-price"
                                         data-width="100%" data-toggle="tooltip"
-                                        title="{{ $model->sort == 'default' ? trans('layout.how_to_sort') : $selectedSortItem }}">
+                                        title="{{ $model->sort == 'default' ? trans('layout.default') : $selectedSortItem }}">
                                     @foreach($model->sortItems->items as $sortItem)
                                         <option data-url="{{ $sortItem->url_search }}" {{$sortItem->isSelected ? 'disabled' : ''}}>
                                             {{ $sortItem->name }}

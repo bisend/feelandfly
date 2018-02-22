@@ -1381,14 +1381,27 @@ $(document).ready(function () {
 });
 /* left slide bar END */
 
+var SHOW_HEADER_TOP_BAR = false;
+
 /*--- SLICK  NAVBAR  ----*/
-$(document).ready(function() {
+$(window).load(function() {
+
+    if ($(window).width() > 991)
+    {
+        SHOW_HEADER_TOP_BAR = true;
+    }
+    else
+    {
+        $('.header-topbar').css('display', 'none');
+    }
+
     var objToStick = $(".header-main"); //Получаем нужный объект
     var topOfObjToStick = $(objToStick).offset().top; //Получаем начальное расположение нашего блока
+    $(window).scroll(function () {
+        var windowScroll = $(window).scrollTop(); //Получаем величину, показывающую на сколько прокручено окно
 
-    if (window.matchMedia('(min-width: 992px)').matches) {
-        $(window).scroll(function () {
-            var windowScroll = $(window).scrollTop(); //Получаем величину, показывающую на сколько прокручено окно
+        if (SHOW_HEADER_TOP_BAR)
+        {
             if (windowScroll > topOfObjToStick)
             { // Если прокрутили больше, чем расстояние до блока, то приклеиваем его
                 $('.header-topbar').slideUp(200, function() {
@@ -1400,12 +1413,28 @@ $(document).ready(function() {
                 $('.header-topbar').slideDown(400);
                 $(objToStick).removeClass("topWindow");
             }
-        });
-    }
+        }
+    });
+
+
 
 
 });
 /*--- SLICK  NAVBAR  END ----*/
+
+$( window ).resize(function() {
+    if ($(window).width() <= 991)
+    {
+        SHOW_HEADER_TOP_BAR = false;
+        $('.header-topbar').css('display', 'none');
+    }
+    else
+    {
+        SHOW_HEADER_TOP_BAR = true;
+        $('.header-topbar').slideDown(400);
+        $(".header-main").removeClass("topWindow");
+    }
+});
 
 /*LANG header*/
 $(document).ready(function() {

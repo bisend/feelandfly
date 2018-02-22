@@ -36,4 +36,6 @@ return [
     'no_products' => 'Таких товаров нет',
 
     'show_filters_btn' => 'Показать фильтры',
+
+    'choose_lang' => 'Выбор языка',
 ];

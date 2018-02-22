@@ -303,6 +303,26 @@ Route::get('/sale/{sort}/{page}/{language?}', 'SaleController@indexPaginationSor
         'language' => '^(uk|ru)?$'
     ])->name('saleIndexPaginationSort');
 
+
+Route::get('/about/{language?}', 'AboutController@index')
+    ->where([
+        'language' => '^(uk|ru)?$'
+    ]);
+
+Route::get('/contact/{language?}', 'ContactController@index')
+    ->where([
+        'language' => '^(uk|ru)?$'
+    ]);
+
+Route::get('/cooperation/{language?}', 'CooperationController@index')
+    ->where([
+        'language' => '^(uk|ru)?$'
+    ]);
+
+Route::get('/payment-delivery/{language?}', 'StaticPaymentDeliveryController@index')
+    ->where([
+        'language' => '^(uk|ru)?$'
+    ]);
 //Route::get('/lookbook/all/{language?}', 'LookBookController@showAllLookBook')->where([
 //    'language' => '^(uk|ru)?$'
 //]);

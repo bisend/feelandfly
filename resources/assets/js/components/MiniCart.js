@@ -53,6 +53,10 @@ new Vue({
         showMiniCart: function () {
             if (GLOBAL_DATA.totalCount > 0)
             {
+                if ($(window).width() <= 991)
+                {
+                    $('#big-cart').modal('show');
+                }
                 // $('.dropdown_cart_smoll').hover(function () {
                 //     $('.smol-cart-content').stop(100,100).fadeIn(100);
                 // });
