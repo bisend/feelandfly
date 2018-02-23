@@ -82,7 +82,7 @@
                             <div class="profile-item-body">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="drop-menu-select" tabindex="1" data-order-payment style="color: rgb(85, 85, 85); font-weight: 500;">
+                                        <div class="drop-menu-select" v-bind:class="{selectedDelPay: orderConfirm.paymentId != ''}" tabindex="1" data-order-payment style="color: rgb(85, 85, 85); font-weight: 500;">
                                             <div class="select">
                                                 @if($model->profile != null && $model->profile->payment_id != null)
                                                     @foreach($model->payments as $payment)
@@ -104,7 +104,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <div class="drop-menu-select" tabindex="1" data-order-delivery style="color: rgb(85, 85, 85); font-weight: 500;">
+                                        <div class="drop-menu-select" tabindex="1" v-bind:class="{selectedDelPay: orderConfirm.deliveryId != ''}" data-order-delivery style="color: rgb(85, 85, 85); font-weight: 500;">
                                             <div class="select">
                                                 @if($model->profile != null && $model->profile->delivery_id != null)
                                                     @foreach($model->deliveries as $delivery)

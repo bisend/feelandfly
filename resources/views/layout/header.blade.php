@@ -1,5 +1,6 @@
 {{--HEADER--}}
 <header>
+    <div class="nav-sidebar-bg"></div>
     <div id="mySidenav" class="sidenav">
         <div class="nav-header">
             <span>Меню</span>
@@ -151,12 +152,12 @@
                     </li>
                 @else
                     <li>
-                        <a data-toggle="modal" data-target="#login-popup" href="#">
+                        <a data-toggle="modal" data-target="#login-popup" data-close-sidebar-nav href="#">
                             {{ trans('header.log_in') }}
                         </a>
                     </li>
                     <li>
-                        <a data-toggle="modal" data-target="#register-popup" href="#">
+                        <a data-toggle="modal" data-target="#register-popup" data-close-sidebar-nav href="#">
                             {{ trans('header.register') }}
                         </a>
                     </li>
