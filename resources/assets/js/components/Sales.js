@@ -160,7 +160,7 @@ if (document.getElementById('sales-products'))
                 /*------------------- Related Product Slider -------------------*/
                 if ($('#sales-prod-slider').length > 0) {
                     $("#sales-prod-slider").owlCarousel({
-                        dots: false,
+                        dots: true,
                         loop: false,
                         autoplay: false,
                         autoplayHoverPause: true,

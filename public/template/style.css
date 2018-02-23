@@ -1674,16 +1674,6 @@ textarea:focus:-ms-input-placeholder {
 .slider-btn > a + a {
     margin-left: 6px;
 }
-.main-slider .owl-dots {
-    bottom: 0;
-    position: absolute;
-    right: 7%;
-    top: 42%;
-}
-.main-slider .owl-dots .owl-dot {
-    display: block;
-    margin: 10px;
-}
 
 /* Animation delays */
 .caption-text .effect-1 {
@@ -5926,6 +5916,10 @@ h2.no-products {
     #main-slider-section .marker-box {
         display: none;
     }
+
+    #main-slider .owl-nav {
+        display: none;
+    }
 }
 
 @media (max-width: 767px) {
@@ -5946,9 +5940,9 @@ h2.no-products {
     .carousel-inner .big-slider-cover {
         height: 250px;
     }
-    .main-slider .owl-dots {
-        top: 33%;
-    }
+    /*.main-slider .owl-dots {*/
+        /*top: 33%;*/
+    /*}*/
 }
 
 @media (max-width: 375px) {
@@ -6138,4 +6132,94 @@ li.sale-link:before {
 
 .drop-menu-select.selectedDelPay .select span {
     color: #000;
+}
+
+#main-slider .owl-nav {
+    right: auto;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+}
+
+#main-slider .owl-dots {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#main-slider .owl-dots .owl-dot {
+    display: inline-block;
+    margin: 10px;
+}
+
+#main-slider .owl-nav > div > i {
+    top: 50%;
+    position: relative;
+    transform: translateY(-50%);
+    transition: none;
+}
+
+#main-slider .owl-nav > div {
+    width: 80px;
+    height: 100%;
+    text-align: center;
+    border: none;
+    font-size: 60px;
+    transition: all .5s ease;
+    background-color: transparent;
+    pointer-events: auto;
+}
+
+#main-slider .owl-nav > div:hover {
+    transition: all .5s ease;
+}
+
+#main-slider .owl-prev {
+    position: absolute;
+    left: 0;
+}
+
+#main-slider .owl-next {
+    position: absolute;
+    right: 0;
+}
+
+#main-slider .owl-prev:hover {
+    background: -moz-linear-gradient(left, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%);
+    background: -webkit-linear-gradient(left, rgba(0,0,0,0.4) 0%,rgba(0,0,0,0) 100%);
+    background: linear-gradient(to right, rgba(0,0,0,0.4) 0%,rgba(0,0,0,0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#00000000',GradientType=1 );
+}
+
+#main-slider .owl-next:hover {
+    background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+    background: -webkit-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0.4) 100%);
+    background: linear-gradient(to right, rgba(0,0,0,0) 0%,rgba(0,0,0,0.4) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#000000',GradientType=1 );
+}
+
+.sale-button-block {
+    text-align: center;
+}
+
+.sale-button-block .sale-button {
+    min-width: 300px;
+}
+
+.sale-button-block .sale-button:after {
+    top: 0;
+    left: 0;
+    transform: none;
+}
+
+.sale-button-block .sale-button:hover {
+    /*color: #606d72;*/
+    /*border: 2px solid #606d72;*/
+}
+
+#sales-prod-slider .owl-dots {
+    margin-top: -60px;
+    margin-bottom: 20px;
 }

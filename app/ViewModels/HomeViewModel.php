@@ -15,6 +15,8 @@ class HomeViewModel extends LayoutViewModel
     public $salesProducts;
     
     public $salesIds = [];
+
+    public $salesProductsCount = 0;
     
     public $topProducts;
     

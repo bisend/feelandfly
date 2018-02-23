@@ -12926,23 +12926,17 @@ if (document.getElementById('main-slider-section')) {
             //Main Slider carousel
             if ($('#main-slider').length > 0) {
                 $("#main-slider").owlCarousel({
-                    //animateOut: 'slideOutDown',
-                    //animateIn: 'flipInX',
-                    autoplay: false,
-                    animateIn: 'fadeInDown',
-                    animateOut: 'slideOutDown',
+                    autoplay: true,
                     items: 1,
                     dots: true,
-                    nav: false,
+                    nav: true,
                     loop: true,
                     touchDrag: true,
                     mouseDrag: false,
+                    navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
                     responsive: {
-                        0: { items: 1
-                            // 900: {
-                            //     mouseDrag:false
-                            // }
-                        } }
+                        0: { items: 1 }
+                    }
                 });
             }
             if (GLOBAL_DATA.isMainSliderProductsInited) {
@@ -15701,7 +15695,7 @@ if (document.getElementById('sales-products')) {
                 /*------------------- Related Product Slider -------------------*/
                 if ($('#sales-prod-slider').length > 0) {
                     $("#sales-prod-slider").owlCarousel({
-                        dots: false,
+                        dots: true,
                         loop: false,
                         autoplay: false,
                         autoplayHoverPause: true,

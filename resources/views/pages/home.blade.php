@@ -567,6 +567,9 @@
                                 @php($counter++)
                             @endforeach
                         </div>
+                        <div class="sale-button-block">
+                            <a href="{{ url_sale($model->language) }}" class="theme-btn btn-black sale-button">{{ trans('home.all_sales') }} ({{ $model->salesProductsCount }})</a>
+                        </div>
                     </div>
                     <!-- Related Products Ends -->
 

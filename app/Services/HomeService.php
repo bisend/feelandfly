@@ -61,6 +61,8 @@ class HomeService extends LayoutService
 
         $this->fillSalesIds($model);
 
+        $this->fillSalesProductsCount($model);
+
         $this->fillTopProducts($model);
 
         $this->fillTopIds($model);
@@ -85,6 +87,11 @@ class HomeService extends LayoutService
         {
             $model->salesIds[] = $salesProduct->id;
         }
+    }
+
+    private function fillSalesProductsCount($model)
+    {
+        $model->salesProductsCount = $this->productRepository->getCountAllSalesProducts($model);
     }
 
     private function fillTopProducts($model)
