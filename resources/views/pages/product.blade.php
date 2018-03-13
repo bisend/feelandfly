@@ -251,7 +251,7 @@
                         </div>
                         <div class="tab-content prod-tab-content">
                             <div id="prod-tab-1" class="tab-pane fade in active">
-                                {{ $model->product->description }}
+                                {!! $model->product->description !!}
                             </div>
                             <div id="prod-tab-2" class="tab-pane fade">
                                 <div class="comment-count">

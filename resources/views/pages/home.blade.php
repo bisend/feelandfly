@@ -206,9 +206,9 @@
                                                 @foreach($slide->markers as $marker)
                                                     @if($marker->product != null)
                                                         @php($product = $marker->product)
-                                                        <div data-marker-point="{{ $counter }}" class="marker-position" style="left: {{ $marker->position_x }}px; top: {{ $marker->position_y }}px;">
-                                                            <a class="pulse marker" v-on:mouseenter="initMarkerPosition({{$counter}})"></a>
-                                                            <div data-marker-product="{{ $counter }}" v-on:mouseleave="resetMarkerPosition({{$counter}})" class="prod-wrap-cont marker-product">
+                                                        <div data-marker-point="{{ $counter }}" class="marker-position" style="left: {{ $marker->position_x }}%; top: {{ $marker->position_y }}%;">
+                                                            <a data-marker-link="{{$counter}}" class="pulse marker"></a>
+                                                            <div data-marker-product="{{ $counter }}" class="prod-wrap-cont marker-product">
                                                                 <div class="product_item prod-wrap">
                                                                     <div class="product_img">
                                                                         <div class="prod-img">
@@ -239,7 +239,7 @@
 
                                                                             <a class="caption-link meta-icon"
                                                                                href="#"
-                                                                               v-on:click.prevent="changeMainSliderProductPreview({{$counter}})">
+                                                                               data-marker-product-preview="{{$counter}}">
                                                                                 <span class="fa fa-eye"> </span>
                                                                             </a>
                                                                         </div>

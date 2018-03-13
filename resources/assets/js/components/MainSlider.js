@@ -160,7 +160,10 @@ if (document.getElementById('main-slider-section'))
             el: '#main-slider-section',
             data: GLOBAL_DATA,
             mounted: function () {
-                //Main Slider carousel
+                let _this = this;
+                let counter;
+
+                    //Main Slider carousel
                 if ($('#main-slider').length > 0) {
                     $("#main-slider").owlCarousel({
                         autoplay: true,
@@ -168,11 +171,27 @@ if (document.getElementById('main-slider-section'))
                         dots: true,
                         nav: true,
                         loop: true,
-                        touchDrag:true,
-                        mouseDrag:false,
+                        touchDrag: true,
+                        mouseDrag: false,
+                        autoplayHoverPause: true,
                         navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
                         responsive: {
                             0: {items: 1}
+                        },
+                        onInitialized: function () {
+                            $('body').on('mouseenter', '[data-marker-link]', function (event) {
+                                counter = $(this).attr('data-marker-link');
+                                _this.initMarkerPosition(counter);
+                            });
+
+                            $('body').on('mouseleave', '[data-marker-product]', function (event) {
+                                _this.resetMarkerPosition(counter);
+                            });
+
+                            $('body').on('click', '[data-marker-product-preview]', function (event) {
+                                event.preventDefault();
+                                _this.changeMainSliderProductPreview(counter);
+                            });
                         }
                     });
                 }

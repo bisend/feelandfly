@@ -7,6 +7,7 @@ use App\DatabaseModels\UserType;
 use App\DatabaseModels\WishList;
 use App\Helpers\Languages;
 use App\Services\ProfileService;
+use function foo\func;
 use Illuminate\Http\Request;
 use Session;
 
@@ -44,7 +45,15 @@ class LayoutController extends Controller
         {
             $user = auth()->user();
             $userTypeId = $user->user_type_id;
-            $profile = Profile::whereUserId($user->id)->first();
+            $profile = Profile::with([
+                'delivery' => function ($query) use ($language) {
+                    $query->select([
+                        'id',
+                        "name_$language as name",
+                        'slug'
+                    ]);
+                }
+            ])->whereUserId($user->id)->first();
             $wishList = WishList::whereUserId($user->id)->first();
             $wishListItems = $this->profileService->getWishListItems($wishList->id, $language, $userTypeId);
             $totalWishListCount = $this->profileService->getTotalWishListCount($wishListItems);

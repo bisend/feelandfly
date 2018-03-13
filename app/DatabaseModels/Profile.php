@@ -30,4 +30,9 @@ use Illuminate\Database\Eloquent\Model;
 class Profile extends Model
 {
     protected $table = 'profiles';
+
+    public function delivery()
+    {
+        return $this->hasOne(Delivery::class, 'id', 'delivery_id');
+    }
 }

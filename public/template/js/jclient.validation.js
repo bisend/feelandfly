@@ -10,6 +10,7 @@ var RegularExpressions = {
 	SIMPLE_PASSWORD: /^[\w.]{6,20}$/,                                               // For example 123123 (similar password)
 	EMAIL: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,	 // For example nicholas.brick@mail.com
 	PHONE_NUMBER: /^[0-9\-\(\)\+ ]{5,30}$/,											// For example +38(012) 345-67-89
+	PHONE_NUMBER_MOBILE: /^[0-9\-\(\)\+ ]{15,30}$/,											// For example +38(012) 345-67-89
 	URL_LINK: /^http:+|https:+.+$/,                                                 // For example http://fs.to
 	LETTERS_ONLY: /^[а-яА-ЯёЁіІїЇa-zA-Z]+$/,                                          // Letters only
 	SIMPLE_TEXT: /.{2,}\s*/,                                                        // Just simple text (more than two symbols)

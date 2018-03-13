@@ -10,6 +10,7 @@ var RegularExpressions = {
 	SIMPLE_PASSWORD: /^[\w.]{6,20}$/,                                               // For example 123123 (similar password)
 	EMAIL: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,	 // For example nicholas.brick@mail.com
 	PHONE_NUMBER: /^[0-9\-\(\)\+ ]{5,30}$/,											// For example +38(012) 345-67-89
+	PHONE_NUMBER_MOBILE: /^[0-9\-\(\)\+ ]{15,30}$/,											// For example +38(012) 345-67-89
 	URL_LINK: /^http:+|https:+.+$/,                                                 // For example http://fs.to
 	LETTERS_ONLY: /^[а-яА-ЯёЁіІїЇa-zA-Z]+$/,                                          // Letters only
 	SIMPLE_TEXT: /.{2,}\s*/,                                                        // Just simple text (more than two symbols)
@@ -447,6 +448,8 @@ var LANGUAGE = $('html').attr('lang'),
 
 var INIT_CART_WS;
 
+const NOVA_POSHTA_API_KEY = 'b44f0a86753950ac8f5484c2030cde2d';
+
 var INCORRECT_FIELD_CLASS = 'incorrect-field',
     REQUIRED_FIELD_TEXT = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Обязательное поле' : 'Обов`язкове поле',
     INCORRECT_FIELD_TEXT = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Неправильные данные' : 'Невірно введені дані',
@@ -463,7 +466,8 @@ var INCORRECT_FIELD_CLASS = 'incorrect-field',
     WRONG_OLD_PASSWORD = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Неверный старый пароль.' : 'Неправильний старий пароль.',
     REVIEW_ADDED = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Спасибо! Модератор пересмотрит Ваш отзыв, после чего он появится на сайте.' : 'Дякуємо! Модератор перегляне Ваш відгук, після чого він з`явиться на сайті.',
     SHOW_FILTERS_BTN = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Показать фильтры' : 'Показати фільтри',
-    HIDE_FILTERS_BTN = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Скрыть фильтры' : 'Сховати фільтри';
+    HIDE_FILTERS_BTN = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Скрыть фильтры' : 'Сховати фільтри',
+    DEFAULT_COUNTRY = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Украина' : 'Україна';
 
 if (window.location.hash && window.location.hash == '#_=_') {
     if (window.history && history.pushState) {
@@ -490,8 +494,8 @@ if (!!window.performance && window.performance.navigation.type === 2)
 
 
 $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    beforeSend: function (request) {
+        request.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));
     }
 });
 
@@ -524,7 +528,17 @@ var GLOBAL_DATA = {
         address: '',
         comment: '',
         paymentId: '',
-        deliveryId: ''
+        deliveryId: '',
+        delivery: null,
+        deliveryType: null,
+        deliveries: [],
+        country: DEFAULT_COUNTRY,
+        city: null,
+        warehouse: null,
+        cities: [],
+        countries: [],
+        warehouses: [],
+        disableWarehouse: true
     },
     wishListItems: [],
     wishListPagination: {
@@ -588,7 +602,8 @@ var GLOBAL_DATA = {
         rel: ''
     },
     newProducts: [],
-    
+
+    DEFAULT_COUNTRY: (LANGUAGE === DEFAULT_LANGUAGE) ? 'Украина' : 'Україна',
     INIT_CART_ENDED: false,
     IS_DATA_PROCESSING: false,
     isMainSliderProductsInited: false,
@@ -596,7 +611,8 @@ var GLOBAL_DATA = {
     user: null,
     profile: null,
     wishList: null,
-    userTypeId: 1
+    userTypeId: 1,
+    lang: LANGUAGE
 };
 
 function initCart() {
@@ -667,6 +683,7 @@ function getUser() {
                     if (data.profile.delivery_id != null)
                     {
                         GLOBAL_DATA.orderConfirm.deliveryId = data.profile.delivery_id;
+                        GLOBAL_DATA.orderConfirm.deliveryName = data.profile.delivery.name;
                     }
 
                     GLOBAL_DATA.review.name = GLOBAL_DATA.user.name;

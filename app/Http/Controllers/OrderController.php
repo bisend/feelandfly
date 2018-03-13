@@ -10,6 +10,7 @@ use App\Services\CartService;
 use App\Services\OrderService;
 use App\ViewModels\OrderViewModel;
 use DB;
+use JavaScript;
 use Session;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -56,6 +57,13 @@ class OrderController extends LayoutController
         $model = new OrderViewModel('order', $language);
 
         $this->orderService->fill($model);
+
+        Javascript::put([
+            'countries' => $model->countries,
+            'deliveries' => $model->deliveries
+        ]);
+
+        \Debugbar::info($model);
 
         return view('pages.order', compact('model'));
     }

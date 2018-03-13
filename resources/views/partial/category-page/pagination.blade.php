@@ -1,7 +1,7 @@
 @php($pages = \App\Helpers\Paginator::createPagination($model->page, $model->categoryProductsLimit, $model->countCategoryProducts))
 @php($isPrev = array_shift($pages))
 @php($isNext = array_pop($pages))
-@if($model->countCategoryProducts >= $model->categoryProductsLimit)
+@if($model->countCategoryProducts > $model->categoryProductsLimit)
     <div class="block-inline pagination-wrap text-center">
         <ul class="pagination-1">
 

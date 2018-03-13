@@ -8,6 +8,7 @@
 
 namespace App\Services;
 
+use App\Helpers\Country;
 use App\Repositories\CategoryRepository;
 use App\Repositories\DeliveryRepository;
 use App\Repositories\MetaTagRepository;
@@ -82,6 +83,8 @@ class OrderService extends LayoutService
         
         $this->fillDeliveries($model);
 
+        $this->fillCountries($model);
+
         $this->fillMetaTags($model);
     }
 
@@ -101,6 +104,11 @@ class OrderService extends LayoutService
     private function fillDeliveries($model)
     {
         $model->deliveries = $this->deliveryRepository->getAllDeliveries($model);
+    }
+
+    private function fillCountries($model)
+    {
+        $model->countries = Country::getData($model->language);
     }
 
     /**

@@ -23,6 +23,8 @@ class OrderViewModel extends LayoutViewModel
      */
     public $order;
 
+    public $countries;
+
     /**
      * OrderViewModel constructor.
      * @param string $view
