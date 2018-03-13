@@ -535,10 +535,16 @@ var GLOBAL_DATA = {
         country: DEFAULT_COUNTRY,
         city: null,
         warehouse: null,
+        aStreet: '',
+        aLand: '',
+        aCity: '',
+        aIndex: '',
         cities: [],
         countries: [],
         warehouses: [],
-        disableWarehouse: true
+        disableWarehouse: true,
+        checkoutPoints: [],
+        checkoutPoint: null
     },
     wishListItems: [],
     wishListPagination: {

@@ -256,30 +256,81 @@
                                             </div>
                                             {{--WAREHOUSE END--}}
                                         </div>
-                                        <div v-else-if="orderConfirm.country !== null &&
-                                         orderConfirm.country !== '' &&
-                                         (orderConfirm.deliveryType === 'Адресная доставка' ||
-                                          orderConfirm.deliveryType === 'Адресна доставка')" class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="order-address-field">{{ trans('order.address') }}: <span class="field-required">*</span></label>
-                                                <input type="text"
-                                                       id="order-address-field"
-                                                       data-order-address
-                                                       v-model="orderConfirm.address"
-                                                       placeholder="{{ trans('order.address') }}"
-                                                       class="form-control black-input">
+
+                                        <div v-show="orderConfirm.country !== null &&
+                                        orderConfirm.country !== '' &&
+                                        (orderConfirm.deliveryType === 'Адресная доставка' ||
+                                        orderConfirm.deliveryType === 'Адресна доставка')">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="order-a-street-field">{{ trans('order.a_street_house_room') }}: <span class="field-required">*</span></label>
+                                                    <input type="text"
+                                                           id="order-a-street-field"
+                                                           data-order-a-street
+                                                           v-model="orderConfirm.aStreet"
+                                                           placeholder="{{ trans('order.a_enter_str') }}"
+                                                           class="form-control black-input">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="order-a-land-field">{{ trans('order.a_land_area_region') }}: <span class="field-required">*</span></label>
+                                                    <input type="text"
+                                                           id="order-a-land-field"
+                                                           data-order-a-land
+                                                           v-model="orderConfirm.aLand"
+                                                           placeholder="{{ trans('order.a_enter_land') }}"
+                                                           class="form-control black-input">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="order-a-city-field">{{ trans('order.a_city') }}: <span class="field-required">*</span></label>
+                                                    <input type="text"
+                                                           id="order-a-city-field"
+                                                           data-order-a-city
+                                                           v-model="orderConfirm.aCity"
+                                                           placeholder="{{ trans('order.a_enter_city') }}"
+                                                           class="form-control black-input">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="order-a-index-field">{{ trans('order.a_post_index') }}:</label>
+                                                    <input type="text"
+                                                           id="order-a-index-field"
+                                                           data-order-a-index
+                                                           v-model="orderConfirm.aIndex"
+                                                           placeholder="{{ trans('order.a_enter_index') }}"
+                                                           class="form-control black-input">
+                                                </div>
                                             </div>
                                         </div>
+
                                     </div>
                                     {{--NOVA POSHTA BLOCK END--}}
 
 
                                     {{--SELF-CHECKOUT MARKS--}}
-                                    <div v-cloak v-if="orderConfirm.delivery &&
+                                    <div v-cloak v-show="orderConfirm.delivery &&
                                         (orderConfirm.delivery.name === 'Самовывоз' ||
                                         orderConfirm.delivery.name === 'Самовивіз')" class="col-md-12">
                                         <div class="form-group">
-                                             точки самовывоза
+                                            <div class="form-group" data-order-points>
+                                                <label for="order-points-field">{{ trans('order.points') }}: <span class="field-required">*</span></label>
+                                                <v-select v-model="orderConfirm.checkoutPoint"
+                                                          :input-id="'order-points-field'"
+                                                          :transition="'slidedd'"
+                                                          :placeholder="'{{ trans('order.choose_point') }}'"
+                                                          :max-height="'200px'"
+                                                          :class="'country-select'"
+                                                          :searchable="false"
+                                                          :options="orderConfirm.checkoutPoints">
+                                                    <span v-cloak slot="no-options">
+                                                        {{ trans('order.no_results') }}
+                                                    </span>
+                                                </v-select>
+                                            </div>
                                         </div>
                                     </div>
                                     {{--SELF-CHECKOUT MARKS END--}}

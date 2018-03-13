@@ -4,10 +4,17 @@ Vue.component('v-select', vSelect);
 
 if (document.getElementById('order-confirm'))
 {
-    let orderNameValidator, orderPhoneValidator, orderEmailValidator, orderAddressValidator;
+    let orderNameValidator,
+        orderPhoneValidator,
+        orderEmailValidator,
+        orderAddressValidator,
+        orderAStreetValidator,
+        orderALandValidator,
+        orderACityValidator;
 
     GLOBAL_DATA.orderConfirm.countries = FFShop.countries;
     GLOBAL_DATA.orderConfirm.deliveries = FFShop.deliveries;
+    GLOBAL_DATA.orderConfirm.checkoutPoints = ['Point 1', 'Point 2'];
 
     new Vue({
         el: '#order-confirm',
@@ -58,19 +65,6 @@ if (document.getElementById('order-confirm'))
                 requiredErrorMessage: REQUIRED_FIELD_TEXT,
                 regExErrorMessage: INCORRECT_FIELD_TEXT
             });
-            
-            // orderAddressValidator = new RegExValidatingInput($('[data-order-address]'), {
-            //     expression: RegularExpressions.MIN_TEXT,
-            //     ChangeOnValid: function (input) {
-            //         input.removeClass(INCORRECT_FIELD_CLASS);
-            //     },
-            //     ChangeOnInvalid: function (input) {
-            //         input.addClass(INCORRECT_FIELD_CLASS);
-            //     },
-            //     showErrors: true,
-            //     requiredErrorMessage: REQUIRED_FIELD_TEXT,
-            //     regExErrorMessage: INCORRECT_FIELD_TEXT
-            // });
 
         },
         watch: {
@@ -105,6 +99,45 @@ if (document.getElementById('order-confirm'))
                     GLOBAL_DATA.orderConfirm.country = DEFAULT_COUNTRY;
                 }
 
+                orderAStreetValidator = new RegExValidatingInput($('[data-order-a-street]'), {
+                    expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function (input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function (input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                orderALandValidator = new RegExValidatingInput($('[data-order-a-land]'), {
+                    expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function (input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function (input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                orderACityValidator = new RegExValidatingInput($('[data-order-a-city]'), {
+                    expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function (input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function (input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
                 $('[data-order-delivery-type]').find('.dropdown-toggle').css('border', '2px solid black');
             },
             'orderConfirm.country': () => {
@@ -117,6 +150,12 @@ if (document.getElementById('order-confirm'))
                 if (GLOBAL_DATA.orderConfirm.warehouse)
                 {
                     $('[data-order-warehouse]').find('.dropdown-toggle').css('border', '2px solid black');
+                }
+            },
+            'orderConfirm.checkoutPoint': () => {
+                if (GLOBAL_DATA.orderConfirm.checkoutPoint)
+                {
+                    $('[data-order-points]').find('.dropdown-toggle').css('border', '2px solid black');
                 }
             },
         },
@@ -274,20 +313,31 @@ if (document.getElementById('order-confirm'))
                     $('[data-order-warehouse]').find('.dropdown-toggle').css('border', '2px solid red');
                 }
 
-                // orderAddressValidator.Validate();
-                // if (isValid && !orderAddressValidator.IsValid()) {
-                //     isValid = false;
-                // }
+                if (GLOBAL_DATA.orderConfirm.checkoutPoint == null)
+                {
+                    isValid = false;
+                    $('[data-order-points]').find('.dropdown-toggle').css('border', '2px solid red');
+                }
 
-                // if (GLOBAL_DATA.orderConfirm.deliveryId == '') {
-                //     isValid = false;
-                //     $('[data-order-delivery]').css('border', '2px solid red');
-                // }
+                if (GLOBAL_DATA.orderConfirm.deliveryType === 'Адресная доставка' ||
+                    GLOBAL_DATA.orderConfirm.deliveryType === 'Адресна доставка'
+                )
+                {
+                    orderAStreetValidator.Validate();
+                    if (!orderAStreetValidator.IsValid()) {
+                        isValid = false;
+                    }
 
-                // if (GLOBAL_DATA.orderConfirm.paymentId == '') {
-                //     isValid = false;
-                //     $('[data-order-payment]').css('border', '2px solid red');
-                // }
+                    orderALandValidator.Validate();
+                    if (!orderALandValidator.IsValid()) {
+                        isValid = false;
+                    }
+
+                    orderACityValidator.Validate();
+                    if (!orderACityValidator.IsValid()) {
+                        isValid = false;
+                    }
+                }
 
                 if (isValid) {
                     _this.createOrder();

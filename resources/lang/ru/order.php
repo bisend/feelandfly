@@ -34,4 +34,17 @@ return [
     'number_warehouse' => 'Номер отделения',
     'full_pre_payment' => 'Полная предоплата',
 
+    'a_street_house_room' => 'Улица, дом, квартира',
+    'a_land_area_region' => 'Край/Область/Регион',
+    'a_city' => 'Город',
+    'a_post_index' => 'Почтовый индекс',
+    'a_enter_str' => 'Улица, дом, квартира',
+    'a_enter_land' => 'Край/Область/Регион',
+    'a_enter_city' => 'Город',
+    'a_enter_index' => 'Почтовый индекс',
+
+    'points' => 'Точки самовывоза',
+    'choose_point' => 'Выберите точку самовывоза'
+
+
 ];
