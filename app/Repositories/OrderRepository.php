@@ -33,16 +33,28 @@ class OrderRepository
 
         $order = new Order();
         $order->user_id = $userId;
-        $order->payment_id = $data['paymentId'];
         $order->delivery_id = $data['deliveryId'];
         $order->status_id = $orderStatus->id;
         $order->total_products_count = $cartService->totalCount;
         $order->total_order_amount = $cartService->totalAmount;
-        $order->address_delivery = $data['address'];
         $order->email = $data['email'];
         $order->name = $data['name'];
         $order->phone_number = $data['phone'];
         $order->comment =  $data['comment'] != '' ? $data['comment'] : null;
+
+        $order->checkout_point = $data['checkoutPoint'];
+        $order->np_delivery_type = $data['npDeliveryType'];
+        $order->country = $data['country'];
+        $order->np_city = $data['npCity'];
+        $order->np_city_ref = $data['npCityRef'];
+        $order->np_warehouse = $data['npWarehouse'];
+        $order->np_warehouse_ref = $data['npWarehouseRef'];
+        $order->a_street = $data['aStreet'];
+        $order->a_land = $data['aLand'];
+        $order->a_city = $data['aCity'];
+        $order->post_index = $data['postIndex'];
+
+
         $order->save();
         $order->order_number = $order->id + 10000;
         $order->save();

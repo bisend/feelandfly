@@ -81,6 +81,8 @@ class OrderController extends LayoutController
 
         $data = request()->all();
 
+        \Debugbar::info($data);
+
         if (auth()->check())
         {
             $userId = auth()->id();
@@ -99,14 +101,14 @@ class OrderController extends LayoutController
 
         $this->cartService->fill($model->language, $userTypeId);
 
-        DB::beginTransaction();
-
-        $this->orderService->createOrder($data, $userId, $userTypeId, $model, $this->cartService);
-
-        $this->orderService->createOrderProducts($model, $this->cartService);
-
         try
         {
+            DB::beginTransaction();
+
+            $this->orderService->createOrder($data, $userId, $userTypeId, $model, $this->cartService);
+
+            $this->orderService->createOrderProducts($model, $this->cartService);
+
             \Mail::to(request('email'))->send(new OrderReport($model, request('name'), $this->cartService));
 
             \Mail::to(config('mail.from.address'))->send(new OrderReportManager($model, request('name'), $this->cartService));
@@ -114,6 +116,7 @@ class OrderController extends LayoutController
         catch (\Exception $e)
         {
             \Debugbar::info($e->getMessage());
+
             DB::rollBack();
 
             return response()->json([
@@ -121,11 +124,11 @@ class OrderController extends LayoutController
             ]);
         }
 
-        $this->cartService->clearCart();
+//        $this->cartService->clearCart();
 
         DB::commit();
 
-        Session::put('isOrderCreated', true);
+//        Session::put('isOrderCreated', true);
 
         return response()->json([
             'status' => 'success'

@@ -284,60 +284,103 @@ if (document.getElementById('order-confirm'))
                 {
                     isValid = false;
                     $('[data-order-delivery]').find('.dropdown-toggle').css('border', '2px solid red');
+                    console.log('dostavka');
                 }
-
-                if (GLOBAL_DATA.orderConfirm.deliveryType == null)
+                else
                 {
-                    isValid = false;
-                    $('[data-order-delivery-type]').find('.dropdown-toggle').css('border', '2px solid red');
-                }
-
-                if (GLOBAL_DATA.orderConfirm.country == null
-                    || GLOBAL_DATA.orderConfirm.country === '')
-                {
-                    isValid = false;
-                    $('[data-order-country]').find('.dropdown-toggle').css('border', '2px solid red');
-                }
-
-                if (GLOBAL_DATA.orderConfirm.city == null
-                    || GLOBAL_DATA.orderConfirm.city === '')
-                {
-                    isValid = false;
-                    $('[data-order-city]').find('.dropdown-toggle').css('border', '2px solid red');
-                }
-
-                if (GLOBAL_DATA.orderConfirm.city != null && GLOBAL_DATA.orderConfirm.warehouse == null
-                    || GLOBAL_DATA.orderConfirm.warehouse === '')
-                {
-                    isValid = false;
-                    $('[data-order-warehouse]').find('.dropdown-toggle').css('border', '2px solid red');
-                }
-
-                if (GLOBAL_DATA.orderConfirm.checkoutPoint == null)
-                {
-                    isValid = false;
-                    $('[data-order-points]').find('.dropdown-toggle').css('border', '2px solid red');
-                }
-
-                if (GLOBAL_DATA.orderConfirm.deliveryType === 'Адресная доставка' ||
-                    GLOBAL_DATA.orderConfirm.deliveryType === 'Адресна доставка'
-                )
-                {
-                    orderAStreetValidator.Validate();
-                    if (!orderAStreetValidator.IsValid()) {
-                        isValid = false;
+                    //CASE SELF CHECKOUT
+                    if (GLOBAL_DATA.orderConfirm.delivery.name === 'Самовывоз' || GLOBAL_DATA.orderConfirm.delivery.name === 'Самовивіз')
+                    {
+                        if (GLOBAL_DATA.orderConfirm.checkoutPoint == null)
+                        {
+                            isValid = false;
+                            $('[data-order-points]').find('.dropdown-toggle').css('border', '2px solid red');
+                            console.log('NP checkout');
+                        }
                     }
+                    //SELF CHECKOUT END
 
-                    orderALandValidator.Validate();
-                    if (!orderALandValidator.IsValid()) {
-                        isValid = false;
-                    }
+                    // CASE NOVA POSHTA
+                    if (GLOBAL_DATA.orderConfirm.delivery.name === 'Новая почта' || GLOBAL_DATA.orderConfirm.delivery.name === 'Нова пошта')
+                    {
+                        //VALIDATE DELIVERY TYPE
+                        if (GLOBAL_DATA.orderConfirm.deliveryType == null)
+                        {
+                            isValid = false;
+                            $('[data-order-delivery-type]').find('.dropdown-toggle').css('border', '2px solid red');
+                            console.log('dostavka tip');
+                        }
+                        //VALIDATE DELIVERY TYPE END
 
-                    orderACityValidator.Validate();
-                    if (!orderACityValidator.IsValid()) {
-                        isValid = false;
+                        if (GLOBAL_DATA.orderConfirm.deliveryType != null)
+                        {
+                            //CASE ADDRESS DELIVERY
+                            if (GLOBAL_DATA.orderConfirm.deliveryType === 'Адресная доставка' || GLOBAL_DATA.orderConfirm.deliveryType === 'Адресна доставка')
+                            {
+                                //VALIDATE COUNTRY
+                                if (GLOBAL_DATA.orderConfirm.country == null || GLOBAL_DATA.orderConfirm.country === '')
+                                {
+                                    isValid = false;
+                                    $('[data-order-country]').find('.dropdown-toggle').css('border', '2px solid red');
+                                    console.log('dostavka country');
+                                }
+                                //VALIDATE COUNTRY END
+                                else
+                                {
+                                    // VALIDATE STREET
+                                    orderAStreetValidator.Validate();
+                                    if (!orderAStreetValidator.IsValid()) {
+                                        isValid = false;
+                                        console.log('A street');
+                                    }
+
+                                    // VALIDATE LAND
+                                    orderALandValidator.Validate();
+                                    if (!orderALandValidator.IsValid()) {
+                                        isValid = false;
+                                        console.log('A land');
+                                    }
+
+                                    // VALIDATE CITY
+                                    orderACityValidator.Validate();
+                                    if (!orderACityValidator.IsValid()) {
+                                        isValid = false;
+                                        console.log('A city');
+                                    }
+                                }
+                            }
+                            //CASE ADDRESS DELIVERY END
+
+                            //CASE NUMBER WAREHOUSE
+                            if (GLOBAL_DATA.orderConfirm.deliveryType === 'Номер отделения' || GLOBAL_DATA.orderConfirm.deliveryType === 'Номер відділення')
+                            {
+                                //VALIDATE NP CITY
+                                if (GLOBAL_DATA.orderConfirm.city == null || GLOBAL_DATA.orderConfirm.city === '')
+                                {
+                                    isValid = false;
+                                    $('[data-order-city]').find('.dropdown-toggle').css('border', '2px solid red');
+                                    console.log('NP city');
+                                }
+                                //VALIDATE NP CITY END
+                                else
+                                {
+                                    //VALIDATE NP WAREHOUSE
+                                    if (GLOBAL_DATA.orderConfirm.warehouse == null || GLOBAL_DATA.orderConfirm.warehouse === '')
+                                    {
+                                        isValid = false;
+                                        $('[data-order-warehouse]').find('.dropdown-toggle').css('border', '2px solid red');
+                                        console.log('NP warehouse');
+                                    }
+                                    //VALIDATE NP WAREHOUSE END
+                                }
+                            }
+                            //CASE NUMBER WAREHOUSE END
+                        }
                     }
+                    // CASE NOVA POSHTA END
                 }
+
+                console.log(isValid);
 
                 if (isValid) {
                     _this.createOrder();
@@ -357,6 +400,46 @@ if (document.getElementById('order-confirm'))
             createOrder() {
                 let _this = this;
 
+                let checkoutPoint = null,
+                    npDeliveryType = null,
+                    country = null,
+                    npCity = null,
+                    npCityRef = null,
+                    npWarehouse = null,
+                    npWarehouseRef = null,
+                    aStreet = null,
+                    aLand = null,
+                    aCity = null,
+                    postIndex = null;
+
+                if (GLOBAL_DATA.orderConfirm.delivery.name === 'Самовывоз' || GLOBAL_DATA.orderConfirm.delivery.name === 'Самовивіз')
+                {
+                    checkoutPoint = GLOBAL_DATA.orderConfirm.checkoutPoint;
+                }
+
+                if (GLOBAL_DATA.orderConfirm.delivery.name === 'Новая почта' || GLOBAL_DATA.orderConfirm.delivery.name === 'Нова пошта')
+                {
+                    if (GLOBAL_DATA.orderConfirm.deliveryType === 'Адресная доставка' || GLOBAL_DATA.orderConfirm.deliveryType === 'Адресна доставка')
+                    {
+                        country = GLOBAL_DATA.orderConfirm.country;
+                        aStreet = GLOBAL_DATA.orderConfirm.aStreet;
+                        aLand = GLOBAL_DATA.orderConfirm.aLand;
+                        aCity = GLOBAL_DATA.orderConfirm.aCity;
+                        postIndex = GLOBAL_DATA.orderConfirm.aIndex;
+                    }
+
+                    if (GLOBAL_DATA.orderConfirm.deliveryType === 'Номер отделения' || GLOBAL_DATA.orderConfirm.deliveryType === 'Номер відділення')
+                    {
+                        npCity = (LANGUAGE === DEFAULT_LANGUAGE) ? GLOBAL_DATA.orderConfirm.city.DescriptionRu : GLOBAL_DATA.orderConfirm.city.Description;
+                        npCityRef = GLOBAL_DATA.orderConfirm.city.Ref;
+                        npWarehouse = (LANGUAGE === DEFAULT_LANGUAGE) ? GLOBAL_DATA.orderConfirm.warehouse.DescriptionRu : GLOBAL_DATA.orderConfirm.warehouse.Description;
+                        npWarehouseRef = GLOBAL_DATA.orderConfirm.warehouse.Ref;
+                    }
+
+                    npDeliveryType = GLOBAL_DATA.orderConfirm.deliveryType;
+                }
+
+
                 showLoader();
 
                 $.ajax({
@@ -366,28 +449,37 @@ if (document.getElementById('order-confirm'))
                         name: GLOBAL_DATA.orderConfirm.name,
                         phone: GLOBAL_DATA.orderConfirm.phone,
                         email: GLOBAL_DATA.orderConfirm.email,
-                        // paymentId: GLOBAL_DATA.orderConfirm.paymentId,
-                        deliveryId: GLOBAL_DATA.orderConfirm.deliveryId,
-                        // address: GLOBAL_DATA.orderConfirm.address,
+                        deliveryId: GLOBAL_DATA.orderConfirm.delivery.id,
+                        checkoutPoint: checkoutPoint,
+                        npDeliveryType: npDeliveryType,
+                        country: country,
+                        npCity: npCity,
+                        npCityRef: npCityRef,
+                        npWarehouse: npWarehouse,
+                        npWarehouseRef: npWarehouseRef,
+                        aStreet: aStreet,
+                        aLand: aLand,
+                        aCity: aCity,
+                        postIndex: postIndex,
                         comment: GLOBAL_DATA.orderConfirm.comment,
                         language: LANGUAGE
                     },
                     success: function (data) {
                         hideLoader();
                         
-                        if (data.status == 'success')
+                        if (data.status === 'success')
                         {
-                            if (LANGUAGE == 'uk')
+                            if (LANGUAGE === 'uk')
                             {
-                                window.location.href = '/uk';
+                                // window.location.href = '/uk';
                             }
                             else
                             {
-                                window.location.href = '/';
+                                // window.location.href = '/';
                             }
                         }
 
-                        if (data.status == 'error')
+                        if (data.status === 'error')
                         {
                             showPopup(SERVER_ERROR);
                         }

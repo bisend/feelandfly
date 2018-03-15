@@ -28,29 +28,72 @@
     <tr>
         <td>{{ trans('email.payment') }}:</td>
         <td>
-            @foreach ($model->payments as $payment)
-                @if($payment->id == $model->order->payment_id)
-                    {{ $payment->name }}
-                @endif
-            @endforeach
+            {{ trans('order.full_pre_payment') }}
         </td>
     </tr>
     <tr>
         <td>{{ trans('email.delivery') }}:</td>
         <td>
+            @php($deliveryName = '')
             @foreach ($model->deliveries as $delivery)
                 @if($delivery->id == $model->order->delivery_id)
+                    @php($deliveryName = $delivery->name)
                     {{ $delivery->name }}
                 @endif
             @endforeach
         </td>
     </tr>
-    <tr>
-        <td>{{ trans('email.address') }}:</td>
-        <td>{{ $model->order->address_delivery }}</td>
-    </tr>
+    @if($deliveryName == 'Самовывоз' || $deliveryName == 'Самовивіз')
+        <tr>
+            <td>{{ trans('email.checkout_point') }}:</td>
+            <td>{{ $model->order->checkout_point }}</td>
+        </tr>
+    @endif
 
-    @if($model->order->comment != null)
+    @if($deliveryName == 'Новая почта' || $deliveryName == 'Нова пошта')
+        <tr>
+            <td>Тип доставки:</td>
+            <td>{{ $model->order->np_delivery_type }}</td>
+        </tr>
+
+        @if($model->order->np_delivery_type == 'Адресная доставка' || $model->order->np_delivery_type == 'Адресна доставка')
+            <tr>
+                <td>{{ trans('order.country') }}:</td>
+                <td>{{ $model->order->country }}</td>
+            </tr>
+            <tr>
+                <td>{{ trans('order.a_street_house_room') }}:</td>
+                <td>{{ $model->order->a_street }}</td>
+            </tr>
+            <tr>
+                <td>{{ trans('order.a_land_area_region') }}:</td>
+                <td>{{ $model->order->a_land }}</td>
+            </tr>
+            <tr>
+                <td>{{ trans('order.a_city') }}:</td>
+                <td>{{ $model->order->a_city }}</td>
+            </tr>
+            @if(!is_null($model->order->post_index))
+                <tr>
+                    <td>{{ trans('order.a_post_index') }}:</td>
+                    <td>{{ $model->order->post_index }}</td>
+                </tr>
+            @endif
+        @endif
+
+        @if($model->order->np_delivery_type == 'Номер отделения' || $model->order->np_delivery_type == 'Номер відділення')
+            <tr>
+                <td>{{ trans('order.city') }}:</td>
+                <td>{{ $model->order->np_city }}</td>
+            </tr>
+            <tr>
+                <td>{{ trans('order.number_warehouse') }}:</td>
+                <td>{{ $model->order->np_warehouse }}</td>
+            </tr>
+        @endif
+    @endif
+
+    @if(!is_null($model->order->comment))
         <tr>
             <td>{{ trans('email.comment') }}:</td>
             <td>{{ $model->order->comment }}</td>

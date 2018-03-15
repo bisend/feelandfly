@@ -41,6 +41,28 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereUserId($value)
  * @mixin \Eloquent
  * @property-read \App\DatabaseModels\OrderStatus $status
+ * @property string|null $checkout_point
+ * @property string|null $np_delivery_type
+ * @property string|null $country
+ * @property string|null $np_city
+ * @property string|null $np_city_ref
+ * @property string|null $np_warehouse
+ * @property string|null $np_warehouse_ref
+ * @property string|null $a_street
+ * @property string|null $a_land
+ * @property string|null $a_city
+ * @property string|null $post_index
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereACity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereALand($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereAStreet($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCheckoutPoint($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCountry($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereNpCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereNpCityRef($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereNpDeliveryType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereNpWarehouse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereNpWarehouseRef($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order wherePostIndex($value)
  */
 class Order extends Model
 {
