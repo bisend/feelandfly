@@ -6266,7 +6266,7 @@ li.sale-link:before {
     margin-bottom: 20px;
 }
 
-@media (min-width: 1200px){
+@media (max-width: 1200px){
     #sales-prod-slider .owl-dots {
         margin-top: -10px;
     }
@@ -6276,7 +6276,6 @@ li.sale-link:before {
     .carousel-inner .big-slider-cover {
         height: auto;
     }
-
 
 }
 
