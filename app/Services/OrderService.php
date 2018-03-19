@@ -10,6 +10,7 @@ namespace App\Services;
 
 use App\Helpers\Country;
 use App\Repositories\CategoryRepository;
+use App\Repositories\CheckoutPointRepository;
 use App\Repositories\DeliveryRepository;
 use App\Repositories\MetaTagRepository;
 use App\Repositories\OrderProductRepository;
@@ -42,7 +43,15 @@ class OrderService extends LayoutService
      */
     protected $orderProductRepository;
 
+    /**
+     * @var MetaTagRepository
+     */
     protected $metaTagRepository;
+
+    /**
+     * @var CheckoutPointRepository
+     */
+    protected $checkoutPointRepository;
 
     /**
      * OrderService constructor.
@@ -51,13 +60,16 @@ class OrderService extends LayoutService
      * @param DeliveryRepository $deliveryRepository
      * @param OrderRepository $orderRepository
      * @param OrderProductRepository $orderProductRepository
+     * @param MetaTagRepository $metaTagRepository
+     * @param CheckoutPointRepository $checkoutPointRepository
      */
     public function __construct(CategoryRepository $categoryRepository,
                                 PaymentRepository $paymentRepository,
                                 DeliveryRepository $deliveryRepository,
                                 OrderRepository $orderRepository, 
                                 OrderProductRepository $orderProductRepository,
-                                MetaTagRepository $metaTagRepository)
+                                MetaTagRepository $metaTagRepository,
+                                CheckoutPointRepository $checkoutPointRepository)
     {
         parent::__construct($categoryRepository);
         
@@ -70,6 +82,8 @@ class OrderService extends LayoutService
         $this->orderProductRepository = $orderProductRepository;
 
         $this->metaTagRepository = $metaTagRepository;
+
+        $this->checkoutPointRepository = $checkoutPointRepository;
     }
 
     /**
@@ -84,6 +98,8 @@ class OrderService extends LayoutService
         $this->fillDeliveries($model);
 
         $this->fillCountries($model);
+
+        $this->fillCheckoutPoints($model);
 
         $this->fillMetaTags($model);
     }
@@ -106,6 +122,9 @@ class OrderService extends LayoutService
         $model->deliveries = $this->deliveryRepository->getAllDeliveries($model);
     }
 
+    /**
+     * @param $model
+     */
     private function fillCountries($model)
     {
         $model->countries = Country::getData($model->language);
@@ -134,6 +153,9 @@ class OrderService extends LayoutService
         $this->orderProductRepository->createOrderProducts($model, $cartService);
     }
 
+    /**
+     * @param $model
+     */
     private function fillMetaTags($model)
     {
         $metaTag = $this->metaTagRepository->getMetaTagByPageName($model);
@@ -141,5 +163,13 @@ class OrderService extends LayoutService
         $model->description = $metaTag->description;
         $model->keywords = $metaTag->keywords;
         $model->h1 = $metaTag->h1;
+    }
+
+    /**
+     * @param $model
+     */
+    private function fillCheckoutPoints($model)
+    {
+        $model->checkoutPoints = $this->checkoutPointRepository->getCheckoutPoints($model);
     }
 }

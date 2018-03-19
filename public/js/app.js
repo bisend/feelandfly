@@ -31400,7 +31400,9 @@ if (document.getElementById('order-confirm')) {
 
     GLOBAL_DATA.orderConfirm.countries = FFShop.countries;
     GLOBAL_DATA.orderConfirm.deliveries = FFShop.deliveries;
-    GLOBAL_DATA.orderConfirm.checkoutPoints = ['Point 1', 'Point 2'];
+    GLOBAL_DATA.orderConfirm.checkoutPoints = FFShop.checkoutPoints.map(function (point) {
+        return point.name;
+    });
 
     new Vue({
         el: '#order-confirm',

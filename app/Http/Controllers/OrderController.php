@@ -60,7 +60,8 @@ class OrderController extends LayoutController
 
         Javascript::put([
             'countries' => $model->countries,
-            'deliveries' => $model->deliveries
+            'deliveries' => $model->deliveries,
+            'checkoutPoints' => $model->checkoutPoints
         ]);
 
         \Debugbar::info($model);
