@@ -6262,14 +6262,22 @@ li.sale-link:before {
 }
 
 #sales-prod-slider .owl-dots {
-    margin-top: -60px;
+    margin-top: -50px;
     margin-bottom: 20px;
+}
+
+@media (min-width: 1200px){
+    #sales-prod-slider .owl-dots {
+        margin-top: -10px;
+    }
 }
 
 @media (min-width: 1024px) {
     .carousel-inner .big-slider-cover {
         height: auto;
     }
+
+
 }
 
 .v-select.country-select .dropdown-toggle{
