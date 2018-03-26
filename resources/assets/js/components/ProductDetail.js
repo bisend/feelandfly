@@ -1,5 +1,84 @@
 if (document.getElementById('product-details'))
 {
+    let sync1Product, sync2Product, navSpeedThumbs = 500;
+
+    function initPreviewProductSlider () {
+        //Resize carousels in modal
+
+        sync1Product = $("[data-single-product-container] .sync1");
+        sync2Product = $("[data-single-product-container] .sync2");
+
+        sync2Product.owlCarousel({
+                rtl: false,
+                items: 3,
+                //loop: true,
+                nav: true,
+                margin: 20,
+                navSpeed: navSpeedThumbs,
+                responsive: {
+                    992: {items: 3},
+                    767: {items: 4},
+                    480: {items: 3},
+                    320: {items: 2}
+                },
+                responsiveRefreshRate: 200,
+                navText: [
+                    "<i class='fa fa-angle-left'></i>",
+                    "<i class='fa fa-angle-right'></i>"
+                ]
+            });
+
+        sync1Product.owlCarousel({
+                rtl: false,
+                items: 1,
+                navSpeed: 1000,
+                nav: false,
+                onChanged: syncPosition,
+                responsiveRefreshRate: 200
+
+            });
+
+        function syncPosition(el) {
+            let current = this._current;
+            sync2Product
+                .find(".owl-item")
+                .removeClass("synced")
+                .eq(current)
+                .addClass("synced");
+            center(current);
+        }
+
+        sync2Product.on("click", ".owl-item", function (e) {
+            e.preventDefault();
+            let number = $(this).index();
+            sync1Product.trigger("to.owl.carousel", [number, 1000, true]);
+            return false;
+        });
+
+        function center(num) {
+
+            let sync2visible = sync2Product.find('.owl-item.active').map(function () {
+                return $(this).index();
+            });
+
+            if ($.inArray(num, sync2visible) === -1) {
+                if (num > sync2visible[sync2visible.length - 1]) {
+                    sync2Product.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
+                } else {
+                    sync2Product.trigger("to.owl.carousel", Math.max(0, num - 1));
+                }
+            } else if (num === sync2visible[sync2visible.length - 1]) {
+                sync2Product.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
+            } else if (num === sync2visible[0]) {
+                sync2Product.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        initPreviewProductSlider();
+    });
+
     //init single product
     GLOBAL_DATA.singleProduct.product = window.FFShop.product;
     //init single product id

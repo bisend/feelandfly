@@ -68,26 +68,26 @@ $(document).ready(function ()
             });
         }
 
-        $(".mega-dropdown-slider").owlCarousel({
-            dots: false,
-            loop: true,
-            autoplay: false,
-            autoplayHoverPause: true,
-            smartSpeed: 100,
-            nav: true,
-            margin: 30,
-            responsive: {
-                0: {items: 1},
-                1200: {items: 2},
-                992: {items: 2},
-                768: {items: 2},
-                568: {items: 2}
-            },
-            navText: [
-                "<i class='fa fa-angle-left'></i>",
-                "<i class='fa fa-angle-right'></i>"
-            ]
-        });
+        // $(".mega-dropdown-slider").owlCarousel({
+        //     dots: false,
+        //     loop: true,
+        //     autoplay: false,
+        //     autoplayHoverPause: true,
+        //     smartSpeed: 100,
+        //     nav: true,
+        //     margin: 30,
+        //     responsive: {
+        //         0: {items: 1},
+        //         1200: {items: 2},
+        //         992: {items: 2},
+        //         768: {items: 2},
+        //         568: {items: 2}
+        //     },
+        //     navText: [
+        //         "<i class='fa fa-angle-left'></i>",
+        //         "<i class='fa fa-angle-right'></i>"
+        //     ]
+        // });
 
 
     }
@@ -121,125 +121,125 @@ $(document).ready(function ()
     // }
 
     /*------------------- Product  Slider -------------------*/
-    if ($('#deal-slider, #prod-featured-slider').length > 0) {
-        $("#deal-slider, #prod-featured-slider").owlCarousel({
-            dots: false,
-            //loop: true,
-            autoplay: true,
-            autoplayHoverPause: true,
-            smartSpeed: 100,
-            nav: true,
-            margin: 30,
-            responsive: {
-                0: {items: 1},
-                1201: {items: 4},
-                1024: {items: 3},
-                768: {items: 2},
-                568: {items: 2}
-            },
-            navText: [
-                "<i class='fa fa-angle-left'></i>",
-                "<i class='fa fa-angle-right'></i>"
-            ]
-        });
-    }
+    // if ($('#deal-slider, #prod-featured-slider').length > 0) {
+    //     $("#deal-slider, #prod-featured-slider").owlCarousel({
+    //         dots: false,
+    //         //loop: true,
+    //         autoplay: true,
+    //         autoplayHoverPause: true,
+    //         smartSpeed: 100,
+    //         nav: true,
+    //         margin: 30,
+    //         responsive: {
+    //             0: {items: 1},
+    //             1201: {items: 4},
+    //             1024: {items: 3},
+    //             768: {items: 2},
+    //             568: {items: 2}
+    //         },
+    //         navText: [
+    //             "<i class='fa fa-angle-left'></i>",
+    //             "<i class='fa fa-angle-right'></i>"
+    //         ]
+    //     });
+    // }
 
     /*------------------- Testimonial Slider -------------------*/
-    if ($('#testimonial-1').length > 0) {
-        $("#testimonial-1").owlCarousel({
-            dots: true,
-            loop: true,
-            autoplay: false,
-            autoplayHoverPause: true,
-            smartSpeed: 100,
-            nav: false,
-            margin: 30,
-            responsive: {
-                0: {items: 1}
-            }
-        });
-    }
+    // if ($('#testimonial-1').length > 0) {
+    //     $("#testimonial-1").owlCarousel({
+    //         dots: true,
+    //         loop: true,
+    //         autoplay: false,
+    //         autoplayHoverPause: true,
+    //         smartSpeed: 100,
+    //         nav: false,
+    //         margin: 30,
+    //         responsive: {
+    //             0: {items: 1}
+    //         }
+    //     });
+    // }
 
     /*------------------- Brand Slider -------------------*/
-    if ($('#brand-slider').length > 0) {
-        $("#brand-slider").owlCarousel({
-            dots: true,
-            loop: true,
-            autoplay: true,
-            autoplayHoverPause: true,
-            smartSpeed: 100,
-            nav: false,
-            margin: 30,
-            responsive: {
-                0: {items: 1},
-                1200: {items: 6},
-                992: {items: 5},
-                480: {items: 3}
-            }
-        });
-    }
+    // if ($('#brand-slider').length > 0) {
+    //     $("#brand-slider").owlCarousel({
+    //         dots: true,
+    //         loop: true,
+    //         autoplay: true,
+    //         autoplayHoverPause: true,
+    //         smartSpeed: 100,
+    //         nav: false,
+    //         margin: 30,
+    //         responsive: {
+    //             0: {items: 1},
+    //             1200: {items: 6},
+    //             992: {items: 5},
+    //             480: {items: 3}
+    //         }
+    //     });
+    // }
 
     /*------------------- Blog Slider -------------------*/
-    if ($('#blog-slider-1').length > 0) {
-        $("#blog-slider-1").owlCarousel({
-            dots: true,
-            loop: true,
-            autoplay: true,
-            autoplayHoverPause: true,
-            smartSpeed: 100,
-            nav: true,
-            margin: 30,
-            responsive: {
-                0: {items: 1},
-                1200: {items: 3},
-                992: {items: 2},
-                568: {items: 2}
-            },
-            navText: [
-                "<i class='fa fa-angle-left'></i>",
-                "<i class='fa fa-angle-right'></i>"
-            ]
-        });
-    }
+    // if ($('#blog-slider-1').length > 0) {
+    //     $("#blog-slider-1").owlCarousel({
+    //         dots: true,
+    //         loop: true,
+    //         autoplay: true,
+    //         autoplayHoverPause: true,
+    //         smartSpeed: 100,
+    //         nav: true,
+    //         margin: 30,
+    //         responsive: {
+    //             0: {items: 1},
+    //             1200: {items: 3},
+    //             992: {items: 2},
+    //             568: {items: 2}
+    //         },
+    //         navText: [
+    //             "<i class='fa fa-angle-left'></i>",
+    //             "<i class='fa fa-angle-right'></i>"
+    //         ]
+    //     });
+    // }
 
     /*------------------- Realated Blog Slider -------------------*/
-    if ($('#rel-blog-slider').length > 0) {
-        $("#rel-blog-slider").owlCarousel({
-            dots: true,
-            loop: true,
-            autoplay: false,
-            autoplayHoverPause: true,
-            smartSpeed: 100,
-            nav: false,
-            margin: 30,
-            responsive: {
-                0: {items: 1},
-                1024: {items: 2},
-                768: {items: 1},
-                568: {items: 2}
-            }
-        });
-    }
+    // if ($('#rel-blog-slider').length > 0) {
+    //     $("#rel-blog-slider").owlCarousel({
+    //         dots: true,
+    //         loop: true,
+    //         autoplay: false,
+    //         autoplayHoverPause: true,
+    //         smartSpeed: 100,
+    //         nav: false,
+    //         margin: 30,
+    //         responsive: {
+    //             0: {items: 1},
+    //             1024: {items: 2},
+    //             768: {items: 1},
+    //             568: {items: 2}
+    //         }
+    //     });
+    // }
 
     /*------------------- Brand Slider -------------------*/
-    if ($('#brand-slider-2').length > 0) {
-        $("#brand-slider-2").owlCarousel({
-            dots: false,
-            loop: true,
-            autoplay: true,
-            autoplayHoverPause: true,
-            smartSpeed: 100,
-            nav: false,
-            margin: 30,
-            responsive: {
-                0: {items: 1},
-                992: {items: 5},
-                768: {items: 4},
-                568: {items: 3},
-                380: {items: 2}
-            }
-        });
-    }
+    // if ($('#brand-slider-2').length > 0) {
+    //     $("#brand-slider-2").owlCarousel({
+    //         dots: false,
+    //         loop: true,
+    //         autoplay: true,
+    //         autoplayHoverPause: true,
+    //         smartSpeed: 100,
+    //         nav: false,
+    //         margin: 30,
+    //         responsive: {
+    //             0: {items: 1},
+    //             992: {items: 5},
+    //             768: {items: 4},
+    //             568: {items: 3},
+    //             380: {items: 2}
+    //         }
+    //     });
+    // }
 
     /*------------------- Related Product Slider -------------------*/
     // if ($('#rel-prod-slider').length > 0) {
@@ -266,144 +266,132 @@ $(document).ready(function ()
     // }
 
     /*------------------- Widget Slider -------------------*/
-    if ($('#widget-best-seller').length > 0) {
-        $("#widget-best-seller").owlCarousel({
-            dots: false,
-            loop: true,
-            autoplay: false,
-            autoplayHoverPause: true,
-            smartSpeed: 100,
-            nav: true,
-            margin: 30,
-            responsive: {
-                0: {items: 1},
-                600: {items: 2},
-                768: {items: 1}
-            },
-            navText: [
-                "<i class='fa fa-angle-left'></i>",
-                "<i class='fa fa-angle-right'></i>"
-            ]
-        });
-    }
+    // if ($('#widget-best-seller').length > 0) {
+    //     $("#widget-best-seller").owlCarousel({
+    //         dots: false,
+    //         loop: true,
+    //         autoplay: false,
+    //         autoplayHoverPause: true,
+    //         smartSpeed: 100,
+    //         nav: true,
+    //         margin: 30,
+    //         responsive: {
+    //             0: {items: 1},
+    //             600: {items: 2},
+    //             768: {items: 1}
+    //         },
+    //         navText: [
+    //             "<i class='fa fa-angle-left'></i>",
+    //             "<i class='fa fa-angle-right'></i>"
+    //         ]
+    //     });
+    // }
 
     //Resize carousels in modal
-    if ($('.sync2:not(.product-preview-images-small)').length > 0) {
-        $(document).on('shown.bs.modal', function () {
-            $(this).find('.sync1, .sync2').each(function () {
-                $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
-            });
-        });
-
-        var sync1 = $(".sync1");
-        var sync2 = $(".sync2");
-        var sliderthumb = $(".single-prod-thumb");
-        var homethumb = $(".home-slide-thumb");
-        var navSpeedThumbs = 500;
-
-        sliderthumb.owlCarousel({
-            rtl: false,
-            items: 3,
-            //loop: true,
-            nav: true,
-            margin: 20,
-            navSpeed: navSpeedThumbs,
-            responsive: {
-                992: {items: 3},
-                767: {items: 4},
-                480: {items: 3},
-                320: {items: 2}
-            },
-            responsiveRefreshRate: 200,
-            navText: [
-                "<i class='fa fa-angle-left'></i>",
-                "<i class='fa fa-angle-right'></i>"
-            ]
-        });
-
-        sync1.owlCarousel({
-            rtl: false,
-            items: 1,
-            navSpeed: 1000,
-            nav: false,
-            onChanged: syncPosition,
-            responsiveRefreshRate: 200
-
-        });
-
-        homethumb.owlCarousel({
-            rtl: false,
-            items: 5,
-            nav: true,
-            //loop: true,
-            navSpeed: navSpeedThumbs,
-            responsive: {
-                1500: {items: 5},
-                1024: {items: 4},
-                768: {items: 3},
-                600: {items: 4},
-                480: {items: 3},
-                320: {items: 2,
-                    nav: false
-                }
-            },
-            responsiveRefreshRate: 200,
-            navText: [
-                "<i class='fa fa-long-arrow-left'></i>",
-                "<i class='fa fa-long-arrow-right'></i>"
-            ]
-        });
-    }
-
-    function syncPosition(el) {
-        var current = this._current;
-        $(".sync2")
-                .find(".owl-item")
-                .removeClass("synced")
-                .eq(current)
-                .addClass("synced");
-        center(current);
-    }
-
-    $(".sync2:not(.product-preview-images-small)").on("click", ".owl-item", function (e) {
-        e.preventDefault();
-        var number = $(this).index();
-        sync1.trigger("to.owl.carousel", [number, 1000]);
-        return false;
-    });
-
-    function center(num) {
-
-        var sync2visible = sync2.find('.owl-item.active').map(function () {
-            return $(this).index();
-        });
-
-        if ($.inArray(num, sync2visible) === -1) {
-            if (num > sync2visible[sync2visible.length - 1]) {
-                sync2.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
-            } else {
-                sync2.trigger("to.owl.carousel", Math.max(0, num - 1));
-            }
-        } else if (num === sync2visible[sync2visible.length - 1]) {
-            sync2.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
-        } else if (num === sync2visible[0]) {
-            sync2.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
-        }
-    }
-
+    // if ($('.sync2:not(.product-preview-images-small)').length > 0) {
+    //     $(document).on('shown.bs.modal', function () {
+    //         $(this).find('.sync1, .sync2').each(function () {
+    //             $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
+    //         });
+    //     });
+    //
+    //     var sync1 = $(".sync1");
+    //     var sync2 = $(".sync2");
+    //     var sliderthumb = $(".single-prod-thumb");
+    //     var homethumb = $(".home-slide-thumb");
+    //     var navSpeedThumbs = 500;
+    //
+    //     sliderthumb.owlCarousel({
+    //         rtl: false,
+    //         items: 3,
+    //         //loop: true,
+    //         nav: true,
+    //         margin: 20,
+    //         navSpeed: navSpeedThumbs,
+    //         responsive: {
+    //             992: {items: 3},
+    //             767: {items: 4},
+    //             480: {items: 3},
+    //             320: {items: 2}
+    //         },
+    //         responsiveRefreshRate: 200,
+    //         navText: [
+    //             "<i class='fa fa-angle-left'></i>",
+    //             "<i class='fa fa-angle-right'></i>"
+    //         ]
+    //     });
+    //
+    //     sync1.owlCarousel({
+    //         rtl: false,
+    //         items: 1,
+    //         navSpeed: 1000,
+    //         nav: false,
+    //         onChanged: syncPosition,
+    //         responsiveRefreshRate: 200
+    //
+    //     });
+    //
+    //     homethumb.owlCarousel({
+    //         rtl: false,
+    //         items: 5,
+    //         nav: true,
+    //         //loop: true,
+    //         navSpeed: navSpeedThumbs,
+    //         responsive: {
+    //             1500: {items: 5},
+    //             1024: {items: 4},
+    //             768: {items: 3},
+    //             600: {items: 4},
+    //             480: {items: 3},
+    //             320: {items: 2,
+    //                 nav: false
+    //             }
+    //         },
+    //         responsiveRefreshRate: 200,
+    //         navText: [
+    //             "<i class='fa fa-long-arrow-left'></i>",
+    //             "<i class='fa fa-long-arrow-right'></i>"
+    //         ]
+    //     });
+    // }
+    //
+    // function syncPosition(el) {
+    //     var current = this._current;
+    //     $(".sync2")
+    //             .find(".owl-item")
+    //             .removeClass("synced")
+    //             .eq(current)
+    //             .addClass("synced");
+    //     center(current);
+    // }
+    //
+    // $(".sync2:not(.product-preview-images-small)").on("click", ".owl-item", function (e) {
+    //     e.preventDefault();
+    //     var number = $(this).index();
+    //     sync1.trigger("to.owl.carousel", [number, 1000]);
+    //     return false;
+    // });
+    //
+    // function center(num) {
+    //
+    //     var sync2visible = sync2.find('.owl-item.active').map(function () {
+    //         return $(this).index();
+    //     });
+    //
+    //     if ($.inArray(num, sync2visible) === -1) {
+    //         if (num > sync2visible[sync2visible.length - 1]) {
+    //             sync2.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
+    //         } else {
+    //             sync2.trigger("to.owl.carousel", Math.max(0, num - 1));
+    //         }
+    //     } else if (num === sync2visible[sync2visible.length - 1]) {
+    //         sync2.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
+    //     } else if (num === sync2visible[0]) {
+    //         sync2.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
+    //     }
+    // }
+//
 // owlCarousel Slider End //
-
-    /*------------------- Subscribe Popup   -------------------*/
-    if ($('#subscribe-popups').length > 0) {
-        $("#subscribe-popups").subscribeBetter({
-            trigger: "onidle", // You can choose which kind of trigger you want for the subscription modal to appear. Available triggers are "atendpage" which will display when the user scrolls to the bottom of the page, "onload" which will display once the page is loaded, and "onidle" which will display after you've scrolled.
-            animation: "flyInDown", // You can set the entrance animation here. Available options are "fade", "flyInRight", "flyInLeft", "flyInUp", and "flyInDown". The default value is "fade".
-            delay: 0, // You can set the delay between the trigger and the appearance of the modal window. This works on all triggers. The value should be in milliseconds. The default value is 0.
-            showOnce: true, // Toggle this to false if you hate your users. :)
-            autoClose: false, // Toggle this to true to automatically close the modal window when the user continue to scroll to make it less intrusive. The default value is false.
-            scrollableModal: false      //  If the modal window is long and you need the ability for the form to be scrollable, toggle this to true. The default value is false.
-        });
-    }
 
     /*------------------- Scroll To Top Animate -------------------*/
     $('#to-top').on('click', function () {

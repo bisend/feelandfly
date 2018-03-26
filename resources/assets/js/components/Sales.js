@@ -4,28 +4,25 @@
 
 if (document.getElementById('sales-products'))
 {
-    let initProductPreviewImagesSliderInited = false,
-        sync1, sync2, sliderthumb, homethumb;
+    let previewSalesSliderInited = false,
+        sync1Sales, sync2Sales, navSpeedThumbs = 500;
 
-    function initProductPreviewImagesSliderSales () {
+    function initPreviewSalesSlider () {
         //Resize carousels in modal
-        if ($('.sync2.product-preview-images-small').length > 0) {
-            $(document).on('shown.bs.modal', function () {
-                $(this).find('.sync1.product-preview-images-big, .sync2.product-preview-images-small').each(function () {
-                    $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
-                });
-            });
+        if ($('#sales-products').length > 0) {
 
-            var navSpeedThumbs = 500;
+            // $(document).on('shown.bs.modal', function () {
+            //     $(this).find('#sales-products .sync1, #sales-products .sync2').each(function () {
+            //         $(this).data('owlCarousel') ? $(this).data('owlCarousel').onResize() : null;
+            //     });
+            // });
 
-            if (!initProductPreviewImagesSliderInited === true) {
-                sync1 = $(".sync1.product-preview-images-big");
-                sync2 = $(".sync2.product-preview-images-small");
-                sliderthumb = $(".single-prod-thumb");
-                homethumb = $(".home-slide-thumb");
+            if (!previewSalesSliderInited === true) {
+                sync1Sales = $("#sales-products .sync1");
+                sync2Sales = $("#sales-products .sync2");
             }
 
-            sliderthumb.owlCarousel({
+            sync2Sales.owlCarousel({
                 rtl: false,
                 items: 3,
                 //loop: true,
@@ -45,47 +42,23 @@ if (document.getElementById('sales-products'))
                 ]
             });
 
-            sync1.owlCarousel({
+            sync1Sales.owlCarousel({
                 rtl: false,
                 items: 1,
                 navSpeed: 1000,
                 nav: false,
                 onChanged: syncPosition,
                 responsiveRefreshRate: 200
-
             });
 
-            homethumb.owlCarousel({
-                rtl: false,
-                items: 5,
-                nav: true,
-                //loop: true,
-                navSpeed: navSpeedThumbs,
-                responsive: {
-                    1500: {items: 5},
-                    1024: {items: 4},
-                    768: {items: 3},
-                    600: {items: 4},
-                    480: {items: 3},
-                    320: {items: 2,
-                        nav: false
-                    }
-                },
-                responsiveRefreshRate: 200,
-                navText: [
-                    "<i class='fa fa-long-arrow-left'></i>",
-                    "<i class='fa fa-long-arrow-right'></i>"
-                ]
-            });
-
-            if (!initProductPreviewImagesSliderInited) {
-                initProductPreviewImagesSliderInited = true;
+            if (!previewSalesSliderInited) {
+                previewSalesSliderInited = true;
             }
         }
 
         function syncPosition(el) {
-            var current = this._current;
-            $(".sync2.product-preview-images-small")
+            let current = this._current;
+            sync2Sales
                 .find(".owl-item")
                 .removeClass("synced")
                 .eq(current)
@@ -93,50 +66,43 @@ if (document.getElementById('sales-products'))
             center(current);
         }
 
-        $(".sync2.product-preview-images-small").on("click", ".owl-item", function (e) {
+        sync2Sales.on("click", ".owl-item", function (e) {
             e.preventDefault();
-            var number = $(this).index();
-            sync1.trigger("to.owl.carousel", [number, 1000]);
+            let number = $(this).index();
+            sync1Sales.trigger("to.owl.carousel", [number, 1000, true]);
             return false;
         });
 
         function center(num) {
 
-            var sync2visible = sync2.find('.owl-item.active').map(function () {
+            let sync2visible = sync2Sales.find('.owl-item.active').map(function () {
                 return $(this).index();
             });
 
             if ($.inArray(num, sync2visible) === -1) {
                 if (num > sync2visible[sync2visible.length - 1]) {
-                    sync2.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
+                    sync2Sales.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
                 } else {
-                    sync2.trigger("to.owl.carousel", Math.max(0, num - 1));
+                    sync2Sales.trigger("to.owl.carousel", Math.max(0, num - 1));
                 }
             } else if (num === sync2visible[sync2visible.length - 1]) {
-                sync2.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
+                sync2Sales.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
             } else if (num === sync2visible[0]) {
-                sync2.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
+                sync2Sales.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
             }
         }
     }
 
-    function destroyProductPreviewImagesSliderSales () {
-        if (initProductPreviewImagesSliderInited === true) {
-            sync1.trigger('destroy.owl.carousel');
-            sliderthumb.trigger('destroy.owl.carousel');
-            homethumb.trigger('destroy.owl.carousel');
+    function destroyPreviewSalesSlider () {
+        if (previewSalesSliderInited === true) {
+            sync1Sales.trigger('destroy.owl.carousel');
+            sync2Sales.trigger('destroy.owl.carousel');
 
-            sync1.find('.owl-stage-outer').children().unwrap();
-            sync1.removeClass("owl-center owl-loaded owl-text-select-on");
+            sync1Sales.find('.owl-stage-outer').children().unwrap();
+            sync1Sales.removeClass("owl-center owl-loaded owl-text-select-on");
 
-            sync2.find('.owl-stage-outer').children().unwrap();
-            sync2.removeClass("owl-center owl-loaded owl-text-select-on");
-
-            sliderthumb.find('.owl-stage-outer').children().unwrap();
-            sliderthumb.removeClass("owl-center owl-loaded owl-text-select-on");
-
-            homethumb.find('.owl-stage-outer').children().unwrap();
-            homethumb.removeClass("owl-center owl-loaded owl-text-select-on");
+            sync2Sales.find('.owl-stage-outer').children().unwrap();
+            sync2Sales.removeClass("owl-center owl-loaded owl-text-select-on");
         }
     }
 
@@ -165,6 +131,8 @@ if (document.getElementById('sales-products'))
                         autoplay: false,
                         autoplayHoverPause: true,
                         smartSpeed: 100,
+                        touchDrag: true,
+                        mouseDrag: false,
                         nav: GLOBAL_DATA.salesProducts.length > 4,
                         margin: 30,
                         responsive: {
@@ -180,10 +148,6 @@ if (document.getElementById('sales-products'))
                         ]
                     });
                 }
-
-                initProductPreviewImagesSliderSales();
-
-                destroyProductPreviewImagesSliderSales();
 
                 $("a[rel^='prettyPhoto[sale-" + GLOBAL_DATA.saleProductPreview.product.id + "]']").prettyPhoto({
                     theme: 'facebook',
@@ -241,7 +205,7 @@ if (document.getElementById('sales-products'))
                     return null;
                 },
                 changeSalesProductPreview(counter) {
-                    destroyProductPreviewImagesSliderSales();
+                    destroyPreviewSalesSlider();
 
                     GLOBAL_DATA.saleProductPreview.product = GLOBAL_DATA.salesProducts[counter];
 
@@ -268,7 +232,7 @@ if (document.getElementById('sales-products'))
                     }
 
                     //container with preview
-                    var $container = $('#sale-preview');
+                    let $container = $('#sale-preview');
 
                     $container.modal();
 
@@ -277,7 +241,7 @@ if (document.getElementById('sales-products'))
                             theme: 'tooltipster-borderless'
                         });
 
-                        initProductPreviewImagesSliderSales();
+                        initPreviewSalesSlider();
 
                         $("a[rel^='prettyPhoto[sale-" + GLOBAL_DATA.saleProductPreview.product.id + "]']").prettyPhoto({
                             theme: 'facebook',

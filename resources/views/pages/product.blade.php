@@ -31,7 +31,7 @@
 
                 <!-- Product Details Starts-->
                 <aside class="col-md-12 col-sm-12">
-                    <div class="row">
+                    <div data-single-product-container class="row">
                         <div class="col-md-7 col-sm-12 single-prod-slider sync-sliedr">
                             <!-- Single Products Slider Starts -->
                             <div class="owl-carousel sync1 solo-prod pb-25 big-slider">

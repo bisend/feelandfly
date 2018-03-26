@@ -3,7 +3,7 @@
 
     {{--SIMILAR PRODUCT PREVIEW--}}
     <div id="similar-product-preview">
-        <section class="modal fade  popups-wrap popups-light" id="prod-preview-test"
+        <section class="modal fade  popups-wrap popups-light" id="similar-preview"
                  tabindex="-1"
                  role="dialog"
                  aria-hidden="true">
@@ -15,7 +15,7 @@
                             type="button">
                         <i class="fa-times fa"></i>
                     </button>
-                    <div class="block-inline  product-modal">
+                    <div class="block-inline product-modal">
                         <!-- Single Products Slider Starts -->
                         <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
                             <div class="owl-carousel sync1 pb-25 product-preview-images-big">
@@ -24,7 +24,6 @@
 
                                     <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].priority == 3"
                                          class="prod-tag-1 font-2">
-                                        {{--<span> -@{{ similarProductPreview.product.price[0].discount }}% </span>--}}
                                         <span> SALE </span>
                                     </div>
                                     <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].priority == 1"
@@ -48,9 +47,9 @@
                             <div class="owl-carousel single-prod-thumb sync2 nav-2 product-preview-images-small">
                                 <div class="item" v-for="image in similarProductPreview.product.images">
                                     <img v-bind:src="image.small">
-                                        <span class="transparent">
-                                            <img src="/img/template/icons/plus.png" alt="view">
-                                        </span>
+                                    <span class="transparent">
+                                        <img src="/img/template/icons/plus.png" alt="view">
+                                    </span>
                                 </div>
                             </div>
                         </div>
