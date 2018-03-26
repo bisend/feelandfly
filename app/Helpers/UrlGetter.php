@@ -495,3 +495,19 @@ if (!function_exists('url_static_payment_delivery'))
         return UrlBuilder::static_payment_delivery($language);
     }
 }
+
+if (!function_exists('url_order_payment_callback'))
+{
+    function url_order_payment_callback($language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::order_payment_callback($language);
+    }
+}
+
+if (!function_exists('url_order_payment_order'))
+{
+    function url_order_payment_order($order_number, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        return UrlBuilder::order_payment_order($order_number, $language);
+    }
+}

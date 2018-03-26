@@ -46,9 +46,11 @@ return [
         'client_secret' => env('GOOGLE_SECRET'),
         'redirect' => env('GOOGLE_CALLBACK'),
     ],
+
     'liqpay' => [
         'version' => env('LIQPAY_VERSION'),
         'public_key' => env('LIQPAY_PUBLIC_KEY'),
         'private_key' => env('LIQPAY_PRIVATE_KEY'),
+        'sandbox' => env('LIQPAY_SANDBOX')
     ],
 ];

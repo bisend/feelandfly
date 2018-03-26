@@ -8,7 +8,6 @@
 
 namespace App\Repositories;
 
-
 use App\DatabaseModels\Order;
 use App\DatabaseModels\OrderStatus;
 
@@ -54,6 +53,11 @@ class OrderRepository
         $order->a_city = $data['aCity'];
         $order->post_index = $data['postIndex'];
 
+        if (!is_null($data['country']) && ($data['country'] != 'Украина' || $data['country'] != 'Україна'))
+        {
+            $order->delivery_price = 400;
+        }
+
 
         $order->save();
         $order->order_number = $order->id + 10000;
@@ -93,5 +97,20 @@ class OrderRepository
     public function getTotalOrdersCount($model)
     {
         return Order::whereUserId($model->user->id)->orWhere('email', '=', $model->user->email)->count();
+    }
+
+    public function getOrder($model)
+    {
+        return Order::whereOrderNumber($model->orderNumber)->first();
+    }
+
+    public function getOrderStatuses($model)
+    {
+        return OrderStatus::get([
+            'id',
+            "name_$model->language as name",
+            'slug',
+            'is_default'
+        ]);
     }
 }

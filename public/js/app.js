@@ -31393,7 +31393,6 @@ if (document.getElementById('order-confirm')) {
     var orderNameValidator = void 0,
         orderPhoneValidator = void 0,
         orderEmailValidator = void 0,
-        orderAddressValidator = void 0,
         orderAStreetValidator = void 0,
         orderALandValidator = void 0,
         orderACityValidator = void 0;
@@ -31813,11 +31812,16 @@ if (document.getElementById('order-confirm')) {
                         hideLoader();
 
                         if (data.status === 'success') {
-                            if (LANGUAGE === 'uk') {
-                                // window.location.href = '/uk';
-                            } else {
-                                    // window.location.href = '/';
-                                }
+                            // if (LANGUAGE === 'uk')
+                            // {
+                            //     // window.location.href = '/uk';
+                            // }
+                            // else
+                            // {
+                            //     // window.location.href = '/';
+                            // }
+
+                            window.location.href = data.url;
                         }
 
                         if (data.status === 'error') {

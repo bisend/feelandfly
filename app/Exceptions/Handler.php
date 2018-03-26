@@ -70,6 +70,7 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof BadRequestHttpException)
         {
+            \Log::info($exception);
             return redirect()->action('ErrorController@index', [
                 'error' => 400,
                 'language' => $language
@@ -77,6 +78,7 @@ class Handler extends ExceptionHandler
         }
         else if ($exception instanceof UnauthorizedHttpException)
         {
+            \Log::info($exception);
             return redirect()->action('ErrorController@index', [
                 'error' => 401,
                 'language' => $language
@@ -84,6 +86,7 @@ class Handler extends ExceptionHandler
         }
         else if ($exception instanceof AccessDeniedHttpException)
         {
+            \Log::info($exception);
             return redirect()->action('ErrorController@index', [
                 'error' => 403,
                 'language' => $language
@@ -91,6 +94,7 @@ class Handler extends ExceptionHandler
         }
         else if($exception instanceof NotFoundHttpException)
         {
+            \Log::info($exception);
             return redirect()->action('ErrorController@index', [
                 'error' => 404,
                 'language' => $language
@@ -98,6 +102,7 @@ class Handler extends ExceptionHandler
         }
         else if ($exception instanceof HttpException)
         {
+            \Log::info($exception);
             return redirect()->action('ErrorController@index', [
                 'error' => 500,
                 'language' => $language

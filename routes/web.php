@@ -206,6 +206,14 @@ Route::group(['prefix' => 'order'], function () {
 
     Route::post('create', 'OrderController@create');
 
+    Route::get('payment/{orderNumber}/{language?}', 'OrderPaymentController@index')
+        ->where([
+            'orderNumber' => '^[0-9]+',
+            'language' => '^(uk|ru)?$'
+        ]);
+
+    Route::post('payment/callback', 'OrderPaymentController@liqpayCallbackHandler');
+
 });
 
 Route::group(['prefix' => 'profile'], function () {

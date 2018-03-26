@@ -63,6 +63,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereNpWarehouse($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereNpWarehouseRef($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order wherePostIndex($value)
+ * @property float|null $delivery_price
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereDeliveryPrice($value)
  */
 class Order extends Model
 {

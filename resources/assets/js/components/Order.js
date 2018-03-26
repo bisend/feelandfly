@@ -470,14 +470,16 @@ if (document.getElementById('order-confirm'))
                         
                         if (data.status === 'success')
                         {
-                            if (LANGUAGE === 'uk')
-                            {
-                                // window.location.href = '/uk';
-                            }
-                            else
-                            {
-                                // window.location.href = '/';
-                            }
+                            // if (LANGUAGE === 'uk')
+                            // {
+                            //     // window.location.href = '/uk';
+                            // }
+                            // else
+                            // {
+                            //     // window.location.href = '/';
+                            // }
+
+                            window.location.href = data.url;
                         }
 
                         if (data.status === 'error')

@@ -6361,3 +6361,11 @@ li.sale-link:before {
     padding: 11px 19px;
     color: #a3a3a3;
 }
+
+.country-select.disabled .clear, .country-select.disabled .open-indicator {
+    display: none;
+}
+
+.country-select.disabled.v-select .dropdown-toggle input, .country-select.disabled.v-select .dropdown-toggle {
+    cursor: default;
+}

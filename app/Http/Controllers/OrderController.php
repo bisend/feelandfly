@@ -125,14 +125,17 @@ class OrderController extends LayoutController
             ]);
         }
 
-//        $this->cartService->clearCart();
+        $this->cartService->clearCart();
 
         DB::commit();
+
+        $url = url_order_payment_order($model->order->order_number, $model->language);
 
 //        Session::put('isOrderCreated', true);
 
         return response()->json([
-            'status' => 'success'
+            'status' => 'success',
+            'url' => $url
         ]);
     }
 }

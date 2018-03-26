@@ -211,6 +211,10 @@ class UrlBuilder
 
     const STATIC_PAYMENT_DELIVERY_PAGE = 'payment-delivery';
 
+    const ORDER_PAYMENT_CALLBACK = 'order/payment/callback';
+
+    const ORDER_PAYMENT_ORDER = 'order/payment';
+
 
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -261,6 +265,27 @@ class UrlBuilder
         $url = self::concatParts([
             url(self::URL_ROOT),
             self::STATIC_PAYMENT_DELIVERY_PAGE
+        ]);
+
+        return self::localize($url, $language);
+    }
+
+    public static function order_payment_callback($language = Languages::DEFAULT_LANGUAGE)
+    {
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::ORDER_PAYMENT_CALLBACK
+        ]);
+
+        return self::localize($url, $language);
+    }
+
+    public static function order_payment_order($order_number, $language = Languages::DEFAULT_LANGUAGE)
+    {
+        $url = self::concatParts([
+            url(self::URL_ROOT),
+            self::ORDER_PAYMENT_ORDER,
+            $order_number
         ]);
 
         return self::localize($url, $language);
