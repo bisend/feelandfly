@@ -135,12 +135,13 @@ if (document.getElementById('top-products'))
                         touchDrag: true,
                         mouseDrag: false,
                         smartSpeed: 100,
-                        nav: GLOBAL_DATA.topProducts.length > 2,
+                        nav: GLOBAL_DATA.topProducts.length > 4,
                         margin: 30,
                         responsive: {
-                            0: {items: 1,nav: GLOBAL_DATA.topProducts.length > 1},
-                            1201: {items: 2,nav: GLOBAL_DATA.topProducts.length > 2},
-                            768: {items: 1,nav: GLOBAL_DATA.topProducts.length > 1},
+                            0: {items: 1,nav: GLOBAL_DATA.topProducts.length > 1 },
+                            1200: {items: 4,nav: GLOBAL_DATA.topProducts.length > 4},
+                            992: {items: 3,nav: GLOBAL_DATA.topProducts.length > 3},
+                            768: {items: 2,nav: GLOBAL_DATA.topProducts.length > 2},
                             568: {items: 1,nav: GLOBAL_DATA.topProducts.length > 1}
                         },
                         navText: [

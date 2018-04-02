@@ -5,7 +5,7 @@ if (document.getElementById('search'))
         data: {
             showResult: false,
             showNoResult: false,
-            series: '',
+            series: null,
             url: '/search',
             urlAjax: '',
             searchProducts: [],
@@ -14,7 +14,7 @@ if (document.getElementById('search'))
         },
         methods: {
             search: function () {
-                var _this = this;
+                let _this = this;
 
                 _this.url = '/search';
 
@@ -91,6 +91,35 @@ if (document.getElementById('search'))
                         });
 
                     }, 400);
+                }
+            },
+            onEsc: () => {
+                let _this = this;
+
+                $('#search').find('input').blur();
+
+                _this.series = '';
+            },
+            onBlur: () => {
+                let _this = this;
+
+                _this.series = '';
+
+                let i = $('button.open-search').find('i');
+
+                if(i.hasClass('fa-times') && !searchBtnClicked)
+                {
+                    i.removeClass('fa-times').addClass('fa-search');
+                    $('.profile-search-smoll').animate({
+                        width: '0'
+                    }, function(){
+                        $('.navbar-nav').show(50);
+                        $('.open-search-this-none').fadeIn(100);
+                        $('.profile-search-smoll').stop().hide();
+                        $('.open-search').css('border', 'none');
+                    });
+
+                    searchWasHidden = !searchWasHidden;
                 }
             }
         }

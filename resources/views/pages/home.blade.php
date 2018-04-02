@@ -601,7 +601,7 @@
             <div class="container theme-container">
                 <div class="row">
                     @if(!is_null($model->topProducts) && $model->topProducts->count() > 0)
-                        <div class="col-md-6 col-sm-6 shares-products" id="top-products">
+                        <div class="col-md-12 shares-products" id="top-products">
                             <h2 class="section-title">
                                 Топ продаж
                             </h2>
@@ -837,7 +837,7 @@
                         </div>
                     @endif
                     @if(!is_null($model->newProducts) && $model->newProducts->count() > 0)
-                        <div class="col-md-6 col-sm-6 new-products" id="new-products">
+                        <div class="col-md-12 new-products" id="new-products">
                             <h2 class="section-title">
                                 Новинки
                             </h2>

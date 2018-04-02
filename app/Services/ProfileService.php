@@ -206,6 +206,11 @@ class ProfileService extends LayoutService
         $model->selectedDeliveryId = $this->profileRepository->getSelectedDeliveryId($model);
     }
 
+    public function fillSelectedDelivery($model)
+    {
+        $model->delivery = $this->deliveryRepository->getDelivery($model);
+    }
+
     /**
      * fill address
      * @param $model
@@ -221,9 +226,9 @@ class ProfileService extends LayoutService
      * @param $deliveryId
      * @param $address
      */
-    public function savePaymentDelivery($paymentId, $deliveryId, $address)
+    public function savePaymentDelivery($deliveryId, $address)
     {
-        $this->profileRepository->savePaymentDelivery($paymentId, $deliveryId, $address);
+        $this->profileRepository->savePaymentDelivery($deliveryId, $address);
     }
 
     /**

@@ -46,8 +46,6 @@ class MyOrdersController extends LayoutController
         
         $this->profileService->fill($model);
         
-        $this->profileService->fillPayments($model);
-        
         $this->profileService->fillDeliveries($model);
 
         $this->profileService->getOrders($model);
@@ -79,9 +77,7 @@ class MyOrdersController extends LayoutController
 
         $model = new MyOrdersViewModel('my-orders', $language, $page);
 
-        $this->profileService->fill($model);
-
-        $this->profileService->fillPayments($model);
+//        $this->profileService->fill($model);
 
         $this->profileService->fillDeliveries($model);
 

@@ -50,6 +50,8 @@ class ProductController extends LayoutController
         $model = new ProductViewModel('product', $language, $slug);
 
         $this->productService->fill($model);
+
+        $this->productService->incrementNumberOfViews($model);
         
         $reviews = $this->reviewService->getReviews($model->product->id, 1);
 

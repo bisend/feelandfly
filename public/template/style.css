@@ -6334,7 +6334,8 @@ li.sale-link:before {
 
 [data-order-delivery] .v-select.unsearchable input[type=search],
 [data-order-delivery-type] .v-select.unsearchable input[type=search],
-[data-order-points] .v-select.unsearchable input[type=search] {
+[data-order-points] .v-select.unsearchable input[type=search],
+[data-profile-delivery] .v-select.unsearchable input[type=search]{
      opacity: 1;
 }
 
@@ -6403,4 +6404,8 @@ li.sale-link:before {
 
 .prod-wrap-cont .product_item .product_info .prod-attributes .choose-size li a:after{
     width: 27px;
+}
+
+.delivery-select span.selected-tag{
+    position: absolute;
 }

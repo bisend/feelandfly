@@ -48,13 +48,23 @@
 
                         <form class="login" @submit.prevent="validateBeforeSubmit">
                             <div class="form-group auth-form-group">
+                                <label for="login-modal-input-email">
+                                    {{ trans('login-modal.email') }}:
+                                    <span class="field-required">*</span>
+                                </label>
                                 <input data-login-email
+                                       id="login-modal-input-email"
                                        type="text"
                                        v-model="email"
                                        placeholder="{{ trans('login-modal.email') }}" class="form-control">
                             </div>
                             <div class="form-group auth-form-group">
+                                <label for="login-modal-input-password">
+                                    {{ trans('login-modal.password') }}:
+                                    <span class="field-required">*</span>
+                                </label>
                                 <input data-login-password
+                                       id="login-modal-input-password"
                                        type="password"
                                        v-model="password"
                                        placeholder="{{ trans('login-modal.password') }}" class="form-control">

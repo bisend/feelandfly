@@ -18,6 +18,8 @@ class PaymentDeliveryViewModel extends LayoutViewModel
      */
     public $deliveries;
 
+    public $delivery;
+
     /**
      * @var
      */

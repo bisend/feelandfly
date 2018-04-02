@@ -140,4 +140,9 @@ class ProductService extends LayoutService
             $model->h1 = 'Feelandfly';
         }
     }
+
+    public function incrementNumberOfViews($model)
+    {
+        $this->productRepository->incrementNumberOfViews($model);
+    }
 }

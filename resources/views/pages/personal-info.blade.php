@@ -55,7 +55,12 @@
                                     {{ csrf_field() }}
                                     <div class="col-md-4 col-sm-12">
                                         <div class="form-group">
+                                            <label for="profile-name-input">
+                                                {{ trans('profile.name') }}:
+                                                <span class="field-required">*</span>
+                                            </label>
                                             <input type="text"
+                                                   id="profile-name-input"
                                                    data-profile-name
                                                    v-model="name"
                                                    placeholder="{{ trans('profile.name') }}"
@@ -69,8 +74,13 @@
                                     {{--</div>--}}
                                     <div class="col-md-4 col-sm-12">
                                         <div class="form-group">
+                                            <label for="profile-email-input">
+                                                {{ trans('profile.email') }}:
+                                                <span class="field-required">*</span>
+                                            </label>
                                             <input type="text"
                                                    data-profile-email
+                                                   id="profile-email-input"
                                                    v-model="email"
                                                    placeholder="{{ trans('profile.email') }}"
                                                    class="form-control black-input">
@@ -78,11 +88,18 @@
                                     </div>
                                     <div class="col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <input type="text"
-                                                   data-profile-phone
-                                                   v-model="phone"
-                                                   placeholder="{{ trans('profile.phone') }}"
-                                                   class="form-control black-input">
+                                            <label for="profile-phone-input">
+                                                {{ trans('profile.phone') }}:
+                                                <span class="field-required">*</span>
+                                            </label>
+                                            <the-mask type="tel"
+                                                      id="profile-phone-input"
+                                                      data-profile-phone
+                                                      mask="(###)-###-##-##"
+                                                      :masked="true"
+                                                      v-model="phone"
+                                                      placeholder="(___)-___-__-__"
+                                                      class="form-control black-input"></the-mask>
                                         </div>
                                     </div>
 
@@ -105,7 +122,12 @@
                                 <div class="row">
                                     <div class="col-md-4 col-sm-12">
                                         <div class="form-group">
+                                            <label for="profile-old-password-input">
+                                                {{ trans('profile.old_password') }}:
+                                                <span class="field-required">*</span>
+                                            </label>
                                             <input type="password"
+                                                   id="profile-old-password-input"
                                                    data-profile-old-password
                                                    v-model="oldPassword"
                                                    placeholder="{{ trans('profile.old_password') }}"
@@ -114,8 +136,13 @@
                                     </div>
                                     <div class="col-md-4 col-sm-12">
                                         <div class="form-group">
+                                            <label for="profile-new-password-input">
+                                                {{ trans('profile.new_password') }}:
+                                                <span class="field-required">*</span>
+                                            </label>
                                             <input type="password"
                                                    data-profile-new-password
+                                                   id="profile-new-password-input"
                                                    v-model="newPassword"
                                                    placeholder="{{ trans('profile.new_password') }}"
                                                    class="form-control black-input">
@@ -123,10 +150,15 @@
                                     </div>
                                     <div class="col-md-4 col-sm-12">
                                         <div class="form-group">
+                                            <label for="profile-confirm-password-input">
+                                                {{ trans('profile.repeat') }}:
+                                                <span class="field-required">*</span>
+                                            </label>
                                             <input type="password"
+                                                   id="profile-confirm-password-input"
                                                    data-profile-confirm-new-password
                                                    v-model="confirmNewPassword"
-                                                   placeholder="{{ trans('profile.new_password') }}"
+                                                   placeholder="{{ trans('profile.repeat') }}"
                                                    class="form-control black-input">
                                         </div>
                                     </div>

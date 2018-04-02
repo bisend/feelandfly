@@ -51,58 +51,35 @@
                         <div class="profile-item-body">
                             <div class="row">
                                 <form @submit.prevent="validateBeforeSubmit">
-                                    <div class="col-md-4 kab-margin-mob">
-                                        <div class="drop-menu-select" tabindex="1" data-profile-payment style="color: rgb(85, 85, 85); font-weight: 500;">
-                                            <div class="select">
-                                                @if($model->selectedPaymentId != null)
-                                                    @foreach($model->payments as $payment)
-                                                        @if($payment->id == $model->selectedPaymentId)
-                                                            <span>{{ $payment->name }}</span>
-                                                        @endif
-                                                    @endforeach
-                                                @else
-                                                    <span>{{ trans('profile.choose_payment') }}</span>
-                                                @endif
-                                                <i class="fa fa-caret-down"></i>
-                                            </div>
-                                            <input type="hidden" name="gender">
-                                            <ul class="dropeddown" style="display: none;">
-                                                @foreach($model->payments as $payment)
-                                                    <li v-on:click="setSelectedPaymentId({{$payment->id}})">{{ $payment->name }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 kab-margin-mob">
-                                        <div class="drop-menu-select" tabindex="1" data-profile-delivery style="color: rgb(85, 85, 85); font-weight: 500;">
-                                            <div class="select">
-                                                @if($model->selectedDeliveryId != null)
-                                                @foreach($model->deliveries as $delivery)
-                                                    @if($delivery->id == $model->selectedDeliveryId)
-                                                        <span>{{ $delivery->name }}</span>
-                                                    @endif
-                                                @endforeach
-                                                @else
-                                                    <span>{{ trans('profile.choose_delivery') }}</span>
-                                                @endif
-                                                <i class="fa fa-caret-down"></i>
-                                            </div>
-                                            <input type="hidden" name="gender">
-                                            <ul class="dropeddown" style="display: none;">
-                                                @foreach($model->deliveries as $delivery)
-                                                    <li v-on:click="setSelectedDeliveryId({{$delivery->id}})">
-                                                        {{ $delivery->name }}
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 kab-margin-mob">
+                                    <div class="col-md-12 kab-margin-mob">
                                         <div class="form-group">
-                                            <input type="text"
-                                                   data-profile-address
-                                                   v-model="address"
-                                                   placeholder="{{ trans('profile.address') }}" class="form-control black-input">
+                                            <label>{{ trans('order.payment') }}:</label>
+                                            <div class="order-payment-method">
+                                                {{ trans('order.full_pre_payment') }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 kab-margin-mob">
+                                        <div class="form-group" data-profile-delivery>
+                                            <label for="profile-delivery-field">
+                                                {{ trans('order.delivery') }}:
+                                                <span class="field-required">*</span>
+                                            </label>
+                                            <v-select v-model="delivery"
+                                                      :transition="'slidedd'"
+                                                      :placeholder="'{{ trans('order.choose_delivery') }}'"
+                                                      :input-id="'profile-delivery-field'"
+                                                      :label="'name'"
+                                                      :searchable="false"
+                                                      :options="deliveries"
+                                                      :class="'country-select delivery-select'">
+                                                <template slot="options" slot-scope="option">
+                                                    @{{ option.name }}
+                                                </template>
+                                                <span v-cloak slot="no-options">
+                                                    {{ trans('order.no_results') }}
+                                                </span>
+                                            </v-select>
                                         </div>
                                     </div>
 

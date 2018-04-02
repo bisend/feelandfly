@@ -471,8 +471,13 @@
                         </div>
                         <div id="search" class="profile-search profile-search-smoll">
                             <form class="form-serch-btn" v-bind:action="url" method="get">
-                                <input v-model="series" v-on:keyup="searchAjax()"
-                                       type="text"
+                                <input
+                                       v-model="series"
+                                       @keyup.esc="onEsc"
+                                       @blur="onBlur"
+                                       @keyup="searchAjax()"
+                                       type="search"
+                                       autocomplete="false"
                                        placeholder="{{ trans('header.search')}}">
 
                                 <button v-on:click.prevent="search()" class="profile-search-btn">
@@ -503,7 +508,6 @@
                                     </div>
                                 </a>
                                 <div class="view-all-result">
-                                    {{--<a v-bind:href="'/search/' + series + '/{{ $model->language == 'ru' ? '' : $model->language }}'" class="theme-btn btn-black">--}}
                                     <a v-bind:href="url" class="theme-btn btn-black">
                                         <span>{{ trans('header.all_results') }} (@{{ countSearchProducts }})</span>
                                     </a>

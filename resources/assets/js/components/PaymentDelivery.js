@@ -1,57 +1,58 @@
 if (document.getElementById('profile-payment-delivery'))
 {
-    var profileAddressValidator;
-    
+    // let profileAddressValidator;
+
     new Vue({
         el: '#profile-payment-delivery',
         data: {
-            selectedPaymentId: window.FFShop.selectedPaymentId,
-            selectedDeliveryId: window.FFShop.selectedDeliveryId,
-            address: window.FFShop.address
+            deliveries: window.FFShop.deliveries,
+            delivery: window.FFShop.delivery,
+            selectedDeliveryId: window.FFShop.selectedDeliveryId
         },
         mounted: function () {
-            profileAddressValidator = new RegExValidatingInput($('[data-profile-address]'), {
-                expression: RegularExpressions.MIN_TEXT,
-                ChangeOnValid: function (input) {
-                    input.removeClass(INCORRECT_FIELD_CLASS);
-                },
-                ChangeOnInvalid: function (input) {
-                    input.addClass(INCORRECT_FIELD_CLASS);
-                },
-                showErrors: true,
-                requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                regExErrorMessage: INCORRECT_FIELD_TEXT
-            });
+            // profileAddressValidator = new RegExValidatingInput($('[data-profile-address]'), {
+            //     expression: RegularExpressions.MIN_TEXT,
+            //     ChangeOnValid: function (input) {
+            //         input.removeClass(INCORRECT_FIELD_CLASS);
+            //     },
+            //     ChangeOnInvalid: function (input) {
+            //         input.addClass(INCORRECT_FIELD_CLASS);
+            //     },
+            //     showErrors: true,
+            //     requiredErrorMessage: REQUIRED_FIELD_TEXT,
+            //     regExErrorMessage: INCORRECT_FIELD_TEXT
+            // });
+        },
+        watch: {
+            delivery: () => {
+                $('[data-profile-delivery]').find('.dropdown-toggle').css('border', '2px solid black');
+            },
         },
         methods: {
-            setSelectedPaymentId: function (paymentId) {
-                var _this = this;
-                
-                _this.selectedPaymentId = paymentId;
-            },
-            setSelectedDeliveryId: function (deliveryId) {
-                var _this = this;
-
-                _this.selectedDeliveryId = deliveryId;
-            },
             validateBeforeSubmit: function () {
-                var _this = this;
+                let _this = this;
 
-                var isValid = true;
+                let isValid = true;
 
-                profileAddressValidator.Validate();
-                if (!profileAddressValidator.IsValid()) {
+                // profileAddressValidator.Validate();
+                // if (!profileAddressValidator.IsValid()) {
+                //     isValid = false;
+                // }
+
+                // if (_this.selectedPaymentId == null) {
+                //     isValid = false;
+                //     $('[data-profile-payment]').css('border', '2px solid red');
+                // }
+
+                // if (_this.selectedDeliveryId == null) {
+                //     isValid = false;
+                //     $('[data-profile-delivery]').css('border', '2px solid red');
+                // }
+
+                if (_this.delivery == null)
+                {
                     isValid = false;
-                }
-
-                if (_this.selectedPaymentId == null) {
-                    isValid = false;
-                    $('[data-profile-payment]').css('border', '2px solid red');
-                }
-
-                if (_this.selectedDeliveryId == null) {
-                    isValid = false;
-                    $('[data-profile-delivery]').css('border', '2px solid red');
+                    $('[data-profile-delivery]').find('.dropdown-toggle').css('border', '2px solid red');
                 }
 
                 if (isValid) {
@@ -59,7 +60,7 @@ if (document.getElementById('profile-payment-delivery'))
                 }
             },
             savePaymentDelivery: function () {
-                var _this = this;
+                let _this = this;
 
                 showLoader();
 
@@ -67,20 +68,20 @@ if (document.getElementById('profile-payment-delivery'))
                     type: 'post',
                     url: '/profile/save-payment-delivery',
                     data: {
-                        paymentId: _this.selectedPaymentId,
-                        deliveryId: _this.selectedDeliveryId,
+                        // paymentId: _this.selectedPaymentId,
+                        deliveryId: _this.delivery.id,
                         address: _this.address,
                         language: LANGUAGE
                     },
                     success: function (data) {
                         hideLoader();
 
-                        if (data.status == 'success')
+                        if (data.status === 'success')
                         {
                             showPopup(PERSONAL_INFO_SAVED);
                         }
 
-                        if (data.status == 'error')
+                        if (data.status === 'error')
                         {
                             showPopup(SERVER_ERROR);
                         }

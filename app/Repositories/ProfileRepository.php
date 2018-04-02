@@ -8,6 +8,7 @@
 
 namespace App\Repositories;
 
+use App\DatabaseModels\Delivery;
 use App\DatabaseModels\Profile;
 
 /**
@@ -90,13 +91,13 @@ class ProfileRepository
      * @param $deliveryId
      * @param $address
      */
-    public function savePaymentDelivery($paymentId, $deliveryId, $address)
+    public function savePaymentDelivery($deliveryId, $address)
     {
         $user = auth()->user();
 
         $profile = Profile::whereUserId($user->id)->first();
         
-        $profile->payment_id = $paymentId;
+//        $profile->payment_id = $paymentId;
         
         $profile->delivery_id = $deliveryId;
         

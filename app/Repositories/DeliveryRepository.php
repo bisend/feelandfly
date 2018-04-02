@@ -30,4 +30,13 @@ class DeliveryRepository
             'slug'
         ]);
     }
+
+    public function getDelivery($model)
+    {
+        return Delivery::whereId($model->selectedDeliveryId)->first([
+            'id',
+            "name_$model->language as name",
+            'slug'
+        ]);
+    }
 }

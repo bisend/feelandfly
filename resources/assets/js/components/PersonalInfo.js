@@ -1,6 +1,6 @@
 if (document.getElementById('personal-info'))
 {
-    var profileNameValidator, profileEmailValidator, profilePhoneValidator;
+    let profileNameValidator, profileEmailValidator, profilePhoneValidator;
     
     new Vue({
         el: '#personal-info',
@@ -10,7 +10,7 @@ if (document.getElementById('personal-info'))
             phone: window.FFShop.auth.profile.phone_number
         },
         mounted: function () {
-            var _this = this;
+            let _this = this;
             // `this` указывает на экземпляр vm
             profileNameValidator = new RegExValidatingInput($('[data-profile-name]'), {
                 expression: RegularExpressions.FULL_NAME,
@@ -53,9 +53,9 @@ if (document.getElementById('personal-info'))
         },
         methods: {
             validateBeforeSubmit() {
-                var _this = this;
+                let _this = this;
 
-                var isValid = true;
+                let isValid = true;
 
                 profileNameValidator.Validate();
                 if (!profileNameValidator.IsValid()) {
@@ -78,7 +78,7 @@ if (document.getElementById('personal-info'))
             },
 
             savePersonalInfo() {
-                var _this = this;
+                let _this = this;
 
                 showLoader();
 
@@ -94,7 +94,7 @@ if (document.getElementById('personal-info'))
                     success: function (data) {
                         hideLoader();
 
-                        if (data.status == 'success')
+                        if (data.status === 'success')
                         {
                             if (data.emailChanged == true)
                             {

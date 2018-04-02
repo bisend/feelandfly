@@ -1261,9 +1261,9 @@ class ProductRepository
                 $query->where('products_promotions.promotion_id', '=', $model->topPromotion->id);
             })->whereIsVisible(true)
             ->whereNotIn('products.id', $model->salesIds)
-//            ->orderByRaw($orderByRaw)
+            ->orderByRaw("number_of_views desc", 'name')
 //            ->offset($categoryProductsOffset)
-//            ->limit($categoryProductsLimit)
+            ->limit($model->topLimit)
             ->get([
                 'products.id',
                 "name_$model->language as name",
@@ -1356,7 +1356,7 @@ class ProductRepository
             ->whereNotIn('products.id', $model->topIds)
 //            ->orderByRaw($orderByRaw)
 //            ->offset($categoryProductsOffset)
-//            ->limit($categoryProductsLimit)
+            ->limit($model->newLimit)
             ->get([
                 'products.id',
                 "name_$model->language as name",
@@ -1589,5 +1589,10 @@ class ProductRepository
         return Product::whereHas('promotions', function ($query) use ($model) {
                 $query->where('products_promotions.promotion_id', '=', $model->salesPromotion->id);
             })->whereIsVisible(true)->count();
+    }
+
+    public function incrementNumberOfViews($model)
+    {
+        $model->product->increment('number_of_views');
     }
 }

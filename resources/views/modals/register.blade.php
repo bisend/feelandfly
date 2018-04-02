@@ -35,7 +35,12 @@
                         </p>
                         <form method="POST" class="login" @submit.prevent="validateBeforeSubmit">
                             <div class="form-group auth-form-group">
+                                <label for="register-modal-input-name">
+                                    {{ trans('register-modal.name') }}:
+                                    <span class="field-required">*</span>
+                                </label>
                                 <input data-register-name
+                                       id="register-modal-input-name"
                                        v-model="name"
                                        name="name"
                                        autocomplete="off"
@@ -44,7 +49,12 @@
                                        class="form-control">
                             </div>
                             <div class="form-group auth-form-group">
+                                <label for="register-modal-input-email">
+                                    {{ trans('register-modal.email') }}:
+                                    <span class="field-required">*</span>
+                                </label>
                                 <input data-register-email
+                                       id="register-modal-input-email"
                                        v-model="email"
                                        name="email"
                                        autocomplete="off"
@@ -53,7 +63,12 @@
                                        class="form-control">
                             </div>
                             <div class="form-group auth-form-group">
+                                <label for="register-modal-input-password">
+                                    {{ trans('register-modal.password') }}:
+                                    <span class="field-required">*</span>
+                                </label>
                                 <input data-register-password
+                                       id="register-modal-input-password"
                                        v-model="password"
                                        name="password"
                                        type="password"
@@ -61,7 +76,12 @@
                                        class="form-control">
                             </div>
                             <div class="form-group auth-form-group">
+                                <label for="register-modal-input-confirm">
+                                    {{ trans('register-modal.confirm') }}:
+                                    <span class="field-required">*</span>
+                                </label>
                                 <input data-register-confirm
+                                       id="register-modal-input-confirm"
                                        v-model="confirmPassword"
                                        name="confirm"
                                        type="password"

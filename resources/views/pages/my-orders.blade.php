@@ -100,10 +100,10 @@
 
                                 <div class="modal-order-pay">
                                     <p class="fsz-15 font-2 no-margin">
-                                        {{ trans('profile.payment_var') }}: <span class="fsz-17"
-                                                             v-for="payment in payments"
-                                                             v-if="payment.id == currentOrder.payment_id">
-                                                        @{{ payment.name }}</span>
+                                        {{ trans('profile.payment_var') }}:
+                                        <span class="fsz-17">
+                                            {{ trans('order.full_pre_payment') }}
+                                        </span>
                                     </p>
                                 </div>
 
