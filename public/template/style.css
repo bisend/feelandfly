@@ -6409,3 +6409,56 @@ li.sale-link:before {
 .delivery-select span.selected-tag{
     position: absolute;
 }
+
+.payment-section{
+    width: 500px;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 40px;
+    margin-bottom: 40px;
+}
+
+
+.payment-section ul li{
+    font-size: 15px;
+    font-weight: 600;
+    margin: 3px 0;
+}
+.payment-section ul li span{
+    margin-right: 6px;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.payment-section .payment-section-text{
+    margin-bottom: 20px;
+    color: #777777;
+    font-size: 15px;
+}
+
+.payment-section .payment-section-header{
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+
+    font-size: 25px;
+    text-align: center;
+}
+
+@media (max-width:767px) {
+    .payment-section{
+        width: 320px;
+    }
+}
+
+.caption-link.meta-icon i{
+    margin-right: 5px;
+}
+
+.caption-link.meta-icon span{
+    margin-right: 5px;
+}
+
+.caption-link.meta-icon{
+    font-family: 'Oswald', sans-serif;
+}

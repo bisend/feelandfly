@@ -17,26 +17,30 @@
         <!--Breadcrumb Section End-->
 
         <!-- Page Starts-->
-        <div class="container theme-container ptb-70">
+        <div class="container theme-container ptb-70 payment-section">
             <div class="row">
                 <div class="col-md-12">
-                    <div>{{ trans('order.order_number') }}: {{ $model->order->order_number }}</div>
-                    <div>Дата: {{ $model->order->created_at }}</div>
-                    <div>{{ trans('order.sum') }}: {{ $model->order->total_order_amount }} грн</div>
+                    <div class="payment-section-header">
+                        Оплата заказа
+                    </div>
+                    <ul>
+                        <li><span>{{ trans('order.order_number') }}</span>: {{ $model->order->order_number }}</li>
+                        <li><span>Дата</span>: {{ $model->order->created_at }}</li>
+                        <li><span>{{ trans('order.sum') }}</span>: {{ $model->order->total_order_amount }} грн</li>
+                        @if(!is_null($model->order->country) && ($model->order->country != 'Украина' || $model->order->country != 'Україна'))
+                            <li><span>{{ trans('order.delivery_price') }}</span>: {{ trans('order.novaya_p2') }}</li>
+                            <li><span>{{ trans('order.to_pay') }}</span>: {{ set_format_price($model->order->total_order_amount + 400.00) }} грн</li>
+                        @else
+                            <li><span>{{ trans('order.delivery_price') }}</span>: {{ trans('order.novaya_p') }}</li>
+                        @endif
+                        <li><span>Статус</span>: {{ $model->status->name }}</li>
+                    </ul>
 
-                    @if(!is_null($model->order->country) && ($model->order->country != 'Украина' || $model->order->country != 'Україна'))
-                        <div>{{ trans('order.delivery_price') }}: {{ trans('order.novaya_p2') }}</div>
-                        <div>{{ trans('order.to_pay') }}: {{ set_format_price($model->order->total_order_amount + 400.00) }} грн</div>
-                    @else
-                        <div>{{ trans('order.delivery_price') }}: {{ trans('order.novaya_p') }}</div>
-                    @endif
-
-                    <div>Статус: {{ $model->status->name }}</div>
                 </div>
 
                 @if($model->status->is_default)
-                    <div class="col-md-12">{{ trans('order.call') }}</div>
-                    <div class="col-md-12">
+                    <div class="col-md-12 payment-section-text">{{ trans('order.call') }}</div>
+                    <div class="col-md-12 payment-section-btn">
                         {!! $model->form !!}
                     </div>
                 @endif

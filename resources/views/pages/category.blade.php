@@ -373,7 +373,7 @@
                                                         <a class="caption-link meta-icon"
                                                            href="#"
                                                            v-on:click.prevent="changeCategoryProductPreview({{$counter}})">
-                                                            <span class="fa fa-eye"></span>
+                                                            <span class="fa fa-eye"></span> БЫСТРЫЙ ПРОСМОТР
                                                         </a>
                                                     </div>
                                                 </div>

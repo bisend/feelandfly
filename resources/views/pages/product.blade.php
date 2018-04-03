@@ -63,7 +63,7 @@
                                            rel="prettyPhoto[single-product]"
                                            title="{{ $model->product->name }}"
                                            class="caption-link meta-icon">
-                                            <i class="fa fa-arrows-alt"></i>
+                                            <i class="fa fa-arrows-alt"></i> БЫСТРЫЙ ПРОСМОТР
                                         </a>
                                     </div>
                                 @endforeach
