@@ -125,12 +125,12 @@ class ProductService extends LayoutService
 
     private function fillMetaTags($model)
     {
-        if ($model->product->meta_tag)
+        if (!is_null($model->product->meta_title))
         {
-            $model->title = $model->product->meta_tag->title;
-            $model->description = $model->product->meta_tag->description;
-            $model->keywords = $model->product->meta_tag->keywords;
-            $model->h1 = $model->product->meta_tag->h1;
+            $model->title = $model->product->meta_title;
+            $model->description = $model->product->meta_description;
+            $model->keywords = $model->product->meta_keywords;
+            $model->h1 = $model->product->meta_h1;
         }
         else
         {

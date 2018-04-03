@@ -102,17 +102,17 @@ class ImagesSeeder extends Seeder
         $image->small = "/img/product/small/orange.jpg";
         $image->save();
 
-        $image = new Image();
-        $image->original = "/img/template/slider/slide-1.jpg";
-        $image->save();
-        
-        $image = new Image();
-        $image->original = "/img/template/slider/slide-3.jpg";
-        $image->save();
-        
-        $image = new Image();
-        $image->original = "/img/template/slider/slide-4.jpg";
-        $image->save();
+//        $image = new Image();
+//        $image->original = "/img/template/slider/slide-1.jpg";
+//        $image->save();
+//
+//        $image = new Image();
+//        $image->original = "/img/template/slider/slide-3.jpg";
+//        $image->save();
+//
+//        $image = new Image();
+//        $image->original = "/img/template/slider/slide-4.jpg";
+//        $image->save();
         
         
     }

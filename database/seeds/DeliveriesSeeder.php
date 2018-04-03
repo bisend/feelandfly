@@ -30,22 +30,12 @@ class DeliveriesSeeder extends Seeder
             0 => [
                 'name_uk' => 'Нова пошта',
                 'name_ru' => 'Новая почта',
-                'slug' => URLify::filter('Новая почта'),
+                'slug' => str_slug('Новая почта'),
             ],
             1 => [
-                'name_uk' => 'Автолюкс',
-                'name_ru' => 'Автолюкс',
-                'slug' => URLify::filter('Автолюкс'),
-            ],
-            2 => [
-                'name_uk' => 'Інтайм',
-                'name_ru' => 'Интайм',
-                'slug' => URLify::filter('Интайм'),
-            ],
-            3 => [
                 'name_uk' => 'Самовивіз',
                 'name_ru' => 'Самовывоз',
-                'slug' => URLify::filter('Самовывоз'),
+                'slug' => str_slug('Самовывоз'),
             ]
         ];
 

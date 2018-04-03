@@ -34,9 +34,18 @@ class CategoriesSeeder extends Seeder
         $category->icon = '/img/template/category-icon/jacket.png';
         $category->name_ru = 'Верхняя одежда';
         $category->name_uk = 'Верхній одяг';
-        $category->slug = URLify::filter('Верхняя одежда');
+        $category->slug = str_slug('Верхняя одежда');
         $category->description_ru = $faker->text(191);
         $category->description_uk = $faker->text(191);
+        $category->save();
+        $category->meta_title_ru = "$category->name_ru купить в интернет-магазине Feel And Fly";
+        $category->meta_title_uk = "$category->name_uk купить в интернет-магазине Feel And Fly";
+        $category->meta_description_ru = "Купить $category->name_ru за лучшими ценами в интернет-магазине Feel And Fly ? (068) 000 00 00 ? (093) 000 00 00 ? Бесплатная доставка по Украине";
+        $category->meta_description_uk = "Купити $category->name_uk за найкращими цiнами в iнтернет-магазині Feel And Fly ? (068) 000 00 00 ? (093) 000 00 00 ? Безкоштовна доставка по Україні";
+        $category->meta_keywords_ru = "$category->name_ru купить в интернет-магазине Feel And Fly";
+        $category->meta_keywords_uk = "$category->name_uk купить в интернет-магазине Feel And Fly";
+        $category->meta_h1_ru = $category->name_ru;
+        $category->meta_h1_uk = $category->name_uk;
         $category->save();
         
         //2
@@ -45,9 +54,18 @@ class CategoriesSeeder extends Seeder
         $category->icon = '/img/template/category-icon/hoodie.png';
         $category->name_ru = 'Свитшоты & толстовки';
         $category->name_uk = 'Світшоти & толстовки';
-        $category->slug = URLify::filter('Свитшоты & толстовки');
+        $category->slug = str_slug('Свитшоты & толстовки');
         $category->description_ru = $faker->text(191);
         $category->description_uk = $faker->text(191);
+        $category->save();
+        $category->meta_title_ru = "$category->name_ru купить в интернет-магазине Feel And Fly";
+        $category->meta_title_uk = "$category->name_uk купить в интернет-магазине Feel And Fly";
+        $category->meta_description_ru = "Купить $category->name_ru за лучшими ценами в интернет-магазине Feel And Fly ? (068) 000 00 00 ? (093) 000 00 00 ? Бесплатная доставка по Украине";
+        $category->meta_description_uk = "Купити $category->name_uk за найкращими цiнами в iнтернет-магазині Feel And Fly ? (068) 000 00 00 ? (093) 000 00 00 ? Безкоштовна доставка по Україні";
+        $category->meta_keywords_ru = "$category->name_ru купить в интернет-магазине Feel And Fly";
+        $category->meta_keywords_uk = "$category->name_uk купить в интернет-магазине Feel And Fly";
+        $category->meta_h1_ru = $category->name_ru;
+        $category->meta_h1_uk = $category->name_uk;
         $category->save();
         
         //3
@@ -56,9 +74,18 @@ class CategoriesSeeder extends Seeder
         $category->icon = '/img/template/category-icon/jeans.png';
         $category->name_ru = 'Штаны';
         $category->name_uk = 'Штани';
-        $category->slug = URLify::filter('Штаны');
+        $category->slug = str_slug('Штаны');
         $category->description_ru = $faker->text(191);
         $category->description_uk = $faker->text(191);
+        $category->save();
+        $category->meta_title_ru = "$category->name_ru купить в интернет-магазине Feel And Fly";
+        $category->meta_title_uk = "$category->name_uk купить в интернет-магазине Feel And Fly";
+        $category->meta_description_ru = "Купить $category->name_ru за лучшими ценами в интернет-магазине Feel And Fly ? (068) 000 00 00 ? (093) 000 00 00 ? Бесплатная доставка по Украине";
+        $category->meta_description_uk = "Купити $category->name_uk за найкращими цiнами в iнтернет-магазині Feel And Fly ? (068) 000 00 00 ? (093) 000 00 00 ? Безкоштовна доставка по Україні";
+        $category->meta_keywords_ru = "$category->name_ru купить в интернет-магазине Feel And Fly";
+        $category->meta_keywords_uk = "$category->name_uk купить в интернет-магазине Feel And Fly";
+        $category->meta_h1_ru = $category->name_ru;
+        $category->meta_h1_uk = $category->name_uk;
         $category->save();
         
         //4
@@ -67,9 +94,18 @@ class CategoriesSeeder extends Seeder
         $category->icon = '/img/template/category-icon/shorts.png';
         $category->name_ru = 'Шорты';
         $category->name_uk = 'Шорти';
-        $category->slug = URLify::filter('Шорты');
+        $category->slug = str_slug('Шорты');
         $category->description_ru = $faker->text(191);
         $category->description_uk = $faker->text(191);
+        $category->save();
+        $category->meta_title_ru = "$category->name_ru купить в интернет-магазине Feel And Fly";
+        $category->meta_title_uk = "$category->name_uk купить в интернет-магазине Feel And Fly";
+        $category->meta_description_ru = "Купить $category->name_ru за лучшими ценами в интернет-магазине Feel And Fly ? (068) 000 00 00 ? (093) 000 00 00 ? Бесплатная доставка по Украине";
+        $category->meta_description_uk = "Купити $category->name_uk за найкращими цiнами в iнтернет-магазині Feel And Fly ? (068) 000 00 00 ? (093) 000 00 00 ? Безкоштовна доставка по Україні";
+        $category->meta_keywords_ru = "$category->name_ru купить в интернет-магазине Feel And Fly";
+        $category->meta_keywords_uk = "$category->name_uk купить в интернет-магазине Feel And Fly";
+        $category->meta_h1_ru = $category->name_ru;
+        $category->meta_h1_uk = $category->name_uk;
         $category->save();
         
         //5
@@ -78,57 +114,18 @@ class CategoriesSeeder extends Seeder
         $category->icon = '/img/template/category-icon/backpack.png';
         $category->name_ru = 'Аксессуары';
         $category->name_uk = 'Аксесуари';
-        $category->slug = URLify::filter('Аксессуары');
+        $category->slug = str_slug('Аксессуары');
         $category->description_ru = $faker->text(191);
         $category->description_uk = $faker->text(191);
         $category->save();
-        
-//        $faker_ru = Faker\Factory::create('ru');
-//        $faker_uk = Faker\Factory::create('uk');
-//
-//        DB::table('categories')->insert([
-//            'parent_id' => null,
-//            'name_ru' => 'Верхняя одежда',
-//            'name_uk' => 'Верхній одяг',
-//            'slug' => URLify::filter('Верхняя одежда'),
-//            'description_ru' => $faker_ru->text(191),
-//            'description_uk' => $faker_uk->text(191)
-//        ]);
-//
-//        DB::table('categories')->insert([
-//            'parent_id' => null,
-//            'name_ru' => 'Свитшоты & толстовки',
-//            'name_uk' => 'Світшоти & толстовки',
-//            'slug' => URLify::filter('Свитшоты & толстовки'),
-//            'description_ru' => $faker_ru->text(191),
-//            'description_uk' => $faker_uk->text(191)
-//        ]);
-//
-//        DB::table('categories')->insert([
-//            'parent_id' => null,
-//            'name_ru' => 'Штаны',
-//            'name_uk' => 'Штани',
-//            'slug' => URLify::filter('Штаны'),
-//            'description_ru' => $faker_ru->text(191),
-//            'description_uk' => $faker_uk->text(191)
-//        ]);
-//
-//        DB::table('categories')->insert([
-//            'parent_id' => null,
-//            'name_ru' => 'Шорты',
-//            'name_uk' => 'Шорти',
-//            'slug' => URLify::filter('Шорты'),
-//            'description_ru' => $faker_ru->text(191),
-//            'description_uk' => $faker_uk->text(191)
-//        ]);
-//
-//        DB::table('categories')->insert([
-//            'parent_id' => null,
-//            'name_ru' => 'Аксессуары',
-//            'name_uk' => 'Аксесуари',
-//            'slug' => URLify::filter('Аксессуары'),
-//            'description_ru' => $faker_ru->text(191),
-//            'description_uk' => $faker_uk->text(191)
-//        ]);
+        $category->meta_title_ru = "$category->name_ru купить в интернет-магазине Feel And Fly";
+        $category->meta_title_uk = "$category->name_uk купить в интернет-магазине Feel And Fly";
+        $category->meta_description_ru = "Купить $category->name_ru за лучшими ценами в интернет-магазине Feel And Fly ? (068) 000 00 00 ? (093) 000 00 00 ? Бесплатная доставка по Украине";
+        $category->meta_description_uk = "Купити $category->name_uk за найкращими цiнами в iнтернет-магазині Feel And Fly ? (068) 000 00 00 ? (093) 000 00 00 ? Безкоштовна доставка по Україні";
+        $category->meta_keywords_ru = "$category->name_ru купить в интернет-магазине Feel And Fly";
+        $category->meta_keywords_uk = "$category->name_uk купить в интернет-магазине Feel And Fly";
+        $category->meta_h1_ru = $category->name_ru;
+        $category->meta_h1_uk = $category->name_uk;
+        $category->save();
     }
 }

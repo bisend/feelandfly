@@ -39,6 +39,22 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $meta_tag_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaTagId($value)
  * @property-read \App\DatabaseModels\MetaTag $meta_tag
+ * @property string|null $meta_title_ru
+ * @property string|null $meta_title_uk
+ * @property string|null $meta_description_ru
+ * @property string|null $meta_description_uk
+ * @property string|null $meta_keywords_ru
+ * @property string|null $meta_keywords_uk
+ * @property string|null $meta_h1_ru
+ * @property string|null $meta_h1_uk
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaDescriptionRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaDescriptionUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaH1Ru($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaH1Uk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaKeywordsRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaKeywordsUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaTitleRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaTitleUk($value)
  */
 class Category extends Model
 {

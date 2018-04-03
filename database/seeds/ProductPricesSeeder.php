@@ -35,6 +35,11 @@ class ProductPricesSeeder extends Seeder
                 $productPrice->user_type_id = $j;
                 $productPrice->price = rand(400, 3000);
                 $productPrice->save();
+                if ($i >= 1 && $i <= 4)
+                {
+                    $productPrice->old_price = $productPrice->price + rand(100, 500);
+                    $productPrice->save();
+                }
             }
         }
     }

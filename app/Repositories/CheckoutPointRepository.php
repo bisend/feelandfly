@@ -9,13 +9,13 @@
 namespace App\Repositories;
 
 
-use App\DatabaseModels\CheckoutPointModel;
+use App\DatabaseModels\CheckoutPoint;
 
 class CheckoutPointRepository
 {
     public function getCheckoutPoints($model)
     {
-        return CheckoutPointModel::whereIsVisible(true)
+        return CheckoutPoint::whereIsVisible(true)
             ->orderBy('priority')
             ->get([
                 'id',

@@ -58,27 +58,19 @@ class CategoryRepository
 
     public function getCurrentCategoryBySlug($slug, $language)
     {
-        return Category::with([
-            'meta_tag' => function ($query) use ($language) {
-                $query->select([
-                    'meta_tags.id',
-                    "meta_tags.title_$language as title",
-                    "meta_tags.description_$language as description",
-                    "meta_tags.keywords_$language as keywords",
-                    "meta_tags.h1_$language as h1"
-                ]);
-            }
-        ])
-            ->whereSlug($slug)->whereIsVisible(true)
+        return Category::whereSlug($slug)->whereIsVisible(true)
             ->first([
                 'id',
                 'parent_id',
-                'meta_tag_id',
                 'icon',
                 "name_$language as name",
                 'slug',
                 "description_$language as description",
-                'priority'
+                'priority',
+                "meta_title_$language as meta_title",
+                "meta_description_$language as meta_description",
+                "meta_keywords_$language as meta_keywords",
+                "meta_h1_$language as meta_h1",
             ]);
     }
 

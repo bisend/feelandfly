@@ -24,6 +24,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Image whereSmall($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Image whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property bool $is_visible
+ * @property int $priority
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Image whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Image wherePriority($value)
  */
 class Image extends Model
 {

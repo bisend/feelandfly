@@ -6335,7 +6335,8 @@ li.sale-link:before {
 [data-order-delivery] .v-select.unsearchable input[type=search],
 [data-order-delivery-type] .v-select.unsearchable input[type=search],
 [data-order-points] .v-select.unsearchable input[type=search],
-[data-profile-delivery] .v-select.unsearchable input[type=search]{
+[data-profile-delivery] .v-select.unsearchable input[type=search],
+[data-profile-delivery-type] .v-select.unsearchable input[type=search]{
      opacity: 1;
 }
 
@@ -6406,7 +6407,7 @@ li.sale-link:before {
     width: 27px;
 }
 
-.delivery-select span.selected-tag{
+.delivery-select span.selected-tag {
     position: absolute;
 }
 

@@ -7,7 +7,8 @@ if (document.getElementById('profile-payment-delivery'))
         data: {
             deliveries: window.FFShop.deliveries,
             delivery: window.FFShop.delivery,
-            selectedDeliveryId: window.FFShop.selectedDeliveryId
+            selectedDeliveryId: window.FFShop.selectedDeliveryId,
+            deliveryType: null,
         },
         mounted: function () {
             // profileAddressValidator = new RegExValidatingInput($('[data-profile-address]'), {

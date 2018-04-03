@@ -22,6 +22,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Delivery whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Delivery whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property bool $is_visible
+ * @property int $priority
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Delivery whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Delivery wherePriority($value)
  */
 class Delivery extends Model
 {

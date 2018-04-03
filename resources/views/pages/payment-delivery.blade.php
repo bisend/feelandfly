@@ -83,6 +83,33 @@
                                         </div>
                                     </div>
 
+
+                                    {{--NOVA POSHTA BLOCK--}}
+                                    <div v-cloak v-if="delivery &&
+                                        (delivery.name === 'Новая почта' ||
+                                        delivery.name === 'Нова пошта')" class="np-block">
+
+                                        <div class="col-md-12">
+                                            <div class="form-group" data-profile-delivery-type>
+                                                <label for="profile-type-field">Тип доставки:
+                                                    <span class="field-required">*</span>
+                                                </label>
+                                                <v-select v-model="deliveryType"
+                                                          :input-id="'profile-type-field'"
+                                                          :transition="'slidedd'"
+                                                          :placeholder="'Тип доставки'"
+                                                          :max-height="'200px'"
+                                                          :class="'country-select delivery-select'"
+                                                          :searchable="false"
+                                                          :options="['{{ trans('order.addressna_dostavka') }}', '{{ trans('order.number_warehouse') }}']">
+                                                    <span v-cloak slot="no-options">
+                                                        {{ trans('order.no_results') }}
+                                                    </span>
+                                                </v-select>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="profile-item-save kab-margin-mob">
                                         <button type="submit" class="theme-btn btn-black">
                                             {{ trans('profile.save') }}

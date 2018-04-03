@@ -17,19 +17,22 @@ class PromotionsSeeder extends Seeder
         $promotion = new Promotion();
         $promotion->name_ru = 'Распродажа';
         $promotion->name_uk = 'Розпродаж';
-        $promotion->slug = URLify::filter('Распродажа');
+        $promotion->slug = str_slug('Распродажа');
+        $promotion->priority = 3;
         $promotion->save();
 
         $promotion = new Promotion();
         $promotion->name_ru = 'Новинки';
         $promotion->name_uk = 'Новинки';
-        $promotion->slug = URLify::filter('Новинки');
+        $promotion->slug = str_slug('Новинки');
         $promotion->save();
+        $promotion->priority = 1;
 
         $promotion = new Promotion();
         $promotion->name_ru = 'Топ продаж';
         $promotion->name_uk = 'Топ продаж';
-        $promotion->slug = URLify::filter('Топ продаж');
+        $promotion->slug = str_slug('Топ продаж');
+        $promotion->priority = 2;
         $promotion->save();
 
         DB::commit();

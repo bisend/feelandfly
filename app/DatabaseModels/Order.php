@@ -65,6 +65,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order wherePostIndex($value)
  * @property float|null $delivery_price
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereDeliveryPrice($value)
+ * @property int|null $checkout_point_id
+ * @property int|null $delivery_type_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCheckoutPointId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereDeliveryTypeId($value)
  */
 class Order extends Model
 {

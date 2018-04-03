@@ -27,29 +27,27 @@ class ReviewsSeeder extends Seeder
         $faker = Faker\Factory::create();
         
         DB::beginTransaction();
-        for ($i = 1; $i <= 20; $i++)
+
+        for ($i = 1; $i <= 620; $i++)
         {
-            $review = new Review();
-
-            if ($i <= 10)
+            for ($j = 1; $j <= 10; $j++)
             {
-                $review->product_id = 1;
-            }
+                $review = new Review();
 
-            if ($i > 10)
-            {
-                $review->product_id = 2;
-            }
+                $review->product_id = $i;
 
-            $review->review = $faker->text(200);
-            
-            $review->name = $faker->name();
-            
-            $review->email = $faker->email;
-            
-            $review->rating = rand(1, 5);
-            
-            $review->save();
+                $review->review = $faker->text(200);
+
+                $review->name = $faker->name();
+
+                $review->email = $faker->email;
+
+                $review->rating = rand(1, 5);
+
+                $review->is_moderated = true;
+
+                $review->save();
+            }
         }
         DB::commit();
     }

@@ -56,6 +56,22 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $meta_tag_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaTagId($value)
  * @property-read \App\DatabaseModels\MetaTag $meta_tag
+ * @property string|null $meta_title_ru
+ * @property string|null $meta_title_uk
+ * @property string|null $meta_description_ru
+ * @property string|null $meta_description_uk
+ * @property string|null $meta_keywords_ru
+ * @property string|null $meta_keywords_uk
+ * @property string|null $meta_h1_ru
+ * @property string|null $meta_h1_uk
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaDescriptionRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaDescriptionUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaH1Ru($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaH1Uk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaKeywordsRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaKeywordsUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaTitleRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaTitleUk($value)
  */
 class Product extends Model
 {

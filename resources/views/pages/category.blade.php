@@ -42,7 +42,7 @@
                                            v-bind:rel="categoryProductPreview.rel"
                                            v-bind:title="categoryProductPreview.product.name"
                                            class="caption-link meta-icon">
-                                            <i class="fa fa-arrows-alt"></i>
+                                            <i class="fa fa-eye"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -373,7 +373,7 @@
                                                         <a class="caption-link meta-icon"
                                                            href="#"
                                                            v-on:click.prevent="changeCategoryProductPreview({{$counter}})">
-                                                            <span class="fa fa-eye"></span> БЫСТРЫЙ ПРОСМОТР
+                                                            <span class="fa fa-eye"></span> {{ trans('product.fast_see') }}
                                                         </a>
                                                     </div>
                                                 </div>

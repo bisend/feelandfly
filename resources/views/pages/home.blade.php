@@ -49,7 +49,7 @@
                                                        v-bind:rel="mainSliderPreview.rel"
                                                        v-bind:title="mainSliderPreview.product.name"
                                                        class="caption-link meta-icon">
-                                                        <i class="fa fa-arrows-alt"></i>
+                                                        <i class="fa fa-eye"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -240,7 +240,7 @@
                                                                             <a class="caption-link meta-icon"
                                                                                href="#"
                                                                                data-marker-product-preview="{{$counter}}">
-                                                                                <span class="fa fa-eye"> </span>
+                                                                                <span class="fa fa-eye"> </span> {{ trans('product.fast_see') }}
                                                                             </a>
                                                                         </div>
                                                                     </div>
@@ -338,7 +338,7 @@
                                                    v-bind:rel="saleProductPreview.rel"
                                                    v-bind:title="saleProductPreview.product.name"
                                                    class="caption-link meta-icon">
-                                                    <i class="fa fa-arrows-alt"></i>
+                                                    <i class="fa fa-eye"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -504,7 +504,7 @@
                                                 <a class="caption-link meta-icon"
                                                    href="#"
                                                    v-on:click.prevent="changeSalesProductPreview({{$counter}})">
-                                                    <span class="fa fa-eye"></span>
+                                                    <span class="fa fa-eye"></span> {{ trans('product.fast_see') }}
                                                 </a>
                                             </div>
                                             <figcaption class="prod-content">
@@ -633,7 +633,7 @@
                                                                v-bind:rel="topProductPreview.rel"
                                                                v-bind:title="topProductPreview.product.name"
                                                                class="caption-link meta-icon">
-                                                                <i class="fa fa-arrows-alt"></i>
+                                                                <i class="fa fa-eye"></i>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -790,7 +790,7 @@
                                                        data-toggle="modal"
                                                        href="#"
                                                        v-on:click.prevent="changeTopProductPreview({{$counter}})">
-                                                        <span class="fa fa-eye"> </span>
+                                                        <span class="fa fa-eye"> </span> {{ trans('product.fast_see') }}
                                                     </a>
                                                 </div>
                                                 <figcaption class="prod-content">
@@ -869,7 +869,7 @@
                                                                v-bind:rel="newProductPreview.rel"
                                                                v-bind:title="newProductPreview.product.name"
                                                                class="caption-link meta-icon">
-                                                                <i class="fa fa-arrows-alt"></i>
+                                                                <i class="fa fa-eye"></i>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -1023,7 +1023,7 @@
                                                     <a class="caption-link meta-icon"
                                                        href="#"
                                                        v-on:click.prevent="changeNewProductPreview({{$counter}})">
-                                                        <span class="fa fa-eye"> </span>
+                                                        <span class="fa fa-eye"> </span> {{ trans('product.fast_see') }}
                                                     </a>
                                                 </div>
                                                 <figcaption class="prod-content">

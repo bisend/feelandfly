@@ -68,7 +68,7 @@ class PaymentDeliveryController extends LayoutController
      */
     public function savePaymentDelivery()
     {
-        $paymentId = request('paymentId');
+//        $paymentId = request('paymentId');
 
         $deliveryId = request('deliveryId');
 

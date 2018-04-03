@@ -18,10 +18,10 @@ class MetaTagRepository
         return MetaTag::wherePageName($model->view)
             ->first([
                 'meta_tags.id',
-                "meta_tags.title_$model->language as title",
-                "meta_tags.description_$model->language as description",
-                "meta_tags.keywords_$model->language as keywords",
-                "meta_tags.h1_$model->language as h1"
+                "meta_tags.meta_title_$model->language as title",
+                "meta_tags.meta_description_$model->language as description",
+                "meta_tags.meta_keywords_$model->language as keywords",
+                "meta_tags.meta_h1_$model->language as h1"
             ]);
     }
 }

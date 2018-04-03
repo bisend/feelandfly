@@ -27,6 +27,28 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereUserId($value)
  * @mixin \Eloquent
  * @property-read \App\DatabaseModels\Delivery $delivery
+ * @property int|null $checkout_point_id
+ * @property int|null $delivery_type_id
+ * @property string|null $country
+ * @property string|null $np_city
+ * @property string|null $np_city_ref
+ * @property string|null $np_warehouse
+ * @property string|null $np_warehouse_ref
+ * @property string|null $a_street
+ * @property string|null $a_land
+ * @property string|null $a_city
+ * @property string|null $post_index
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereACity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereALand($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereAStreet($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereCheckoutPointId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereCountry($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereDeliveryTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereNpCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereNpCityRef($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereNpWarehouse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereNpWarehouseRef($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile wherePostIndex($value)
  */
 class Profile extends Model
 {

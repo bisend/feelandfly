@@ -34,6 +34,22 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereTitleUk($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string $meta_title_ru
+ * @property string $meta_title_uk
+ * @property string $meta_description_ru
+ * @property string $meta_description_uk
+ * @property string $meta_keywords_ru
+ * @property string $meta_keywords_uk
+ * @property string $meta_h1_ru
+ * @property string $meta_h1_uk
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaDescriptionRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaDescriptionUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaH1Ru($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaH1Uk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaKeywordsRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaKeywordsUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaTitleRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaTitleUk($value)
  */
 class MetaTag extends Model
 {

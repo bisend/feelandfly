@@ -173,12 +173,12 @@ class CategoryService extends LayoutService
 
     private function fillMetaTags($model)
     {
-        if ($model->currentCategory->meta_tag)
+        if (!is_null($model->currentCategory->meta_title))
         {
-            $model->title = $model->currentCategory->meta_tag->title;
-            $model->description = $model->currentCategory->meta_tag->description;
-            $model->keywords = $model->currentCategory->meta_tag->keywords;
-            $model->h1 = $model->currentCategory->meta_tag->h1;
+            $model->title = $model->currentCategory->meta_title;
+            $model->description = $model->currentCategory->meta_description;
+            $model->keywords = $model->currentCategory->meta_keywords;
+            $model->h1 = $model->currentCategory->meta_h1;
         }
         else
         {

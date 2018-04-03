@@ -15,15 +15,15 @@ class MainSliderSeeder extends Seeder
         DB::beginTransaction();
         
         $slide = new MainSlider();
-        $slide->image_id = 320;
+        $slide->image = "/img/template/slider/slide-1.jpg";
         $slide->save();
         
         $slide = new MainSlider();
-        $slide->image_id = 321;
+        $slide->image = "/img/template/slider/slide-3.jpg";
         $slide->save();
         
         $slide = new MainSlider();
-        $slide->image_id = 322;
+        $slide->image = "/img/template/slider/slide-4.jpg";
         $slide->save();
         
         DB::commit();
