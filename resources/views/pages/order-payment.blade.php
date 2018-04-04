@@ -27,7 +27,7 @@
                         <li><span>{{ trans('order.order_number') }}</span>: {{ $model->order->order_number }}</li>
                         <li><span>Дата</span>: {{ $model->order->created_at }}</li>
                         <li><span>{{ trans('order.sum') }}</span>: {{ $model->order->total_order_amount }} грн</li>
-                        @if(!is_null($model->order->country) && ($model->order->country != 'Украина' || $model->order->country != 'Україна'))
+                        @if(!is_null($model->order->country_code) && $model->order->country_code != 'UA')
                             <li><span>{{ trans('order.delivery_price') }}</span>: {{ trans('order.novaya_p2') }}</li>
                             <li><span>{{ trans('order.to_pay') }}</span>: {{ set_format_price($model->order->total_order_amount + 400.00) }} грн</li>
                         @else

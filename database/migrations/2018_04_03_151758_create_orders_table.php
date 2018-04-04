@@ -26,7 +26,8 @@ class CreateOrdersTable extends Migration
             $table->integer('order_number')->nullable();
             $table->integer('checkout_point_id')->unsigned()->nullable();
             $table->integer('delivery_type_id')->unsigned()->nullable();
-            $table->string('country')->nullable();
+            $table->string('country_name')->nullable();
+            $table->string('country_code')->nullable();
             $table->string('np_city')->nullable();
             $table->string('np_city_ref')->nullable();
             $table->string('np_warehouse')->nullable();

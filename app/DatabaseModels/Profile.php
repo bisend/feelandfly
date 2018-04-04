@@ -49,6 +49,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereNpWarehouse($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereNpWarehouseRef($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile wherePostIndex($value)
+ * @property string|null $country_name
+ * @property string|null $country_code
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereCountryCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereCountryName($value)
  */
 class Profile extends Model
 {

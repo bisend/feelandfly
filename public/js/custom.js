@@ -467,7 +467,7 @@ var INCORRECT_FIELD_CLASS = 'incorrect-field',
     REVIEW_ADDED = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Спасибо! Модератор пересмотрит Ваш отзыв, после чего он появится на сайте.' : 'Дякуємо! Модератор перегляне Ваш відгук, після чого він з`явиться на сайті.',
     SHOW_FILTERS_BTN = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Показать фильтры' : 'Показати фільтри',
     HIDE_FILTERS_BTN = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Скрыть фильтры' : 'Сховати фільтри',
-    DEFAULT_COUNTRY = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Украина' : 'Україна';
+    DEFAULT_COUNTRY = (LANGUAGE == DEFAULT_LANGUAGE) ? {name: 'Украина', code: 'UA'} : {name: 'Україна', code: 'UA'};
 
 if (window.location.hash && window.location.hash == '#_=_') {
     if (window.history && history.pushState) {
@@ -531,6 +531,7 @@ var GLOBAL_DATA = {
         deliveryId: '',
         delivery: null,
         deliveryType: null,
+        deliveryTypes: [],
         deliveries: [],
         country: DEFAULT_COUNTRY,
         city: null,
@@ -609,7 +610,7 @@ var GLOBAL_DATA = {
     },
     newProducts: [],
 
-    DEFAULT_COUNTRY: (LANGUAGE === DEFAULT_LANGUAGE) ? 'Украина' : 'Україна',
+    DEFAULT_COUNTRY: [DEFAULT_COUNTRY],
     INIT_CART_ENDED: false,
     IS_DATA_PROCESSING: false,
     isMainSliderProductsInited: false,

@@ -90,22 +90,39 @@
         </td>
     </tr>
     @if($deliveryName == 'Самовывоз' || $deliveryName == 'Самовивіз')
+
+        @php($checkOutPointName = '')
+        @foreach($model->checkoutPoints as $checkoutPoint)
+            @if($model->order->checkout_point_id == $checkoutPoint->id)
+                @php($checkOutPointName = $checkoutPoint->name)
+            @endif
+        @endforeach
+
         <tr>
             <td>{{ trans('email.checkout_point') }}:</td>
-            <td>{{ $model->order->checkout_point }}</td>
+            <td>{{ $checkOutPointName }}</td>
         </tr>
+
     @endif
 
     @if($deliveryName == 'Новая почта' || $deliveryName == 'Нова пошта')
+
+        @php($deliveryTypeName = '')
+        @foreach($model->deliveryTypes as $deliveryType)
+            @if($model->order->delivery_type_id == $deliveryType->id)
+                @php($deliveryTypeName = $deliveryType->name)
+            @endif
+        @endforeach
+
         <tr>
             <td>Тип доставки:</td>
-            <td>{{ $model->order->np_delivery_type }}</td>
+            <td>{{ $deliveryTypeName }}</td>
         </tr>
 
-        @if($model->order->np_delivery_type == 'Адресная доставка' || $model->order->np_delivery_type == 'Адресна доставка')
+        @if($deliveryTypeName == 'Адресная доставка' || $deliveryTypeName == 'Адресна доставка')
             <tr>
                 <td>{{ trans('order.country') }}:</td>
-                <td>{{ $model->order->country }}</td>
+                <td>{{ $model->order->country_name }}</td>
             </tr>
             <tr>
                 <td>{{ trans('order.a_street_house_room') }}:</td>
@@ -127,7 +144,7 @@
             @endif
         @endif
 
-        @if($model->order->np_delivery_type == 'Номер отделения' || $model->order->np_delivery_type == 'Номер відділення')
+        @if($deliveryTypeName == 'Номер отделения' || $deliveryTypeName == 'Номер відділення')
             <tr>
                 <td>{{ trans('order.city') }}:</td>
                 <td>{{ $model->order->np_city }}</td>

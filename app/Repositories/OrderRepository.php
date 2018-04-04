@@ -41,9 +41,10 @@ class OrderRepository
         $order->phone_number = $data['phone'];
         $order->comment =  $data['comment'] != '' ? $data['comment'] : null;
 
-        $order->checkout_point = $data['checkoutPoint'];
-        $order->np_delivery_type = $data['npDeliveryType'];
-        $order->country = $data['country'];
+        $order->checkout_point_id = $data['checkoutPointId'];
+        $order->delivery_type_id = $data['npDeliveryTypeId'];
+        $order->country_name = $data['countryName'];
+        $order->country_code = $data['countryCode'];
         $order->np_city = $data['npCity'];
         $order->np_city_ref = $data['npCityRef'];
         $order->np_warehouse = $data['npWarehouse'];
@@ -53,7 +54,7 @@ class OrderRepository
         $order->a_city = $data['aCity'];
         $order->post_index = $data['postIndex'];
 
-        if (!is_null($data['country']) && ($data['country'] != 'Украина' || $data['country'] != 'Україна'))
+        if (!is_null($data['countryName']) && $data['countryCode'] !== 'UA')
         {
             $order->delivery_price = 400;
         }

@@ -26,54 +26,29 @@ class ProductsPromotionsSeeder extends Seeder
 
     public function seed()
     {
-        $productPromotion = new ProductPromotion();
-        $productPromotion->product_id = 1;
-        $productPromotion->promotion_id = 1;
-        $productPromotion->save();
+        for ($i = 1; $i <= 32; $i++)
+        {
+            $productPromotion = new ProductPromotion();
 
-        $productPromotion = new ProductPromotion();
-        $productPromotion->product_id = 2;
-        $productPromotion->promotion_id = 1;
-        $productPromotion->save();
+            if ($i <= 16)
+            {
+                $productPromotion->product_id = $i;
+                $productPromotion->promotion_id = 1;
+            }
 
-        $productPromotion = new ProductPromotion();
-        $productPromotion->product_id = 3;
-        $productPromotion->promotion_id = 1;
-        $productPromotion->save();
+            if ($i > 16 && $i <= 24)
+            {
+                $productPromotion->product_id = $i;
+                $productPromotion->promotion_id = 2;
+            }
 
-        $productPromotion = new ProductPromotion();
-        $productPromotion->product_id = 4;
-        $productPromotion->promotion_id = 1;
-        $productPromotion->save();
+            if ($i > 24 && $i <= 32)
+            {
+                $productPromotion->product_id = $i;
+                $productPromotion->promotion_id = 3;
+            }
 
-        $productPromotion = new ProductPromotion();
-        $productPromotion->product_id = 5;
-        $productPromotion->promotion_id = 2;
-        $productPromotion->save();
-
-        $productPromotion = new ProductPromotion();
-        $productPromotion->product_id = 6;
-        $productPromotion->promotion_id = 2;
-        $productPromotion->save();
-
-        $productPromotion = new ProductPromotion();
-        $productPromotion->product_id = 3;
-        $productPromotion->promotion_id = 2;
-        $productPromotion->save();
-
-        $productPromotion = new ProductPromotion();
-        $productPromotion->product_id = 7;
-        $productPromotion->promotion_id = 3;
-        $productPromotion->save();
-
-        $productPromotion = new ProductPromotion();
-        $productPromotion->product_id = 8;
-        $productPromotion->promotion_id = 3;
-        $productPromotion->save();
-        
-        $productPromotion = new ProductPromotion();
-        $productPromotion->product_id = 9;
-        $productPromotion->promotion_id = 2;
-        $productPromotion->save();
+            $productPromotion->save();
+        }
     }
 }

@@ -69,6 +69,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $delivery_type_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCheckoutPointId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereDeliveryTypeId($value)
+ * @property string|null $country_name
+ * @property string|null $country_code
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCountryCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCountryName($value)
  */
 class Order extends Model
 {

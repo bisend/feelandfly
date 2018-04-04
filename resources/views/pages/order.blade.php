@@ -117,8 +117,8 @@
                                                       :transition="'slidedd'"
                                                       :placeholder="'{{ trans('order.choose_delivery') }}'"
                                                       :input-id="'order-delivery-field'"
-                                                      :label="'name'"
                                                       :searchable="false"
+                                                      :label="'name'"
                                                       :options="orderConfirm.deliveries"
                                                       :class="'country-select'">
                                                 <template slot="options" slot-scope="option">
@@ -147,20 +147,25 @@
                                                           :max-height="'200px'"
                                                           :class="'country-select'"
                                                           :searchable="false"
-                                                          :options="['{{ trans('order.addressna_dostavka') }}', '{{ trans('order.number_warehouse') }}']">
-                                                <span v-cloak slot="no-options">
-                                                    {{ trans('order.no_results') }}
-                                                </span>
+                                                          :label="'name'"
+                                                          :options="orderConfirm.deliveryTypes">
+                                                    <template slot="options" slot-scope="option">
+                                                        @{{ option.name }}
+                                                    </template>
+                                                    <span v-cloak slot="no-options">
+                                                        {{ trans('order.no_results') }}
+                                                    </span>
                                                 </v-select>
                                             </div>
                                         </div>
 
                                         {{--COUNTRY--}}
-                                        <div v-if="orderConfirm.deliveryType != null" class="col-md-12" data-order-country>
+                                        <div v-if="orderConfirm.deliveryType" class="col-md-12" data-order-country>
                                             <div class="form-group">
                                                 <label for="order-country-field">{{ trans('order.country') }}: <span class="field-required">*</span></label>
-                                                <v-select v-if="orderConfirm.deliveryType === 'Номер отделения' ||
-                                                          orderConfirm.deliveryType === 'Номер відділення'"
+                                                <v-select v-if="orderConfirm.deliveryType &&
+                                                          (orderConfirm.deliveryType.name === 'Номер отделения' ||
+                                                          orderConfirm.deliveryType.name === 'Номер відділення')"
                                                           v-model="orderConfirm.country"
                                                           :input-id="'order-country-field'"
                                                           :transition="'slidedd'"
@@ -169,11 +174,13 @@
                                                           :class="'country-select'"
                                                           {{--:searchable="false"--}}
                                                           :disabled="true"
-                                                          :options="['{{ trans('order.default_country') }}']">
-                                                <span v-cloak slot="no-options">
-                                                    {{ trans('order.no_results') }}
-                                                </span>
+                                                          :label="'name'"
+                                                          :options="[DEFAULT_COUNTRY]">
+                                                    <span v-cloak slot="no-options">
+                                                        {{ trans('order.no_results') }}
+                                                    </span>
                                                 </v-select>
+
                                                 <v-select v-else
                                                           v-model="orderConfirm.country"
                                                           :input-id="'order-country-field'"
@@ -181,26 +188,31 @@
                                                           :placeholder="'{{ trans('order.choose_country') }}'"
                                                           :max-height="'200px'"
                                                           :class="'country-select'"
+                                                          :label="'name'"
                                                           :options="orderConfirm.countries">
-                                                <span v-cloak slot="no-options">
-                                                    {{ trans('order.no_results') }}
-                                                </span>
+                                                    <template slot="options" slot-scope="option">
+                                                        @{{ option.name }}
+                                                    </template>
+                                                    <span v-cloak slot="no-options">
+                                                        {{ trans('order.no_results') }}
+                                                    </span>
                                                 </v-select>
                                             </div>
                                         </div>
                                         {{--COUNTRY END--}}
 
                                         <div v-cloak
-                                             v-if="(orderConfirm.country === 'Украина' ||
-                                              orderConfirm.country === 'Україна') &&
-                                              (orderConfirm.deliveryType === 'Номер отделения' ||
-                                              orderConfirm.deliveryType === 'Номер відділення')">
+                                             v-if="orderConfirm.country &&
+                                             orderConfirm.deliveryType &&
+                                             (orderConfirm.country.name === 'Украина' ||
+                                              orderConfirm.country.name === 'Україна') &&
+                                              (orderConfirm.deliveryType.name === 'Номер отделения' ||
+                                              orderConfirm.deliveryType.name === 'Номер відділення')">
                                             {{--CITY--}}
                                             <div class="col-md-12">
                                                 <div class="form-group" data-order-city>
                                                     <label for="order-city-field">{{ trans('order.city') }}: <span class="field-required">*</span></label>
                                                     <v-select v-model="orderConfirm.city"
-                                                              label="{{ $model->language == 'ru' ? 'DescriptionRu' : 'Description' }}"
                                                               @search="searchCity"
                                                               :input-id="'order-city-field'"
                                                               :transition="'slidedd'"
@@ -209,6 +221,7 @@
                                                               :on-change="searchWarehouses"
                                                               :filterable="false"
                                                               :class="'country-select'"
+                                                              label="{{ $model->language == 'ru' ? 'DescriptionRu' : 'Description' }}"
                                                               :options="orderConfirm.cities">
                                                         <template slot="option" slot-scope="option">
                                                             @{{ (lang == 'ru') ? option.DescriptionRu : option.Description }}
@@ -227,13 +240,13 @@
                                                     <label for="order-warehouse-field">{{ trans('order.warehouse') }}: <span class="field-required">*</span></label>
                                                     <v-select v-model="orderConfirm.warehouse"
                                                               :input-id="'order-warehouse-field'"
-                                                              :label="'Number'"
                                                               :transition="'slidedd'"
                                                               :max-height="'200px'"
                                                               :placeholder="'{{ trans('order.choose_warehouse') }}'"
                                                               :filterable="true"
                                                               :disabled="orderConfirm.disableWarehouse"
                                                               :class="'country-select'"
+                                                              :label="'Number'"
                                                               :options="orderConfirm.warehouses">
                                                         <template slot="selected-option" slot-scope="option">
                                                             <span v-if="lang === 'ru' && option.ShortAddressRu !== ''">
@@ -257,10 +270,10 @@
                                             {{--WAREHOUSE END--}}
                                         </div>
 
-                                        <div v-show="orderConfirm.country !== null &&
-                                        orderConfirm.country !== '' &&
-                                        (orderConfirm.deliveryType === 'Адресная доставка' ||
-                                        orderConfirm.deliveryType === 'Адресна доставка')">
+                                        <div v-show="orderConfirm.country &&
+                                        orderConfirm.deliveryType &&
+                                        (orderConfirm.deliveryType.name === 'Адресная доставка' ||
+                                        orderConfirm.deliveryType.name === 'Адресна доставка')">
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label for="order-a-street-field">{{ trans('order.a_street_house_room') }}: <span class="field-required">*</span></label>
@@ -306,7 +319,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                     {{--NOVA POSHTA BLOCK END--}}
 
@@ -325,7 +337,11 @@
                                                           :max-height="'200px'"
                                                           :class="'country-select'"
                                                           :searchable="false"
+                                                          :label="'name'"
                                                           :options="orderConfirm.checkoutPoints">
+                                                    <template slot="options" slot-scope="option">
+                                                        @{{ option.name }}
+                                                    </template>
                                                     <span v-cloak slot="no-options">
                                                         {{ trans('order.no_results') }}
                                                     </span>

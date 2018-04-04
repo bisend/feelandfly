@@ -13,6 +13,8 @@ class PromotionsSeeder extends Seeder
     public function run()
     {
         DB::beginTransaction();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        Promotion::truncate();
 
         $promotion = new Promotion();
         $promotion->name_ru = 'Распродажа';
@@ -25,8 +27,8 @@ class PromotionsSeeder extends Seeder
         $promotion->name_ru = 'Новинки';
         $promotion->name_uk = 'Новинки';
         $promotion->slug = str_slug('Новинки');
-        $promotion->save();
         $promotion->priority = 1;
+        $promotion->save();
 
         $promotion = new Promotion();
         $promotion->name_ru = 'Топ продаж';
@@ -34,7 +36,7 @@ class PromotionsSeeder extends Seeder
         $promotion->slug = str_slug('Топ продаж');
         $promotion->priority = 2;
         $promotion->save();
-
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
         DB::commit();
     }
 }

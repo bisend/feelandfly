@@ -143,7 +143,7 @@ class ProductRepository
         $sort
     )
     {
-        $orderByRaw = 'name';
+        $orderByRaw = 'priority desc, name';
 
         if ($sort == 'popularity')
         {
@@ -579,23 +579,23 @@ class ProductRepository
         $model
     )
     {
-        $orderByRaw = 'name';
+        $orderByRaw = 'priority desc, name';
 
         if ($model->sort == 'popularity')
         {
-            $orderByRaw = 'rating desc, name';
+            $orderByRaw = 'rating desc, priority desc, name';
         }
         elseif ($model->sort == 'new')
         {
-            $orderByRaw = 'created_at desc, name';
+            $orderByRaw = 'created_at desc, priority desc, name';
         }
         elseif ($model->sort == 'price-asc')
         {
-            $orderByRaw = 'price asc, name';
+            $orderByRaw = 'price asc, priority desc, name';
         }
         elseif ($model->sort == 'price-desc')
         {
-            $orderByRaw = 'price desc, name';
+            $orderByRaw = 'price desc, priority desc, name';
         }
 
         $query = Product::query();
@@ -1255,7 +1255,7 @@ class ProductRepository
                 $query->where('products_promotions.promotion_id', '=', $model->topPromotion->id);
             })->whereIsVisible(true)
             ->whereNotIn('products.id', $model->salesIds)
-            ->orderByRaw("number_of_views desc", 'name')
+            ->orderByRaw("number_of_views desc", 'priority desc', 'name')
 //            ->offset($categoryProductsOffset)
             ->limit($model->topLimit)
             ->get([
@@ -1348,7 +1348,7 @@ class ProductRepository
                 $query->where('products_promotions.promotion_id', '=', $model->newPromotion->id);
             })->whereIsVisible(true)
             ->whereNotIn('products.id', $model->topIds)
-//            ->orderByRaw($orderByRaw)
+            ->orderByRaw('priority desc', 'name')
 //            ->offset($categoryProductsOffset)
             ->limit($model->newLimit)
             ->get([

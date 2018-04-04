@@ -31465,9 +31465,11 @@ if (document.getElementById('order-confirm')) {
 
     GLOBAL_DATA.orderConfirm.countries = FFShop.countries;
     GLOBAL_DATA.orderConfirm.deliveries = FFShop.deliveries;
-    GLOBAL_DATA.orderConfirm.checkoutPoints = FFShop.checkoutPoints.map(function (point) {
-        return point.name;
-    });
+    GLOBAL_DATA.orderConfirm.deliveryTypes = FFShop.deliveryTypes;
+    GLOBAL_DATA.orderConfirm.checkoutPoints = FFShop.checkoutPoints;
+    // GLOBAL_DATA.orderConfirm.checkoutPoints = FFShop.checkoutPoints.map(function (point) {
+    //     return point.name;
+    // });
 
     new Vue({
         el: '#order-confirm',
@@ -31540,7 +31542,7 @@ if (document.getElementById('order-confirm')) {
                 }
             },
             'orderConfirm.deliveryType': function orderConfirmDeliveryType() {
-                if (GLOBAL_DATA.orderConfirm.deliveryType === 'Номер отделения' || GLOBAL_DATA.orderConfirm.deliveryType === 'Номер відділення') {
+                if (GLOBAL_DATA.orderConfirm.deliveryType.name === 'Номер отделения' || GLOBAL_DATA.orderConfirm.deliveryType.name === 'Номер відділення') {
                     GLOBAL_DATA.orderConfirm.country = DEFAULT_COUNTRY;
                 }
 
@@ -31737,7 +31739,7 @@ if (document.getElementById('order-confirm')) {
 
                         if (GLOBAL_DATA.orderConfirm.deliveryType != null) {
                             //CASE ADDRESS DELIVERY
-                            if (GLOBAL_DATA.orderConfirm.deliveryType === 'Адресная доставка' || GLOBAL_DATA.orderConfirm.deliveryType === 'Адресна доставка') {
+                            if (GLOBAL_DATA.orderConfirm.deliveryType.name === 'Адресная доставка' || GLOBAL_DATA.orderConfirm.deliveryType.name === 'Адресна доставка') {
                                 //VALIDATE COUNTRY
                                 if (GLOBAL_DATA.orderConfirm.country == null || GLOBAL_DATA.orderConfirm.country === '') {
                                     isValid = false;
@@ -31771,7 +31773,7 @@ if (document.getElementById('order-confirm')) {
                             //CASE ADDRESS DELIVERY END
 
                             //CASE NUMBER WAREHOUSE
-                            if (GLOBAL_DATA.orderConfirm.deliveryType === 'Номер отделения' || GLOBAL_DATA.orderConfirm.deliveryType === 'Номер відділення') {
+                            if (GLOBAL_DATA.orderConfirm.deliveryType.name === 'Номер отделения' || GLOBAL_DATA.orderConfirm.deliveryType.name === 'Номер відділення') {
                                 //VALIDATE NP CITY
                                 if (GLOBAL_DATA.orderConfirm.city == null || GLOBAL_DATA.orderConfirm.city === '') {
                                     isValid = false;
@@ -31815,9 +31817,10 @@ if (document.getElementById('order-confirm')) {
             createOrder: function createOrder() {
                 var _this = this;
 
-                var checkoutPoint = null,
-                    npDeliveryType = null,
-                    country = null,
+                var checkoutPointId = null,
+                    npDeliveryTypeId = null,
+                    countryName = null,
+                    countryCode = null,
                     npCity = null,
                     npCityRef = null,
                     npWarehouse = null,
@@ -31828,26 +31831,27 @@ if (document.getElementById('order-confirm')) {
                     postIndex = null;
 
                 if (GLOBAL_DATA.orderConfirm.delivery.name === 'Самовывоз' || GLOBAL_DATA.orderConfirm.delivery.name === 'Самовивіз') {
-                    checkoutPoint = GLOBAL_DATA.orderConfirm.checkoutPoint;
+                    checkoutPointId = GLOBAL_DATA.orderConfirm.checkoutPoint.id;
                 }
 
                 if (GLOBAL_DATA.orderConfirm.delivery.name === 'Новая почта' || GLOBAL_DATA.orderConfirm.delivery.name === 'Нова пошта') {
-                    if (GLOBAL_DATA.orderConfirm.deliveryType === 'Адресная доставка' || GLOBAL_DATA.orderConfirm.deliveryType === 'Адресна доставка') {
-                        country = GLOBAL_DATA.orderConfirm.country;
+                    if (GLOBAL_DATA.orderConfirm.deliveryType.name === 'Адресная доставка' || GLOBAL_DATA.orderConfirm.deliveryType.name === 'Адресна доставка') {
+                        countryName = GLOBAL_DATA.orderConfirm.country.name;
+                        countryCode = GLOBAL_DATA.orderConfirm.country.code;
                         aStreet = GLOBAL_DATA.orderConfirm.aStreet;
                         aLand = GLOBAL_DATA.orderConfirm.aLand;
                         aCity = GLOBAL_DATA.orderConfirm.aCity;
                         postIndex = GLOBAL_DATA.orderConfirm.aIndex;
                     }
 
-                    if (GLOBAL_DATA.orderConfirm.deliveryType === 'Номер отделения' || GLOBAL_DATA.orderConfirm.deliveryType === 'Номер відділення') {
+                    if (GLOBAL_DATA.orderConfirm.deliveryType.name === 'Номер отделения' || GLOBAL_DATA.orderConfirm.deliveryType.name === 'Номер відділення') {
                         npCity = LANGUAGE === DEFAULT_LANGUAGE ? GLOBAL_DATA.orderConfirm.city.DescriptionRu : GLOBAL_DATA.orderConfirm.city.Description;
                         npCityRef = GLOBAL_DATA.orderConfirm.city.Ref;
                         npWarehouse = LANGUAGE === DEFAULT_LANGUAGE ? GLOBAL_DATA.orderConfirm.warehouse.DescriptionRu : GLOBAL_DATA.orderConfirm.warehouse.Description;
                         npWarehouseRef = GLOBAL_DATA.orderConfirm.warehouse.Ref;
                     }
 
-                    npDeliveryType = GLOBAL_DATA.orderConfirm.deliveryType;
+                    npDeliveryTypeId = GLOBAL_DATA.orderConfirm.deliveryType.id;
                 }
 
                 showLoader();
@@ -31860,9 +31864,10 @@ if (document.getElementById('order-confirm')) {
                         phone: GLOBAL_DATA.orderConfirm.phone,
                         email: GLOBAL_DATA.orderConfirm.email,
                         deliveryId: GLOBAL_DATA.orderConfirm.delivery.id,
-                        checkoutPoint: checkoutPoint,
-                        npDeliveryType: npDeliveryType,
-                        country: country,
+                        checkoutPointId: checkoutPointId,
+                        npDeliveryTypeId: npDeliveryTypeId,
+                        countryName: countryName,
+                        countryCode: countryCode,
                         npCity: npCity,
                         npCityRef: npCityRef,
                         npWarehouse: npWarehouse,
