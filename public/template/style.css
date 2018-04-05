@@ -5735,8 +5735,8 @@ textarea.incorrect-field:-ms-input-placeholder {
 /*-----------21.01.2018-----------*/
 
 .choose-size li {
-    padding-left: 3px;
-    padding-right: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
     margin-bottom: 10px;
 }
 
