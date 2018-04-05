@@ -8,32 +8,15 @@ namespace App\ViewModels;
  */
 class PaymentDeliveryViewModel extends LayoutViewModel
 {
-    /**
-     * @var
-     */
-    public $payments;
-
-    /**
-     * @var
-     */
     public $deliveries;
+    public $deliveryTypes;
+
+
+    public $selectedDeliveryId;
+    public $selectedDeliveryTypeId;
 
     public $delivery;
-
-    /**
-     * @var
-     */
-    public $selectedPaymentId;
-
-    /**
-     * @var
-     */
-    public $selectedDeliveryId;
-
-    /**
-     * @var
-     */
-    public $address;
+    public $deliveryType;
 
     /**
      * PaymentDeliveryViewModel constructor.

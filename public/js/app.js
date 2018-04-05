@@ -31923,8 +31923,9 @@ if (document.getElementById('profile-payment-delivery')) {
         data: {
             deliveries: window.FFShop.deliveries,
             delivery: window.FFShop.delivery,
-            selectedDeliveryId: window.FFShop.selectedDeliveryId,
-            deliveryType: null
+
+            deliveryTypes: window.FFShop.deliveryTypes,
+            deliveryType: window.FFShop.deliveryType
         },
         mounted: function mounted() {
             // profileAddressValidator = new RegExValidatingInput($('[data-profile-address]'), {
@@ -31961,14 +31962,14 @@ if (document.getElementById('profile-payment-delivery')) {
                 //     $('[data-profile-payment]').css('border', '2px solid red');
                 // }
 
-                // if (_this.selectedDeliveryId == null) {
-                //     isValid = false;
-                //     $('[data-profile-delivery]').css('border', '2px solid red');
-                // }
-
                 if (_this.delivery == null) {
                     isValid = false;
                     $('[data-profile-delivery]').find('.dropdown-toggle').css('border', '2px solid red');
+                }
+
+                if (_this.deliveryType == null) {
+                    isValid = false;
+                    $('[data-profile-delivery-type]').find('.dropdown-toggle').css('border', '2px solid red');
                 }
 
                 if (isValid) {
@@ -31984,9 +31985,8 @@ if (document.getElementById('profile-payment-delivery')) {
                     type: 'post',
                     url: '/profile/save-payment-delivery',
                     data: {
-                        // paymentId: _this.selectedPaymentId,
                         deliveryId: _this.delivery.id,
-                        address: _this.address,
+                        deliveryTypeId: _this.deliveryType.id,
                         language: LANGUAGE
                     },
                     success: function success(data) {

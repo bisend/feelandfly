@@ -45,18 +45,25 @@ class PaymentDeliveryController extends LayoutController
         
         $this->profileService->fill($model);
 
+        //deliveries
         $this->profileService->fillDeliveries($model);
-
         $this->profileService->fillSelectedDeliveryId($model);
-
         $this->profileService->fillSelectedDelivery($model);
+
+        //delivery types
+        $this->profileService->fillDeliveryTypes($model);
+        $this->profileService->fillSelectedDeliveryTypeId($model);
+        $this->profileService->fillSelectedDeliveryType($model);
+
+
 
         \Debugbar::info($model);
 
         JavaScript::put([
             'deliveries' => $model->deliveries,
-            'selectedDeliveryId' => $model->selectedDeliveryId,
-            'delivery' => $model->delivery
+            'deliveryTypes' => $model->deliveryTypes,
+            'delivery' => $model->delivery,
+            'deliveryType' => $model->deliveryType
         ]);
         
         return view('pages.payment-delivery', compact('model'));
@@ -68,16 +75,14 @@ class PaymentDeliveryController extends LayoutController
      */
     public function savePaymentDelivery()
     {
-//        $paymentId = request('paymentId');
-
+        \Debugbar::info(request()->all());
         $deliveryId = request('deliveryId');
-
-        $address = request('address');
+        $deliveryTypeId = request('deliveryTypeId');
 
         try
         {
             DB::beginTransaction();
-            $this->profileService->savePaymentDelivery($deliveryId, $address);
+            $this->profileService->savePaymentDelivery($deliveryId, $deliveryTypeId);
         }
         catch (\Exception $e)
         {

@@ -101,7 +101,11 @@
                                                           :max-height="'200px'"
                                                           :class="'country-select delivery-select'"
                                                           :searchable="false"
-                                                          :options="['{{ trans('order.addressna_dostavka') }}', '{{ trans('order.number_warehouse') }}']">
+                                                          :label="'name'"
+                                                          :options="deliveryTypes">
+                                                    <template slot="options" slot-scope="option">
+                                                        @{{ option.name }}
+                                                    </template>
                                                     <span v-cloak slot="no-options">
                                                         {{ trans('order.no_results') }}
                                                     </span>

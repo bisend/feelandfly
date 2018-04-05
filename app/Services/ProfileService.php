@@ -10,6 +10,7 @@ namespace App\Services;
 
 use App\Repositories\CategoryRepository;
 use App\Repositories\DeliveryRepository;
+use App\Repositories\DeliveryTypeRepository;
 use App\Repositories\MetaTagRepository;
 use App\Repositories\OrderProductRepository;
 use App\Repositories\OrderRepository;
@@ -65,8 +66,30 @@ class ProfileService extends LayoutService
      */
     protected $orderProductRepository;
 
+    /**
+     * @var MetaTagRepository
+     */
     protected $metaTagRepository;
 
+    /**
+     * @var DeliveryTypeRepository
+     */
+    protected $deliveryTypeRepository;
+
+    /**
+     * ProfileService constructor.
+     * @param CategoryRepository $categoryRepository
+     * @param UserRepository $userRepository
+     * @param ProfileRepository $profileRepository
+     * @param PaymentRepository $paymentRepository
+     * @param DeliveryRepository $deliveryRepository
+     * @param WishListProductRepository $wishListProductRepository
+     * @param ProductRepository $productRepository
+     * @param OrderRepository $orderRepository
+     * @param OrderProductRepository $orderProductRepository
+     * @param MetaTagRepository $metaTagRepository
+     * @param DeliveryTypeRepository $deliveryTypeRepository
+     */
     public function __construct(CategoryRepository $categoryRepository, 
                                 UserRepository $userRepository, 
                                 ProfileRepository $profileRepository,
@@ -76,7 +99,8 @@ class ProfileService extends LayoutService
                                 ProductRepository $productRepository,
                                 OrderRepository $orderRepository,
                                 OrderProductRepository $orderProductRepository,
-                                MetaTagRepository $metaTagRepository)
+                                MetaTagRepository $metaTagRepository,
+                                DeliveryTypeRepository $deliveryTypeRepository)
     {
         parent::__construct($categoryRepository);
         
@@ -97,6 +121,8 @@ class ProfileService extends LayoutService
         $this->orderProductRepository = $orderProductRepository;
 
         $this->metaTagRepository = $metaTagRepository;
+
+        $this->deliveryTypeRepository = $deliveryTypeRepository;
     }
 
     /**
@@ -171,15 +197,6 @@ class ProfileService extends LayoutService
     }
 
     /**
-     * fill payments
-     * @param $model
-     */
-    public function fillPayments($model)
-    {
-        $model->payments = $this->paymentRepository->getAllPayments($model);
-    }
-
-    /**
      * fill deliveries
      * @param $model
      */
@@ -189,16 +206,7 @@ class ProfileService extends LayoutService
     }
 
     /**
-     * fill selected payment id
-     * @param $model
-     */
-    public function fillSelectedPaymentId($model)
-    {
-        $model->selectedPaymentId = $this->profileRepository->getSelectedPaymentId($model);
-    }
-
-    /**
-     * fill selected delivery id
+     * fill selected delivery ID
      * @param $model
      */
     public function fillSelectedDeliveryId($model)
@@ -206,29 +214,50 @@ class ProfileService extends LayoutService
         $model->selectedDeliveryId = $this->profileRepository->getSelectedDeliveryId($model);
     }
 
+    /**
+     * fill selected delivery
+     * @param $model
+     */
     public function fillSelectedDelivery($model)
     {
         $model->delivery = $this->deliveryRepository->getDelivery($model);
     }
 
     /**
-     * fill address
+     * fill delivery types
      * @param $model
      */
-    public function fillAddress($model)
+    public function fillDeliveryTypes($model)
     {
-        $model->address = $this->profileRepository->getAddress($model);
+        $model->deliveryTypes = $this->deliveryTypeRepository->getDeliveryTypes($model);
     }
 
     /**
-     * save payment delivery
-     * @param $paymentId
-     * @param $deliveryId
-     * @param $address
+     * fill selected deliveryType ID
+     * @param $model
      */
-    public function savePaymentDelivery($deliveryId, $address)
+    public function fillSelectedDeliveryTypeId($model)
     {
-        $this->profileRepository->savePaymentDelivery($deliveryId, $address);
+        $model->selectedDeliveryTypeId = $this->profileRepository->getSelectedDeliveryTypeId($model);
+    }
+
+    /**
+     * fill selected deliveryType
+     * @param $model
+     */
+    public function fillSelectedDeliveryType($model)
+    {
+        $model->deliveryType = $this->deliveryTypeRepository->getDeliveryType($model);
+    }
+
+
+    /**
+     * @param $deliveryId
+     * @param $deliveryTypeId
+     */
+    public function savePaymentDelivery($deliveryId, $deliveryTypeId)
+    {
+        $this->profileRepository->savePaymentDelivery($deliveryId, $deliveryTypeId);
     }
 
     /**

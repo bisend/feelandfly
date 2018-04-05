@@ -22,4 +22,15 @@ class DeliveryTypeRepository
                 "slug",
             ]);
     }
+
+    public function getDeliveryType($model)
+    {
+        return DeliveryType::whereIsVisible(true)
+            ->whereId($model->selectedDeliveryTypeId)
+            ->first([
+                'id',
+                "name_$model->language as name",
+                "slug"
+            ]);
+    }
 }

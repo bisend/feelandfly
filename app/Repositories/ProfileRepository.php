@@ -45,20 +45,6 @@ class ProfileRepository
     }
 
     /**
-     * return selected payment id
-     * @param $model
-     * @return int|mixed|null
-     */
-    public function getSelectedPaymentId($model)
-    {
-        $user = auth()->user();
-        
-        $profile = Profile::whereUserId($user->id)->first();
-        
-        return $profile->payment_id;
-    }
-
-    /**
      * return selected delivery id
      * @param $model
      * @return int|mixed|null
@@ -72,36 +58,28 @@ class ProfileRepository
         return $profile->delivery_id;
     }
 
-    /**
-     * @param $model
-     * @return mixed|null|string
-     */
-    public function getAddress($model)
+    public function getSelectedDeliveryTypeId($model)
     {
         $user = auth()->user();
 
         $profile = Profile::whereUserId($user->id)->first();
 
-        return $profile->address_delivery;
+        return $profile->delivery_type_id;
     }
 
     /**
-     * save selected payment and delivery
-     * @param $paymentId
+     * save selected delivery
      * @param $deliveryId
-     * @param $address
+     * @param $deliveryTypeId
      */
-    public function savePaymentDelivery($deliveryId, $address)
+    public function savePaymentDelivery($deliveryId, $deliveryTypeId)
     {
         $user = auth()->user();
 
         $profile = Profile::whereUserId($user->id)->first();
         
-//        $profile->payment_id = $paymentId;
-        
         $profile->delivery_id = $deliveryId;
-        
-        $profile->address_delivery = $address;
+        $profile->delivery_type_id = $deliveryTypeId;
         
         $profile->save();
     }
