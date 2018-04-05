@@ -1,5 +1,4 @@
 import vSelect from 'vue-select';
-import _ from 'lodash';
 Vue.component('v-select', vSelect);
 
 if (document.getElementById('order-confirm'))
@@ -78,7 +77,7 @@ if (document.getElementById('order-confirm'))
                     window.location.reload(true);
                 }
             },
-            'orderConfirm.city': () => {
+            'orderConfirm.city': function() {
                 if (GLOBAL_DATA.orderConfirm.city !== '' && GLOBAL_DATA.orderConfirm.city != null)
                 {
                     $('[data-order-city]').find('.dropdown-toggle').css('border', '2px solid black');
@@ -89,13 +88,13 @@ if (document.getElementById('order-confirm'))
                     GLOBAL_DATA.orderConfirm.disableWarehouse = true;
                 }
             },
-            'orderConfirm.delivery': () => {
+            'orderConfirm.delivery': function() {
                 if (GLOBAL_DATA.orderConfirm.delivery)
                 {
                     $('[data-order-delivery]').find('.dropdown-toggle').css('border', '2px solid black');
                 }
             },
-            'orderConfirm.deliveryType': () => {
+            'orderConfirm.deliveryType': function() {
                 if (GLOBAL_DATA.orderConfirm.deliveryType.name === 'Номер отделения'
                     || GLOBAL_DATA.orderConfirm.deliveryType.name === 'Номер відділення')
                 {
@@ -143,19 +142,19 @@ if (document.getElementById('order-confirm'))
 
                 $('[data-order-delivery-type]').find('.dropdown-toggle').css('border', '2px solid black');
             },
-            'orderConfirm.country': () => {
+            'orderConfirm.country': function() {
                 if (GLOBAL_DATA.orderConfirm.country)
                 {
                     $('[data-order-country]').find('.dropdown-toggle').css('border', '2px solid black');
                 }
             },
-            'orderConfirm.warehouse': () => {
+            'orderConfirm.warehouse': function() {
                 if (GLOBAL_DATA.orderConfirm.warehouse)
                 {
                     $('[data-order-warehouse]').find('.dropdown-toggle').css('border', '2px solid black');
                 }
             },
-            'orderConfirm.checkoutPoint': () => {
+            'orderConfirm.checkoutPoint': function() {
                 if (GLOBAL_DATA.orderConfirm.checkoutPoint)
                 {
                     $('[data-order-points]').find('.dropdown-toggle').css('border', '2px solid black');
@@ -219,7 +218,7 @@ if (document.getElementById('order-confirm'))
                 console.log('search warehouses');
 
                 if (GLOBAL_DATA.orderConfirm.city != null &&
-                    GLOBAL_DATA.orderConfirm.city != '')
+                    GLOBAL_DATA.orderConfirm.city !== '')
                 {
                     $.ajax({
                         async: true,

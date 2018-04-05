@@ -45,6 +45,7 @@ class CategoryRepository
                     ]);
                 }
             ])
+            ->orderByRaw('priority desc', 'name')
             ->get([
                 'id',
                 'parent_id',

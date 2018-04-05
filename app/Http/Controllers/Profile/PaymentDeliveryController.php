@@ -45,6 +45,8 @@ class PaymentDeliveryController extends LayoutController
         
         $this->profileService->fill($model);
 
+//        $this->profileService->fillProfile($model);
+
         //deliveries
         $this->profileService->fillDeliveries($model);
         $this->profileService->fillSelectedDeliveryId($model);
@@ -55,6 +57,20 @@ class PaymentDeliveryController extends LayoutController
         $this->profileService->fillSelectedDeliveryTypeId($model);
         $this->profileService->fillSelectedDeliveryType($model);
 
+        //countries
+        $this->profileService->fillCountries($model);
+        $this->profileService->fillSelectedCountryCode($model);
+        $this->profileService->fillSelectedCountry($model);
+
+        //checkout points
+        $this->profileService->fillCheckoutPoints($model);
+        $this->profileService->fillSelectedCheckoutPointId($model);
+        $this->profileService->fillSelectedCheckoutPoint($model);
+
+        //city
+        $this->profileService->fillSelectedCityRef($model);
+        $this->profileService->fillSelectedWarehouseRef($model);
+
 
 
         \Debugbar::info($model);
@@ -63,7 +79,13 @@ class PaymentDeliveryController extends LayoutController
             'deliveries' => $model->deliveries,
             'deliveryTypes' => $model->deliveryTypes,
             'delivery' => $model->delivery,
-            'deliveryType' => $model->deliveryType
+            'deliveryType' => $model->deliveryType,
+            'countries' => $model->countries,
+            'country' => $model->country,
+            'checkoutPoints' => $model->checkoutPoints,
+            'checkoutPoint' => $model->checkoutPoint,
+            'selectedCityRef' => $model->selectedCityRef,
+            'selectedWarehouseRef' => $model->selectedWarehouseRef,
         ]);
         
         return view('pages.payment-delivery', compact('model'));
@@ -78,11 +100,15 @@ class PaymentDeliveryController extends LayoutController
         \Debugbar::info(request()->all());
         $deliveryId = request('deliveryId');
         $deliveryTypeId = request('deliveryTypeId');
+        $countryName = request('countryName');
+        $countryCode = request('countryCode');
+        $cityRef = request('cityRef');
+        $warehouseRef = request('warehouseRef');
 
         try
         {
             DB::beginTransaction();
-            $this->profileService->savePaymentDelivery($deliveryId, $deliveryTypeId);
+            $this->profileService->savePaymentDelivery($deliveryId, $deliveryTypeId, $countryName, $countryCode, $cityRef, $warehouseRef);
         }
         catch (\Exception $e)
         {

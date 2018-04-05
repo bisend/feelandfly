@@ -8,6 +8,7 @@ window.Vue = require('vue');
 
 import VueTheMask  from 'vue-the-mask'
 Vue.use(VueTheMask);
+import _ from 'lodash';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -28671,6 +28671,8 @@ module.exports = function(module) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_the_mask__ = __webpack_require__("./node_modules/vue-the-mask/dist/vue-the-mask.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_the_mask___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_the_mask__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash__ = __webpack_require__("./node_modules/lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -28681,6 +28683,7 @@ window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_the_mask___default.a);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -31449,9 +31452,6 @@ if (document.getElementById('new-products')) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_select__ = __webpack_require__("./node_modules/vue-select/dist/vue-select.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_select__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash__ = __webpack_require__("./node_modules/lodash/lodash.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash__);
-
 
 Vue.component('v-select', __WEBPACK_IMPORTED_MODULE_0_vue_select___default.a);
 
@@ -31604,7 +31604,7 @@ if (document.getElementById('order-confirm')) {
             }
         },
         methods: {
-            searchCity: __WEBPACK_IMPORTED_MODULE_1_lodash___default.a.debounce(function (search, loading) {
+            searchCity: _.debounce(function (search, loading) {
 
                 $.ajax({
                     async: true,
@@ -31654,7 +31654,7 @@ if (document.getElementById('order-confirm')) {
 
                 console.log('search warehouses');
 
-                if (GLOBAL_DATA.orderConfirm.city != null && GLOBAL_DATA.orderConfirm.city != '') {
+                if (GLOBAL_DATA.orderConfirm.city != null && GLOBAL_DATA.orderConfirm.city !== '') {
                     $.ajax({
                         async: true,
                         crossDomain: true,
@@ -31918,16 +31918,46 @@ if (document.getElementById('order-confirm')) {
 if (document.getElementById('profile-payment-delivery')) {
     // let profileAddressValidator;
 
+    var profileAStreetValidator = void 0,
+        profileALandValidator = void 0,
+        profileACityValidator = void 0;
+
     new Vue({
         el: '#profile-payment-delivery',
         data: {
+            lang: LANGUAGE,
             deliveries: window.FFShop.deliveries,
-            delivery: window.FFShop.delivery,
+            delivery: window.FFShop.delivery == null ? null : window.FFShop.delivery,
 
             deliveryTypes: window.FFShop.deliveryTypes,
-            deliveryType: window.FFShop.deliveryType
+            deliveryType: window.FFShop.deliveryType == null ? null : window.FFShop.deliveryType,
+
+            countries: window.FFShop.countries,
+            DEFAULT_COUNTRY: [DEFAULT_COUNTRY],
+            country: window.FFShop.country == null ? DEFAULT_COUNTRY : window.FFShop.country,
+
+            aStreet: '',
+            aLand: '',
+            aCity: '',
+            aIndex: '',
+
+            cities: [],
+            selectedCityRef: window.FFShop.selectedCityRef == null ? null : window.FFShop.selectedCityRef,
+            city: null,
+
+            warehouses: [],
+            selectedWarehouseRef: window.FFShop.selectedWarehouseRef == null ? null : window.FFShop.selectedWarehouseRef,
+            warehouse: null,
+            disableWarehouse: true,
+
+            checkoutPoints: window.FFShop.checkoutPoints,
+            checkoutPoint: window.FFShop.checkoutPoint == null ? null : window.FFShop.checkoutPoint
         },
         mounted: function mounted() {
+
+            if (this.selectedCityRef) {
+                this.getCity(this.selectedCityRef);
+            }
             // profileAddressValidator = new RegExValidatingInput($('[data-profile-address]'), {
             //     expression: RegularExpressions.MIN_TEXT,
             //     ChangeOnValid: function (input) {
@@ -31940,13 +31970,244 @@ if (document.getElementById('profile-payment-delivery')) {
             //     requiredErrorMessage: REQUIRED_FIELD_TEXT,
             //     regExErrorMessage: INCORRECT_FIELD_TEXT
             // });
+
+            $('body').on('click', '.selected-tag', function (e) {
+                $(this).siblings('input').focus();
+            });
         },
         watch: {
             delivery: function delivery() {
                 $('[data-profile-delivery]').find('.dropdown-toggle').css('border', '2px solid black');
+            },
+            deliveryType: function deliveryType(newVal, oldVal) {
+                if (newVal && (newVal.name === 'Номер отделения' || newVal.name === 'Номер відділення')) {
+                    this.country = DEFAULT_COUNTRY;
+                }
+
+                profileAStreetValidator = new RegExValidatingInput($('[data-profile-a-street]'), {
+                    expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function ChangeOnValid(input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function ChangeOnInvalid(input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                profileALandValidator = new RegExValidatingInput($('[data-profile-a-land]'), {
+                    expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function ChangeOnValid(input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function ChangeOnInvalid(input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                profileACityValidator = new RegExValidatingInput($('[data-profile-a-city]'), {
+                    expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function ChangeOnValid(input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function ChangeOnInvalid(input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                $('[data-profile-delivery-type]').find('.dropdown-toggle').css('border', '2px solid black');
+            },
+            city: function city(newVal, oldVal) {
+                if (this.city != null) {
+                    $('[data-profile-city]').find('.dropdown-toggle').css('border', '2px solid black');
+                    this.disableWarehouse = false;
+                } else {
+                    this.disableWarehouse = true;
+                }
             }
         },
         methods: {
+            getCity: function getCity(selectedCityRef) {
+                var _this = this;
+
+                $.ajax({
+                    async: true,
+                    crossDomain: true,
+                    url: 'https://api.novaposhta.ua/v2.0/json/',
+                    method: 'POST',
+                    processData: false,
+                    data: JSON.stringify({
+                        apiKey: NOVA_POSHTA_API_KEY,
+                        modelName: 'Address',
+                        calledMethod: 'getCities',
+                        methodProperties: {
+                            Ref: selectedCityRef
+                        }
+                    }),
+                    beforeSend: function beforeSend(request) {
+                        request.setRequestHeader("Content-Type", "application/json");
+                    },
+                    success: function success(data) {
+                        console.log(data);
+
+                        if (data && data.data && data.data.length > 0) {
+                            _this.city = data.data[0];
+                            _this.cities = data.data;
+                            _this.getWarehouse(_this.selectedWarehouseRef);
+                        } else {
+                            _this.cities = [];
+                            _this.city = null;
+                        }
+                    },
+                    complete: function complete() {
+                        // loading(false);
+                    },
+                    error: function error(_error) {
+                        // loading(false);
+                        console.log(_error);
+                    }
+                });
+            },
+            getWarehouse: function getWarehouse(selectedWarehouseRef) {
+                var _this = this;
+
+                $.ajax({
+                    async: true,
+                    crossDomain: true,
+                    url: 'https://api.novaposhta.ua/v2.0/json/',
+                    method: 'POST',
+                    processData: false,
+                    data: JSON.stringify({
+                        apiKey: NOVA_POSHTA_API_KEY,
+                        modelName: 'Address',
+                        calledMethod: 'getWarehouses',
+                        methodProperties: {
+                            CityRef: _this.selectedCityRef
+                            // Ref: selectedWarehouseRef
+                        }
+                    }),
+                    beforeSend: function beforeSend(request) {
+                        request.setRequestHeader("Content-Type", "application/json");
+                    },
+                    success: function success(data) {
+
+                        console.log(data);
+
+                        if (data && data.data && data.data.length > 0) {
+                            data.data.forEach(function (item, i) {
+                                if (item.Ref === selectedWarehouseRef) {
+                                    _this.warehouse = item;
+                                }
+                            });
+                            _this.warehouses = data.data;
+                        } else {
+                            _this.warehouses = [];
+                            _this.warehouse = null;
+                        }
+                    },
+                    complete: function complete() {
+                        // loading(false);///dsd
+                    },
+                    error: function error(_error2) {
+                        // loading(false);
+                        console.log(_error2);
+                    }
+                });
+            },
+            searchCity: _.debounce(function (search, loading) {
+                var _this = this;
+
+                $.ajax({
+                    async: true,
+                    crossDomain: true,
+                    url: 'https://api.novaposhta.ua/v2.0/json/',
+                    method: 'POST',
+                    processData: false,
+                    data: JSON.stringify({
+                        apiKey: NOVA_POSHTA_API_KEY,
+                        modelName: 'Address',
+                        calledMethod: 'getCities',
+                        methodProperties: {
+                            FindByString: search.trim().toLowerCase()
+                        }
+                    }),
+                    beforeSend: function beforeSend(request) {
+                        loading(true);
+                        request.setRequestHeader("Content-Type", "application/json");
+                    },
+                    success: function success(data) {
+                        console.log(data);
+
+                        if (data && data.data && data.data.length > 0) {
+                            _this.cities = data.data;
+                        } else {
+                            _this.cities = [];
+                        }
+                    },
+                    complete: function complete() {
+                        loading(false);
+                    },
+                    error: function error(_error3) {
+                        loading(false);
+                        console.log(_error3);
+                    }
+                });
+            }, 350),
+            searchWarehouses: function searchWarehouses(value) {
+                var _this = this;
+
+                // _this.warehouse = null;
+
+                _this.city = value;
+
+                console.log('search warehouses');
+
+                if (_this.city != null && _this.city !== '') {
+                    $.ajax({
+                        async: true,
+                        crossDomain: true,
+                        url: 'https://api.novaposhta.ua/v2.0/json/',
+                        method: 'POST',
+                        processData: false,
+                        data: JSON.stringify({
+                            apiKey: NOVA_POSHTA_API_KEY,
+                            modelName: 'Address',
+                            calledMethod: 'getWarehouses',
+                            methodProperties: {
+                                CityRef: value.Ref
+                            }
+                        }),
+                        beforeSend: function beforeSend(request) {
+                            request.setRequestHeader("Content-Type", "application/json");
+                        },
+                        success: function success(data) {
+
+                            console.log(data);
+
+                            if (data && data.data && data.data.length > 0) {
+                                _this.warehouses = data.data;
+                            } else {
+                                _this.warehouses = [];
+                            }
+                        },
+                        complete: function complete() {
+                            // loading(false);///dsd
+                        },
+                        error: function error(_error4) {
+                            loading(false);
+                            console.log(_error4);
+                        }
+                    });
+                }
+            },
             validateBeforeSubmit: function validateBeforeSubmit() {
                 var _this = this;
 
@@ -31957,19 +32218,88 @@ if (document.getElementById('profile-payment-delivery')) {
                 //     isValid = false;
                 // }
 
-                // if (_this.selectedPaymentId == null) {
-                //     isValid = false;
-                //     $('[data-profile-payment]').css('border', '2px solid red');
-                // }
-
                 if (_this.delivery == null) {
                     isValid = false;
                     $('[data-profile-delivery]').find('.dropdown-toggle').css('border', '2px solid red');
-                }
+                } else {
+                    //CASE SELF CHECKOUT
+                    if (_this.delivery.name === 'Самовывоз' || _this.delivery.name === 'Самовивіз') {
+                        if (_this.checkoutPoint == null) {
+                            isValid = false;
+                            $('[data-profile-points]').find('.dropdown-toggle').css('border', '2px solid red');
+                            console.log('NP checkout');
+                        }
+                    }
+                    //SELF CHECKOUT END
 
-                if (_this.deliveryType == null) {
-                    isValid = false;
-                    $('[data-profile-delivery-type]').find('.dropdown-toggle').css('border', '2px solid red');
+                    // CASE NOVA POSHTA
+                    if (_this.delivery.name === 'Новая почта' || _this.delivery.name === 'Нова пошта') {
+                        //VALIDATE DELIVERY TYPE
+                        if (_this.deliveryType == null) {
+                            isValid = false;
+                            $('[data-profile-delivery-type]').find('.dropdown-toggle').css('border', '2px solid red');
+                            console.log('dostavka tip');
+                        }
+                        //VALIDATE DELIVERY TYPE END
+
+                        if (_this.deliveryType != null) {
+                            //CASE ADDRESS DELIVERY
+                            if (_this.deliveryType.name === 'Адресная доставка' || _this.deliveryType.name === 'Адресна доставка') {
+                                //VALIDATE COUNTRY
+                                if (_this.country == null || _this.country === '') {
+                                    isValid = false;
+                                    $('[data-profile-country]').find('.dropdown-toggle').css('border', '2px solid red');
+                                    console.log('dostavka country');
+                                }
+                                //VALIDATE COUNTRY END
+                                else {
+                                        // VALIDATE STREET
+                                        profileAStreetValidator.Validate();
+                                        if (!profileAStreetValidator.IsValid()) {
+                                            isValid = false;
+                                            console.log('A street');
+                                        }
+
+                                        // VALIDATE LAND
+                                        profileALandValidator.Validate();
+                                        if (!profileALandValidator.IsValid()) {
+                                            isValid = false;
+                                            console.log('A land');
+                                        }
+
+                                        // VALIDATE CITY
+                                        profileACityValidator.Validate();
+                                        if (!profileACityValidator.IsValid()) {
+                                            isValid = false;
+                                            console.log('A city');
+                                        }
+                                    }
+                            }
+                            //CASE ADDRESS DELIVERY END
+
+                            //CASE NUMBER WAREHOUSE
+                            if (_this.deliveryType.name === 'Номер отделения' || _this.deliveryType.name === 'Номер відділення') {
+                                //VALIDATE NP CITY
+                                if (_this.city == null || _this.city === '') {
+                                    isValid = false;
+                                    $('[data-profile-city]').find('.dropdown-toggle').css('border', '2px solid red');
+                                    console.log('NP city');
+                                }
+                                //VALIDATE NP CITY END
+                                else {
+                                        //VALIDATE NP WAREHOUSE
+                                        if (_this.warehouse == null || _this.warehouse === '') {
+                                            isValid = false;
+                                            $('[data-profile-warehouse]').find('.dropdown-toggle').css('border', '2px solid red');
+                                            console.log('NP warehouse');
+                                        }
+                                        //VALIDATE NP WAREHOUSE END
+                                    }
+                            }
+                            //CASE NUMBER WAREHOUSE END
+                        }
+                    }
+                    // CASE NOVA POSHTA END
                 }
 
                 if (isValid) {
@@ -31987,6 +32317,10 @@ if (document.getElementById('profile-payment-delivery')) {
                     data: {
                         deliveryId: _this.delivery.id,
                         deliveryTypeId: _this.deliveryType.id,
+                        countryName: _this.country.name,
+                        countryCode: _this.country.code,
+                        cityRef: _this.city.Ref,
+                        warehouseRef: _this.warehouse.Ref,
                         language: LANGUAGE
                     },
                     success: function success(data) {
@@ -32000,10 +32334,10 @@ if (document.getElementById('profile-payment-delivery')) {
                             showPopup(SERVER_ERROR);
                         }
                     },
-                    error: function error(_error) {
+                    error: function error(_error5) {
                         hideLoader();
                         showPopup(SERVER_ERROR);
-                        console.log(_error);
+                        console.log(_error5);
                     }
                 });
             }

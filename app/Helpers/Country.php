@@ -540,4 +540,22 @@ class Country
 
         return $arr;
     }
+
+    public static function getSelectedCountry($model)
+    {
+        $arr = null;
+
+        foreach (self::COUNTRIES[$model->language] as $key => $value)
+        {
+            if ($key == $model->selectedCountryCode)
+            {
+                $arr = [
+                    'name' => $value,
+                    'code' => $key
+                ];
+            }
+        }
+
+        return $arr;
+    }
 }

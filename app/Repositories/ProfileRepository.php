@@ -30,6 +30,13 @@ class ProfileRepository
         $profile->save();
     }
 
+    public function getProfile($model)
+    {
+        $user = auth()->user();
+
+        return Profile::whereUserId($user->id)->first();
+    }
+
     /**
      * save phone number
      * @param $userId
@@ -51,28 +58,53 @@ class ProfileRepository
      */
     public function getSelectedDeliveryId($model)
     {
-        $user = auth()->user();
+//        $user = auth()->user();
         
-        $profile = Profile::whereUserId($user->id)->first();
+//        $profile = Profile::whereUserId($user->id)->first();
         
-        return $profile->delivery_id;
+//        return $profile->delivery_id;
+        return $model->profile->delivery_id;
     }
 
     public function getSelectedDeliveryTypeId($model)
     {
-        $user = auth()->user();
+//        $user = auth()->user();
 
-        $profile = Profile::whereUserId($user->id)->first();
+//        $profile = Profile::whereUserId($user->id)->first();
 
-        return $profile->delivery_type_id;
+//        return $profile->delivery_type_id;
+
+        return $model->profile->delivery_type_id;
+    }
+
+    public function getSelectedCountryCode($model)
+    {
+        return $model->profile->country_code;
+    }
+
+    public function getSelectedCheckoutPointId($model)
+    {
+        return $model->profile->checkout_point_id;
+    }
+
+    public function getSelectedCityRef($model)
+    {
+        return $model->profile->np_city_ref;
+    }
+
+    public function getSelectedWarehouseRef($model)
+    {
+        return $model->profile->np_warehouse_ref;
     }
 
     /**
      * save selected delivery
      * @param $deliveryId
      * @param $deliveryTypeId
+     * @param $countryName
+     * @param $countryCode
      */
-    public function savePaymentDelivery($deliveryId, $deliveryTypeId)
+    public function savePaymentDelivery($deliveryId, $deliveryTypeId, $countryName, $countryCode, $cityRef, $warehouseRef)
     {
         $user = auth()->user();
 
@@ -80,7 +112,11 @@ class ProfileRepository
         
         $profile->delivery_id = $deliveryId;
         $profile->delivery_type_id = $deliveryTypeId;
-        
+        $profile->country_name = $countryName;
+        $profile->country_code = $countryCode;
+        $profile->np_city_ref = $cityRef;
+        $profile->np_warehouse_ref = $warehouseRef;
+
         $profile->save();
     }
 }

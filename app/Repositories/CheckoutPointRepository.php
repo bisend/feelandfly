@@ -23,4 +23,15 @@ class CheckoutPointRepository
                 'slug'
             ]);
     }
+
+    public function getCheckoutPoint($model)
+    {
+        return CheckoutPoint::whereIsVisible(true)
+            ->whereId($model->selectedCheckoutPointId)
+            ->first([
+                'id',
+                "name_$model->language as name",
+                'slug'
+            ]);
+    }
 }
