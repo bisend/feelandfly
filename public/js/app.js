@@ -31463,13 +31463,20 @@ if (document.getElementById('order-confirm')) {
         orderALandValidator = void 0,
         orderACityValidator = void 0;
 
-    // GLOBAL_DATA.orderConfirm.countries = FFShop.countries;
-    // GLOBAL_DATA.orderConfirm.deliveries = FFShop.deliveries;
-    // GLOBAL_DATA.orderConfirm.deliveryTypes = FFShop.deliveryTypes;
-    // GLOBAL_DATA.orderConfirm.checkoutPoints = FFShop.checkoutPoints;
-    // GLOBAL_DATA.orderConfirm.checkoutPoints = FFShop.checkoutPoints.map(function (point) {
-    //     return point.name;
-    // });
+    GLOBAL_DATA.orderConfirm.delivery = window.FFShop.delivery == null ? null : window.FFShop.delivery;
+    GLOBAL_DATA.orderConfirm.deliveryType = window.FFShop.deliveryType == null ? null : window.FFShop.deliveryType;
+    GLOBAL_DATA.orderConfirm.deliveryTypes = window.FFShop.deliveryTypes;
+    GLOBAL_DATA.orderConfirm.deliveries = window.FFShop.deliveries;
+    GLOBAL_DATA.orderConfirm.country = window.FFShop.country == null ? DEFAULT_COUNTRY : window.FFShop.country;
+    GLOBAL_DATA.orderConfirm.aStreet = window.FFShop.selectedStreet == null ? '' : window.FFShop.selectedStreet;
+    GLOBAL_DATA.orderConfirm.aLand = window.FFShop.selectedLand == null ? '' : window.FFShop.selectedLand;
+    GLOBAL_DATA.orderConfirm.aCity = window.FFShop.selectedCity == null ? '' : window.FFShop.selectedCity;
+    GLOBAL_DATA.orderConfirm.aIndex = window.FFShop.selectedIndex == null ? '' : window.FFShop.selectedIndex;
+    GLOBAL_DATA.orderConfirm.countries = window.FFShop.countries;
+    GLOBAL_DATA.orderConfirm.checkoutPoints = window.FFShop.checkoutPoints == null ? [] : window.FFShop.checkoutPoints;
+    GLOBAL_DATA.orderConfirm.checkoutPoint = window.FFShop.checkoutPoint == null ? null : window.FFShop.checkoutPoint;
+    GLOBAL_DATA.orderConfirm.selectedCityRef = window.FFShop.selectedCityRef == null ? null : window.FFShop.selectedCityRef;
+    GLOBAL_DATA.orderConfirm.selectedWarehouseRef = window.FFShop.selectedWarehouseRef == null ? null : window.FFShop.selectedWarehouseRef;
 
     new Vue({
         el: '#order-confirm',
@@ -34169,7 +34176,7 @@ if (document.getElementById('search')) {
         data: {
             showResult: false,
             showNoResult: false,
-            series: null,
+            series: '',
             url: '/search',
             urlAjax: '',
             searchProducts: [],
@@ -34182,74 +34189,67 @@ if (document.getElementById('search')) {
 
                 _this.url = '/search';
 
-                if (_this.series != '') {
+                if (_this.series !== '') {
                     _this.url += '/' + buildSearchUrl(_this.series);
 
-                    if (LANGUAGE != DEFAULT_LANGUAGE) {
+                    if (LANGUAGE !== DEFAULT_LANGUAGE) {
                         _this.url += '/' + LANGUAGE;
                     }
 
                     window.location.href = _this.url;
                 }
             },
-            searchAjax: function searchAjax() {
+            searchAjax: _.debounce(function () {
                 var _this = this;
 
                 _this.urlAjax = '/search/async';
 
                 _this.url = '/search';
 
-                if (_this.series == '') {
+                if (_this.series === '') {
                     _this.showNoResult = false;
                     _this.showResult = false;
                 }
 
-                if (_this.series != '') {
+                if (_this.series !== '') {
                     _this.urlAjax += '/' + buildSearchUrl(_this.series);
 
-                    if (LANGUAGE != DEFAULT_LANGUAGE) {
+                    if (LANGUAGE !== DEFAULT_LANGUAGE) {
                         _this.urlAjax += '/' + LANGUAGE;
                     }
 
                     _this.url += '/' + buildSearchUrl(_this.series);
 
-                    if (LANGUAGE != DEFAULT_LANGUAGE) {
+                    if (LANGUAGE !== DEFAULT_LANGUAGE) {
                         _this.url += '/' + LANGUAGE;
                     }
 
-                    if (_this.timer) {
-                        clearTimeout(_this.timer);
-                        _this.timer = undefined;
-                    }
-                    _this.timer = setTimeout(function () {
+                    _this.showNoResult = false;
 
-                        _this.showNoResult = false;
+                    _this.showResult = true;
 
-                        _this.showResult = false;
+                    $.ajax({
+                        type: 'get',
+                        url: _this.urlAjax,
+                        success: function success(data) {
+                            _this.searchProducts = data.searchProducts;
 
-                        $.ajax({
-                            type: 'get',
-                            url: _this.urlAjax,
-                            success: function success(data) {
-                                _this.searchProducts = data.searchProducts;
+                            _this.countSearchProducts = data.countSearchProducts;
 
-                                _this.countSearchProducts = data.countSearchProducts;
+                            _this.showNoResult = true;
 
-                                _this.showNoResult = true;
+                            _this.showResult = true;
+                        },
+                        error: function error(_error) {
+                            _this.showNoResult = true;
 
-                                _this.showResult = true;
-                            },
-                            error: function error(_error) {
-                                _this.showNoResult = true;
+                            _this.showResult = true;
 
-                                _this.showResult = true;
-
-                                console.log(_error);
-                            }
-                        });
-                    }, 400);
+                            console.log(_error);
+                        }
+                    });
                 }
-            },
+            }, 450),
             onEsc: function onEsc() {
                 var _this = _this2;
 
@@ -34257,14 +34257,16 @@ if (document.getElementById('search')) {
 
                 _this.series = '';
             },
-            onBlur: function onBlur() {
+            onBlur: function onBlur(event) {
+                console.log(event.relatedTarget);
+
                 var _this = _this2;
 
                 _this.series = '';
 
                 var i = $('button.open-search').find('i');
 
-                if (i.hasClass('fa-times') && !searchBtnClicked) {
+                if (i.hasClass('fa-times') && !searchBtnClicked && !$(event.relatedTarget).hasClass('result-item-link') && !$(event.relatedTarget).hasClass('all-search-results-btn')) {
                     i.removeClass('fa-times').addClass('fa-search');
                     $('.profile-search-smoll').animate({
                         width: '0'

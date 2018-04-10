@@ -465,7 +465,6 @@
                         @endforeach
                     </ul>
                     <div class="button-search">
-                        {{--<a class="main-menu"><i class="fa fa-search"></i></a>--}}
                         <div class="serch-button-open">
                             <button class="open-search"><i class="fa fa-search" aria-hidden="true"></i></button>
                         </div>
@@ -508,7 +507,7 @@
                                     </div>
                                 </a>
                                 <div class="view-all-result">
-                                    <a v-bind:href="url" class="theme-btn btn-black">
+                                    <a v-bind:href="url" class="theme-btn btn-black all-search-results-btn">
                                         <span>{{ trans('header.all_results') }} (@{{ countSearchProducts }})</span>
                                     </a>
                                 </div>

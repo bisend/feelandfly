@@ -5,7 +5,7 @@ if (document.getElementById('search'))
         data: {
             showResult: false,
             showNoResult: false,
-            series: null,
+            series: '',
             url: '/search',
             urlAjax: '',
             searchProducts: [],
@@ -18,11 +18,11 @@ if (document.getElementById('search'))
 
                 _this.url = '/search';
 
-                if (_this.series != '')
+                if (_this.series !== '')
                 {
                     _this.url += '/' + buildSearchUrl(_this.series);
 
-                    if (LANGUAGE != DEFAULT_LANGUAGE)
+                    if (LANGUAGE !== DEFAULT_LANGUAGE)
                     {
                         _this.url += '/' + LANGUAGE;
                     }
@@ -30,69 +30,61 @@ if (document.getElementById('search'))
                     window.location.href = _this.url;
                 }
             },
-            searchAjax: function () {
-                var _this = this;
+            searchAjax: _.debounce(function () {
+                let _this = this;
 
                 _this.urlAjax = '/search/async';
 
                 _this.url = '/search';
 
-                if (_this.series == '')
+                if (_this.series === '')
                 {
                     _this.showNoResult = false;
                     _this.showResult = false;
                 }
 
-                if (_this.series != '')
+                if (_this.series !== '')
                 {
                     _this.urlAjax += '/' + buildSearchUrl(_this.series);
 
-                    if (LANGUAGE != DEFAULT_LANGUAGE)
+                    if (LANGUAGE !== DEFAULT_LANGUAGE)
                     {
                         _this.urlAjax += '/' + LANGUAGE;
                     }
 
                     _this.url += '/' + buildSearchUrl(_this.series);
 
-                    if (LANGUAGE != DEFAULT_LANGUAGE)
+                    if (LANGUAGE !== DEFAULT_LANGUAGE)
                     {
                         _this.url += '/' + LANGUAGE;
                     }
 
-                    if (_this.timer) {
-                        clearTimeout(_this.timer);
-                        _this.timer = undefined;
-                    }
-                    _this.timer = setTimeout(function () {
+                    _this.showNoResult = false;
 
-                        _this.showNoResult = false;
+                    _this.showResult = true;
 
-                        _this.showResult = false;
+                    $.ajax({
+                        type: 'get',
+                        url: _this.urlAjax,
+                        success: function (data) {
+                            _this.searchProducts = data.searchProducts;
 
-                        $.ajax({
-                            type: 'get',
-                            url: _this.urlAjax,
-                            success: function (data) {
-                                _this.searchProducts = data.searchProducts;
+                            _this.countSearchProducts = data.countSearchProducts;
 
-                                _this.countSearchProducts = data.countSearchProducts;
+                            _this.showNoResult = true;
 
-                                _this.showNoResult = true;
+                            _this.showResult = true;
+                        },
+                        error: function (error) {
+                            _this.showNoResult = true;
 
-                                _this.showResult = true;
-                            },
-                            error: function (error) {
-                                _this.showNoResult = true;
+                            _this.showResult = true;
 
-                                _this.showResult = true;
-
-                                console.log(error);
-                            }
-                        });
-
-                    }, 400);
+                            console.log(error);
+                        }
+                    });
                 }
-            },
+            }, 450),
             onEsc: () => {
                 let _this = this;
 
@@ -100,14 +92,19 @@ if (document.getElementById('search'))
 
                 _this.series = '';
             },
-            onBlur: () => {
+            onBlur: (event) => {
+                console.log(event.relatedTarget);
+
                 let _this = this;
 
                 _this.series = '';
 
                 let i = $('button.open-search').find('i');
 
-                if(i.hasClass('fa-times') && !searchBtnClicked)
+                if(i.hasClass('fa-times') &&
+                    !searchBtnClicked &&
+                    !$(event.relatedTarget).hasClass('result-item-link') &&
+                    !$(event.relatedTarget).hasClass('all-search-results-btn'))
                 {
                     i.removeClass('fa-times').addClass('fa-search');
                     $('.profile-search-smoll').animate({
