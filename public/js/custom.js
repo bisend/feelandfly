@@ -1348,27 +1348,48 @@ if ($('#lookbook-slider').length > 0) {
 
 /*------------------- category Slider -------------------*/
 if ($('#slider-category').length > 0) {
-    $("#slider-category").owlCarousel({
-        dots: true,
-        loop: true,
-        autoplay: true,
-        autoplayHoverPause: true,
-        smartSpeed: 100,
-        nav: true,
-        margin: 30,
-        responsive: {
-            0: {items: 1},
-            1200: {items: 4},
-            992: {items: 3},
-            568: {items: 2},
-            400: {items: 1}
-        },
-        navText: [
-            "<i class='fa fa-angle-left'></i>",
-            "<i class='fa fa-angle-right'></i>"
-        ]
-    });
+	$("#slider-category").owlCarousel({
+		dots: true,
+		loop: true,
+		autoplay: true,
+		autoplayHoverPause: true,
+		smartSpeed: 100,
+		nav: true,
+		margin: 30,
+		responsive: {
+			0: {items: 1},
+			1200: {items: 4},
+			992: {items: 3},
+			568: {items: 2},
+			400: {items: 1}
+		},
+		navText: [
+			"<i class='fa fa-angle-left'></i>",
+			"<i class='fa fa-angle-right'></i>"
+		]
+	});
 }
+
+if ($('#home-slider-category').length > 0) {
+	$('#home-slider-category').owlCarousel({
+		dots: true,
+		loop: true,
+		autoplay: true,
+		autoplayHoverPause: true,
+		smartSpeed: 100,
+		nav: false,
+		margin: 30,
+		responsive: {
+			0: {items: 1},
+			1200: {items: 4},
+			992: {items: 3},
+			568: {items: 2},
+			400: {items: 1}
+		}
+	});
+}
+
+
 /* left slide bar */
 function openNav(e) {
     $('#mySidenav').animate({
