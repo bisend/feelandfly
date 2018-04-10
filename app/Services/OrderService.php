@@ -105,13 +105,13 @@ class OrderService extends LayoutService
 
 //        $this->fillPayments($model);
 
-        $this->fillDeliveryTypes($model);
+//        $this->fillDeliveryTypes($model);
         
-        $this->fillDeliveries($model);
+//        $this->fillDeliveries($model);
 
-        $this->fillCountries($model);
+//        $this->fillCountries($model);
 
-        $this->fillCheckoutPoints($model);
+//        $this->fillCheckoutPoints($model);
 
         $this->fillMetaTags($model);
     }

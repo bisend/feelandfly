@@ -8,6 +8,7 @@ use App\Mail\OrderReport;
 use App\Mail\OrderReportManager;
 use App\Services\CartService;
 use App\Services\OrderService;
+use App\Services\ProfileService;
 use App\ViewModels\OrderViewModel;
 use DB;
 use JavaScript;
@@ -31,15 +32,23 @@ class OrderController extends LayoutController
     protected $cartService;
 
     /**
+     * @var ProfileService
+     */
+    protected $profileService;
+
+    /**
      * OrderController constructor.
      * @param OrderService $orderService
      * @param CartService $cartService
+     * @param ProfileService $profileService
      */
-    public function __construct(OrderService $orderService, CartService $cartService)
+    public function __construct(OrderService $orderService, CartService $cartService, ProfileService $profileService)
     {
         $this->orderService = $orderService;
         
         $this->cartService = $cartService;
+
+        $this->profileService = $profileService;
     }
 
     /**
@@ -58,11 +67,23 @@ class OrderController extends LayoutController
 
         $this->orderService->fill($model);
 
+        $this->fillProfileDeliveriesFields($model);
+
         Javascript::put([
-            'countries' => $model->countries,
             'deliveries' => $model->deliveries,
+            'deliveryTypes' => $model->deliveryTypes,
+            'delivery' => $model->delivery,
+            'deliveryType' => $model->deliveryType,
+            'countries' => $model->countries,
+            'country' => $model->country,
             'checkoutPoints' => $model->checkoutPoints,
-            'deliveryTypes' => $model->deliveryTypes
+            'checkoutPoint' => $model->checkoutPoint,
+            'selectedCityRef' => $model->selectedCityRef,
+            'selectedWarehouseRef' => $model->selectedWarehouseRef,
+            'selectedStreet' => $model->selectedStreet,
+            'selectedLand' => $model->selectedLand,
+            'selectedCity' => $model->selectedCity,
+            'selectedIndex' => $model->selectedIndex,
         ]);
 
         \Debugbar::info($model);
@@ -101,6 +122,8 @@ class OrderController extends LayoutController
 
         $this->orderService->fill($model);
 
+        $this->fillProfileDeliveriesFields($model);
+
         $this->cartService->fill($model->language, $userTypeId);
 
         try
@@ -138,5 +161,38 @@ class OrderController extends LayoutController
             'status' => 'success',
             'url' => $url
         ]);
+    }
+
+    public function fillProfileDeliveriesFields($model)
+    {
+        //deliveries
+        $this->profileService->fillDeliveries($model);
+        $this->profileService->fillSelectedDeliveryId($model);
+        $this->profileService->fillSelectedDelivery($model);
+
+        //delivery types
+        $this->profileService->fillDeliveryTypes($model);
+        $this->profileService->fillSelectedDeliveryTypeId($model);
+        $this->profileService->fillSelectedDeliveryType($model);
+
+        //countries
+        $this->profileService->fillCountries($model);
+        $this->profileService->fillSelectedCountryCode($model);
+        $this->profileService->fillSelectedCountry($model);
+
+        //checkout points
+        $this->profileService->fillCheckoutPoints($model);
+        $this->profileService->fillSelectedCheckoutPointId($model);
+        $this->profileService->fillSelectedCheckoutPoint($model);
+
+        //city
+        $this->profileService->fillSelectedCityRef($model);
+        $this->profileService->fillSelectedWarehouseRef($model);
+
+        //address delivery fields
+        $this->profileService->fillSelectedStreet($model);
+        $this->profileService->fillSelectedLand($model);
+        $this->profileService->fillSelectedCity($model);
+        $this->profileService->fillSelectedIndex($model);
     }
 }

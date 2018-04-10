@@ -8,26 +8,27 @@ namespace App\ViewModels;
  */
 class OrderViewModel extends LayoutViewModel
 {
-    /**
-     * @var
-     */
-    public $payments;
-
-    /**
-     * @var
-     */
-    public $deliveries;
-
-    /**
-     * @var
-     */
     public $order;
 
-    public $countries;
-
-    public $checkoutPoints;
-
+    public $deliveries;
     public $deliveryTypes;
+    public $countries;
+    public $checkoutPoints;
+    public $delivery;
+    public $deliveryType;
+
+    public $selectedDeliveryId;
+    public $selectedDeliveryTypeId;
+    public $selectedCountryCode;
+    public $country;
+    public $selectedCheckoutPointId;
+    public $checkoutPoint;
+    public $selectedCityRef;
+    public $selectedWarehouseRef;
+    public $selectedStreet;
+    public $selectedLand;
+    public $selectedCity;
+    public $selectedIndex;
 
     /**
      * OrderViewModel constructor.

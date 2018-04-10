@@ -10,10 +10,10 @@ if (document.getElementById('order-confirm'))
         orderALandValidator,
         orderACityValidator;
 
-    GLOBAL_DATA.orderConfirm.countries = FFShop.countries;
-    GLOBAL_DATA.orderConfirm.deliveries = FFShop.deliveries;
-    GLOBAL_DATA.orderConfirm.deliveryTypes = FFShop.deliveryTypes;
-    GLOBAL_DATA.orderConfirm.checkoutPoints = FFShop.checkoutPoints;
+    // GLOBAL_DATA.orderConfirm.countries = FFShop.countries;
+    // GLOBAL_DATA.orderConfirm.deliveries = FFShop.deliveries;
+    // GLOBAL_DATA.orderConfirm.deliveryTypes = FFShop.deliveryTypes;
+    // GLOBAL_DATA.orderConfirm.checkoutPoints = FFShop.checkoutPoints;
     // GLOBAL_DATA.orderConfirm.checkoutPoints = FFShop.checkoutPoints.map(function (point) {
     //     return point.name;
     // });
@@ -24,9 +24,19 @@ if (document.getElementById('order-confirm'))
         mounted: function () {
             let _this = this;
 
+            if (GLOBAL_DATA.orderConfirm.selectedCityRef)
+            {
+                _this.getCity(GLOBAL_DATA.orderConfirm.selectedCityRef);
+            }
+
             $('body').on('click', '.selected-tag', function (e) {
                 $(this).siblings('input').focus();
             });
+
+            if (GLOBAL_DATA.orderConfirm.deliveryType)
+            {
+                _this.initValidators();
+            }
 
             // `this` указывает на экземпляр vm
             orderNameValidator = new RegExValidatingInput($('[data-order-name]'), {
@@ -101,6 +111,31 @@ if (document.getElementById('order-confirm'))
                     GLOBAL_DATA.orderConfirm.country = DEFAULT_COUNTRY;
                 }
 
+                this.initValidators();
+
+                $('[data-order-delivery-type]').find('.dropdown-toggle').css('border', '2px solid black');
+            },
+            'orderConfirm.country': function() {
+                if (GLOBAL_DATA.orderConfirm.country)
+                {
+                    $('[data-order-country]').find('.dropdown-toggle').css('border', '2px solid black');
+                }
+            },
+            'orderConfirm.warehouse': function() {
+                if (GLOBAL_DATA.orderConfirm.warehouse)
+                {
+                    $('[data-order-warehouse]').find('.dropdown-toggle').css('border', '2px solid black');
+                }
+            },
+            'orderConfirm.checkoutPoint': function() {
+                if (GLOBAL_DATA.orderConfirm.checkoutPoint)
+                {
+                    $('[data-order-points]').find('.dropdown-toggle').css('border', '2px solid black');
+                }
+            },
+        },
+        methods: {
+            initValidators: function () {
                 orderAStreetValidator = new RegExValidatingInput($('[data-order-a-street]'), {
                     expression: RegularExpressions.MIN_TEXT,
                     ChangeOnValid: function (input) {
@@ -139,29 +174,105 @@ if (document.getElementById('order-confirm'))
                     requiredErrorMessage: REQUIRED_FIELD_TEXT,
                     regExErrorMessage: INCORRECT_FIELD_TEXT
                 });
+            },
+            getCity: function (selectedCityRef) {
+                let _this = this;
 
-                $('[data-order-delivery-type]').find('.dropdown-toggle').css('border', '2px solid black');
+                $.ajax({
+                    async: true,
+                    crossDomain: true,
+                    url: 'https://api.novaposhta.ua/v2.0/json/',
+                    method: 'POST',
+                    processData: false,
+                    data: JSON.stringify({
+                        apiKey: NOVA_POSHTA_API_KEY,
+                        modelName: 'Address',
+                        calledMethod: 'getCities',
+                        methodProperties: {
+                            Ref: selectedCityRef
+                        },
+                    }),
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Content-Type", "application/json");
+                    },
+                    success: function (data) {
+                        console.log(data);
+
+                        if (data &&
+                            data.data &&
+                            data.data.length > 0)
+                        {
+                            GLOBAL_DATA.orderConfirm.city = data.data[0];
+                            GLOBAL_DATA.orderConfirm.cities = data.data;
+                            _this.getWarehouse(GLOBAL_DATA.orderConfirm.selectedWarehouseRef);
+                        }
+                        else
+                        {
+                            GLOBAL_DATA.orderConfirm.cities = [];
+                            GLOBAL_DATA.orderConfirm.city = null;
+                        }
+                    },
+                    complete: function () {
+                        // loading(false);
+                    },
+                    error: function (error) {
+                        // loading(false);
+                        console.log(error);
+                    }
+                });
             },
-            'orderConfirm.country': function() {
-                if (GLOBAL_DATA.orderConfirm.country)
-                {
-                    $('[data-order-country]').find('.dropdown-toggle').css('border', '2px solid black');
-                }
+            getWarehouse: function (selectedWarehouseRef) {
+                let _this = this;
+
+                $.ajax({
+                    async: true,
+                    crossDomain: true,
+                    url: 'https://api.novaposhta.ua/v2.0/json/',
+                    method: 'POST',
+                    processData: false,
+                    data: JSON.stringify({
+                        apiKey: NOVA_POSHTA_API_KEY,
+                        modelName: 'Address',
+                        calledMethod: 'getWarehouses',
+                        methodProperties: {
+                            CityRef: GLOBAL_DATA.orderConfirm.selectedCityRef,
+                            // Ref: selectedWarehouseRef
+                        },
+                    }),
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Content-Type", "application/json");
+                    },
+                    success: function (data) {
+
+                        console.log(data);
+
+                        if (data &&
+                            data.data &&
+                            data.data.length > 0)
+                        {
+                            data.data.forEach(function (item, i) {
+                                if (item.Ref === selectedWarehouseRef)
+                                {
+                                    GLOBAL_DATA.orderConfirm.warehouse = item;
+                                }
+                            });
+                            GLOBAL_DATA.orderConfirm.warehouses = data.data;
+                        }
+                        else
+                        {
+                            GLOBAL_DATA.orderConfirm.warehouses = [];
+                            GLOBAL_DATA.orderConfirm.warehouse = null;
+                        }
+                    },
+                    complete: function () {
+                        // loading(false);///dsd
+                    },
+                    error: function (error) {
+                        // loading(false);
+                        console.log(error);
+                    }
+                });
             },
-            'orderConfirm.warehouse': function() {
-                if (GLOBAL_DATA.orderConfirm.warehouse)
-                {
-                    $('[data-order-warehouse]').find('.dropdown-toggle').css('border', '2px solid black');
-                }
-            },
-            'orderConfirm.checkoutPoint': function() {
-                if (GLOBAL_DATA.orderConfirm.checkoutPoint)
-                {
-                    $('[data-order-points]').find('.dropdown-toggle').css('border', '2px solid black');
-                }
-            },
-        },
-        methods: {
             searchCity: _.debounce((search, loading) => {
 
                 $.ajax({

@@ -295,7 +295,7 @@
                                         delivery.name === 'Самовивіз')" class="col-md-12">
                                         <div class="form-group">
                                             <div class="form-group" data-profile-points>
-                                                <label for="order-points-field">{{ trans('order.points') }}:
+                                                <label for="profile-points-field">{{ trans('order.points') }}:
                                                     <span class="field-required">*</span>
                                                 </label>
                                                 <v-select v-model="checkoutPoint"

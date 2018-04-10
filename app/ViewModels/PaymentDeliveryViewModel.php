@@ -27,6 +27,11 @@ class PaymentDeliveryViewModel extends LayoutViewModel
     public $selectedCityRef;
     public $selectedWarehouseRef;
 
+    public $selectedStreet;
+    public $selectedLand;
+    public $selectedCity;
+    public $selectedIndex;
+
 
     /**
      * PaymentDeliveryViewModel constructor.

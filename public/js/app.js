@@ -31463,10 +31463,10 @@ if (document.getElementById('order-confirm')) {
         orderALandValidator = void 0,
         orderACityValidator = void 0;
 
-    GLOBAL_DATA.orderConfirm.countries = FFShop.countries;
-    GLOBAL_DATA.orderConfirm.deliveries = FFShop.deliveries;
-    GLOBAL_DATA.orderConfirm.deliveryTypes = FFShop.deliveryTypes;
-    GLOBAL_DATA.orderConfirm.checkoutPoints = FFShop.checkoutPoints;
+    // GLOBAL_DATA.orderConfirm.countries = FFShop.countries;
+    // GLOBAL_DATA.orderConfirm.deliveries = FFShop.deliveries;
+    // GLOBAL_DATA.orderConfirm.deliveryTypes = FFShop.deliveryTypes;
+    // GLOBAL_DATA.orderConfirm.checkoutPoints = FFShop.checkoutPoints;
     // GLOBAL_DATA.orderConfirm.checkoutPoints = FFShop.checkoutPoints.map(function (point) {
     //     return point.name;
     // });
@@ -31477,9 +31477,17 @@ if (document.getElementById('order-confirm')) {
         mounted: function mounted() {
             var _this = this;
 
+            if (GLOBAL_DATA.orderConfirm.selectedCityRef) {
+                _this.getCity(GLOBAL_DATA.orderConfirm.selectedCityRef);
+            }
+
             $('body').on('click', '.selected-tag', function (e) {
                 $(this).siblings('input').focus();
             });
+
+            if (GLOBAL_DATA.orderConfirm.deliveryType) {
+                _this.initValidators();
+            }
 
             // `this` указывает на экземпляр vm
             orderNameValidator = new RegExValidatingInput($('[data-order-name]'), {
@@ -31546,6 +31554,28 @@ if (document.getElementById('order-confirm')) {
                     GLOBAL_DATA.orderConfirm.country = DEFAULT_COUNTRY;
                 }
 
+                this.initValidators();
+
+                $('[data-order-delivery-type]').find('.dropdown-toggle').css('border', '2px solid black');
+            },
+            'orderConfirm.country': function orderConfirmCountry() {
+                if (GLOBAL_DATA.orderConfirm.country) {
+                    $('[data-order-country]').find('.dropdown-toggle').css('border', '2px solid black');
+                }
+            },
+            'orderConfirm.warehouse': function orderConfirmWarehouse() {
+                if (GLOBAL_DATA.orderConfirm.warehouse) {
+                    $('[data-order-warehouse]').find('.dropdown-toggle').css('border', '2px solid black');
+                }
+            },
+            'orderConfirm.checkoutPoint': function orderConfirmCheckoutPoint() {
+                if (GLOBAL_DATA.orderConfirm.checkoutPoint) {
+                    $('[data-order-points]').find('.dropdown-toggle').css('border', '2px solid black');
+                }
+            }
+        },
+        methods: {
+            initValidators: function initValidators() {
                 orderAStreetValidator = new RegExValidatingInput($('[data-order-a-street]'), {
                     expression: RegularExpressions.MIN_TEXT,
                     ChangeOnValid: function ChangeOnValid(input) {
@@ -31584,26 +31614,94 @@ if (document.getElementById('order-confirm')) {
                     requiredErrorMessage: REQUIRED_FIELD_TEXT,
                     regExErrorMessage: INCORRECT_FIELD_TEXT
                 });
+            },
+            getCity: function getCity(selectedCityRef) {
+                var _this = this;
 
-                $('[data-order-delivery-type]').find('.dropdown-toggle').css('border', '2px solid black');
+                $.ajax({
+                    async: true,
+                    crossDomain: true,
+                    url: 'https://api.novaposhta.ua/v2.0/json/',
+                    method: 'POST',
+                    processData: false,
+                    data: JSON.stringify({
+                        apiKey: NOVA_POSHTA_API_KEY,
+                        modelName: 'Address',
+                        calledMethod: 'getCities',
+                        methodProperties: {
+                            Ref: selectedCityRef
+                        }
+                    }),
+                    beforeSend: function beforeSend(request) {
+                        request.setRequestHeader("Content-Type", "application/json");
+                    },
+                    success: function success(data) {
+                        console.log(data);
+
+                        if (data && data.data && data.data.length > 0) {
+                            GLOBAL_DATA.orderConfirm.city = data.data[0];
+                            GLOBAL_DATA.orderConfirm.cities = data.data;
+                            _this.getWarehouse(GLOBAL_DATA.orderConfirm.selectedWarehouseRef);
+                        } else {
+                            GLOBAL_DATA.orderConfirm.cities = [];
+                            GLOBAL_DATA.orderConfirm.city = null;
+                        }
+                    },
+                    complete: function complete() {
+                        // loading(false);
+                    },
+                    error: function error(_error) {
+                        // loading(false);
+                        console.log(_error);
+                    }
+                });
             },
-            'orderConfirm.country': function orderConfirmCountry() {
-                if (GLOBAL_DATA.orderConfirm.country) {
-                    $('[data-order-country]').find('.dropdown-toggle').css('border', '2px solid black');
-                }
+            getWarehouse: function getWarehouse(selectedWarehouseRef) {
+                var _this = this;
+
+                $.ajax({
+                    async: true,
+                    crossDomain: true,
+                    url: 'https://api.novaposhta.ua/v2.0/json/',
+                    method: 'POST',
+                    processData: false,
+                    data: JSON.stringify({
+                        apiKey: NOVA_POSHTA_API_KEY,
+                        modelName: 'Address',
+                        calledMethod: 'getWarehouses',
+                        methodProperties: {
+                            CityRef: GLOBAL_DATA.orderConfirm.selectedCityRef
+                            // Ref: selectedWarehouseRef
+                        }
+                    }),
+                    beforeSend: function beforeSend(request) {
+                        request.setRequestHeader("Content-Type", "application/json");
+                    },
+                    success: function success(data) {
+
+                        console.log(data);
+
+                        if (data && data.data && data.data.length > 0) {
+                            data.data.forEach(function (item, i) {
+                                if (item.Ref === selectedWarehouseRef) {
+                                    GLOBAL_DATA.orderConfirm.warehouse = item;
+                                }
+                            });
+                            GLOBAL_DATA.orderConfirm.warehouses = data.data;
+                        } else {
+                            GLOBAL_DATA.orderConfirm.warehouses = [];
+                            GLOBAL_DATA.orderConfirm.warehouse = null;
+                        }
+                    },
+                    complete: function complete() {
+                        // loading(false);///dsd
+                    },
+                    error: function error(_error2) {
+                        // loading(false);
+                        console.log(_error2);
+                    }
+                });
             },
-            'orderConfirm.warehouse': function orderConfirmWarehouse() {
-                if (GLOBAL_DATA.orderConfirm.warehouse) {
-                    $('[data-order-warehouse]').find('.dropdown-toggle').css('border', '2px solid black');
-                }
-            },
-            'orderConfirm.checkoutPoint': function orderConfirmCheckoutPoint() {
-                if (GLOBAL_DATA.orderConfirm.checkoutPoint) {
-                    $('[data-order-points]').find('.dropdown-toggle').css('border', '2px solid black');
-                }
-            }
-        },
-        methods: {
             searchCity: _.debounce(function (search, loading) {
 
                 $.ajax({
@@ -31641,9 +31739,9 @@ if (document.getElementById('order-confirm')) {
                     complete: function complete() {
                         loading(false);
                     },
-                    error: function error(_error) {
+                    error: function error(_error3) {
                         loading(false);
-                        console.log(_error);
+                        console.log(_error3);
                     }
                 });
             }, 350),
@@ -31685,9 +31783,9 @@ if (document.getElementById('order-confirm')) {
                         complete: function complete() {
                             // loading(false);///dsd
                         },
-                        error: function error(_error2) {
+                        error: function error(_error4) {
                             loading(false);
-                            console.log(_error2);
+                            console.log(_error4);
                         }
                     });
                 }
@@ -31899,10 +31997,10 @@ if (document.getElementById('order-confirm')) {
                             showPopup(SERVER_ERROR);
                         }
                     },
-                    error: function error(_error3) {
+                    error: function error(_error5) {
                         hideLoader();
                         showPopup(SERVER_ERROR);
-                        console.log(_error3);
+                        console.log(_error5);
                     }
                 });
             }
@@ -31916,8 +32014,6 @@ if (document.getElementById('order-confirm')) {
 /***/ (function(module, exports) {
 
 if (document.getElementById('profile-payment-delivery')) {
-    // let profileAddressValidator;
-
     var profileAStreetValidator = void 0,
         profileALandValidator = void 0,
         profileACityValidator = void 0;
@@ -31936,10 +32032,10 @@ if (document.getElementById('profile-payment-delivery')) {
             DEFAULT_COUNTRY: [DEFAULT_COUNTRY],
             country: window.FFShop.country == null ? DEFAULT_COUNTRY : window.FFShop.country,
 
-            aStreet: '',
-            aLand: '',
-            aCity: '',
-            aIndex: '',
+            aStreet: window.FFShop.selectedStreet == null ? '' : window.FFShop.selectedStreet,
+            aLand: window.FFShop.selectedLand == null ? '' : window.FFShop.selectedLand,
+            aCity: window.FFShop.selectedCity == null ? '' : window.FFShop.selectedCity,
+            aIndex: window.FFShop.selectedIndex == null ? '' : window.FFShop.selectedIndex,
 
             cities: [],
             selectedCityRef: window.FFShop.selectedCityRef == null ? null : window.FFShop.selectedCityRef,
@@ -31958,18 +32054,10 @@ if (document.getElementById('profile-payment-delivery')) {
             if (this.selectedCityRef) {
                 this.getCity(this.selectedCityRef);
             }
-            // profileAddressValidator = new RegExValidatingInput($('[data-profile-address]'), {
-            //     expression: RegularExpressions.MIN_TEXT,
-            //     ChangeOnValid: function (input) {
-            //         input.removeClass(INCORRECT_FIELD_CLASS);
-            //     },
-            //     ChangeOnInvalid: function (input) {
-            //         input.addClass(INCORRECT_FIELD_CLASS);
-            //     },
-            //     showErrors: true,
-            //     requiredErrorMessage: REQUIRED_FIELD_TEXT,
-            //     regExErrorMessage: INCORRECT_FIELD_TEXT
-            // });
+
+            if (this.deliveryType) {
+                this.initValidators();
+            }
 
             $('body').on('click', '.selected-tag', function (e) {
                 $(this).siblings('input').focus();
@@ -31984,44 +32072,7 @@ if (document.getElementById('profile-payment-delivery')) {
                     this.country = DEFAULT_COUNTRY;
                 }
 
-                profileAStreetValidator = new RegExValidatingInput($('[data-profile-a-street]'), {
-                    expression: RegularExpressions.MIN_TEXT,
-                    ChangeOnValid: function ChangeOnValid(input) {
-                        input.removeClass(INCORRECT_FIELD_CLASS);
-                    },
-                    ChangeOnInvalid: function ChangeOnInvalid(input) {
-                        input.addClass(INCORRECT_FIELD_CLASS);
-                    },
-                    showErrors: true,
-                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                    regExErrorMessage: INCORRECT_FIELD_TEXT
-                });
-
-                profileALandValidator = new RegExValidatingInput($('[data-profile-a-land]'), {
-                    expression: RegularExpressions.MIN_TEXT,
-                    ChangeOnValid: function ChangeOnValid(input) {
-                        input.removeClass(INCORRECT_FIELD_CLASS);
-                    },
-                    ChangeOnInvalid: function ChangeOnInvalid(input) {
-                        input.addClass(INCORRECT_FIELD_CLASS);
-                    },
-                    showErrors: true,
-                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                    regExErrorMessage: INCORRECT_FIELD_TEXT
-                });
-
-                profileACityValidator = new RegExValidatingInput($('[data-profile-a-city]'), {
-                    expression: RegularExpressions.MIN_TEXT,
-                    ChangeOnValid: function ChangeOnValid(input) {
-                        input.removeClass(INCORRECT_FIELD_CLASS);
-                    },
-                    ChangeOnInvalid: function ChangeOnInvalid(input) {
-                        input.addClass(INCORRECT_FIELD_CLASS);
-                    },
-                    showErrors: true,
-                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                    regExErrorMessage: INCORRECT_FIELD_TEXT
-                });
+                this.initValidators();
 
                 $('[data-profile-delivery-type]').find('.dropdown-toggle').css('border', '2px solid black');
             },
@@ -32030,8 +32081,18 @@ if (document.getElementById('profile-payment-delivery')) {
                     $('[data-profile-city]').find('.dropdown-toggle').css('border', '2px solid black');
                     this.disableWarehouse = false;
                 } else {
+                    this.warehouse = null;
                     this.disableWarehouse = true;
                 }
+            },
+            checkoutPoint: function checkoutPoint(newVal, oldVal) {
+                $('[data-profile-points]').find('.dropdown-toggle').css('border', '2px solid black');
+            },
+            country: function country(newVal, oldVal) {
+                $('[data-profile-country]').find('.dropdown-toggle').css('border', '2px solid black');
+            },
+            warehouse: function warehouse(newVal, oldVal) {
+                $('[data-profile-warehouse]').find('.dropdown-toggle').css('border', '2px solid black');
             }
         },
         methods: {
@@ -32213,11 +32274,6 @@ if (document.getElementById('profile-payment-delivery')) {
 
                 var isValid = true;
 
-                // profileAddressValidator.Validate();
-                // if (!profileAddressValidator.IsValid()) {
-                //     isValid = false;
-                // }
-
                 if (_this.delivery == null) {
                     isValid = false;
                     $('[data-profile-delivery]').find('.dropdown-toggle').css('border', '2px solid red');
@@ -32309,6 +32365,43 @@ if (document.getElementById('profile-payment-delivery')) {
             savePaymentDelivery: function savePaymentDelivery() {
                 var _this = this;
 
+                var checkoutPointId = null,
+                    npDeliveryTypeId = null,
+                    countryName = null,
+                    countryCode = null,
+                    npCity = null,
+                    npCityRef = null,
+                    npWarehouse = null,
+                    npWarehouseRef = null,
+                    aStreet = null,
+                    aLand = null,
+                    aCity = null,
+                    postIndex = null;
+
+                if (_this.delivery.name === 'Самовывоз' || _this.delivery.name === 'Самовивіз') {
+                    checkoutPointId = _this.checkoutPoint.id;
+                }
+
+                if (_this.delivery.name === 'Новая почта' || _this.delivery.name === 'Нова пошта') {
+                    if (_this.deliveryType.name === 'Адресная доставка' || _this.deliveryType.name === 'Адресна доставка') {
+                        countryName = _this.country.name;
+                        countryCode = _this.country.code;
+                        aStreet = _this.aStreet;
+                        aLand = _this.aLand;
+                        aCity = _this.aCity;
+                        postIndex = _this.aIndex;
+                    }
+
+                    if (_this.deliveryType.name === 'Номер отделения' || _this.deliveryType.name === 'Номер відділення') {
+                        npCity = LANGUAGE === DEFAULT_LANGUAGE ? _this.city.DescriptionRu : _this.city.Description;
+                        npCityRef = _this.city.Ref;
+                        npWarehouse = LANGUAGE === DEFAULT_LANGUAGE ? _this.warehouse.DescriptionRu : _this.warehouse.Description;
+                        npWarehouseRef = _this.warehouse.Ref;
+                    }
+
+                    npDeliveryTypeId = _this.deliveryType.id;
+                }
+
                 showLoader();
 
                 $.ajax({
@@ -32316,11 +32409,18 @@ if (document.getElementById('profile-payment-delivery')) {
                     url: '/profile/save-payment-delivery',
                     data: {
                         deliveryId: _this.delivery.id,
-                        deliveryTypeId: _this.deliveryType.id,
-                        countryName: _this.country.name,
-                        countryCode: _this.country.code,
-                        cityRef: _this.city.Ref,
-                        warehouseRef: _this.warehouse.Ref,
+                        deliveryTypeId: npDeliveryTypeId,
+                        checkoutPointId: checkoutPointId,
+                        countryName: countryName,
+                        countryCode: countryCode,
+                        city: npCity,
+                        cityRef: npCityRef,
+                        warehouse: npWarehouse,
+                        warehouseRef: npWarehouseRef,
+                        aStreet: aStreet,
+                        aLand: aLand,
+                        aCity: aCity,
+                        postIndex: postIndex,
                         language: LANGUAGE
                     },
                     success: function success(data) {
@@ -32339,6 +32439,46 @@ if (document.getElementById('profile-payment-delivery')) {
                         showPopup(SERVER_ERROR);
                         console.log(_error5);
                     }
+                });
+            },
+            initValidators: function initValidators() {
+                profileAStreetValidator = new RegExValidatingInput($('[data-profile-a-street]'), {
+                    expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function ChangeOnValid(input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function ChangeOnInvalid(input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                profileALandValidator = new RegExValidatingInput($('[data-profile-a-land]'), {
+                    expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function ChangeOnValid(input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function ChangeOnInvalid(input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                profileACityValidator = new RegExValidatingInput($('[data-profile-a-city]'), {
+                    expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function ChangeOnValid(input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function ChangeOnInvalid(input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
                 });
             }
         }

@@ -1,7 +1,5 @@
 if (document.getElementById('profile-payment-delivery'))
 {
-    // let profileAddressValidator;
-
     let profileAStreetValidator, profileALandValidator, profileACityValidator;
 
     new Vue({
@@ -18,10 +16,10 @@ if (document.getElementById('profile-payment-delivery'))
             DEFAULT_COUNTRY: [DEFAULT_COUNTRY],
             country: (window.FFShop.country == null ? DEFAULT_COUNTRY : window.FFShop.country),
 
-            aStreet: '',
-            aLand: '',
-            aCity: '',
-            aIndex: '',
+            aStreet: (window.FFShop.selectedStreet == null ? '' : window.FFShop.selectedStreet),
+            aLand: (window.FFShop.selectedLand == null ? '' : window.FFShop.selectedLand),
+            aCity: (window.FFShop.selectedCity == null ? '' : window.FFShop.selectedCity),
+            aIndex: (window.FFShop.selectedIndex == null ? '' : window.FFShop.selectedIndex),
 
             cities: [],
             selectedCityRef: (window.FFShop.selectedCityRef == null ? null : window.FFShop.selectedCityRef),
@@ -41,18 +39,11 @@ if (document.getElementById('profile-payment-delivery'))
             {
                 this.getCity(this.selectedCityRef);
             }
-            // profileAddressValidator = new RegExValidatingInput($('[data-profile-address]'), {
-            //     expression: RegularExpressions.MIN_TEXT,
-            //     ChangeOnValid: function (input) {
-            //         input.removeClass(INCORRECT_FIELD_CLASS);
-            //     },
-            //     ChangeOnInvalid: function (input) {
-            //         input.addClass(INCORRECT_FIELD_CLASS);
-            //     },
-            //     showErrors: true,
-            //     requiredErrorMessage: REQUIRED_FIELD_TEXT,
-            //     regExErrorMessage: INCORRECT_FIELD_TEXT
-            // });
+
+            if (this.deliveryType)
+            {
+                this.initValidators();
+            }
 
             $('body').on('click', '.selected-tag', function (e) {
                 $(this).siblings('input').focus();
@@ -68,44 +59,7 @@ if (document.getElementById('profile-payment-delivery'))
                     this.country = DEFAULT_COUNTRY;
                 }
 
-                profileAStreetValidator = new RegExValidatingInput($('[data-profile-a-street]'), {
-                    expression: RegularExpressions.MIN_TEXT,
-                    ChangeOnValid: function (input) {
-                        input.removeClass(INCORRECT_FIELD_CLASS);
-                    },
-                    ChangeOnInvalid: function (input) {
-                        input.addClass(INCORRECT_FIELD_CLASS);
-                    },
-                    showErrors: true,
-                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                    regExErrorMessage: INCORRECT_FIELD_TEXT
-                });
-
-                profileALandValidator = new RegExValidatingInput($('[data-profile-a-land]'), {
-                    expression: RegularExpressions.MIN_TEXT,
-                    ChangeOnValid: function (input) {
-                        input.removeClass(INCORRECT_FIELD_CLASS);
-                    },
-                    ChangeOnInvalid: function (input) {
-                        input.addClass(INCORRECT_FIELD_CLASS);
-                    },
-                    showErrors: true,
-                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                    regExErrorMessage: INCORRECT_FIELD_TEXT
-                });
-
-                profileACityValidator = new RegExValidatingInput($('[data-profile-a-city]'), {
-                    expression: RegularExpressions.MIN_TEXT,
-                    ChangeOnValid: function (input) {
-                        input.removeClass(INCORRECT_FIELD_CLASS);
-                    },
-                    ChangeOnInvalid: function (input) {
-                        input.addClass(INCORRECT_FIELD_CLASS);
-                    },
-                    showErrors: true,
-                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
-                    regExErrorMessage: INCORRECT_FIELD_TEXT
-                });
+                this.initValidators();
 
                 $('[data-profile-delivery-type]').find('.dropdown-toggle').css('border', '2px solid black');
             },
@@ -117,9 +71,19 @@ if (document.getElementById('profile-payment-delivery'))
                 }
                 else
                 {
+                    this.warehouse = null;
                     this.disableWarehouse = true;
                 }
             },
+            checkoutPoint: function (newVal, oldVal) {
+                $('[data-profile-points]').find('.dropdown-toggle').css('border', '2px solid black');
+            },
+            country: function (newVal, oldVal) {
+                $('[data-profile-country]').find('.dropdown-toggle').css('border', '2px solid black');
+            },
+            warehouse: function (newVal, oldVal) {
+                $('[data-profile-warehouse]').find('.dropdown-toggle').css('border', '2px solid black');
+            }
         },
         methods: {
             getCity: function (selectedCityRef) {
@@ -324,11 +288,6 @@ if (document.getElementById('profile-payment-delivery'))
 
                 let isValid = true;
 
-                // profileAddressValidator.Validate();
-                // if (!profileAddressValidator.IsValid()) {
-                //     isValid = false;
-                // }
-
                 if (_this.delivery == null)
                 {
                     isValid = false;
@@ -437,6 +396,51 @@ if (document.getElementById('profile-payment-delivery'))
             savePaymentDelivery: function () {
                 let _this = this;
 
+                let checkoutPointId = null,
+                    npDeliveryTypeId = null,
+                    countryName = null,
+                    countryCode = null,
+                    npCity = null,
+                    npCityRef = null,
+                    npWarehouse = null,
+                    npWarehouseRef = null,
+                    aStreet = null,
+                    aLand = null,
+                    aCity = null,
+                    postIndex = null;
+
+                if (_this.delivery.name === 'Самовывоз'
+                    || _this.delivery.name === 'Самовивіз')
+                {
+                    checkoutPointId = _this.checkoutPoint.id;
+                }
+
+                if (_this.delivery.name === 'Новая почта'
+                    || _this.delivery.name === 'Нова пошта')
+                {
+                    if (_this.deliveryType.name === 'Адресная доставка'
+                        || _this.deliveryType.name === 'Адресна доставка')
+                    {
+                        countryName = _this.country.name;
+                        countryCode = _this.country.code;
+                        aStreet = _this.aStreet;
+                        aLand = _this.aLand;
+                        aCity = _this.aCity;
+                        postIndex = _this.aIndex;
+                    }
+
+                    if (_this.deliveryType.name === 'Номер отделения'
+                        || _this.deliveryType.name === 'Номер відділення')
+                    {
+                        npCity = (LANGUAGE === DEFAULT_LANGUAGE) ? _this.city.DescriptionRu : _this.city.Description;
+                        npCityRef = _this.city.Ref;
+                        npWarehouse = (LANGUAGE === DEFAULT_LANGUAGE) ? _this.warehouse.DescriptionRu : _this.warehouse.Description;
+                        npWarehouseRef = _this.warehouse.Ref;
+                    }
+
+                    npDeliveryTypeId = _this.deliveryType.id;
+                }
+
                 showLoader();
 
                 $.ajax({
@@ -444,11 +448,18 @@ if (document.getElementById('profile-payment-delivery'))
                     url: '/profile/save-payment-delivery',
                     data: {
                         deliveryId: _this.delivery.id,
-                        deliveryTypeId: _this.deliveryType.id,
-                        countryName: _this.country.name,
-                        countryCode: _this.country.code,
-                        cityRef: _this.city.Ref,
-                        warehouseRef: _this.warehouse.Ref,
+                        deliveryTypeId: npDeliveryTypeId,
+                        checkoutPointId: checkoutPointId,
+                        countryName: countryName,
+                        countryCode: countryCode,
+                        city: npCity,
+                        cityRef: npCityRef,
+                        warehouse: npWarehouse,
+                        warehouseRef: npWarehouseRef,
+                        aStreet: aStreet,
+                        aLand: aLand,
+                        aCity: aCity,
+                        postIndex: postIndex,
                         language: LANGUAGE
                     },
                     success: function (data) {
@@ -469,6 +480,46 @@ if (document.getElementById('profile-payment-delivery'))
                         showPopup(SERVER_ERROR);
                         console.log(error);
                     }
+                });
+            },
+            initValidators: function () {
+                profileAStreetValidator = new RegExValidatingInput($('[data-profile-a-street]'), {
+                    expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function (input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function (input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                profileALandValidator = new RegExValidatingInput($('[data-profile-a-land]'), {
+                    expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function (input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function (input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                profileACityValidator = new RegExValidatingInput($('[data-profile-a-city]'), {
+                    expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function (input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function (input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
                 });
             }
         }

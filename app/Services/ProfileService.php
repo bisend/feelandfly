@@ -307,13 +307,35 @@ class ProfileService extends LayoutService
         $model->selectedWarehouseRef = $this->profileRepository->getSelectedWarehouseRef($model);
     }
 
+    public function fillSelectedStreet($model)
+    {
+        $model->selectedStreet = $this->profileRepository->getSelectedStreet($model);
+    }
+
+    public function fillSelectedLand($model)
+    {
+        $model->selectedLand = $this->profileRepository->getSelectedLand($model);
+    }
+
+    public function fillSelectedCity($model)
+    {
+        $model->selectedCity = $this->profileRepository->getSelectedCity($model);
+    }
+
+    public function fillSelectedIndex($model)
+    {
+        $model->selectedIndex = $this->profileRepository->getSelectedIndex($model);
+    }
+
     /**
      * @param $deliveryId
      * @param $deliveryTypeId
      */
-    public function savePaymentDelivery($deliveryId, $deliveryTypeId, $countryName, $countryCode, $cityRef, $warehouseRef)
+    public function savePaymentDelivery($deliveryId, $deliveryTypeId, $checkoutPointId, $countryName,
+                                        $countryCode, $city, $cityRef, $warehouse, $warehouseRef, $aStreet, $aLand, $aCity, $postIndex)
     {
-        $this->profileRepository->savePaymentDelivery($deliveryId, $deliveryTypeId, $countryName, $countryCode, $cityRef, $warehouseRef);
+        $this->profileRepository->savePaymentDelivery($deliveryId, $deliveryTypeId, $checkoutPointId, $countryName,
+            $countryCode, $city, $cityRef, $warehouse, $warehouseRef, $aStreet, $aLand, $aCity, $postIndex);
     }
 
     /**
