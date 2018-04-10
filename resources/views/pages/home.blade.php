@@ -580,20 +580,44 @@
             <!-- / SALES PRODUCTS Slider Ends -->
         @endif
         <!-- CATEGORIES SPECIAL Slider Starts-->
-        <section class="special-promo-sec black-mask">
-            <div id="slider-category" class="blog-slider-1 category-slider">
-                @foreach($model->categories as $category)
-                    <div class="item">
-                        <a href="{{ url_category($category->slug, $model->language) }}" class="promo">
-                            <h2 class="section-title wht fsz-106 font-s-cat">
-                                <img alt="{{ $category->name }}" src="{{ $category->icon }}" >
-                            </h2>
-                            <span class="sub-detail wht font-s-number"> {{ $category->name }} </span>
-                        </a>
+        {{--<section class="special-promo-sec black-mask">--}}
+            {{--<div id="slider-category" class="blog-slider-1 category-slider">--}}
+                {{--@foreach($model->categories as $category)--}}
+                    {{--<div class="item">--}}
+                        {{--<a href="{{ url_category($category->slug, $model->language) }}" class="promo">--}}
+                            {{--<h2 class="section-title wht fsz-106 font-s-cat">--}}
+                                {{--<img alt="{{ $category->name }}" src="{{ $category->icon }}" >--}}
+                            {{--</h2>--}}
+                            {{--<span class="sub-detail wht font-s-number"> {{ $category->name }} </span>--}}
+                        {{--</a>--}}
+                    {{--</div>--}}
+                {{--@endforeach--}}
+            {{--</div>--}}
+        {{--</section>--}}
+
+            <section class="home-category-section">
+                <div class="container">
+                    <h2 class="section-title">
+                        Категорії
+                    </h2>
+                    <div id="home-slider-category" class="home-slider-category">
+                        @for($i = 0; $i < 2; $i++)
+                            @foreach($model->categories as $category)
+                                <div class="item category-slider-item">
+                                    <a href="{{ url_category($category->slug, $model->language) }}" class="category-inform">
+                                        <div class="img">
+                                            <img src="/img/test-category.jpg" >
+                                        </div>
+                                        <span class="category-title"> {{ $category->name }} </span>
+                                    </a>
+                                </div>
+                            @endforeach
+                        @endfor
                     </div>
-                @endforeach
-            </div>
-        </section>
+                </div>
+            </section>
+
+
         <!-- / CATEGORIES SPECIAL Slider  Ends -->
 
         <!-- TOP AND NEW Sliders Start -->
