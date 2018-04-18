@@ -22,7 +22,7 @@
                             <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
                                 <div class="owl-carousel sync1 pb-25 product-preview-images-big">
                                     <div class="item" v-for="image in categoryProductPreview.product.images">
-                                        <img v-bind:src="image.big" v-bind:alt="categoryProductPreview.product.name">
+                                        <img :src="image.big" :alt="categoryProductPreview.product.name">
 
                                         <div v-if="categoryProductPreview.product.promotions != null && categoryProductPreview.product.promotions.length > 0 && categoryProductPreview.product.promotions[0].priority == 3"
                                              class="prod-tag-1 font-2">
@@ -38,9 +38,9 @@
                                             <span> TOP </span>
                                         </div>
 
-                                        <a v-bind:href="image.original"
-                                           v-bind:rel="categoryProductPreview.rel"
-                                           v-bind:title="categoryProductPreview.product.name"
+                                        <a :href="image.original"
+                                           :rel="categoryProductPreview.rel"
+                                           :title="categoryProductPreview.product.name"
                                            class="caption-link meta-icon">
                                             <i class="fa fa-eye"></i>
                                         </a>
@@ -49,7 +49,7 @@
 
                                 <div class="owl-carousel single-prod-thumb sync2 nav-2 product-preview-images-small">
                                     <div class="item" v-for="image in categoryProductPreview.product.images">
-                                        <img v-bind:src="image.small" v-bind:alt="categoryProductPreview.product.name">
+                                        <img :src="image.small" :alt="categoryProductPreview.product.name">
                                         <span class="transparent">
                                             <img src="/img/template/icons/plus.png" alt="view">
                                         </span>
@@ -103,13 +103,13 @@
                                             <li v-for="relatedProduct in categoryProductPreview.product.product_group.products">
                                                 <a v-if="relatedProduct.color.id === categoryProductPreview.product.color.id"
                                                    class="active ttip"
-                                                   v-bind:title="relatedProduct.color.name"
+                                                   :title="relatedProduct.color.name"
                                                    :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
-                                                   v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
+                                                   :href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
                                                 <a class="ttip"
-                                                   v-bind:title="relatedProduct.color.name"
+                                                   :title="relatedProduct.color.name"
                                                    v-else :style="{'background-color': '' + relatedProduct.color.html_code + ''}"
-                                                   v-bind:href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
+                                                   :href="'/product/' + relatedProduct.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'"></a>
                                             </li>
                                         </ul>
                                         <ul class="choose-size list-inline border-hover">
@@ -120,8 +120,8 @@
                                                 </span>
                                             </div>
                                             <li v-for="(size, index) in categoryProductPreview.product.sizes">
-                                                <a v-on:click.prevent="changeCurrentSizeId(size.id)"
-                                                   :class="{active : categoryProductPreview.currentSizeId == size.id}"
+                                                <a @click.prevent="changeCurrentSizeId(size.id)"
+                                                   :class="{'active' : categoryProductPreview.currentSizeId == size.id}"
                                                    href="#">
                                                     @{{ size.name }}
                                                 </a>
@@ -130,19 +130,19 @@
                                         <ul class="prod-btns prod-meta">
                                             <li>
                                                 <div class="quantity">
-                                                    <button class="btn minus" v-on:click="decrement()">-</button>
+                                                    <button class="btn minus" @click="decrement()">-</button>
                                                     <input type="number"
                                                            name="product-preview-quantity"
                                                            v-model.number="categoryProductPreview.count"
-                                                           v-on:change="toInteger(categoryProductPreview.count)"
+                                                           @change="toInteger(categoryProductPreview.count)"
                                                            class="form-control qty"
                                                            title="{{ trans('cart.qty') }}">
-                                                    <button class="btn plus" v-on:click="increment()">+</button>
+                                                    <button class="btn plus" @click="increment()">+</button>
                                                 </div>
                                             </li>
                                             <li>
                                                 <a class="theme-btn btn-black small-btn"
-                                                   v-on:click.prevent="addToCart(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, categoryProductPreview.count)"
+                                                   @click.prevent="addToCart(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, categoryProductPreview.count)"
                                                    href="#">
                                                     <span v-cloak
                                                           v-if="!findWhere(cartItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})">
@@ -158,7 +158,7 @@
                                                     <a v-cloak
                                                        v-if="!findWhere(wishListItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})"
                                                        class="fa fa-heart meta-icon"
-                                                       v-on:click.prevent="addToWishList(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, wishList.id)"
+                                                       @click.prevent="addToWishList(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, wishList.id)"
                                                        href="#"></a>
                                                     <a v-cloak v-else
                                                        class="fa fa-check meta-icon meta-icon-in-wish"
@@ -225,19 +225,19 @@
                                         @foreach($filterValues as $filterValue)
                                             <li>
                                                 <label class="checkbox-inline"
-                                                       v-on:click.prevent="setCheck('{{ $filterName }}', '{{ $valueCounter }}')">
+                                                       @click.prevent="setCheck('{{ $filterName }}', '{{ $valueCounter }}')">
                                                     <input type="checkbox"
                                                            v-model="filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked">
                                                     <span class="square-box"></span>
                                                 </label>
                                                 <a class="checkbox-inline filter-value-link"
                                                    href="{{ url_category_filters($model->currentCategory->slug, null, $filterValue->filter_name_slug, $filterValue->filter_value_slug, $model->language)  }}">
-                                                    <span class="" :class="{checkactive: filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked}">
+                                                    <span class="" :class="{'checkactive': filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked}">
                                                         {{ $filterValue->filter_value_title }}
                                                     </span>
                                                 </a>
                                                 <span class="filter-count-to-right"
-                                                      :class="{checkactive: filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked}">
+                                                      :class="{'checkactive': filters['{{ $filterName }}']['{{ $valueCounter }}'].isChecked}">
                                                     {{ $filterValue->filter_products_count }}
                                                 </span>
                                             </li>
@@ -246,7 +246,7 @@
                                         <transition name="slide">
                                             <a v-cloak class="theme-btn btn-black apply-filters-btn"
                                                     v-if="isCheckSelected('{{$filterName}}')"
-                                                    v-bind:href="filterUrl">
+                                                    :href="filterUrl">
                                                 {{ trans('layout.submit') }}
                                             </a>
                                         </transition>
@@ -270,7 +270,7 @@
                                 <transition name="slide">
                                     <a v-cloak class="theme-btn btn-black apply-filters-btn"
                                        v-if="initialPriceMin != priceMin || initialPriceMax != priceMax"
-                                       v-bind:href="filterUrl">
+                                       :href="filterUrl">
                                         {{ trans('layout.submit') }}
                                     </a>
                                 </transition>
@@ -323,19 +323,17 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="tab-content">
-
                         <!-- Product Grid View Starts -->
-                        <div id="grid-view" class="tab-pane fade active in" role="tabpanel">
+                        <div id="grid-view">
                             <div class="row">
+
                                 @php($counter = 0)
                                 @foreach($model->categoryProducts as $categoryProduct)
 
                                     @php($relatedProducts = $categoryProduct->product_group->products)
 
                                     <div class="col-lg-4 col-sm-12 prod-wrap-cont">
-
                                         <div class="prod-wrap-absolute clearfix">
                                             <div class="product_item prod-wrap">
                                                 <div class="product_img">
@@ -343,18 +341,14 @@
                                                         <a class="img-hover"
                                                            href="{{ url_product($categoryProduct->slug, $model->language) }}">
                                                             <div class="photo-cat_fit">
-                                                                @if($categoryProduct->images->count() > 0)
-                                                                    <img alt="{{ $categoryProduct->name }}" src="{{ $categoryProduct->images[0]->medium }}">
-                                                                @else
-                                                                    <img alt="{{ $categoryProduct->name }}" src="/img/product/medium/no_photo.jpg">
-                                                                @endif
+                                                                <img alt="{{ $categoryProduct->name }}"
+                                                                     src="{{ $categoryProduct->images[0]->medium }}">
                                                             </div>
                                                         </a>
 
                                                         @if($categoryProduct->promotions != null && $categoryProduct->promotions->count() > 0)
                                                             @if($categoryProduct->promotions[0]->priority == 3)
                                                                 <div class="prod-tag-1 font-2">
-                                                                    {{--<span> -{{ $categoryProduct->price[0]->discount }}% </span>--}}
                                                                     <span> SALE </span>
                                                                 </div>
                                                             @endif
@@ -372,7 +366,7 @@
 
                                                         <a class="caption-link meta-icon"
                                                            href="#"
-                                                           v-on:click.prevent="changeCategoryProductPreview({{$counter}})">
+                                                           @click.prevent="changeCategoryProductPreview({{$counter}})">
                                                             <span class="fa fa-eye"></span> {{ trans('product.fast_see') }}
                                                         </a>
                                                     </div>
@@ -413,23 +407,23 @@
                                                         <ul class="prod-meta">
                                                             <li>
                                                                 <a class="theme-btn btn-black"
-                                                                   v-on:click.prevent="addToCart({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, 1)"
+                                                                   @click.prevent="addToCart({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, 1)"
                                                                    href="#">
-                                                                <span v-cloak
-                                                                      v-if="!findWhere(cartItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})">
-                                                                    {{ trans('layout.add_to_cart') }}
-                                                                </span>
-                                                                <span v-cloak v-else>
-                                                                    {{ trans('layout.in_cart') }}
-                                                                </span>
+                                                                    <span v-cloak
+                                                                          v-if="!findWhere(cartItems, {'productId': '{{$categoryProduct->id}}', 'sizeId': categoryProducts['{{$counter}}'].currentSizeId})">
+                                                                        {{ trans('layout.add_to_cart') }}
+                                                                    </span>
+                                                                    <span v-cloak v-else>
+                                                                        {{ trans('layout.in_cart') }}
+                                                                    </span>
                                                                 </a>
                                                             </li>
                                                             <li>
                                                                 @if(auth()->check())
                                                                     <a v-cloak
-                                                                       v-if="!findWhere(wishListItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})"
+                                                                       v-if="!findWhere(wishListItems, {'productId': '{{$categoryProduct->id}}', 'sizeId': categoryProducts['{{$counter}}'].currentSizeId})"
                                                                        class="fa fa-heart meta-icon"
-                                                                       v-on:click.prevent="addToWishList({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, wishList.id)"
+                                                                       @click.prevent="addToWishList({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, wishList.id)"
                                                                        href="#"></a>
                                                                     <a v-cloak v-else
                                                                        class="fa fa-check meta-icon meta-icon-in-wish"
@@ -467,22 +461,21 @@
                                                                 @foreach($categoryProduct->sizes as $size)
                                                                     <li>
                                                                         @if($counterSize == 0)
-                                                                            <a v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
-                                                                                :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
+                                                                            <a @click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                               :class="{'active': categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
                                                                                href="#">
                                                                                 {{ $size->name }}
                                                                             </a>
                                                                         @else
                                                                             <a href="#"
-                                                                               v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
-                                                                               :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}">
+                                                                               @click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                               :class="{'active': categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}">
                                                                                 {{ $size->name }}
                                                                             </a>
                                                                         @endif
                                                                     </li>
                                                                     @php($counterSize++)
                                                                 @endforeach
-                                                                {{--<li> <a href="#" class="active"> M </a> </li>--}}
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -491,10 +484,11 @@
                                         </div>
                                     </div>
                                 @php($counter++)
-                                @endforeach
-                                <!-- Pagination Starts -->
-                                @include('partial.category-page.pagination')
-                                <!-- Pagination Ends -->
+                            @endforeach
+
+                            <!-- Pagination Starts -->
+                            @include('partial.category-page.pagination')
+                            <!-- Pagination Ends -->
                             </div>
                         </div>
                         <!-- Product Grid View Ends -->

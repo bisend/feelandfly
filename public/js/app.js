@@ -29085,8 +29085,8 @@ if (document.getElementById('grid-view')) {
 
 
     var previewGridSliderInited = false,
-        sync1Grid = void 0,
-        sync2Grid = void 0,
+        sync1Grid,
+        sync2Grid,
         navSpeedThumbs = 500;
 
     GLOBAL_DATA.categoryProducts = window.FFShop.products;
@@ -29204,6 +29204,7 @@ if (document.getElementById('grid-view')) {
                         $('#big-cart').modal();
                     }
                 },
+                //
                 addToWishList: function addToWishList(productId, sizeId, wishListId) {
                     var obj = {
                         productId: parseInt(productId),
@@ -29262,10 +29263,7 @@ if (document.getElementById('grid-view')) {
                     GLOBAL_DATA.categoryProductPreview.currentSizeId = GLOBAL_DATA.categoryProductPreview.product.sizes[0].id;
 
                     //init count checking if current preview in cart
-                    if (this.findWhere(GLOBAL_DATA.cartItems, {
-                        productId: GLOBAL_DATA.categoryProductPreview.product.id,
-                        sizeId: GLOBAL_DATA.categoryProductPreview.currentSizeId
-                    })) {
+                    if (this.findWhere(GLOBAL_DATA.cartItems, { productId: GLOBAL_DATA.categoryProductPreview.product.id, sizeId: GLOBAL_DATA.categoryProductPreview.currentSizeId })) {
                         //looping cartItems
                         GLOBAL_DATA.cartItems.forEach(function (item) {
                             //check if current active size id in cart
@@ -29310,12 +29308,12 @@ if (document.getElementById('grid-view')) {
                                 $('body').removeClass('modal-open').css('padding-right', 0);
                             }
                         });
-                    }, 500);
+                    }, 400);
                 }
             }
         });
 
-        new Vue({
+        var preview = new Vue({
             el: '#category-product-preview',
             data: GLOBAL_DATA,
             mounted: function mounted() {
@@ -29475,6 +29473,7 @@ if (document.getElementById('grid-view')) {
                         });
                     }
                 },
+                //
                 addToWishList: function addToWishList(productId, sizeId, wishListId) {
                     var obj = {
                         productId: parseInt(productId),
@@ -34168,8 +34167,6 @@ if (document.getElementById('sales-products')) {
 /***/ "./resources/assets/js/components/Search.js":
 /***/ (function(module, exports) {
 
-var _this2 = this;
-
 if (document.getElementById('search')) {
     new Vue({
         el: '#search',
@@ -34251,16 +34248,14 @@ if (document.getElementById('search')) {
                 }
             }, 450),
             onEsc: function onEsc() {
-                var _this = _this2;
+                var _this = this;
 
                 $('#search').find('input').blur();
 
                 _this.series = '';
             },
             onBlur: function onBlur(event) {
-                console.log(event.relatedTarget);
-
-                var _this = _this2;
+                var _this = this;
 
                 _this.series = '';
 

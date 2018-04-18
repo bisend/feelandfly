@@ -14,7 +14,7 @@ if (document.getElementById('search'))
         },
         methods: {
             search: function () {
-                let _this = this;
+                var _this = this;
 
                 _this.url = '/search';
 
@@ -31,7 +31,7 @@ if (document.getElementById('search'))
                 }
             },
             searchAjax: _.debounce(function () {
-                let _this = this;
+                var _this = this;
 
                 _this.urlAjax = '/search/async';
 
@@ -85,21 +85,19 @@ if (document.getElementById('search'))
                     });
                 }
             }, 450),
-            onEsc: () => {
-                let _this = this;
+            onEsc: function() {
+                var _this = this;
 
                 $('#search').find('input').blur();
 
                 _this.series = '';
             },
-            onBlur: (event) => {
-                console.log(event.relatedTarget);
-
-                let _this = this;
+            onBlur: function(event) {
+                var _this = this;
 
                 _this.series = '';
 
-                let i = $('button.open-search').find('i');
+                var i = $('button.open-search').find('i');
 
                 if(i.hasClass('fa-times') &&
                     !searchBtnClicked &&

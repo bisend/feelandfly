@@ -167,32 +167,36 @@ class OrderController extends LayoutController
     {
         //deliveries
         $this->profileService->fillDeliveries($model);
-        $this->profileService->fillSelectedDeliveryId($model);
-        $this->profileService->fillSelectedDelivery($model);
-
-        //delivery types
         $this->profileService->fillDeliveryTypes($model);
-        $this->profileService->fillSelectedDeliveryTypeId($model);
-        $this->profileService->fillSelectedDeliveryType($model);
-
-        //countries
         $this->profileService->fillCountries($model);
-        $this->profileService->fillSelectedCountryCode($model);
-        $this->profileService->fillSelectedCountry($model);
-
-        //checkout points
         $this->profileService->fillCheckoutPoints($model);
-        $this->profileService->fillSelectedCheckoutPointId($model);
-        $this->profileService->fillSelectedCheckoutPoint($model);
 
-        //city
-        $this->profileService->fillSelectedCityRef($model);
-        $this->profileService->fillSelectedWarehouseRef($model);
+        if (auth()->check())
+        {
+            $this->profileService->fillSelectedDeliveryId($model);
+            $this->profileService->fillSelectedDelivery($model);
 
-        //address delivery fields
-        $this->profileService->fillSelectedStreet($model);
-        $this->profileService->fillSelectedLand($model);
-        $this->profileService->fillSelectedCity($model);
-        $this->profileService->fillSelectedIndex($model);
+            //delivery types
+            $this->profileService->fillSelectedDeliveryTypeId($model);
+            $this->profileService->fillSelectedDeliveryType($model);
+
+            //countries
+            $this->profileService->fillSelectedCountryCode($model);
+            $this->profileService->fillSelectedCountry($model);
+
+            //checkout points
+            $this->profileService->fillSelectedCheckoutPointId($model);
+            $this->profileService->fillSelectedCheckoutPoint($model);
+
+            //city
+            $this->profileService->fillSelectedCityRef($model);
+            $this->profileService->fillSelectedWarehouseRef($model);
+
+            //address delivery fields
+            $this->profileService->fillSelectedStreet($model);
+            $this->profileService->fillSelectedLand($model);
+            $this->profileService->fillSelectedCity($model);
+            $this->profileService->fillSelectedIndex($model);
+        }
     }
 }

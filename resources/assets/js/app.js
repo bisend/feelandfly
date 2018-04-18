@@ -6,7 +6,7 @@
 
 window.Vue = require('vue');
 
-import VueTheMask  from 'vue-the-mask'
+import VueTheMask from 'vue-the-mask';
 Vue.use(VueTheMask);
 import _ from 'lodash';
 

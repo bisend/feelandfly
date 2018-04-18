@@ -1,6 +1,6 @@
 if (document.getElementById('grid-view'))
 {
-    let previewGridSliderInited = false,
+    var previewGridSliderInited = false,
         sync1Grid, sync2Grid, navSpeedThumbs = 500;
 
     function initPreviewGridSlider () {
@@ -54,7 +54,7 @@ if (document.getElementById('grid-view'))
         }
 
         function syncPosition(el) {
-            let current = this._current;
+            var current = this._current;
             sync2Grid
                 .find(".owl-item")
                 .removeClass("synced")
@@ -65,14 +65,14 @@ if (document.getElementById('grid-view'))
 
         sync2Grid.on("click", ".owl-item", function (e) {
             e.preventDefault();
-            let number = $(this).index();
+            var number = $(this).index();
             sync1Grid.trigger("to.owl.carousel", [number, 1000, true]);
             return false;
         });
 
         function center(num) {
 
-            let sync2visible = sync2Grid.find('.owl-item.active').map(function () {
+            var sync2visible = sync2Grid.find('.owl-item.active').map(function () {
                 return $(this).index();
             });
 
@@ -222,6 +222,7 @@ if (document.getElementById('grid-view'))
                         $('#big-cart').modal();
                     }
                 },
+                //
                 addToWishList: function (productId, sizeId, wishListId) {
                     var obj = {
                             productId: parseInt(productId),
@@ -282,14 +283,13 @@ if (document.getElementById('grid-view'))
                     GLOBAL_DATA.categoryProductPreview.currentSizeId = GLOBAL_DATA.categoryProductPreview.product.sizes[0].id;
 
                     //init count checking if current preview in cart
-                    if (this.findWhere(GLOBAL_DATA.cartItems, ({
-                            productId: GLOBAL_DATA.categoryProductPreview.product.id,
-                            sizeId: GLOBAL_DATA.categoryProductPreview.currentSizeId
-                        }))) {
+                    if (this.findWhere(GLOBAL_DATA.cartItems, ({productId: GLOBAL_DATA.categoryProductPreview.product.id, sizeId: GLOBAL_DATA.categoryProductPreview.currentSizeId})))
+                    {
                         //looping cartItems
                         GLOBAL_DATA.cartItems.forEach(function (item) {
                             //check if current active size id in cart
-                            if (item.productId == GLOBAL_DATA.categoryProductPreview.product.id && item.sizeId == GLOBAL_DATA.categoryProductPreview.currentSizeId) {
+                            if (item.productId == GLOBAL_DATA.categoryProductPreview.product.id &&
+                                item.sizeId == GLOBAL_DATA.categoryProductPreview.currentSizeId) {
                                 //then setting count
                                 GLOBAL_DATA.categoryProductPreview.count = item.count;
                             }
@@ -300,7 +300,7 @@ if (document.getElementById('grid-view'))
                     }
 
                     //container with preview
-                    let $container = $('#prod-preview-test');
+                    var $container = $('#prod-preview-test');
 
                     $container.modal();
 
@@ -318,7 +318,7 @@ if (document.getElementById('grid-view'))
                             social_tools: false,
                             deeplinking: false,
                             ajaxcallback: function () {
-                                let PRETTY_LOADED = true;
+                                var PRETTY_LOADED = true;
                                 $container.modal('hide');
                                 $container.on('hidden.bs.modal', function () {
                                     if (PRETTY_LOADED) {
@@ -331,12 +331,12 @@ if (document.getElementById('grid-view'))
                                 $('body').removeClass('modal-open').css('padding-right', 0);
                             }
                         });
-                    }, 500);
+                    }, 400);
                 }
             }
         });
 
-        new Vue({
+        var preview = new Vue({
             el: '#category-product-preview',
             data: GLOBAL_DATA,
             mounted: function () {
@@ -347,7 +347,7 @@ if (document.getElementById('grid-view'))
                     social_tools: false,
                     deeplinking: false,
                     ajaxcallback: function () {
-                        let PRETTY_LOADED = true;
+                        var PRETTY_LOADED = true;
                         $('#prod-preview-test').modal('hide');
                         $('#prod-preview-test').on('hidden.bs.modal', function () {
                             if (PRETTY_LOADED) {
@@ -500,6 +500,7 @@ if (document.getElementById('grid-view'))
                         });
                     }
                 },
+                //
                 addToWishList: function (productId, sizeId, wishListId) {
                     var obj = {
                             productId: parseInt(productId),

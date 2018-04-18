@@ -821,7 +821,7 @@ $(document).ready(function () {
     });
 
     $('body').on('click', function (e) {
-        let _this = $(e.target);
+        var _this = $(e.target);
         if (!_this.hasClass('.drop-nav-profile') &&
             _this.closest('.drop-nav-profile').length === 0 &&
             !_this.hasClass('.open-drop-profile-nav') && $('.open-drop-profile-nav').hasClass('prof-drop-opened'))

@@ -280,7 +280,7 @@ if (document.getElementById('order-confirm'))
                     }
                 });
             },
-            searchCity: _.debounce((search, loading) => {
+            searchCity: _.debounce(function(search, loading) {
 
                 $.ajax({
                     async: true,
@@ -328,7 +328,7 @@ if (document.getElementById('order-confirm'))
                 });
 
             }, 350),
-            searchWarehouses: (value) => {
+            searchWarehouses: function(value) {
                 GLOBAL_DATA.orderConfirm.warehouse = null;
 
                 GLOBAL_DATA.orderConfirm.city = value;
