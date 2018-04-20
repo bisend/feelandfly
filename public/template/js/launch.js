@@ -6,7 +6,7 @@ var LANGUAGE = $('html').attr('lang'),
 
 var INIT_CART_WS;
 
-const NOVA_POSHTA_API_KEY = 'b44f0a86753950ac8f5484c2030cde2d';
+var NOVA_POSHTA_API_KEY = 'b44f0a86753950ac8f5484c2030cde2d';
 
 var INCORRECT_FIELD_CLASS = 'incorrect-field',
     REQUIRED_FIELD_TEXT = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Обязательное поле' : 'Обов`язкове поле',
@@ -344,13 +344,16 @@ $(document).ready(function () {
 
     $('.open-search').click(function() {
         searchBtnClicked = true;
-
+        console.log(searchBtnClicked);
         if (searchBtnClicked)
         {
-            var i = $(this).find('i');
+            console.log(searchBtnClicked);
+            var i = $('.open-search').find('i');
 
             if ($('#search').css('display') === 'none')
             {
+                console.log(searchBtnClicked);
+
                 $('.open-search').css('border', '2px solid #000');
                 $('.navbar-nav').hide(50);
                 $('.profile-search-smoll').stop().show().animate({
@@ -360,12 +363,25 @@ $(document).ready(function () {
 
                 i.removeClass('fa-search').addClass('fa-times');
 
-                searchWasHidden =! searchWasHidden;
+                searchWasHidden = !searchWasHidden;
 
             }
             else
             {
                 $('#search').find('input').val('');
+
+                i.removeClass('fa-times').addClass('fa-search');
+
+                $('.profile-search-smoll').animate({
+                    width: '0'
+                }, function(){
+                    $('.navbar-nav').show(50);
+                    $('.open-search-this-none').fadeIn(100);
+                    $('.profile-search-smoll').stop().hide();
+                    $('.open-search').css('border', 'none');
+                });
+
+                searchWasHidden = !searchWasHidden;
             }
 
             searchBtnClicked = false;

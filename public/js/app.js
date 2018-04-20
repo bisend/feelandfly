@@ -29091,7 +29091,7 @@ if (document.getElementById('grid-view')) {
 
     GLOBAL_DATA.categoryProducts = window.FFShop.products;
 
-    if (GLOBAL_DATA.categoryProducts.length > 0) {
+    if (GLOBAL_DATA.categoryProducts && GLOBAL_DATA.categoryProducts.length > 0) {
         //init currentSizeId for categoryProducts
         GLOBAL_DATA.categoryProducts.forEach(function (item) {
             item.currentSizeId = item.sizes[0].id;
@@ -34257,11 +34257,15 @@ if (document.getElementById('search')) {
             onBlur: function onBlur(event) {
                 var _this = this;
 
-                _this.series = '';
-
                 var i = $('button.open-search').find('i');
 
-                if (i.hasClass('fa-times') && !searchBtnClicked && !$(event.relatedTarget).hasClass('result-item-link') && !$(event.relatedTarget).hasClass('all-search-results-btn')) {
+                console.log(searchBtnClicked);
+
+                if (!searchBtnClicked && i.hasClass('fa-times') && event.relatedTarget == null &&
+                // !$(event.relatedTfarget).hasClass('result-item-link') &&
+                !$(event.relatedTarget).hasClass('all-search-results-btn')) {
+                    _this.series = '';
+
                     i.removeClass('fa-times').addClass('fa-search');
                     $('.profile-search-smoll').animate({
                         width: '0'

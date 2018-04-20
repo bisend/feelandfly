@@ -107,7 +107,7 @@ if (document.getElementById('grid-view'))
     //init category products
     GLOBAL_DATA.categoryProducts = window.FFShop.products;
 
-    if (GLOBAL_DATA.categoryProducts.length > 0) {
+    if (GLOBAL_DATA.categoryProducts && GLOBAL_DATA.categoryProducts.length > 0) {
         //init currentSizeId for categoryProducts
         GLOBAL_DATA.categoryProducts.forEach(function (item) {
             item.currentSizeId = item.sizes[0].id;
