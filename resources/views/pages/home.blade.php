@@ -598,21 +598,23 @@
             <section class="home-category-section">
                 <div class="container">
                     <h2 class="section-title">
-                        Категорії
+                        {{ trans('home.categories') }}
                     </h2>
                     <div id="home-slider-category" class="home-slider-category">
-                        @for($i = 0; $i < 2; $i++)
-                            @foreach($model->categories as $category)
-                                <div class="item category-slider-item">
-                                    <a href="{{ url_category($category->slug, $model->language) }}" class="category-inform">
-                                        <div class="img">
-                                            <img src="/img/test-category.jpg" >
-                                        </div>
-                                        <span class="category-title"> {{ $category->name }} </span>
-                                    </a>
-                                </div>
-                            @endforeach
-                        @endfor
+                        @foreach($model->categories as $category)
+                            <div class="item category-slider-item">
+                                <a href="{{ url_category($category->slug, $model->language) }}" class="category-inform">
+                                    <div class="img">
+                                        @if( ! is_null($category->icon))
+                                            <img src="{{ $category->icon }}" alt="{{ $category->name }}">
+                                        @else
+                                            <img src="/img/product/big/no-photo.jpg" alt="{{ $category->name }}">
+                                        @endif
+                                    </div>
+                                    <span class="category-title"> {{ $category->name }} </span>
+                                </a>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </section>
