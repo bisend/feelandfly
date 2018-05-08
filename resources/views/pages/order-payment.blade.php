@@ -21,15 +21,19 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="payment-section-header">
-                        Оплата заказа
+                        {{ trans('order.order_pay') }}
                     </div>
                     <ul>
                         <li><span>{{ trans('order.order_number') }}</span>: {{ $model->order->order_number }}</li>
                         <li><span>Дата</span>: {{ $model->order->created_at }}</li>
                         <li><span>{{ trans('order.sum') }}</span>: {{ $model->order->total_order_amount }} грн</li>
-                        @if(!is_null($model->order->country_code) && $model->order->country_code != 'UA')
+
+
+                        @if( ! is_null($model->order->country_code) && $model->order->country_code != 'UA')
                             <li><span>{{ trans('order.delivery_price') }}</span>: {{ trans('order.novaya_p2') }}</li>
                             <li><span>{{ trans('order.to_pay') }}</span>: {{ set_format_price($model->order->total_order_amount + 400.00) }} грн</li>
+                        @elseif( ! is_null($model->order->checkout_point_id))
+                            <li><span>{{ trans('order.point') }}</span>: {{ $model->language == 'ru' ? $model->order->checkoutPoint->name_ru : $model->order->checkoutPoint->name_uk }}</li>
                         @else
                             <li><span>{{ trans('order.delivery_price') }}</span>: {{ trans('order.novaya_p') }}</li>
                         @endif

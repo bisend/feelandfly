@@ -57,8 +57,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($language, $userTypeId) {
                 $query->select([
@@ -184,8 +185,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($language, $userTypeId) {
                 $query->select([
@@ -301,8 +303,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($language, $userTypeId) {
                 $query->select([
@@ -394,8 +397,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($language, $userTypeId) {
                 $query->select([
@@ -460,8 +464,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($language, $userTypeId) {
                 $query->select([
@@ -526,8 +531,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($language, $userTypeId) {
                 $query->select([
@@ -622,8 +628,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($language, $userTypeId) {
                 $query->select([
@@ -767,8 +774,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$model->language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($model) {
                 $query->select([
@@ -904,8 +912,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$model->language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($model) {
                 $query->select([
@@ -1113,8 +1122,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$model->language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($model) {
                 $query->select([
@@ -1208,8 +1218,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$model->language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($model) {
                 $query->select([
@@ -1301,8 +1312,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$model->language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($model) {
                 $query->select([
@@ -1415,8 +1427,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$model->language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'markers.product.price'  => function ($query) use ($model) {
                 $query->select([
@@ -1509,8 +1522,9 @@ class ProductRepository
                 $query->select([
                     'sizes.id',
                     "sizes.name_$model->language as name",
-                    'sizes.slug'
-                ]);
+                    'sizes.slug',
+                    'sizes.priority'
+                ])->orderByRaw('sizes.priority desc');
             },
             'price' => function ($query) use ($model) {
                 $query->select([

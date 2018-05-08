@@ -82,4 +82,9 @@ class Order extends Model
     {
         return $this->hasOne(OrderStatus::class, 'id', 'status_id');
     }
+
+    public function checkoutPoint()
+    {
+        return $this->hasOne(CheckoutPoint::class, 'id', 'checkout_point_id');
+    }
 }
