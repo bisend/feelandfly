@@ -249,14 +249,20 @@
                                                               :label="'Number'"
                                                               :options="orderConfirm.warehouses">
                                                         <template slot="selected-option" slot-scope="option">
-                                                            <span v-if="lang === 'ru' && option.ShortAddressRu !== ''">
-                                                                №@{{ option.Number }}:
-                                                                @{{ option.ShortAddressRu }}
+                                                            <span v-if="lang === 'ru'">
+                                                                @{{ option.DescriptionRu }}
                                                             </span>
                                                             <span v-else>
-                                                                №@{{ option.Number }}:
-                                                                @{{ option.ShortAddress }}
+                                                                @{{ option.Description }}
                                                             </span>
+                                                            {{--<span v-if="lang === 'ru' && option.ShortAddressRu !== ''">--}}
+                                                                {{--№@{{ option.Number }}:--}}
+                                                                {{--@{{ option.ShortAddressRu }}--}}
+                                                            {{--</span>--}}
+                                                            {{--<span v-else>--}}
+                                                                {{--№@{{ option.Number }}:--}}
+                                                                {{--@{{ option.ShortAddress }}--}}
+                                                            {{--</span>--}}
                                                         </template>
                                                         <template slot="option" slot-scope="option">
                                                             @{{ (lang == 'ru') ? option.DescriptionRu : option.Description }}
