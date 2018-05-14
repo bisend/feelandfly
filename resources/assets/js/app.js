@@ -61,3 +61,5 @@ require('./components/TopProducts');
 require('./components/NewProducts');
 
 require('./components/MainSlider');
+
+require('./components/Notify');

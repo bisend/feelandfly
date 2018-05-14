@@ -73,6 +73,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $country_code
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCountryCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCountryName($value)
+ * @property-read \App\DatabaseModels\CheckoutPoint $checkoutPoint
  */
 class Order extends Model
 {

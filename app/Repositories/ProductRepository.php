@@ -411,6 +411,9 @@ class ProductRepository
                     'product_prices.discount'
                 ])->whereUserTypeId($userTypeId);
             },
+            'product_sizes.stocks' => function ($query) use ($userTypeId) {
+                $query->whereUserTypeId($userTypeId);
+            },
             'promotions' => function ($query) {
                 $query->orderByRaw('promotions.priority desc');
             },

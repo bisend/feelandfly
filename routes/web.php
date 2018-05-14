@@ -331,6 +331,9 @@ Route::get('/payment-delivery/{language?}', 'StaticPaymentDeliveryController@ind
     ->where([
         'language' => '^(uk|ru)?$'
     ]);
+
+Route::post('/notify/create', 'NotifyController@createNotify');
+
 //Route::get('/lookbook/all/{language?}', 'LookBookController@showAllLookBook')->where([
 //    'language' => '^(uk|ru)?$'
 //]);

@@ -43,10 +43,24 @@ new Vue({
                 count = 1;
             }
 
-            if (count > 99)
-            {
-                count = 99;
-            }
+            GLOBAL_DATA.cartItems.forEach(function (item) {
+                if (item.productId == productId && item.sizeId == sizeId)
+                {
+                    item.product.product_sizes.forEach(function (el) {
+                        if (el.product_id == productId && el.size_id == sizeId) {
+                            if (count > el.stocks[0].stock ) {
+                                count = el.stocks[0].stock;
+                                showPopup(CART_MAX);
+                            }
+                        }
+                    });
+
+                    if (count > 9999)
+                    {
+                        count = 9999;
+                    }
+                }
+            });
             //check if current page single product
             if (document.getElementById('product-details'))
             {
@@ -164,12 +178,21 @@ new Vue({
                 if (item.productId == productId && item.sizeId == sizeId)
                 {
                     oldCount = item.count;
+                    
+                    item.product.product_sizes.forEach(function (el) {
+                        if (el.product_id == searchObj.productId && el.size_id == searchObj.sizeId) {
+                            item.count++;
+    
+                            if (item.count > el.stocks[0].stock ) {
+                                item.count = el.stocks[0].stock;
+                                showPopup(CART_MAX);
+                            }
+                        }
+                    });
 
-                    item.count++;
-
-                    if (item.count > 99)
+                    if (item.count > 9999)
                     {
-                        item.count = 99;
+                        item.count = 9999;
                     }
 
                     newCount = item.count;

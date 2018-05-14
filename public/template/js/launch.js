@@ -26,6 +26,8 @@ var INCORRECT_FIELD_CLASS = 'incorrect-field',
     SHOW_FILTERS_BTN = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Показать фильтры' : 'Показати фільтри',
     HIDE_FILTERS_BTN = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Скрыть фильтры' : 'Сховати фільтри',
     DEFAULT_COUNTRY = (LANGUAGE == DEFAULT_LANGUAGE) ? {name: 'Украина', code: 'UA'} : {name: 'Україна', code: 'UA'};
+    NOTIFY_SUCCESS = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Ваша заявка принята' : 'Ваша заявка прийнята';
+    CART_MAX = (LANGUAGE == DEFAULT_LANGUAGE) ? 'Вы достигли максимально возможного количества товара' : 'Ви досягли максимально можливої кількості товару';
 
 if (window.location.hash && window.location.hash == '#_=_') {
     if (window.history && history.pushState) {
@@ -62,7 +64,16 @@ var GLOBAL_DATA = {
         product: [],
         productId: '',
         sizeId: '',
-        count: 1
+        count: 1,
+        inStock: true
+    },
+    notify: {
+        product: [],
+        name: '',
+        email: '',
+        count: 1,
+        productId: '',
+        sizeId: ''
     },
     cartItems: [],
     categoryProducts: [],

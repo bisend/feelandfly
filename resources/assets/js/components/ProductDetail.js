@@ -86,6 +86,19 @@ if (document.getElementById('product-details'))
     //init single size id [first id in list]
     GLOBAL_DATA.singleProduct.sizeId = parseInt(window.FFShop.product.sizes[0].id);
 
+    GLOBAL_DATA.notify.productId = GLOBAL_DATA.singleProduct.productId;
+    GLOBAL_DATA.notify.sizeId = GLOBAL_DATA.singleProduct.sizeId;
+
+    GLOBAL_DATA.singleProduct.product.product_sizes.forEach(function (item) {
+        if (item.size_id == GLOBAL_DATA.singleProduct.sizeId) {
+            if (item.stocks[0].stock > 0) {
+                GLOBAL_DATA.singleProduct.inStock = true;
+            } else {
+                GLOBAL_DATA.singleProduct.inStock = false;
+            }
+        }
+    });
+
     new Vue({
         el: '#product-details',
         data: GLOBAL_DATA,
@@ -125,10 +138,18 @@ if (document.getElementById('product-details'))
                     GLOBAL_DATA.singleProduct.count = 1;
                 }
 
-                if (count > 99)
-                {
-                    GLOBAL_DATA.singleProduct.count = 99;
-                }
+                GLOBAL_DATA.singleProduct.product.product_sizes.forEach(function (item) {
+                    if (item.product_id == searchObj.productId && item.size_id == searchObj.sizeId) {
+                        if (count > item.stocks[0].stock)
+                        {
+                            GLOBAL_DATA.singleProduct.count = item.stocks[0].stock;
+                        }
+
+                        if (GLOBAL_DATA.singleProduct.count == item.stocks[0].stock ) {
+                            showPopup(CART_MAX);
+                        }
+                    }
+                });
                 
                 //if prod size in cart
                 if (this.findWhere(GLOBAL_DATA.cartItems, searchObj))
@@ -184,6 +205,18 @@ if (document.getElementById('product-details'))
                 GLOBAL_DATA.singleProduct.sizeId = parseInt(sizeId);
 
                 GLOBAL_DATA.singleProduct.count = 1;
+
+                GLOBAL_DATA.notify.sizeId = parseInt(sizeId);
+
+                GLOBAL_DATA.singleProduct.product.product_sizes.forEach(function (item) {
+                    if (item.size_id == sizeId) {
+                        if (item.stocks[0].stock > 0) {
+                            GLOBAL_DATA.singleProduct.inStock = true;
+                        } else {
+                            GLOBAL_DATA.singleProduct.inStock = false;
+                        }
+                    }
+                });
                 
                 //looping cartItems
                 GLOBAL_DATA.cartItems.forEach(function (item) {
@@ -209,53 +242,57 @@ if (document.getElementById('product-details'))
                     },
                     _this = this;
 
-                if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null)
-                {
-                    if (GLOBAL_DATA.IS_DATA_PROCESSING)
+                if (GLOBAL_DATA.singleProduct.inStock) {
+                    if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null)
                     {
-                        return false;
-                    }
-
-                    GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                    showLoader();
-
-                    //ajax
-                    $.ajax({
-                        type: 'post',
-                        url: '/cart/add-to-cart',
-                        data: {
-                            productId: obj.productId,
-                            sizeId: obj.sizeId,
-                            count: obj.count,
-                            language: LANGUAGE,
-                            userTypeId: GLOBAL_DATA.userTypeId
-                        },
-                        success: function (data) {
-                            hideLoader();
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                            //check if this item not in cart yet
-                            // if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null)
-                            // {
-                            //     //then push this item to global cart items
-                            //     GLOBAL_DATA.cartItems.push(obj);
-                            // }
-
-                            GLOBAL_DATA.cartItems = data.cart;
-                            GLOBAL_DATA.totalCount = data.totalCount;
-                            GLOBAL_DATA.totalAmount = data.totalAmount;
-
-                            $('#big-cart').modal();
-                        },
-                        error: function (error) {
-                            hideLoader();
-                            GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                            console.log(error);
+                        if (GLOBAL_DATA.IS_DATA_PROCESSING)
+                        {
+                            return false;
                         }
-                    });
-                }
-                else {
-                    $('#big-cart').modal();
+    
+                        GLOBAL_DATA.IS_DATA_PROCESSING = true;
+    
+                        showLoader();
+    
+                        //ajax
+                        $.ajax({
+                            type: 'post',
+                            url: '/cart/add-to-cart',
+                            data: {
+                                productId: obj.productId,
+                                sizeId: obj.sizeId,
+                                count: obj.count,
+                                language: LANGUAGE,
+                                userTypeId: GLOBAL_DATA.userTypeId
+                            },
+                            success: function (data) {
+                                hideLoader();
+                                GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                                //check if this item not in cart yet
+                                // if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null)
+                                // {
+                                //     //then push this item to global cart items
+                                //     GLOBAL_DATA.cartItems.push(obj);
+                                // }
+    
+                                GLOBAL_DATA.cartItems = data.cart;
+                                GLOBAL_DATA.totalCount = data.totalCount;
+                                GLOBAL_DATA.totalAmount = data.totalAmount;
+    
+                                $('#big-cart').modal();
+                            },
+                            error: function (error) {
+                                hideLoader();
+                                GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                                console.log(error);
+                            }
+                        });
+                    }
+                    else {
+                        $('#big-cart').modal();
+                    }
+                } else {
+                    $('[data-notify]').modal();
                 }
             },
             //method handles updating cart, change count
@@ -310,12 +347,24 @@ if (document.getElementById('product-details'))
                     _this = this;
 
                 var oldCount = GLOBAL_DATA.singleProduct.count;
+                
+                GLOBAL_DATA.singleProduct.product.product_sizes.forEach(function (item) {
+                    if (item.product_id == searchObj.productId && item.size_id == searchObj.sizeId) {
+                        if (GLOBAL_DATA.singleProduct.count < item.stocks[0].stock) {
+                            GLOBAL_DATA.singleProduct.count++;
+                        }
 
-                GLOBAL_DATA.singleProduct.count++;
+                        if (GLOBAL_DATA.singleProduct.count == item.stocks[0].stock ) {
+                            showPopup(CART_MAX);
+                        }
+                    }
+                });
+            
+                
 
-                if (GLOBAL_DATA.singleProduct.count > 99)
+                if (GLOBAL_DATA.singleProduct.count > 9999)
                 {
-                    GLOBAL_DATA.singleProduct.count = 99;
+                    GLOBAL_DATA.singleProduct.count = 9999;
                 }
                 
                 //check if size id in cart

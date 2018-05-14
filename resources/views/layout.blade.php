@@ -23,6 +23,8 @@
 
     @include('modals.restore-password')
 
+    @include('modals.notify')
+
     {{--HEADER--}}
     @include('layout.header')
     {{--/HEADER--}}
