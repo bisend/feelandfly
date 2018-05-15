@@ -68,7 +68,11 @@
                                         <!-- Products Description Starts -->
                                         <div class="col-md-7 col-sm-12">
                                             <div class="prod-details">
-                                                <div class="prod-title">@{{ mainSliderPreview.product.name }}</div>
+                                                <div class="prod-title">
+                                                    <a :href="'/product/' + mainSliderPreview.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+                                                        @{{ mainSliderPreview.product.name }}
+                                                    </a>
+                                                </div>
                                                 <div class="block-inline">
                                                     <div class="rating pull-right">
                                                         <span v-for="i in 5" v-if="i <= mainSliderPreview.product.rating" class="star active"></span>
@@ -151,13 +155,16 @@
                                                             <a class="theme-btn btn-black small-btn"
                                                                v-on:click.prevent="addToCart(mainSliderPreview.product.id, mainSliderPreview.currentSizeId, mainSliderPreview.count)"
                                                                href="#">
-                                                            <span v-cloak
-                                                                  v-if="!findWhere(cartItems, {'productId': mainSliderPreview.product.id, 'sizeId': mainSliderPreview.currentSizeId})">
-                                                                {{ trans('layout.add_to_cart') }}
-                                                            </span>
+                                                                <span v-cloak v-if=" ! mainSliderPreview.inStock">
+                                                                    {{ trans('layout.notify') }}
+                                                                </span>
+                                                                <span v-cloak
+                                                                    v-else-if="!findWhere(cartItems, {'productId': mainSliderPreview.product.id, 'sizeId': mainSliderPreview.currentSizeId})">
+                                                                    {{ trans('layout.add_to_cart') }}
+                                                                </span>
                                                                 <span v-cloak v-else>
-                                                                {{ trans('layout.in_cart') }}
-                                                            </span>
+                                                                    {{ trans('layout.in_cart') }}
+                                                                </span>
                                                             </a>
                                                         </li>
                                                         <li>

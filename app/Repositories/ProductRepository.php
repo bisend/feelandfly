@@ -36,7 +36,9 @@ class ProductRepository
     public function getProductBySlug($slug, $language, $userTypeId)
     {
         return Product::with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($language) {
                 $query->select([
                     'colors.id',
@@ -164,7 +166,9 @@ class ProductRepository
         }
         
         return Product::with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($language) {
                 $query->select([
                     'colors.id',
@@ -282,7 +286,9 @@ class ProductRepository
     public function getSimilarProducts($productId, $categoryId, $language, $userTypeId)
     {
         return Product::with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($language) {
                 $query->select([
                     'colors.id',
@@ -376,7 +382,9 @@ class ProductRepository
     public function getCartProducts($productIds, $language, $userTypeId)
     {
         return Product::with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($language) {
                 $query->select([
                     'colors.id',
@@ -446,7 +454,9 @@ class ProductRepository
     public function getWishListProducts($productIds, $language, $userTypeId)
     {
         return Product::with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($language) {
                 $query->select([
                     'colors.id',
@@ -513,7 +523,9 @@ class ProductRepository
     public function getOrdersProducts($productIds, $language, $userTypeId)
     {
         return Product::with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($language) {
                 $query->select([
                     'colors.id',
@@ -610,7 +622,9 @@ class ProductRepository
         $query = Product::query();
 
         $query->with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($language) {
                 $query->select([
                     'colors.id',
@@ -756,7 +770,9 @@ class ProductRepository
         $series = implode($this->likeSeparator, $words);
 
         return Product::with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($model) {
                 $query->select([
                     'colors.id',
@@ -894,7 +910,9 @@ class ProductRepository
         $series = implode($this->likeSeparator, $words);
 
         return Product::with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($model) {
                 $query->select([
                     'colors.id',
@@ -1104,7 +1122,9 @@ class ProductRepository
         $model->salesPromotion = Promotion::wherePriority(3)->first();
 
         return Product::with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($model) {
                 $query->select([
                     'colors.id',
@@ -1200,7 +1220,9 @@ class ProductRepository
         $model->topPromotion = Promotion::wherePriority(2)->first();
 
         return Product::with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($model) {
                 $query->select([
                     'colors.id',
@@ -1294,7 +1316,9 @@ class ProductRepository
         $model->newPromotion = Promotion::wherePriority(1)->first();
 
         return Product::with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($model) {
                 $query->select([
                     'colors.id',
@@ -1409,7 +1433,9 @@ class ProductRepository
                 ]);
                 $query->where('products.is_visible', '=', true);
             },
-            'markers.product.images',
+            'markers.product.images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'markers.product.color' => function ($query) use ($model) {
                 $query->select([
                     'colors.id',
@@ -1504,7 +1530,9 @@ class ProductRepository
         }
 
         return Product::with([
-            'images',
+            'images' => function ($query) {
+                $query->orderByRaw('priority desc');
+            },
             'color' => function ($query) use ($model) {
                 $query->select([
                     'colors.id',

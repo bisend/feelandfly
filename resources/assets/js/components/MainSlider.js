@@ -109,6 +109,19 @@ if (document.getElementById('main-slider-section'))
         }
     }
 
+    function checkPreviewMainSliderStock ()
+    {
+        GLOBAL_DATA.mainSliderPreview.product.product_sizes.forEach(function (item) {
+            if (item.size_id == GLOBAL_DATA.mainSliderPreview.currentSizeId) {
+                if (item.stocks[0].stock > 0) {
+                    GLOBAL_DATA.mainSliderPreview.inStock = true;
+                } else {
+                    GLOBAL_DATA.mainSliderPreview.inStock = false;
+                }
+            }
+        });
+    }
+
     GLOBAL_DATA.mainSliderProducts = window.FFShop.mainSliderProducts;
 
     if (GLOBAL_DATA.mainSliderProducts && GLOBAL_DATA.mainSliderProducts.length > 0)
@@ -123,6 +136,8 @@ if (document.getElementById('main-slider-section'))
 
         //init category product preview count
         GLOBAL_DATA.mainSliderPreview.count = 1;
+
+        checkPreviewMainSliderStock ();
     }
 
     new Vue({
@@ -299,6 +314,8 @@ if (document.getElementById('main-slider-section'))
 
                     GLOBAL_DATA.mainSliderPreview.currentSizeId = GLOBAL_DATA.mainSliderPreview.product.sizes[0].id;
 
+                    checkPreviewMainSliderStock ();
+
                     //init count checking if current preview in cart
                     if (this.findWhere(GLOBAL_DATA.cartItems, ({
                             productId: GLOBAL_DATA.mainSliderPreview.product.id,
@@ -363,9 +380,15 @@ if (document.getElementById('main-slider-section'))
                         GLOBAL_DATA.mainSliderPreview.count = 1;
                     }
 
-                    if (count > 99) {
-                        GLOBAL_DATA.mainSliderPreview.count = 99;
-                    }
+                    GLOBAL_DATA.mainSliderPreview.product.product_sizes.forEach(function (item) {
+                        if (item.product_id == searchObj.productId && item.size_id == searchObj.sizeId) {
+                            if (count > item.stocks[0].stock)
+                            {
+                                GLOBAL_DATA.mainSliderPreview.count = item.stocks[0].stock > 0 ? item.stocks[0].stock : 1;
+                                showPopup(CART_MAX);
+                            }
+                        }
+                    });
 
                     //if prod size in cart
                     if (this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
@@ -394,62 +417,75 @@ if (document.getElementById('main-slider-section'))
                         },
                         _this = this;
 
-                    if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
-                        if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                            return false;
-                        }
-
-                        GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                        showLoader();
-
-                        //ajax
-                        $.ajax({
-                            type: 'post',
-                            url: '/cart/add-to-cart',
-                            data: {
-                                productId: obj.productId,
-                                sizeId: obj.sizeId,
-                                count: obj.count,
-                                language: LANGUAGE,
-                                userTypeId: GLOBAL_DATA.userTypeId
-                            },
-                            success: function (data) {
-                                hideLoader();
-                                GLOBAL_DATA.IS_DATA_PROCESSING = false;
-
-                                GLOBAL_DATA.cartItems = data.cart;
-                                GLOBAL_DATA.totalCount = data.totalCount;
-                                GLOBAL_DATA.totalAmount = data.totalAmount;
-
-                                var LOADED = true;
-                                $('#main-slider-preview').modal('hide');
-                                $('#main-slider-preview').on('hidden.bs.modal', function () {
-                                    if (LOADED) {
-                                        $('#big-cart').modal();
-                                        // $('body').addClass('modal-open').css('padding-right', '17px');
-                                        LOADED = false;
-                                    }
-                                });
-
-
-                            },
-                            error: function (error) {
-                                hideLoader();
-                                GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                                console.log(error);
+                    if (GLOBAL_DATA.mainSliderPreview.inStock) {
+                        if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
+                            if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                                return false;
                             }
-                        });
-                    }
-                    else {
-                        // $('#prod-preview-test').modal('hide');
-                        // $('#big-cart').modal();
-
+    
+                            GLOBAL_DATA.IS_DATA_PROCESSING = true;
+    
+                            showLoader();
+    
+                            //ajax
+                            $.ajax({
+                                type: 'post',
+                                url: '/cart/add-to-cart',
+                                data: {
+                                    productId: obj.productId,
+                                    sizeId: obj.sizeId,
+                                    count: obj.count,
+                                    language: LANGUAGE,
+                                    userTypeId: GLOBAL_DATA.userTypeId
+                                },
+                                success: function (data) {
+                                    hideLoader();
+                                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+    
+                                    GLOBAL_DATA.cartItems = data.cart;
+                                    GLOBAL_DATA.totalCount = data.totalCount;
+                                    GLOBAL_DATA.totalAmount = data.totalAmount;
+    
+                                    var LOADED = true;
+                                    $('#main-slider-preview').modal('hide');
+                                    $('#main-slider-preview').on('hidden.bs.modal', function () {
+                                        if (LOADED) {
+                                            $('#big-cart').modal();
+                                            // $('body').addClass('modal-open').css('padding-right', '17px');
+                                            LOADED = false;
+                                        }
+                                    });
+    
+    
+                                },
+                                error: function (error) {
+                                    hideLoader();
+                                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                                    console.log(error);
+                                }
+                            });
+                        }
+                        else {
+                            // $('#prod-preview-test').modal('hide');
+                            // $('#big-cart').modal();
+    
+                            var LOADED = true;
+                            $('#main-slider-preview').modal('hide');
+                            $('#main-slider-preview').on('hidden.bs.modal', function () {
+                                if (LOADED) {
+                                    $('#big-cart').modal();
+                                    // $('body').addClass('modal-open').css('padding-right', '17px');
+                                    LOADED = false;
+                                }
+                            });
+                        }
+                    } else {
+                        setNotifyIds(productId, sizeId);
                         var LOADED = true;
                         $('#main-slider-preview').modal('hide');
                         $('#main-slider-preview').on('hidden.bs.modal', function () {
                             if (LOADED) {
-                                $('#big-cart').modal();
+                                $('[data-notify]').modal();
                                 // $('body').addClass('modal-open').css('padding-right', '17px');
                                 LOADED = false;
                             }
@@ -503,6 +539,8 @@ if (document.getElementById('main-slider-section'))
                 //changing current sizeId in preview
                 changeCurrentSizeId: function (sizeId) {
                     GLOBAL_DATA.mainSliderPreview.currentSizeId = sizeId;
+
+                    checkPreviewMainSliderStock ();
 
                     if (this.findWhere(GLOBAL_DATA.cartItems, ({
                             productId: GLOBAL_DATA.mainSliderPreview.product.id,
@@ -573,10 +611,20 @@ if (document.getElementById('main-slider-section'))
 
                     var oldCount = GLOBAL_DATA.mainSliderPreview.count;
 
-                    GLOBAL_DATA.mainSliderPreview.count++;
+                    GLOBAL_DATA.mainSliderPreview.product.product_sizes.forEach(function (item) {
+                        if (item.product_id == searchObj.productId && item.size_id == searchObj.sizeId) {
+                            if (GLOBAL_DATA.mainSliderPreview.count < item.stocks[0].stock) {
+                                GLOBAL_DATA.mainSliderPreview.count++;
+                            }
+            
+                            if (GLOBAL_DATA.mainSliderPreview.count == item.stocks[0].stock ) {
+                                showPopup(CART_MAX);
+                            }
+                        }
+                    });
 
-                    if (GLOBAL_DATA.mainSliderPreview.count > 99) {
-                        GLOBAL_DATA.mainSliderPreview.count = 99;
+                    if (GLOBAL_DATA.mainSliderPreview.count > 9999) {
+                        GLOBAL_DATA.mainSliderPreview.count = 9999;
                     }
 
                     //check if size id in cart

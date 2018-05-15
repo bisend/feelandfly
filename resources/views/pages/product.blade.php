@@ -207,9 +207,9 @@
                                             <a class="theme-btn btn-black small-btn"
                                                @click.prevent="addToCart(singleProduct.productId, singleProduct.sizeId, singleProduct.count)"
                                                href="#">
-                                               <span v-cloak v-if=" ! singleProduct.inStock">
-                                                    {{ trans('layout.notify') }}
-                                               </span>
+                                                <span v-cloak v-if=" ! singleProduct.inStock">
+                                                        {{ trans('layout.notify') }}
+                                                </span>
                                                 <span v-cloak
                                                       v-else-if="!findWhere(cartItems, {'productId': singleProduct.productId, 'sizeId': singleProduct.sizeId})">
                                                     {{ trans('layout.add_to_cart') }}

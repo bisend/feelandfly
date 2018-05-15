@@ -63,7 +63,11 @@
                                 <!-- Products Description Starts -->
                                 <div class="col-md-7 col-sm-12">
                                     <div class="prod-details">
-                                        <div class="prod-title">@{{ categoryProductPreview.product.name }}</div>
+                                        <div class="prod-title">
+                                            <a :href="'/product/' + categoryProductPreview.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+                                                @{{ categoryProductPreview.product.name }}
+                                            </a>
+                                        </div>
                                         <div class="block-inline">
                                             <div class="rating pull-right">
                                                 <span v-for="i in 5" v-if="i <= categoryProductPreview.product.rating" class="star active"></span>
@@ -146,8 +150,11 @@
                                                     <a class="theme-btn btn-black small-btn"
                                                        v-on:click.prevent="addToCart(categoryProductPreview.product.id, categoryProductPreview.currentSizeId, categoryProductPreview.count)"
                                                        href="#">
+                                                        <span v-cloak v-if=" ! categoryProductPreview.inStock">
+                                                            {{ trans('layout.notify') }}
+                                                        </span>
                                                         <span v-cloak
-                                                              v-if="!findWhere(cartItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})">
+                                                              v-else-if="!findWhere(cartItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})">
                                                             {{ trans('layout.add_to_cart') }}
                                                         </span>
                                                         <span v-cloak v-else>
@@ -326,15 +333,18 @@
                                                                 <ul class="prod-meta">
                                                                     <li>
                                                                         <a class="theme-btn btn-black"
-                                                                           v-on:click.prevent="addToCart({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, 1)"
+                                                                           v-on:click.prevent="addToCart({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, 1, {{$counter}})"
                                                                            href="#">
-                                                                    <span v-cloak
-                                                                          v-if="!findWhere(cartItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})">
-                                                                        {{ trans('layout.add_to_cart') }}
-                                                                    </span>
-                                                                            <span v-cloak v-else>
-                                                                        {{ trans('layout.in_cart') }}
-                                                                    </span>
+                                                                            <span v-cloak v-if=" ! categoryProducts[{{$counter}}].inStock">
+                                                                                {{ trans('layout.notify') }}
+                                                                            </span>
+                                                                            <span v-cloak
+                                                                                v-else-if="!findWhere(cartItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})">
+                                                                                {{ trans('layout.add_to_cart') }}
+                                                                            </span>
+                                                                                    <span v-cloak v-else>
+                                                                                {{ trans('layout.in_cart') }}
+                                                                            </span>
                                                                         </a>
                                                                     </li>
                                                                     <li>

@@ -6559,3 +6559,7 @@ li.sale-link:before {
     appearance: none;
     margin: 0; 
 }
+
+[data-popup].modal {
+    z-index: 10000;
+}

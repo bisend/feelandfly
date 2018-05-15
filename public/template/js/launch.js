@@ -68,7 +68,6 @@ var GLOBAL_DATA = {
         inStock: true
     },
     notify: {
-        product: [],
         name: '',
         email: '',
         count: 1,
@@ -81,14 +80,16 @@ var GLOBAL_DATA = {
         product: [],
         currentSizeId: '',
         count: '',
-        rel: ''
+        rel: '',
+        inStock: true
     },
     similarProducts: [],
     similarProductPreview: {
         product: [],
         currentSizeId: '',
         count: '',
-        rel: ''
+        rel: '',
+        inStock: true
     },
     orderConfirm: {
         name: '',
@@ -152,7 +153,8 @@ var GLOBAL_DATA = {
         product: [],
         currentSizeId: '',
         count: '',
-        rel: ''
+        rel: '',
+        inStock: true
     },
     mainSliderProducts: [],
 
@@ -191,6 +193,12 @@ var GLOBAL_DATA = {
     userTypeId: 1,
     lang: LANGUAGE
 };
+
+function setNotifyIds(productId, sizeId)
+{
+    GLOBAL_DATA.notify.productId = productId;
+    GLOBAL_DATA.notify.sizeId = sizeId;
+}
 
 function initCart() {
 

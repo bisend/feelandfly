@@ -86,9 +86,6 @@ if (document.getElementById('product-details'))
     //init single size id [first id in list]
     GLOBAL_DATA.singleProduct.sizeId = parseInt(window.FFShop.product.sizes[0].id);
 
-    GLOBAL_DATA.notify.productId = GLOBAL_DATA.singleProduct.productId;
-    GLOBAL_DATA.notify.sizeId = GLOBAL_DATA.singleProduct.sizeId;
-
     GLOBAL_DATA.singleProduct.product.product_sizes.forEach(function (item) {
         if (item.size_id == GLOBAL_DATA.singleProduct.sizeId) {
             if (item.stocks[0].stock > 0) {
@@ -142,10 +139,7 @@ if (document.getElementById('product-details'))
                     if (item.product_id == searchObj.productId && item.size_id == searchObj.sizeId) {
                         if (count > item.stocks[0].stock)
                         {
-                            GLOBAL_DATA.singleProduct.count = item.stocks[0].stock;
-                        }
-
-                        if (GLOBAL_DATA.singleProduct.count == item.stocks[0].stock ) {
+                            GLOBAL_DATA.singleProduct.count = item.stocks[0].stock > 0 ? item.stocks[0].stock : 1;
                             showPopup(CART_MAX);
                         }
                     }
@@ -292,6 +286,7 @@ if (document.getElementById('product-details'))
                         $('#big-cart').modal();
                     }
                 } else {
+                    setNotifyIds(productId, sizeId);
                     $('[data-notify]').modal();
                 }
             },
