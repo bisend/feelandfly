@@ -364,7 +364,11 @@
                                     <!-- Products Description Starts -->
                                     <div class="col-md-7 col-sm-12">
                                         <div class="prod-details">
-                                            <div class="prod-title">@{{ saleProductPreview.product.name }}</div>
+                                            <div class="prod-title">
+                                                <a :href="'/product/' + saleProductPreview.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+                                                    @{{ saleProductPreview.product.name }}
+                                                </a>
+                                            </div>
                                             <div class="block-inline">
                                                 <div class="rating pull-right">
                                                     <span v-for="i in 5" v-if="i <= saleProductPreview.product.rating" class="star active"></span>
@@ -443,13 +447,16 @@
                                                         <a class="theme-btn btn-black small-btn"
                                                            v-on:click.prevent="addToCart(saleProductPreview.product.id, saleProductPreview.currentSizeId, saleProductPreview.count)"
                                                            href="#">
-                                                        <span v-cloak
-                                                              v-if="!findWhere(cartItems, {'productId': saleProductPreview.product.id, 'sizeId': saleProductPreview.currentSizeId})">
-                                                            {{ trans('layout.add_to_cart') }}
-                                                        </span>
-                                                        <span v-cloak v-else>
-                                                            {{ trans('layout.in_cart') }}
-                                                        </span>
+                                                            <span v-cloak v-if=" ! saleProductPreview.inStock">
+                                                                {{ trans('layout.notify') }}
+                                                            </span>
+                                                            <span v-cloak
+                                                                v-else-if="!findWhere(cartItems, {'productId': saleProductPreview.product.id, 'sizeId': saleProductPreview.currentSizeId})">
+                                                                {{ trans('layout.add_to_cart') }}
+                                                            </span>
+                                                            <span v-cloak v-else>
+                                                                {{ trans('layout.in_cart') }}
+                                                            </span>
                                                         </a>
                                                     </li>
                                                     <li>
@@ -685,7 +692,11 @@
                                                 <!-- Products Description Starts -->
                                                 <div class="col-md-7 col-sm-12">
                                                     <div class="prod-details">
-                                                        <div class="prod-title">@{{ topProductPreview.product.name }}</div>
+                                                        <div class="prod-title">
+                                                                <a :href="'/product/' + topProductPreview.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+                                                                @{{ topProductPreview.product.name }}
+                                                            </a>
+                                                        </div>
                                                         <div class="block-inline">
                                                             <div class="rating pull-right">
                                                                 <span v-for="i in 5" v-if="i <= topProductPreview.product.rating" class="star active"></span>
@@ -763,13 +774,16 @@
                                                                     <a class="theme-btn btn-black small-btn"
                                                                        v-on:click.prevent="addToCart(topProductPreview.product.id, topProductPreview.currentSizeId, topProductPreview.count)"
                                                                        href="#">
-                                                        <span v-cloak
-                                                              v-if="!findWhere(cartItems, {'productId': topProductPreview.product.id, 'sizeId': topProductPreview.currentSizeId})">
-                                                            {{ trans('layout.add_to_cart') }}
-                                                        </span>
-                                                        <span v-cloak v-else>
-                                                            {{ trans('layout.in_cart') }}
-                                                        </span>
+                                                                        <span v-cloak v-if=" ! topProductPreview.inStock">
+                                                                            {{ trans('layout.notify') }}
+                                                                        </span>
+                                                                        <span v-cloak
+                                                                            v-else-if="!findWhere(cartItems, {'productId': topProductPreview.product.id, 'sizeId': topProductPreview.currentSizeId})">
+                                                                            {{ trans('layout.add_to_cart') }}
+                                                                        </span>
+                                                                        <span v-cloak v-else>
+                                                                            {{ trans('layout.in_cart') }}
+                                                                        </span>
                                                                     </a>
                                                                 </li>
                                                                 <li>
@@ -921,7 +935,11 @@
                                                 <!-- Products Description Starts -->
                                                 <div class="col-md-7 col-sm-12">
                                                     <div class="prod-details">
-                                                        <div class="prod-title">@{{ newProductPreview.product.name }}</div>
+                                                        <div class="prod-title">
+                                                            <a :href="'/product/' + newProductPreview.product.slug + '/{{ $model->language == 'ru' ? '' : $model->language }}'">
+                                                                @{{ newProductPreview.product.name }}
+                                                            </a>
+                                                        </div>
                                                         <div class="block-inline">
                                                             <div class="rating pull-right">
                                                                 <span v-for="i in 5" v-if="i <= newProductPreview.product.rating" class="star active"></span>
@@ -999,8 +1017,11 @@
                                                                     <a class="theme-btn btn-black small-btn"
                                                                        v-on:click.prevent="addToCart(newProductPreview.product.id, newProductPreview.currentSizeId, newProductPreview.count)"
                                                                        href="#">
+                                                                        <span v-cloak v-if=" ! newProductPreview.inStock">
+                                                                            {{ trans('layout.notify') }}
+                                                                        </span>
                                                                         <span v-cloak
-                                                                              v-if="!findWhere(cartItems, {'productId': newProductPreview.product.id, 'sizeId': newProductPreview.currentSizeId})">
+                                                                                v-else-if="!findWhere(cartItems, {'productId': newProductPreview.product.id, 'sizeId': newProductPreview.currentSizeId})">
                                                                             {{ trans('layout.add_to_cart') }}
                                                                         </span>
                                                                         <span v-cloak v-else>

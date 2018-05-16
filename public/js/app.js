@@ -31151,6 +31151,18 @@ if (document.getElementById('new-products')) {
         }
     };
 
+    var checkPreviewNewSliderStock = function checkPreviewNewSliderStock() {
+        GLOBAL_DATA.newProductPreview.product.product_sizes.forEach(function (item) {
+            if (item.size_id == GLOBAL_DATA.newProductPreview.currentSizeId) {
+                if (item.stocks[0].stock > 0) {
+                    GLOBAL_DATA.newProductPreview.inStock = true;
+                } else {
+                    GLOBAL_DATA.newProductPreview.inStock = false;
+                }
+            }
+        });
+    };
+
     var previewNewSliderInited = false,
         sync1New = void 0,
         sync2New = void 0,
@@ -31167,6 +31179,8 @@ if (document.getElementById('new-products')) {
 
         //init category product preview count
         GLOBAL_DATA.newProductPreview.count = 1;
+
+        checkPreviewNewSliderStock();
 
         new Vue({
             el: '#new-products',
@@ -31259,6 +31273,8 @@ if (document.getElementById('new-products')) {
 
                     GLOBAL_DATA.newProductPreview.currentSizeId = GLOBAL_DATA.newProductPreview.product.sizes[0].id;
 
+                    checkPreviewNewSliderStock();
+
                     //init count checking if current preview in cart
                     if (this.findWhere(GLOBAL_DATA.cartItems, {
                         productId: GLOBAL_DATA.newProductPreview.product.id,
@@ -31323,9 +31339,14 @@ if (document.getElementById('new-products')) {
                         GLOBAL_DATA.newProductPreview.count = 1;
                     }
 
-                    if (count > 99) {
-                        GLOBAL_DATA.newProductPreview.count = 99;
-                    }
+                    GLOBAL_DATA.newProductPreview.product.product_sizes.forEach(function (item) {
+                        if (item.product_id == searchObj.productId && item.size_id == searchObj.sizeId) {
+                            if (count > item.stocks[0].stock) {
+                                GLOBAL_DATA.newProductPreview.count = item.stocks[0].stock > 0 ? item.stocks[0].stock : 1;
+                                showPopup(CART_MAX);
+                            }
+                        }
+                    });
 
                     //if prod size in cart
                     if (this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
@@ -31353,59 +31374,72 @@ if (document.getElementById('new-products')) {
                     },
                         _this = this;
 
-                    if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
-                        if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                            return false;
-                        }
-
-                        GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                        showLoader();
-
-                        //ajax
-                        $.ajax({
-                            type: 'post',
-                            url: '/cart/add-to-cart',
-                            data: {
-                                productId: obj.productId,
-                                sizeId: obj.sizeId,
-                                count: obj.count,
-                                language: LANGUAGE,
-                                userTypeId: GLOBAL_DATA.userTypeId
-                            },
-                            success: function success(data) {
-                                hideLoader();
-                                GLOBAL_DATA.IS_DATA_PROCESSING = false;
-
-                                GLOBAL_DATA.cartItems = data.cart;
-                                GLOBAL_DATA.totalCount = data.totalCount;
-                                GLOBAL_DATA.totalAmount = data.totalAmount;
-
-                                var LOADED = true;
-                                $('#new-preview').modal('hide');
-                                $('#new-preview').on('hidden.bs.modal', function () {
-                                    if (LOADED) {
-                                        $('#big-cart').modal();
-                                        // $('body').addClass('modal-open').css('padding-right', '17px');
-                                        LOADED = false;
-                                    }
-                                });
-                            },
-                            error: function error(_error) {
-                                hideLoader();
-                                GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                                console.log(_error);
+                    if (GLOBAL_DATA.newProductPreview.inStock) {
+                        if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
+                            if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                                return false;
                             }
-                        });
-                    } else {
-                        // $('#prod-preview-test').modal('hide');
-                        // $('#big-cart').modal();
 
+                            GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                            showLoader();
+
+                            //ajax
+                            $.ajax({
+                                type: 'post',
+                                url: '/cart/add-to-cart',
+                                data: {
+                                    productId: obj.productId,
+                                    sizeId: obj.sizeId,
+                                    count: obj.count,
+                                    language: LANGUAGE,
+                                    userTypeId: GLOBAL_DATA.userTypeId
+                                },
+                                success: function success(data) {
+                                    hideLoader();
+                                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                                    GLOBAL_DATA.cartItems = data.cart;
+                                    GLOBAL_DATA.totalCount = data.totalCount;
+                                    GLOBAL_DATA.totalAmount = data.totalAmount;
+
+                                    var LOADED = true;
+                                    $('#new-preview').modal('hide');
+                                    $('#new-preview').on('hidden.bs.modal', function () {
+                                        if (LOADED) {
+                                            $('#big-cart').modal();
+                                            // $('body').addClass('modal-open').css('padding-right', '17px');
+                                            LOADED = false;
+                                        }
+                                    });
+                                },
+                                error: function error(_error) {
+                                    hideLoader();
+                                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                                    console.log(_error);
+                                }
+                            });
+                        } else {
+                            // $('#prod-preview-test').modal('hide');
+                            // $('#big-cart').modal();
+
+                            var LOADED = true;
+                            $('#new-preview').modal('hide');
+                            $('#new-preview').on('hidden.bs.modal', function () {
+                                if (LOADED) {
+                                    $('#big-cart').modal();
+                                    // $('body').addClass('modal-open').css('padding-right', '17px');
+                                    LOADED = false;
+                                }
+                            });
+                        }
+                    } else {
+                        setNotifyIds(productId, sizeId);
                         var LOADED = true;
                         $('#new-preview').modal('hide');
                         $('#new-preview').on('hidden.bs.modal', function () {
                             if (LOADED) {
-                                $('#big-cart').modal();
+                                $('[data-notify]').modal();
                                 // $('body').addClass('modal-open').css('padding-right', '17px');
                                 LOADED = false;
                             }
@@ -31457,6 +31491,8 @@ if (document.getElementById('new-products')) {
                 //changing current sizeId in preview
                 changeCurrentSizeId: function changeCurrentSizeId(sizeId) {
                     GLOBAL_DATA.newProductPreview.currentSizeId = sizeId;
+
+                    checkPreviewNewSliderStock();
 
                     if (this.findWhere(GLOBAL_DATA.cartItems, {
                         productId: GLOBAL_DATA.newProductPreview.product.id,
@@ -31526,10 +31562,20 @@ if (document.getElementById('new-products')) {
 
                     var oldCount = GLOBAL_DATA.newProductPreview.count;
 
-                    GLOBAL_DATA.newProductPreview.count++;
+                    GLOBAL_DATA.newProductPreview.product.product_sizes.forEach(function (item) {
+                        if (item.product_id == searchObj.productId && item.size_id == searchObj.sizeId) {
+                            if (GLOBAL_DATA.newProductPreview.count < item.stocks[0].stock) {
+                                GLOBAL_DATA.newProductPreview.count++;
+                            }
 
-                    if (GLOBAL_DATA.newProductPreview.count > 99) {
-                        GLOBAL_DATA.newProductPreview.count = 99;
+                            if (GLOBAL_DATA.newProductPreview.count == item.stocks[0].stock) {
+                                showPopup(CART_MAX);
+                            }
+                        }
+                    });
+
+                    if (GLOBAL_DATA.newProductPreview.count > 9999) {
+                        GLOBAL_DATA.newProductPreview.count = 9999;
                     }
 
                     //check if size id in cart
@@ -34015,6 +34061,18 @@ if (document.getElementById('sales-products')) {
         }
     };
 
+    var checkPreviewSaleSliderStock = function checkPreviewSaleSliderStock() {
+        GLOBAL_DATA.saleProductPreview.product.product_sizes.forEach(function (item) {
+            if (item.size_id == GLOBAL_DATA.saleProductPreview.currentSizeId) {
+                if (item.stocks[0].stock > 0) {
+                    GLOBAL_DATA.saleProductPreview.inStock = true;
+                } else {
+                    GLOBAL_DATA.saleProductPreview.inStock = false;
+                }
+            }
+        });
+    };
+
     var previewSalesSliderInited = false,
         sync1Sales = void 0,
         sync2Sales = void 0,
@@ -34031,6 +34089,8 @@ if (document.getElementById('sales-products')) {
 
         //init category product preview count
         GLOBAL_DATA.saleProductPreview.count = 1;
+
+        checkPreviewSaleSliderStock();
 
         new Vue({
             el: '#sales-products',
@@ -34123,6 +34183,8 @@ if (document.getElementById('sales-products')) {
 
                     GLOBAL_DATA.saleProductPreview.currentSizeId = GLOBAL_DATA.saleProductPreview.product.sizes[0].id;
 
+                    checkPreviewSaleSliderStock();
+
                     //init count checking if current preview in cart
                     if (this.findWhere(GLOBAL_DATA.cartItems, {
                         productId: GLOBAL_DATA.saleProductPreview.product.id,
@@ -34187,9 +34249,14 @@ if (document.getElementById('sales-products')) {
                         GLOBAL_DATA.saleProductPreview.count = 1;
                     }
 
-                    if (count > 99) {
-                        GLOBAL_DATA.saleProductPreview.count = 99;
-                    }
+                    GLOBAL_DATA.saleProductPreview.product.product_sizes.forEach(function (item) {
+                        if (item.product_id == searchObj.productId && item.size_id == searchObj.sizeId) {
+                            if (count > item.stocks[0].stock) {
+                                GLOBAL_DATA.saleProductPreview.count = item.stocks[0].stock > 0 ? item.stocks[0].stock : 1;
+                                showPopup(CART_MAX);
+                            }
+                        }
+                    });
 
                     //if prod size in cart
                     if (this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
@@ -34217,59 +34284,72 @@ if (document.getElementById('sales-products')) {
                     },
                         _this = this;
 
-                    if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
-                        if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                            return false;
-                        }
-
-                        GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                        showLoader();
-
-                        //ajax
-                        $.ajax({
-                            type: 'post',
-                            url: '/cart/add-to-cart',
-                            data: {
-                                productId: obj.productId,
-                                sizeId: obj.sizeId,
-                                count: obj.count,
-                                language: LANGUAGE,
-                                userTypeId: GLOBAL_DATA.userTypeId
-                            },
-                            success: function success(data) {
-                                hideLoader();
-                                GLOBAL_DATA.IS_DATA_PROCESSING = false;
-
-                                GLOBAL_DATA.cartItems = data.cart;
-                                GLOBAL_DATA.totalCount = data.totalCount;
-                                GLOBAL_DATA.totalAmount = data.totalAmount;
-
-                                var LOADED = true;
-                                $('#sale-preview').modal('hide');
-                                $('#sale-preview').on('hidden.bs.modal', function () {
-                                    if (LOADED) {
-                                        $('#big-cart').modal();
-                                        // $('body').addClass('modal-open').css('padding-right', '17px');
-                                        LOADED = false;
-                                    }
-                                });
-                            },
-                            error: function error(_error) {
-                                hideLoader();
-                                GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                                console.log(_error);
+                    if (GLOBAL_DATA.saleProductPreview.inStock) {
+                        if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
+                            if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                                return false;
                             }
-                        });
-                    } else {
-                        // $('#prod-preview-test').modal('hide');
-                        // $('#big-cart').modal();
 
+                            GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                            showLoader();
+
+                            //ajax
+                            $.ajax({
+                                type: 'post',
+                                url: '/cart/add-to-cart',
+                                data: {
+                                    productId: obj.productId,
+                                    sizeId: obj.sizeId,
+                                    count: obj.count,
+                                    language: LANGUAGE,
+                                    userTypeId: GLOBAL_DATA.userTypeId
+                                },
+                                success: function success(data) {
+                                    hideLoader();
+                                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                                    GLOBAL_DATA.cartItems = data.cart;
+                                    GLOBAL_DATA.totalCount = data.totalCount;
+                                    GLOBAL_DATA.totalAmount = data.totalAmount;
+
+                                    var LOADED = true;
+                                    $('#sale-preview').modal('hide');
+                                    $('#sale-preview').on('hidden.bs.modal', function () {
+                                        if (LOADED) {
+                                            $('#big-cart').modal();
+                                            // $('body').addClass('modal-open').css('padding-right', '17px');
+                                            LOADED = false;
+                                        }
+                                    });
+                                },
+                                error: function error(_error) {
+                                    hideLoader();
+                                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                                    console.log(_error);
+                                }
+                            });
+                        } else {
+                            // $('#prod-preview-test').modal('hide');
+                            // $('#big-cart').modal();
+
+                            var LOADED = true;
+                            $('#sale-preview').modal('hide');
+                            $('#sale-preview').on('hidden.bs.modal', function () {
+                                if (LOADED) {
+                                    $('#big-cart').modal();
+                                    // $('body').addClass('modal-open').css('padding-right', '17px');
+                                    LOADED = false;
+                                }
+                            });
+                        }
+                    } else {
+                        setNotifyIds(productId, sizeId);
                         var LOADED = true;
                         $('#sale-preview').modal('hide');
                         $('#sale-preview').on('hidden.bs.modal', function () {
                             if (LOADED) {
-                                $('#big-cart').modal();
+                                $('[data-notify]').modal();
                                 // $('body').addClass('modal-open').css('padding-right', '17px');
                                 LOADED = false;
                             }
@@ -34321,6 +34401,8 @@ if (document.getElementById('sales-products')) {
                 //changing current sizeId in preview
                 changeCurrentSizeId: function changeCurrentSizeId(sizeId) {
                     GLOBAL_DATA.saleProductPreview.currentSizeId = sizeId;
+
+                    checkPreviewSaleSliderStock();
 
                     if (this.findWhere(GLOBAL_DATA.cartItems, {
                         productId: GLOBAL_DATA.saleProductPreview.product.id,
@@ -34390,10 +34472,20 @@ if (document.getElementById('sales-products')) {
 
                     var oldCount = GLOBAL_DATA.saleProductPreview.count;
 
-                    GLOBAL_DATA.saleProductPreview.count++;
+                    GLOBAL_DATA.saleProductPreview.product.product_sizes.forEach(function (item) {
+                        if (item.product_id == searchObj.productId && item.size_id == searchObj.sizeId) {
+                            if (GLOBAL_DATA.saleProductPreview.count < item.stocks[0].stock) {
+                                GLOBAL_DATA.saleProductPreview.count++;
+                            }
 
-                    if (GLOBAL_DATA.saleProductPreview.count > 99) {
-                        GLOBAL_DATA.saleProductPreview.count = 99;
+                            if (GLOBAL_DATA.saleProductPreview.count == item.stocks[0].stock) {
+                                showPopup(CART_MAX);
+                            }
+                        }
+                    });
+
+                    if (GLOBAL_DATA.saleProductPreview.count > 9999) {
+                        GLOBAL_DATA.saleProductPreview.count = 9999;
                     }
 
                     //check if size id in cart
@@ -35483,6 +35575,18 @@ if (document.getElementById('top-products')) {
         }
     };
 
+    var checkPreviewTopSliderStock = function checkPreviewTopSliderStock() {
+        GLOBAL_DATA.topProductPreview.product.product_sizes.forEach(function (item) {
+            if (item.size_id == GLOBAL_DATA.topProductPreview.currentSizeId) {
+                if (item.stocks[0].stock > 0) {
+                    GLOBAL_DATA.topProductPreview.inStock = true;
+                } else {
+                    GLOBAL_DATA.topProductPreview.inStock = false;
+                }
+            }
+        });
+    };
+
     var previewTopSliderInited = false,
         sync1Top = void 0,
         sync2Top = void 0,
@@ -35499,6 +35603,8 @@ if (document.getElementById('top-products')) {
 
         //init category product preview count
         GLOBAL_DATA.topProductPreview.count = 1;
+
+        checkPreviewTopSliderStock();
 
         new Vue({
             el: '#top-products',
@@ -35591,6 +35697,8 @@ if (document.getElementById('top-products')) {
 
                     GLOBAL_DATA.topProductPreview.currentSizeId = GLOBAL_DATA.topProductPreview.product.sizes[0].id;
 
+                    checkPreviewTopSliderStock();
+
                     //init count checking if current preview in cart
                     if (this.findWhere(GLOBAL_DATA.cartItems, {
                         productId: GLOBAL_DATA.topProductPreview.product.id,
@@ -35655,9 +35763,14 @@ if (document.getElementById('top-products')) {
                         GLOBAL_DATA.topProductPreview.count = 1;
                     }
 
-                    if (count > 99) {
-                        GLOBAL_DATA.topProductPreview.count = 99;
-                    }
+                    GLOBAL_DATA.topProductPreview.product.product_sizes.forEach(function (item) {
+                        if (item.product_id == searchObj.productId && item.size_id == searchObj.sizeId) {
+                            if (count > item.stocks[0].stock) {
+                                GLOBAL_DATA.topProductPreview.count = item.stocks[0].stock > 0 ? item.stocks[0].stock : 1;
+                                showPopup(CART_MAX);
+                            }
+                        }
+                    });
 
                     //if prod size in cart
                     if (this.findWhere(GLOBAL_DATA.cartItems, searchObj)) {
@@ -35685,59 +35798,72 @@ if (document.getElementById('top-products')) {
                     },
                         _this = this;
 
-                    if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
-                        if (GLOBAL_DATA.IS_DATA_PROCESSING) {
-                            return false;
-                        }
-
-                        GLOBAL_DATA.IS_DATA_PROCESSING = true;
-
-                        showLoader();
-
-                        //ajax
-                        $.ajax({
-                            type: 'post',
-                            url: '/cart/add-to-cart',
-                            data: {
-                                productId: obj.productId,
-                                sizeId: obj.sizeId,
-                                count: obj.count,
-                                language: LANGUAGE,
-                                userTypeId: GLOBAL_DATA.userTypeId
-                            },
-                            success: function success(data) {
-                                hideLoader();
-                                GLOBAL_DATA.IS_DATA_PROCESSING = false;
-
-                                GLOBAL_DATA.cartItems = data.cart;
-                                GLOBAL_DATA.totalCount = data.totalCount;
-                                GLOBAL_DATA.totalAmount = data.totalAmount;
-
-                                var LOADED = true;
-                                $('#top-preview').modal('hide');
-                                $('#top-preview').on('hidden.bs.modal', function () {
-                                    if (LOADED) {
-                                        $('#big-cart').modal();
-                                        // $('body').addClass('modal-open').css('padding-right', '17px');
-                                        LOADED = false;
-                                    }
-                                });
-                            },
-                            error: function error(_error) {
-                                hideLoader();
-                                GLOBAL_DATA.IS_DATA_PROCESSING = false;
-                                console.log(_error);
+                    if (GLOBAL_DATA.topProductPreview.inStock) {
+                        if (_this.findWhere(GLOBAL_DATA.cartItems, searchObj) == null) {
+                            if (GLOBAL_DATA.IS_DATA_PROCESSING) {
+                                return false;
                             }
-                        });
-                    } else {
-                        // $('#prod-preview-test').modal('hide');
-                        // $('#big-cart').modal();
 
+                            GLOBAL_DATA.IS_DATA_PROCESSING = true;
+
+                            showLoader();
+
+                            //ajax
+                            $.ajax({
+                                type: 'post',
+                                url: '/cart/add-to-cart',
+                                data: {
+                                    productId: obj.productId,
+                                    sizeId: obj.sizeId,
+                                    count: obj.count,
+                                    language: LANGUAGE,
+                                    userTypeId: GLOBAL_DATA.userTypeId
+                                },
+                                success: function success(data) {
+                                    hideLoader();
+                                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+
+                                    GLOBAL_DATA.cartItems = data.cart;
+                                    GLOBAL_DATA.totalCount = data.totalCount;
+                                    GLOBAL_DATA.totalAmount = data.totalAmount;
+
+                                    var LOADED = true;
+                                    $('#top-preview').modal('hide');
+                                    $('#top-preview').on('hidden.bs.modal', function () {
+                                        if (LOADED) {
+                                            $('#big-cart').modal();
+                                            // $('body').addClass('modal-open').css('padding-right', '17px');
+                                            LOADED = false;
+                                        }
+                                    });
+                                },
+                                error: function error(_error) {
+                                    hideLoader();
+                                    GLOBAL_DATA.IS_DATA_PROCESSING = false;
+                                    console.log(_error);
+                                }
+                            });
+                        } else {
+                            // $('#prod-preview-test').modal('hide');
+                            // $('#big-cart').modal();
+
+                            var LOADED = true;
+                            $('#top-preview').modal('hide');
+                            $('#top-preview').on('hidden.bs.modal', function () {
+                                if (LOADED) {
+                                    $('#big-cart').modal();
+                                    // $('body').addClass('modal-open').css('padding-right', '17px');
+                                    LOADED = false;
+                                }
+                            });
+                        }
+                    } else {
+                        setNotifyIds(productId, sizeId);
                         var LOADED = true;
                         $('#top-preview').modal('hide');
                         $('#top-preview').on('hidden.bs.modal', function () {
                             if (LOADED) {
-                                $('#big-cart').modal();
+                                $('[data-notify]').modal();
                                 // $('body').addClass('modal-open').css('padding-right', '17px');
                                 LOADED = false;
                             }
@@ -35789,6 +35915,8 @@ if (document.getElementById('top-products')) {
                 //changing current sizeId in preview
                 changeCurrentSizeId: function changeCurrentSizeId(sizeId) {
                     GLOBAL_DATA.topProductPreview.currentSizeId = sizeId;
+
+                    checkPreviewTopSliderStock();
 
                     if (this.findWhere(GLOBAL_DATA.cartItems, {
                         productId: GLOBAL_DATA.topProductPreview.product.id,
@@ -35858,10 +35986,20 @@ if (document.getElementById('top-products')) {
 
                     var oldCount = GLOBAL_DATA.topProductPreview.count;
 
-                    GLOBAL_DATA.topProductPreview.count++;
+                    GLOBAL_DATA.topProductPreview.product.product_sizes.forEach(function (item) {
+                        if (item.product_id == searchObj.productId && item.size_id == searchObj.sizeId) {
+                            if (GLOBAL_DATA.topProductPreview.count < item.stocks[0].stock) {
+                                GLOBAL_DATA.topProductPreview.count++;
+                            }
 
-                    if (GLOBAL_DATA.topProductPreview.count > 99) {
-                        GLOBAL_DATA.topProductPreview.count = 99;
+                            if (GLOBAL_DATA.topProductPreview.count == item.stocks[0].stock) {
+                                showPopup(CART_MAX);
+                            }
+                        }
+                    });
+
+                    if (GLOBAL_DATA.topProductPreview.count > 9999) {
+                        GLOBAL_DATA.topProductPreview.count = 9999;
                     }
 
                     //check if size id in cart

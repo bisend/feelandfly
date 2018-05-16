@@ -162,7 +162,8 @@ var GLOBAL_DATA = {
         product: [],
         currentSizeId: '',
         count: '',
-        rel: ''
+        rel: '',
+        inStock: true
     },
     salesProducts: [],
     
@@ -170,7 +171,8 @@ var GLOBAL_DATA = {
         product: [],
         currentSizeId: '',
         count: '',
-        rel: ''
+        rel: '',
+        inStock: true
     },
     topProducts: [],
     
@@ -178,7 +180,8 @@ var GLOBAL_DATA = {
         product: [],
         currentSizeId: '',
         count: '',
-        rel: ''
+        rel: '',
+        inStock: true
     },
     newProducts: [],
 
