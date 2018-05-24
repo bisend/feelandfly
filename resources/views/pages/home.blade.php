@@ -490,7 +490,7 @@
                 </div>
                 {{--SALES PRODUCT PREVIEW--}}
 
-                <div class="container theme-container">
+                <div class="container">
                     <!-- Related Products Starts -->
                     <div class="block-inline pt-15 similar_prod-section">
                         <h2 class="section-title">
@@ -582,7 +582,7 @@
                             @endforeach
                         </div>
                         <div class="sale-button-block">
-                            <a href="{{ url_sale($model->language) }}" class="theme-btn btn-black sale-button">{{ trans('home.all_sales') }} ({{ $model->salesProductsCount }})</a>
+                            <a href="{{ url_sale($model->language) }}" class="btn_link sale-button">{{ trans('home.all_sales') }} ({{ $model->salesProductsCount }})</a>
                         </div>
                     </div>
                     <!-- Related Products Ends -->
@@ -637,8 +637,8 @@
         <!-- / CATEGORIES SPECIAL Slider  Ends -->
 
         <!-- TOP AND NEW Sliders Start -->
-        <section class="prod-slider-sec pb-70">
-            <div class="container theme-container">
+        <section class="prod-slider-sec">
+            <div class="container">
                 <div class="row">
                     @if(!is_null($model->topProducts) && $model->topProducts->count() > 0)
                         <div class="col-md-12 shares-products" id="top-products">
@@ -883,6 +883,13 @@
                             </div>
                         </div>
                     @endif
+                </div>
+            </div>
+        </section>
+
+        <section class="prod-slider-sec prod-slider-news pb-20">
+            <div class="container">
+                <div class="row">
                     @if(!is_null($model->newProducts) && $model->newProducts->count() > 0)
                         <div class="col-md-12 new-products" id="new-products">
                             <h2 class="section-title">
@@ -1199,7 +1206,7 @@
         @if(null)
         <!-- Blog Starts-->
         <section class="blog-sec padding-b-30">
-            <div class="container theme-container">
+            <div class="container">
                 <div class="title-wrap pb-20">
                     <div class="my_title_link my_title_link_blogs">
                         <a href="{{ url_all_blogs($model->language) }}" class="title_link">{{ trans('home.see_all') }}</a>

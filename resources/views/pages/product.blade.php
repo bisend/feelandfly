@@ -63,7 +63,7 @@
                                            rel="prettyPhoto[single-product]"
                                            title="{{ $model->product->name }}"
                                            class="caption-link meta-icon">
-                                            <i class="fa fa-eye"></i>
+                                            <i class="fa fa-search-plus"></i>
                                         </a>
                                     </div>
                                 @endforeach
@@ -86,6 +86,9 @@
                             <div class="prod-details" id="product-details">
                                 <div class="prod-title">
                                     <h1>{{ $model->product->name }}</h1>
+                                    <div class="product-article">
+                                        Артикул: <b>{{ $model->product->vendor_code }}</b>
+                                    </div>
                                 </div>
                                 <div class="block-inline">
                                     <div class="rating pull-left">
@@ -119,9 +122,9 @@
                                 </div>
 
 
-                                <div class="discriptions pt-20">
+                                <div class="discriptions pt-15">
                                     <ul>
-                                        <li>{{ trans('product.stock') }}:
+                                        <!-- <li>{{ trans('product.stock') }}:
                                             <span v-cloak v-for="productSize in singleProduct.product.product_sizes"
                                                   v-if="productSize.size_id == singleProduct.sizeId">
                                                 <span v-if="productSize.stocks[0].stock > 0" class="product-in-stock">
@@ -131,7 +134,7 @@
                                                     {{ trans('product.product_not_in_stock') }}
                                                 </span>
                                             </span>
-                                        </li>
+                                        </li> -->
                                         @foreach($model->productProperties as $productProperty)
                                             @if($productProperty->property_name_slug != 'razmer' && $productProperty->property_name_slug != 'cvet')
                                                 <li>
@@ -139,7 +142,7 @@
                                                 </li>
                                             @endif
                                         @endforeach
-                                        <li>Артикул: {{ $model->product->vendor_code }}</li>
+                                        <!-- <li>Артикул: {{ $model->product->vendor_code }}</li> -->
                                     </ul>
                                 </div>
                                 <div class="prod-attributes">
@@ -169,6 +172,9 @@
                                             <span v-for="size in singleProduct.product.sizes" v-if="size.id == singleProduct.sizeId" v-cloak>
                                                 @{{ size.name }}
                                             </span>
+                                            <a class="size-table-btn pull-right" href="#" data-toggle="modal" data-target="#size-table-popup">
+                                                Таблица размеров
+                                            </a>
                                         </div>
                                         @php($counterSize = 0)
                                         @foreach($model->product->sizes as $size)
@@ -190,6 +196,17 @@
                                             @php($counterSize++)
                                         @endforeach
                                     </ul>
+                                    <div class="product-present">
+                                        <span v-cloak v-for="productSize in singleProduct.product.product_sizes"
+                                              v-if="productSize.size_id == singleProduct.sizeId">
+                                            <span v-if="productSize.stocks[0].stock > 0" class="product-in-stock">
+                                                {{ trans('product.product_in_stock') }}
+                                            </span>
+                                            <span v-else class="product-not-in-stock">
+                                                {{ trans('product.product_not_in_stock') }}
+                                            </span>
+                                        </span>
+                                    </div>
                                     <ul class="prod-btns prod-meta">
                                         <li>
                                             <div class="quantity">

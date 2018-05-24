@@ -481,3 +481,17 @@ if (document.getElementById('product-details'))
         }
     });
 }
+
+$(window).load(function(){
+    $("[data-single-product-container] .sync2").on('initialize.owl.carousel', function( event ){
+        fixedSize();
+    });
+
+    function fixedSize(){
+        sync2Product.find(".item-smoll .owl-stage .owl-item").each(function(i, item){
+            var $item = $(item),
+                $itemW = $item.outerWidth();
+            $item.css("height", $itemW);
+        })
+    };
+})
