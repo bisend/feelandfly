@@ -4,7 +4,7 @@
     <article class="margin-after-header">
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">
-            <div class="theme-container container ">
+            <div class="container ">
                 <div class="site-breadcumb white-clr no-flex-title">
                     {{--BREADCRUMB--}}
                     <h2 class="section-title wht fsz-36"> {{ trans('order.order_payment') }} </h2>
@@ -17,7 +17,7 @@
         <!--Breadcrumb Section End-->
 
         <!-- Page Starts-->
-        <div class="container theme-container ptb-70 payment-section">
+        <div class="container ptb-70 payment-section">
             <div class="row">
                 <div class="col-md-12">
                     <div class="payment-section-header">

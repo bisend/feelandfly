@@ -6,7 +6,7 @@
 
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">
-            <div class="theme-container container ">
+            <div class="container ">
                 <div class="site-breadcumb white-clr no-flex-title">
 
                     {{--EDIT ORDER BUTTON--}}
@@ -27,7 +27,7 @@
         <!--Breadcrumb Section End-->
 
         <!-- Page Starts-->
-        <div class="container theme-container ptb-70">
+        <div class="container ptb-70">
             <div class="row">
 
 

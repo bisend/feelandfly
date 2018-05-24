@@ -6,7 +6,7 @@
 
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">
-            <div class="theme-container container ">
+            <div class="container ">
                 <div class="site-breadcumb white-clr breadcrumb-dis-block">
                     <h2 class="section-title wht fsz-36">{{ trans('profile.my_profile') }}</h2>
                     <ol class="breadcrumb breadcrumb-menubar">
@@ -23,7 +23,7 @@
         <!--Breadcrumb Section End-->
 
         <!-- Page Starts-->
-        <div class="container theme-container ptb-70" id="profile-wish-list">
+        <div class="container ptb-70" id="profile-wish-list">
             <aside class="row">
                 <!-- Sidebar Starts -->
                 <aside class="col-md-3 col-sm-4 sidebar">
