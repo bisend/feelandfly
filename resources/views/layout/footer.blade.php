@@ -1,7 +1,7 @@
 <footer class="footer-wrap">
     <!-- FOOTER-1 Starts -->
     <section class="sec-space footer-1">
-        <div class="container theme-container">
+        <div class="container">
             <div class="row">
                 <div class="col-sm-6 col-md-4">
                     <div class="text-widget clearfix">
@@ -92,7 +92,7 @@
 
     <!-- Footer Banner-2 Starts -->
     <section class="footer-banner">
-        <div class="container theme-container">
+        <div class="container">
             <div class="row">
                 <div class="col-sm-6 gray-clr copy-right">
                     © Feel and Fly 2017. Все права защищены.

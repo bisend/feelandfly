@@ -6,7 +6,7 @@
 
 
         <!-- ERROR PAGE ---------------------------------------------------------------- -->
-        <div class="container theme-container ptb-70">
+        <div class="container ptb-70">
             <div class="row">
 
                 <div class="error-section">

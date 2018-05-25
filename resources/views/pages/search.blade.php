@@ -197,7 +197,7 @@
 
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">
-            <div class="theme-container container ">
+            <div class="container ">
                 <div class="site-breadcumb">
 
                     <h1 class="section-title fsz-36">
@@ -212,7 +212,7 @@
         <!--Breadcrumb Section End-->
 
         <!-- Page Starts-->
-        <div class="container theme-container ptb-70">
+        <div class="container ptb-70">
             <div class="row">
 
 

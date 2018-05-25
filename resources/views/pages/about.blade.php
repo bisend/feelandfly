@@ -6,7 +6,7 @@
 
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">
-            <div class="theme-container container ">
+            <div class="container ">
                 <div class="site-breadcumb">
                     <h1 class="section-title fsz-36">
                         {{ trans('header.about_us') }}
@@ -17,7 +17,7 @@
         <!--Breadcrumb Section End-->
 
 
-        <div class="container theme-container ptb-70">
+        <div class="container ptb-70">
 
             {{--content--}}
 

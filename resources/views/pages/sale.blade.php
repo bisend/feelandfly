@@ -195,7 +195,7 @@
 
 
             <!-- Page Starts-->
-            <div class="container theme-container ptb-70 sale-section">
+            <div class="container ptb-70 sale-section">
                 <div class="row">
 
 
@@ -434,7 +434,7 @@
         </article>
     @else
         <article class="margin-after-header">
-            <div class="container theme-container ptb-70">
+            <div class="container ptb-70">
                 <div class="row">
 
 

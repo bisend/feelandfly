@@ -3,7 +3,7 @@
 @section('content')
 
     <!-- Page Starts-->
-    <div class="container theme-container pt-70">
+    <div class="container pt-70">
         <div class="row">
 
             {{--BLOG Starts--}}

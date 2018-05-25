@@ -7,7 +7,7 @@
     <article class="margin-after-header">
         <!--Breadcrumb Section Start-->
         <section class="breadcrumb-bg">
-            <div class="theme-container container ">
+            <div class="container ">
                 <div class="site-breadcumb white-clr">
                     <ol class="breadcrumb breadcrumb-menubar">
                         <li>
@@ -26,7 +26,7 @@
         <!--Breadcrumb Section End-->
 
         <!-- Page Starts-->
-        <div class="container theme-container product_section">
+        <div class="container product_section">
             <div class="row">
 
                 <!-- Product Details Starts-->
