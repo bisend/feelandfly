@@ -24,6 +24,7 @@ class CreateCategoriesTable extends Migration
             $table->text('description_uk')->nullable();
             $table->integer('priority')->default(1000);
             $table->boolean('is_visible')->default(true);
+            $table->string('picture_size')->nullable();
             $table->string('code_1c', 36)->nullable();
             //meta
             $table->text('meta_title_ru')->nullable();

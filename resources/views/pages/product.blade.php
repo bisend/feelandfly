@@ -172,7 +172,10 @@
                                             <span v-for="size in singleProduct.product.sizes" v-if="size.id == singleProduct.sizeId" v-cloak>
                                                 @{{ size.name }}
                                             </span>
-                                            <a class="size-table-btn pull-right" href="#" data-toggle="modal" data-target="#size-table-popup">
+                                            <a class="size-table-btn pull-right"
+                                               href="{{ $image->original }}"
+                                               rel="prettyPhoto[single-product]"
+                                               title="{{ $model->product->name }}">
                                                 Таблица размеров
                                             </a>
                                         </div>

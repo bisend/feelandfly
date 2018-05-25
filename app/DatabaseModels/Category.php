@@ -55,6 +55,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaKeywordsUk($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaTitleRu($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaTitleUk($value)
+ * @property string|null $picture_size_id
+ * @property-read \App\DatabaseModels\PictureSize $pictureSize
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category wherePictureSizeId($value)
+ * @property string|null $picture_size
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category wherePictureSize($value)
  */
 class Category extends Model
 {

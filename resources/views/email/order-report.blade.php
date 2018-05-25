@@ -7,7 +7,15 @@
 | Фото | {{ trans('email.product_name') }} | {{ trans('email.color') }} | {{ trans('email.size') }} | {{ trans('email.price') }} | {{ trans('email.count') }} | {{ trans('email.sum') }} |
 | :-------------: | :---------------------------------- | :--------: | :--------: | :----------: | :-----------: | :----------: |
 @foreach($cartService->cart as $cartItem)
-    | <a href="{{ url_product($cartItem['product']->slug, $model->language) }}"><img height="65px" src="{{ url('/') }}/{{ $cartItem['product']->images[0]->small }}" alt=""></a> | <a href="{{ url_product($cartItem['product']->slug, $model->language) }}">{{ $cartItem['product']->name }}</a> | <div class="product-color" style="background-color: {{ $cartItem['product']->color->html_code }};"></div> | <div class="product-size" style="">{{ $cartItem['product']->sizes[0]->name }}</div> | {{ $cartItem['product']->price[0]->price }} грн | {{ $cartItem['count'] }} | {{ set_format_price($cartItem['product']->price[0]->price, $cartItem['count']) }} грн |
+    | <a href="{{ url_product($cartItem['product']->slug, $model->language) }}">
+        <img height="65px" src="{{ url('/') }}/{{ $cartItem['product']->images[0]->small }}" alt="">
+    </a> |
+    <a href="{{ url_product($cartItem['product']->slug, $model->language) }}">
+        {{ $cartItem['product']->name }}</a>
+    | <div class="product-color" style="background-color: {{ $cartItem['product']->color->html_code }};"></div> |
+    <div class="product-size" style="">{{ $cartItem['product']->sizes[0]->name }}</div>
+    | {{ $cartItem['product']->price[0]->price }} грн | {{ $cartItem['count'] }}
+    | {{ set_format_price($cartItem['product']->price[0]->price, $cartItem['count']) }} грн |
 @endforeach
 @endcomponent
 {{--<table>--}}
