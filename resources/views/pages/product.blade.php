@@ -173,9 +173,9 @@
                                                 @{{ size.name }}
                                             </span>
                                             <a class="size-table-btn pull-right"
-                                               href="{{ $image->original }}"
+                                               href="{{ $model->currentCategory->picture_size }}"
                                                rel="prettyPhoto[single-product]"
-                                               title="{{ $model->product->name }}">
+                                               title="{{ $model->currentCategory->name }}">
                                                 Таблица размеров
                                             </a>
                                         </div>
