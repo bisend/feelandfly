@@ -17,7 +17,7 @@ class OrderStatusesSeeder extends Seeder
         $this->command->info('[order_statuses] table truncated...');
 
         DB::beginTransaction();
-        $this->seed();
+//        $this->seed();
         DB::commit();
 
         $this->command->info('[order_statuses] table seeded...');

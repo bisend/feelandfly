@@ -72,6 +72,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaKeywordsUk($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaTitleRu($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaTitleUk($value)
+ * @property string|null $picture_size
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product wherePictureSize($value)
  */
 class Product extends Model
 {

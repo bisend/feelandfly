@@ -17,7 +17,7 @@ class ProductPricesSeeder extends Seeder
         $this->command->info('[product_prices] table truncated...');
 
         DB::beginTransaction();
-        $this->seed();
+//        $this->seed();
         DB::commit();
 
         $this->command->info('[product_prices] table seeded...');

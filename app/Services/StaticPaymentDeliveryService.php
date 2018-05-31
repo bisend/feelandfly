@@ -11,7 +11,7 @@ namespace App\Services;
 
 use App\Repositories\CategoryRepository;
 
-class StaticPaymentDeliveryService extends LayoutService
+    class StaticPaymentDeliveryService extends LayoutService
 {
     public function __construct(CategoryRepository $categoryRepository)
     {

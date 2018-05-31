@@ -15,7 +15,7 @@ class ProductsGroupsIdPatch extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
         DB::beginTransaction();
-        $this->seed();
+//        $this->seed();
         DB::commit();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1');

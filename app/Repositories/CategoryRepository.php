@@ -53,7 +53,6 @@ class CategoryRepository
                 "name_$language as name",
                 'slug',
                 "description_$language as description",
-                'picture_size',
                 'priority'
             ]);
     }
@@ -69,7 +68,6 @@ class CategoryRepository
                 'slug',
                 "description_$language as description",
                 'priority',
-                'picture_size',
                 "meta_title_$language as meta_title",
                 "meta_description_$language as meta_description",
                 "meta_keywords_$language as meta_keywords",
@@ -87,7 +85,6 @@ class CategoryRepository
                 "name_$language as name",
                 'slug',
                 "description_$language as description",
-                'picture_size',
                 'priority'
             ]);
     }

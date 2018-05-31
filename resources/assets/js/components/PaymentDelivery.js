@@ -1,6 +1,6 @@
 if (document.getElementById('profile-payment-delivery'))
 {
-    let profileAStreetValidator, profileALandValidator, profileACityValidator;
+    let profileAStreetValidator, profileALandValidator, profileACityValidator, profileAIndexValidator;
 
     new Vue({
         el: '#profile-payment-delivery',
@@ -355,6 +355,13 @@ if (document.getElementById('profile-payment-delivery'))
                                         isValid = false;
                                         console.log('A city');
                                     }
+
+                                    // VALIDATE INDEX
+                                    profileAIndexValidator.Validate();
+                                    if (!profileAIndexValidator.IsValid()) {
+                                        isValid = false;
+                                        console.log('A index');
+                                    }
                                 }
                             }
                             //CASE ADDRESS DELIVERY END
@@ -511,6 +518,19 @@ if (document.getElementById('profile-payment-delivery'))
 
                 profileACityValidator = new RegExValidatingInput($('[data-profile-a-city]'), {
                     expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function (input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function (input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                profileAIndexValidator = new RegExValidatingInput($('[data-profile-a-index]'), {
+                    expression: RegularExpressions.DIGITS_ONLY,
                     ChangeOnValid: function (input) {
                         input.removeClass(INCORRECT_FIELD_CLASS);
                     },

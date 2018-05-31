@@ -17,7 +17,7 @@ class ProductCategorySeeder extends Seeder
         ProductCategory::truncate();
         $this->command->info('[product_category] table truncated...');
 
-        $this->seed();
+//        $this->seed();
 
         $this->command->info('[product_category] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');

@@ -363,7 +363,6 @@ var searchWasHidden = false;
 var searchBtnClicked = false;
 
 $(document).ready(function () {
-
     $('.open-search').click(function() {
         searchBtnClicked = true;
         console.log(searchBtnClicked);

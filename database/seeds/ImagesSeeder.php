@@ -17,7 +17,7 @@ class ImagesSeeder extends Seeder
         $this->command->info('[images] table truncated...');
         
         DB::beginTransaction();
-        $this->seed();
+//        $this->seed();
         DB::commit();
 
         $this->command->info('[images] table seeded...');

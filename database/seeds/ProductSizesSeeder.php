@@ -18,7 +18,7 @@ class ProductSizesSeeder extends Seeder
         $this->command->info('[product_sizes] table truncated...');
 
         DB::beginTransaction();
-        $this->seed();
+//        $this->seed();
         DB::commit();
 
         $this->command->info('[product_sizes] table seeded...');

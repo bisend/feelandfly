@@ -17,7 +17,7 @@ class CategoriesSeeder extends Seeder
         $this->command->info('[categories] table truncated...');
         
         DB::beginTransaction();
-        $this->seed();
+//        $this->seed();
         DB::commit();
         
         $this->command->info('[categories] table seeded...');

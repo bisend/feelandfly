@@ -172,17 +172,19 @@
                                             <span v-for="size in singleProduct.product.sizes" v-if="size.id == singleProduct.sizeId" v-cloak>
                                                 @{{ size.name }}
                                             </span>
-                                            <a class="size-table-btn pull-right"
-                                               href="{{ $model->currentCategory->picture_size }}"
-                                               rel="prettyPhoto[single-product]"
-                                               title="{{ $model->currentCategory->name }}">
-                                                Таблица размеров
-                                            </a>
+                                            @if($model->product->picture_size)
+                                                <a class=" size-table-btn pull-right"
+                                                   id="button-product-size"
+                                                   data-toggle="modal"
+                                                   data-target="#product-size">
+                                                    Таблица размеров
+                                                </a>
+                                            @endif
                                         </div>
                                         @php($counterSize = 0)
                                         @foreach($model->product->sizes as $size)
                                             <li>
-                                                @if($counterSize == 0)
+                                                @if($counterSize != 0)
                                                     <a href="#"
                                                        v-on:click.prevent="changeSizeId('{{ $size->id }}')"
                                                        :class="{active : singleProduct.sizeId == {{$size->id}}}">
@@ -466,4 +468,22 @@
         <!-- / Page Ends -->
 
     </article>
+
+    <!-- Modal -->
+    <div id="product-size" class="modal fade pop-up-messege" role="dialog" aria-hidden="true" tabindex="-1" data-notify>
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form >
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" data-notify-close>&times;</button>
+                        <h4 class="modal-title">Таблиця розмеров</h4>
+                    </div>
+                    <img src="{{ $model->product->picture_size }}" alt="{{ $model->product->name }}">
+                </form>
+            </div>
+
+        </div>
+    </div>
 @endsection

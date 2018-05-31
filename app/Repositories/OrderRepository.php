@@ -10,6 +10,7 @@ namespace App\Repositories;
 
 use App\DatabaseModels\Order;
 use App\DatabaseModels\OrderStatus;
+use App\DatabaseModels\Profile;
 
 /**
  * Class OrderRepository
@@ -59,6 +60,29 @@ class OrderRepository
             $order->delivery_price = 400;
         }
 
+        if(auth()->check())
+        {
+            \Debugbar::info("jrbfsvhevblkjd");
+            $user = auth()->user();
+
+            $profile = Profile::whereUserId($user->id)->first();
+
+            $profile->delivery_id = $data['deliveryId'];
+            $profile->delivery_type_id = $data['npDeliveryTypeId'];
+            $profile->checkout_point_id = $data['checkoutPointId'];
+            $profile->country_name = $data['countryName'];
+            $profile->country_code = $data['countryCode'];
+            $profile->np_city = $data['npCity'];
+            $profile->np_city_ref = $data['npCityRef'];
+            $profile->np_warehouse = $data['npWarehouse'];
+            $profile->np_warehouse_ref = $data['npWarehouseRef'];
+            $profile->a_street = $data['aStreet'];
+            $profile->a_land = $data['aLand'];
+            $profile->a_city = $data['aCity'];
+            $profile->post_index =  $data['postIndex'];
+
+            $profile->save();
+        }
 
         $order->save();
         $order->order_number = $order->id + 10000;
