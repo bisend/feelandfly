@@ -431,7 +431,6 @@ $(document).ready(function ()
             deeplinking:false
         });
     }
-
 });
 
 $(window).scroll(function () {

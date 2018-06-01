@@ -17,7 +17,7 @@ class DeliveriesSeeder extends Seeder
         $this->command->info('[deliveries] table truncated...');
 
         DB::beginTransaction();
-        $this->seed();
+//        $this->seed();
         DB::commit();
 
         $this->command->info('[deliveries] table seeded...');

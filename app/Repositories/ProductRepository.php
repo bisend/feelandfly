@@ -95,6 +95,7 @@ class ProductRepository
                 'priority',
                 'vendor_code',
                 'rating',
+                'picture_size',
                 'number_of_views',
                 "meta_title_$language as meta_title",
                 "meta_description_$language as meta_description",

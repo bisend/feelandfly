@@ -18,7 +18,7 @@ class ProductImagesSeeder extends Seeder
         $this->command->info('[product_images] table truncated...');
 
         DB::beginTransaction();
-        $this->seed();
+//        $this->seed();
         DB::commit();
         
         $this->command->info('[product_images] table seeded...');

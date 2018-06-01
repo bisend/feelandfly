@@ -16,7 +16,7 @@ class BlogsSeeder extends Seeder
         Blog::truncate();
         $this->command->info('[blogs] table truncated...');
 
-        $this->seed();
+//        $this->seed();
 
         $this->command->info('[blogs] table seeded...');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');

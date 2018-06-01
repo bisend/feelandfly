@@ -82,7 +82,7 @@
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.5';
+  var VERSION = '4.17.10';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -506,6 +506,14 @@
   /** Used to access faster Node.js helpers. */
   var nodeUtil = (function() {
     try {
+      // Use `util.types` for Node.js 10+.
+      var types = freeModule && freeModule.require && freeModule.require('util').types;
+
+      if (types) {
+        return types;
+      }
+
+      // Legacy `process.binding('util')` for Node.js < 10.
       return freeProcess && freeProcess.binding && freeProcess.binding('util');
     } catch (e) {}
   }());
@@ -17559,15 +17567,18 @@ process.umask = function() { return 0; };
 /***/ "./node_modules/timers-browserify/main.js":
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var apply = Function.prototype.apply;
+/* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
+            (typeof self !== "undefined" && self) ||
+            window;
+var apply = Function.prototype.apply;
 
 // DOM APIs, for completeness
 
 exports.setTimeout = function() {
-  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+  return new Timeout(apply.call(setTimeout, scope, arguments), clearTimeout);
 };
 exports.setInterval = function() {
-  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+  return new Timeout(apply.call(setInterval, scope, arguments), clearInterval);
 };
 exports.clearTimeout =
 exports.clearInterval = function(timeout) {
@@ -17582,7 +17593,7 @@ function Timeout(id, clearFn) {
 }
 Timeout.prototype.unref = Timeout.prototype.ref = function() {};
 Timeout.prototype.close = function() {
-  this._clearFn.call(window, this._id);
+  this._clearFn.call(scope, this._id);
 };
 
 // Does not start the time, just sets up the members needed.
@@ -17610,7 +17621,7 @@ exports._unrefActive = exports.active = function(item) {
 
 // setimmediate attaches itself to the global object
 __webpack_require__("./node_modules/setimmediate/setImmediate.js");
-// On some exotic environments, it's not clear which object `setimmeidate` was
+// On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
 exports.setImmediate = (typeof self !== "undefined" && self.setImmediate) ||
@@ -31751,7 +31762,8 @@ if (document.getElementById('order-confirm')) {
         orderEmailValidator = void 0,
         orderAStreetValidator = void 0,
         orderALandValidator = void 0,
-        orderACityValidator = void 0;
+        orderACityValidator = void 0,
+        orderAIndexValidator = void 0;
 
     GLOBAL_DATA.orderConfirm.delivery = window.FFShop.delivery == null ? null : window.FFShop.delivery;
     GLOBAL_DATA.orderConfirm.deliveryType = window.FFShop.deliveryType == null ? null : window.FFShop.deliveryType;
@@ -31901,6 +31913,19 @@ if (document.getElementById('order-confirm')) {
 
                 orderACityValidator = new RegExValidatingInput($('[data-order-a-city]'), {
                     expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function ChangeOnValid(input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function ChangeOnInvalid(input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                orderAIndexValidator = new RegExValidatingInput($('[data-order-a-index]'), {
+                    expression: RegularExpressions.DIGITS_ONLY,
                     ChangeOnValid: function ChangeOnValid(input) {
                         input.removeClass(INCORRECT_FIELD_CLASS);
                     },
@@ -32163,6 +32188,13 @@ if (document.getElementById('order-confirm')) {
                                             isValid = false;
                                             console.log('A city');
                                         }
+
+                                        // VALIDATE INDEX
+                                        orderAIndexValidator.Validate();
+                                        if (!orderAIndexValidator.IsValid()) {
+                                            isValid = false;
+                                            console.log('A index');
+                                        }
                                     }
                             }
                             //CASE ADDRESS DELIVERY END
@@ -32291,6 +32323,7 @@ if (document.getElementById('order-confirm')) {
                         }
 
                         if (data.status === 'error') {
+                            console.log("error success");
                             showPopup(SERVER_ERROR);
                         }
                     },
@@ -32313,7 +32346,8 @@ if (document.getElementById('order-confirm')) {
 if (document.getElementById('profile-payment-delivery')) {
     var profileAStreetValidator = void 0,
         profileALandValidator = void 0,
-        profileACityValidator = void 0;
+        profileACityValidator = void 0,
+        profileAIndexValidator = void 0;
 
     new Vue({
         el: '#profile-payment-delivery',
@@ -32626,6 +32660,13 @@ if (document.getElementById('profile-payment-delivery')) {
                                             isValid = false;
                                             console.log('A city');
                                         }
+
+                                        // VALIDATE INDEX
+                                        profileAIndexValidator.Validate();
+                                        if (!profileAIndexValidator.IsValid()) {
+                                            isValid = false;
+                                            console.log('A index');
+                                        }
                                     }
                             }
                             //CASE ADDRESS DELIVERY END
@@ -32767,6 +32808,19 @@ if (document.getElementById('profile-payment-delivery')) {
 
                 profileACityValidator = new RegExValidatingInput($('[data-profile-a-city]'), {
                     expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function ChangeOnValid(input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function ChangeOnInvalid(input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                profileAIndexValidator = new RegExValidatingInput($('[data-profile-a-index]'), {
+                    expression: RegularExpressions.DIGITS_ONLY,
                     ChangeOnValid: function ChangeOnValid(input) {
                         input.removeClass(INCORRECT_FIELD_CLASS);
                     },
@@ -32924,9 +32978,9 @@ if (document.getElementById('product-details')) {
         //Resize carousels in modal
 
         sync1Product = $("[data-single-product-container] .sync1");
-        sync2Product = $("[data-single-product-container] .sync2");
+        _sync2Product = $("[data-single-product-container] .sync2");
 
-        sync2Product.owlCarousel({
+        _sync2Product.owlCarousel({
             rtl: false,
             items: 3,
             //loop: true,
@@ -32955,11 +33009,11 @@ if (document.getElementById('product-details')) {
 
         function syncPosition(el) {
             var current = this._current;
-            sync2Product.find(".owl-item").removeClass("synced").eq(current).addClass("synced");
+            _sync2Product.find(".owl-item").removeClass("synced").eq(current).addClass("synced");
             center(current);
         }
 
-        sync2Product.on("click", ".owl-item", function (e) {
+        _sync2Product.on("click", ".owl-item", function (e) {
             e.preventDefault();
             var number = $(this).index();
             sync1Product.trigger("to.owl.carousel", [number, 1000, true]);
@@ -32968,26 +33022,26 @@ if (document.getElementById('product-details')) {
 
         function center(num) {
 
-            var sync2visible = sync2Product.find('.owl-item.active').map(function () {
+            var sync2visible = _sync2Product.find('.owl-item.active').map(function () {
                 return $(this).index();
             });
 
             if ($.inArray(num, sync2visible) === -1) {
                 if (num > sync2visible[sync2visible.length - 1]) {
-                    sync2Product.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
+                    _sync2Product.trigger("to.owl.carousel", [num - sync2visible.length + 2, navSpeedThumbs, true]);
                 } else {
-                    sync2Product.trigger("to.owl.carousel", Math.max(0, num - 1));
+                    _sync2Product.trigger("to.owl.carousel", Math.max(0, num - 1));
                 }
             } else if (num === sync2visible[sync2visible.length - 1]) {
-                sync2Product.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
+                _sync2Product.trigger("to.owl.carousel", [sync2visible[1], navSpeedThumbs, true]);
             } else if (num === sync2visible[0]) {
-                sync2Product.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
+                _sync2Product.trigger("to.owl.carousel", [Math.max(0, num - 1), navSpeedThumbs, true]);
             }
         }
     };
 
     var sync1Product = void 0,
-        sync2Product = void 0,
+        _sync2Product = void 0,
         navSpeedThumbs = 500;
 
     $(document).ready(function () {
@@ -33368,6 +33422,20 @@ if (document.getElementById('product-details')) {
         }
     });
 }
+
+$(window).load(function () {
+    $("[data-single-product-container] .sync2").on('initialize.owl.carousel', function (event) {
+        fixedSize();
+    });
+
+    function fixedSize() {
+        sync2Product.find(".item-smoll .owl-stage .owl-item").each(function (i, item) {
+            var $item = $(item),
+                $itemW = $item.outerWidth();
+            $item.css("height", $itemW);
+        });
+    };
+});
 
 /***/ }),
 

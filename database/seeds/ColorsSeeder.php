@@ -17,7 +17,7 @@ class ColorsSeeder extends Seeder
         $this->command->info('[colors] table truncated...');
 
         DB::beginTransaction();
-        $this->seed();
+//        $this->seed();
         DB::commit();
 
         $this->command->info('[colors] table seeded...');

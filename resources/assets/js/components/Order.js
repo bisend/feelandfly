@@ -8,7 +8,8 @@ if (document.getElementById('order-confirm'))
         orderEmailValidator,
         orderAStreetValidator,
         orderALandValidator,
-        orderACityValidator;
+        orderACityValidator,
+        orderAIndexValidator;
 
     GLOBAL_DATA.orderConfirm.delivery = (window.FFShop.delivery == null ? null : window.FFShop.delivery);
     GLOBAL_DATA.orderConfirm.deliveryType = (window.FFShop.deliveryType == null ? null : window.FFShop.deliveryType);
@@ -171,6 +172,19 @@ if (document.getElementById('order-confirm'))
 
                 orderACityValidator = new RegExValidatingInput($('[data-order-a-city]'), {
                     expression: RegularExpressions.MIN_TEXT,
+                    ChangeOnValid: function (input) {
+                        input.removeClass(INCORRECT_FIELD_CLASS);
+                    },
+                    ChangeOnInvalid: function (input) {
+                        input.addClass(INCORRECT_FIELD_CLASS);
+                    },
+                    showErrors: true,
+                    requiredErrorMessage: REQUIRED_FIELD_TEXT,
+                    regExErrorMessage: INCORRECT_FIELD_TEXT
+                });
+
+                orderAIndexValidator = new RegExValidatingInput($('[data-order-a-index]'), {
+                    expression: RegularExpressions.DIGITS_ONLY,
                     ChangeOnValid: function (input) {
                         input.removeClass(INCORRECT_FIELD_CLASS);
                     },
@@ -468,6 +482,13 @@ if (document.getElementById('order-confirm'))
                                         isValid = false;
                                         console.log('A city');
                                     }
+
+                                    // VALIDATE INDEX
+                                    orderAIndexValidator.Validate();
+                                    if (!orderAIndexValidator.IsValid()) {
+                                        isValid = false;
+                                        console.log('A index');
+                                    }
                                 }
                             }
                             //CASE ADDRESS DELIVERY END
@@ -612,6 +633,7 @@ if (document.getElementById('order-confirm'))
 
                         if (data.status === 'error')
                         {
+                            console.log("error success");
                             showPopup(SERVER_ERROR);
                         }
                     },

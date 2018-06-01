@@ -339,7 +339,7 @@
                                                 <v-select v-model="orderConfirm.checkoutPoint"
                                                           :input-id="'order-points-field'"
                                                           :transition="'slidedd'"
-                                                          :placeholder="'{{ trans('order.choose_point') }}'"
+                                                          order-a-index-field                   :placeholder="'{{ trans('order.choose_point') }}'"
                                                           :max-height="'200px'"
                                                           :class="'country-select'"
                                                           :searchable="false"
