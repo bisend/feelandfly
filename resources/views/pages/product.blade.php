@@ -470,20 +470,24 @@
     </article>
 
     <!-- Modal -->
-    <div id="product-size" class="modal fade pop-up-messege" role="dialog" aria-hidden="true" tabindex="-1" data-notify>
+    <div id="product-size" class="modal fade pop-up-messege" role="dialog" aria-hidden="true" tabindex="-1">
         <div class="modal-dialog">
 
             <!-- Modal content-->
-            <div class="modal-content">
+            <div class="modal-content" style="min-width: 400px;">
                 <form >
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" data-notify-close>&times;</button>
-                        <h4 class="modal-title">Таблиця розмеров</h4>
+                        <h4 class="modal-title">{{ trans('product.table') }}</h4>
                     </div>
                     <img src="{{ $model->product->picture_size }}" alt="{{ $model->product->name }}">
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="theme-btn btn-white small-btn">
+                            {{ trans('product.close_table') }}
+                        </button>
+                    </div>
                 </form>
             </div>
-
         </div>
     </div>
 @endsection

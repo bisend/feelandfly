@@ -633,6 +633,7 @@ if (document.getElementById('order-confirm'))
 
                         if (data.status === 'error')
                         {
+                            console.log("error success");
                             showPopup(SERVER_ERROR);
                         }
                     },

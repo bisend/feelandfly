@@ -42,6 +42,8 @@ class OrderRepository
         $order->phone_number = $data['phone'];
         $order->comment =  $data['comment'] != '' ? $data['comment'] : null;
 
+
+
         $order->checkout_point_id = $data['checkoutPointId'];
         $order->delivery_type_id = $data['npDeliveryTypeId'];
         $order->country_name = $data['countryName'];

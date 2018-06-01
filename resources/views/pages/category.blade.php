@@ -220,6 +220,7 @@
                         <div class="widget-wrap">
 
                             @foreach($model->filters as $filterName => $filterValues)
+
                                 <div class="dropdown-div-btn">
                                     <h2 class="widget-title"><span class="filter-name">{{ $filterName }}</span><span class="plus-icon"> - </span> </h2>
                                 </div>

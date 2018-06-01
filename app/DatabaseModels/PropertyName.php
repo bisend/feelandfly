@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PropertyName whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PropertyName whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $is_visible
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PropertyName whereIsVisible($value)
  */
 class PropertyName extends Model
 {

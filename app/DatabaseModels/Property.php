@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\PropertyName[] $property_names
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\PropertyValue[] $property_values
+ * @property int $is_visible
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Property whereIsVisible($value)
  */
 class Property extends Model
 {

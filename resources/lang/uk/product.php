@@ -21,5 +21,8 @@ return [
     'product_in_stock' => 'В наявності',
     'product_not_in_stock' => 'Немає в наявності',
 
-    'fast_see' => 'ШВИДКИЙ ПЕРЕГЛЯД'
+    'fast_see' => 'ШВИДКИЙ ПЕРЕГЛЯД',
+
+    'table' => 'Таблицa размеров',
+    'close_table' => 'Закрить'
 ];
