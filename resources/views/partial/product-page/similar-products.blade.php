@@ -17,7 +17,7 @@
                     </button>
                     <div class="block-inline product-modal">
                         <!-- Single Products Slider Starts -->
-                        <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
+                       <!--  <div class="col-md-5 col-sm-12 single-prod-slider sync-sliedr">
                             <div class="owl-carousel sync1 pb-25 product-preview-images-big">
                                 <div class="item" v-for="image in similarProductPreview.product.images">
                                     <img v-bind:src="image.big">
@@ -45,6 +45,42 @@
                             </div>
 
                             <div class="owl-carousel single-prod-thumb sync2 nav-2 product-preview-images-small">
+                                <div class="item" v-for="image in similarProductPreview.product.images">
+                                    <img v-bind:src="image.small">
+                                    <span class="transparent">
+                                        <img src="/img/template/icons/plus.png" alt="view">
+                                    </span>
+                                </div>
+                            </div>
+                        </div> -->
+                         <div class="col-md-5 col-sm-12">
+                            <div class="slider slider-for single-prod-slider">
+                                <div class="item" v-for="image in similarProductPreview.product.images">
+                                    <img v-bind:src="image.big">
+
+                                    <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].priority == 3"
+                                         class="prod-tag-1 font-2">
+                                        <span> SALE </span>
+                                    </div>
+                                    <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].priority == 1"
+                                         class="prod-tag-1 font-2 prod-tag-green">
+                                        <span> NEW </span>
+                                    </div>
+                                    <div v-if="similarProductPreview.product.promotions != null && similarProductPreview.product.promotions.length > 0 && similarProductPreview.product.promotions[0].priority == 2"
+                                         class="prod-tag-1 font-2 prod-tag-violet">
+                                        <span> TOP </span>
+                                    </div>
+
+                                    <a v-bind:href="image.original"
+                                       v-bi  nd:rel="similarProductPreview.rel"
+                                       v-bind:title="similarProductPreview.product.name"
+                                       class="caption-link meta-icon">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="slider slider-nav single-prod-thumb">
                                 <div class="item" v-for="image in similarProductPreview.product.images">
                                     <img v-bind:src="image.small">
                                     <span class="transparent">
