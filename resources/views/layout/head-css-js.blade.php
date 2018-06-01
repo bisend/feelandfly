@@ -13,10 +13,6 @@
 <link href="/template/plugins/owl.carousel.2/assets/owl.carousel.css" rel="stylesheet">
 <link href="/template/plugins/prettyphoto-master/css/prettyPhoto.css" rel="stylesheet">
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.min.css">
-
-
 <!-- Custom CSS -->
 <link href="/template/header.css" rel="stylesheet">
 <link href="/template/style.css" rel="stylesheet">
