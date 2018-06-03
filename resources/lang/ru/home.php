@@ -6,5 +6,7 @@ return [
     'blogs' => 'Блоги',
     'see_all' => 'Просмотреть все',
     'all_sales' => 'Все акционные товары',
-    'categories' => 'Категории'
+    'categories' => 'Категории',
+    'catalog' => 'Католог',
+    'information' => 'Информацыя'
 ];

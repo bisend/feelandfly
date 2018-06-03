@@ -12,5 +12,29 @@
 @stack('js')
 <!--Page JS END-->
 
+<script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+        $("body").on("click", ".caption-link", function(){
+	        fixPreviewToSquer();
+        });
+    });
+    
+	function  fixPreviewToSquer(){
+    	setTimeout(function(){
+	        $(".product-preview-images-small .owl-item").each(function(i, el){
+                var $el = $(el),
+                    $elW = $el.outerWidth(),
+                    img = $el.find("img").eq(0);
+
+            	img.css({
+            		"height": $elW,
+        		    "object-fit": "cover"
+            	});
+            });
+
+    	}, 500);
+    }
+</script>
+
 <script defer src="{{ mix('/js/custom.js') }}"></script>
 <script defer src="{{ mix('/js/app.js') }}"></script>

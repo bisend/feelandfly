@@ -94,11 +94,11 @@
                         {{ trans('header.contacts') }}
                     </a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="{{ url_cooperation($model->language) }}">
                         {{ trans('header.cooperation') }}
                     </a>
-                </li>
+                </li> -->
                 <li>
                     <a href="{{ url_static_payment_delivery($model->language) }}">
                         {{ trans('header.payment_delivery') }}
@@ -198,7 +198,7 @@
                 <ul>
                     <li><a href="{{ url_about($model->language) }}">{{ trans('header.about_us') }}</a></li>
                     <li><a href="{{ url_contact($model->language) }}">{{ trans('header.contacts') }}</a></li>
-                    <li><a href="{{ url_cooperation($model->language) }}">{{ trans('header.cooperation') }}</a></li>
+                    <!-- <li><a href="{{ url_cooperation($model->language) }}">{{ trans('header.cooperation') }}</a></li> -->
                     <li><a href="{{ url_static_payment_delivery($model->language) }}">{{ trans('header.payment_delivery') }}</a></li>
                     <li class="sale-link">
                         <a href="{{ route('saleIndex', ['language' => $model->language == 'uk' ? $model->language : '']) }}">
