@@ -274,7 +274,7 @@
 
                                     @php($relatedProducts = $categoryProduct->product_group->products)
 
-                                    <div class="col-lg-3 col-sm-6 prod-wrap-cont">
+                                    <div class="col-lg-3 col-xs-6 r-full-width prod-wrap-cont">
 
                                         <div class="prod-wrap-absolute clearfix">
                                             <div class="product_item prod-wrap">

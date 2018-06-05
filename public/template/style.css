@@ -1563,8 +1563,9 @@ textarea:focus:-ms-input-placeholder {
 }
 @media (min-width:992px)and (max-width:1200px) {
     .prod-wrap {
-        display: table;
+        /*display: table;*/
         margin: auto;
+        margin-bottom: 50px;
     }
     .prod-wrap .block-inline {
         display: table;
@@ -3135,6 +3136,12 @@ table {
 .footer-wrap ul {
     margin-bottom: 0;
 }
+.footer-wrap .section-title {
+    padding-bottom: 5px;
+}
+.footer-wrap ul.social-media {
+    margin-bottom: 20px;
+}
 .footer-2 li {
     font-weight: 500;
     margin-top: 8px;
@@ -3657,6 +3664,7 @@ table {
     .prod-wrap {
         display: table;
         margin: auto;
+        margin-bottom: 50px;
     }
     .theme-tabs > li {
         padding: 0 20px;
@@ -3801,6 +3809,7 @@ table {
     .prod-wrap {
         display: table;
         margin: auto;
+        margin-bottom: 50px;
     }
 
     /*-- Footer-1 --*/
@@ -3880,9 +3889,9 @@ table {
 @media (max-width:479px) {  
     /*-- Single Product --*/
     .prod-btns.prod-meta li:nth-child(-n+2) {
-        clear: both;
-        display: table-cell;
-        padding-bottom: 15px;
+        /*clear: both;*/
+        /*display: table-cell;*/
+        /*padding-bottom: 15px;*/
     }
     .prod-btns .theme-btn {
         min-width: 150px;
@@ -6528,7 +6537,7 @@ li.sale-link:before {
 
 .category-slider-item .img{
     width: 100%;
-    height: 370px;
+    /*height: 370px;*/
     overflow: hidden!important;
 
     border: 2px solid #000;
@@ -6536,7 +6545,7 @@ li.sale-link:before {
 
 .category-slider-item .img img{
     width: 100%;
-    height: 370px;
+    /*height: 370px;*/
     object-fit: cover;
 }
 
@@ -6786,7 +6795,7 @@ footer .sec-space {
 }
 
 .choose-size a {
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 footer .navbar-nav>li,
@@ -6829,11 +6838,11 @@ footer .ather-lang {
 }
 
 .img-slide-fit {
-    height: 370px;
+    /*height: 370px;*/
 }
 
 .img-slide-fit img {
-    height: 370px;
+    /*height: 370px;*/
 }
 
 .general-leng a {
@@ -6898,3 +6907,101 @@ footer .ather-lang {
 .slider-nav .slick-next:before {
     transform: rotate(90deg);
 }*/
+
+
+
+
+
+
+@media (min-width:1200px){
+    .category-slider-item .img,
+    .category-slider-item .img img,
+    .img-slide-fit,
+    .img-slide-fit img {
+        height: 370px;
+    }
+}
+@media screen and (max-width:1200px){
+    .prod-wrap-absolute .prod-meta .theme-btn {
+        min-width: calc(100% - 55px);
+    }
+    .prod-wrap-absolute .prod-meta li {
+        display: inline;
+    }
+    .item-smoll .owl-stage .owl-item {
+        height: 103px !important;
+        width: 103px !important;
+    }
+    .single-prod-slider .single-prod-thumb:not(.product-preview-images-small) {
+        top: 167px;
+        left: -117px;
+    }
+    .item-smoll .owl-stage .owl-item .item {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    .item-smoll .owl-prev {
+        line-height: 6!important; 
+    }
+}
+@media screen and (max-width: 991px) {
+    .single-prod-slider .single-prod-thumb:not(.product-preview-images-small) {
+        top: 152px;
+        left: -92px;
+        width: 42%;
+    }
+    .item-smoll .owl-stage .owl-item {
+        height: 70px !important;
+        width: 70px !important;
+        margin-right: 10px !important;
+    }
+    .single-prod-thumb:not(.product-preview-images-small).nav-2 .owl-nav > .owl-next {
+        right: -7%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .prod-wrap-absolute {
+        position: relative;
+    }
+    .prod-wrap {
+        display:  block;
+    }
+    .photo-cat_fit {
+        /*max-height: calc(100vh - 130px);*/
+    }
+    .photo-cat_fit img {
+        /*height: auto;*/
+    }
+    .prod-wrap {
+        margin-bottom: 0px;
+    }
+    .prod-wrap-cont {
+        min-height: 370px;
+    }
+}
+
+@media (max-width: 479px){
+    .prod-attributes .prod-meta {
+        display: inline;
+    }
+    .product_section .prod-btns.prod-meta li {
+        display: inline;
+    }
+    .prod-attributes #button-product-size {
+        margin-top: -5px;
+    }
+    .prod-btns.prod-meta li:nth-child(1) {
+        clear: both;
+        display: table-cell;
+        padding-bottom: 15px;
+    }
+    .r-full-width {
+        width: 100%!important;
+    }
+    .prod-wrap-cont {
+        min-height: 320px;
+    }
+}
