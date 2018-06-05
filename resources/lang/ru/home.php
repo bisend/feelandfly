@@ -8,5 +8,5 @@ return [
     'all_sales' => 'Все акционные товары',
     'categories' => 'Категории',
     'catalog' => 'Католог',
-    'information' => 'Информацыя'
+    'information' => 'Информация'
 ];

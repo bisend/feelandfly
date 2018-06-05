@@ -64,6 +64,7 @@
                                            title="{{ $model->product->name }}"
                                            class="caption-link meta-icon">
                                             <i class="fa fa-search-plus"></i>
+                                            <span class="zoom-text">{{ trans('product.zoom_picture') }}</span>
                                         </a>
                                     </div>
                                 @endforeach
@@ -203,7 +204,7 @@
                                     </ul>
                                     <div class="product-present">
                                         <span v-cloak v-for="productSize in singleProduct.product.product_sizes"
-                                              v-if="productSize.size_id == singleProduct.sizeId">
+                                                     v-if="productSize.size_id == singleProduct.sizeId">
                                             <span v-if="productSize.stocks[0].stock > 0" class="product-in-stock">
                                                 {{ trans('product.product_in_stock') }}
                                             </span>
@@ -474,7 +475,7 @@
         <div class="modal-dialog">
 
             <!-- Modal content-->
-            <div class="modal-content" style="min-width: 400px;">
+            <div class="modal-content">
                 <form >
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" data-notify-close>&times;</button>

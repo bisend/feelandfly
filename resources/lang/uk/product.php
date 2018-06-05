@@ -24,5 +24,6 @@ return [
     'fast_see' => 'ШВИДКИЙ ПЕРЕГЛЯД',
 
     'table' => 'Таблицa размеров',
-    'close_table' => 'Закрить'
+    'close_table' => 'Закрить',
+    'zoom_picture' => 'Збільшити фото'
 ];

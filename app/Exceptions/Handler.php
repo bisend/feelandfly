@@ -61,53 +61,53 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        $language = config('app.locale');
-
-        if ($language == Languages::DEFAULT_LANGUAGE)
-        {
-            $language = '';
-        }
-
-        if ($exception instanceof BadRequestHttpException)
-        {
-            \Log::info($exception);
-            return redirect()->action('ErrorController@index', [
-                'error' => 400,
-                'language' => $language
-            ]);
-        }
-        else if ($exception instanceof UnauthorizedHttpException)
-        {
-            \Log::info($exception);
-            return redirect()->action('ErrorController@index', [
-                'error' => 401,
-                'language' => $language
-            ]);
-        }
-        else if ($exception instanceof AccessDeniedHttpException)
-        {
-            \Log::info($exception);
-            return redirect()->action('ErrorController@index', [
-                'error' => 403,
-                'language' => $language
-            ]);
-        }
-        else if($exception instanceof NotFoundHttpException)
-        {
-            \Log::info($exception);
-            return redirect()->action('ErrorController@index', [
-                'error' => 404,
-                'language' => $language
-            ]);
-        }
-        else if ($exception instanceof HttpException)
-        {
-            \Log::info($exception);
-            return redirect()->action('ErrorController@index', [
-                'error' => 500,
-                'language' => $language
-            ]);
-        }
+//        $language = config('app.locale');
+//
+//        if ($language == Languages::DEFAULT_LANGUAGE)
+//        {
+//            $language = '';
+//        }
+//
+//        if ($exception instanceof BadRequestHttpException)
+//        {
+//            \Log::info($exception);
+//            return redirect()->action('ErrorController@index', [
+//                'error' => 400,
+//                'language' => $language
+//            ]);
+//        }
+//        else if ($exception instanceof UnauthorizedHttpException)
+//        {
+//            \Log::info($exception);
+//            return redirect()->action('ErrorController@index', [
+//                'error' => 401,
+//                'language' => $language
+//            ]);
+//        }
+//        else if ($exception instanceof AccessDeniedHttpException)
+//        {
+//            \Log::info($exception);
+//            return redirect()->action('ErrorController@index', [
+//                'error' => 403,
+//                'language' => $language
+//            ]);
+//        }
+//        else if($exception instanceof NotFoundHttpException)
+//        {
+//            \Log::info($exception);
+//            return redirect()->action('ErrorController@index', [
+//                'error' => 404,
+//                'language' => $language
+//            ]);
+//        }
+//        else if ($exception instanceof HttpException)
+//        {
+//            \Log::info($exception);
+//            return redirect()->action('ErrorController@index', [
+//                'error' => 500,
+//                'language' => $language
+//            ]);
+//        }
         
         return parent::render($request, $exception);
     }

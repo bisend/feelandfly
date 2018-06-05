@@ -65,7 +65,7 @@ class ProductController extends LayoutController
             'reviews' => $reviews,
             'reviewsCount' => $reviewsCount
         ]);
-        
+
         return view('pages.product', compact('model'));
     }
 

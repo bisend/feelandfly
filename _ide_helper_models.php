@@ -81,8 +81,59 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereIcon($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\Category[] $childs
  * @property-read \App\DatabaseModels\Category|null $parent
+ * @property int|null $meta_tag_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaTagId($value)
+ * @property-read \App\DatabaseModels\MetaTag $meta_tag
+ * @property string|null $meta_title_ru
+ * @property string|null $meta_title_uk
+ * @property string|null $meta_description_ru
+ * @property string|null $meta_description_uk
+ * @property string|null $meta_keywords_ru
+ * @property string|null $meta_keywords_uk
+ * @property string|null $meta_h1_ru
+ * @property string|null $meta_h1_uk
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaDescriptionRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaDescriptionUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaH1Ru($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaH1Uk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaKeywordsRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaKeywordsUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaTitleRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category whereMetaTitleUk($value)
+ * @property string|null $picture_size_id
+ * @property-read \App\DatabaseModels\PictureSize $pictureSize
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category wherePictureSizeId($value)
+ * @property string|null $picture_size
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Category wherePictureSize($value)
  */
 	class Category extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
+ * App\DatabaseModels\CheckoutPoint
+ *
+ * @property int $id
+ * @property string $name_ru
+ * @property string $name_uk
+ * @property string $slug
+ * @property bool $is_visible
+ * @property int $priority
+ * @property string|null $code_1c
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\CheckoutPoint whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\CheckoutPoint whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\CheckoutPoint whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\CheckoutPoint whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\CheckoutPoint whereNameRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\CheckoutPoint whereNameUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\CheckoutPoint wherePriority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\CheckoutPoint whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\CheckoutPoint whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	class CheckoutPoint extends \Eloquent {}
 }
 
 namespace App\DatabaseModels{
@@ -133,8 +184,39 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Delivery whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Delivery whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property bool $is_visible
+ * @property int $priority
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Delivery whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Delivery wherePriority($value)
  */
 	class Delivery extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
+ * App\DatabaseModels\DeliveryType
+ *
+ * @property int $id
+ * @property string $name_ru
+ * @property string $name_uk
+ * @property string $slug
+ * @property bool $is_visible
+ * @property int $priority
+ * @property string|null $code_1c
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\DeliveryType whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\DeliveryType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\DeliveryType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\DeliveryType whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\DeliveryType whereNameRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\DeliveryType whereNameUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\DeliveryType wherePriority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\DeliveryType whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\DeliveryType whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	class DeliveryType extends \Eloquent {}
 }
 
 namespace App\DatabaseModels{
@@ -158,6 +240,10 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Image whereSmall($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Image whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property bool $is_visible
+ * @property int $priority
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Image whereIsVisible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Image wherePriority($value)
  */
 	class Image extends \Eloquent {}
 }
@@ -183,6 +269,11 @@ namespace App\DatabaseModels{
  * @mixin \Eloquent
  * @property-read \App\DatabaseModels\Image $image
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\MainSliderMarker[] $markers
+ * @property string|null $url_ru
+ * @property string|null $url_uk
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSlider whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSlider whereUrlRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSlider whereUrlUk($value)
  */
 	class MainSlider extends \Eloquent {}
 }
@@ -215,6 +306,57 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MainSliderMarker wherePositionY($value)
  */
 	class MainSliderMarker extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
+ * App\DatabaseModels\MetaTag
+ *
+ * @property int $id
+ * @property string $page_name
+ * @property string $title_ru
+ * @property string $title_uk
+ * @property string $description_ru
+ * @property string $description_uk
+ * @property string $keywords_ru
+ * @property string $keywords_uk
+ * @property string $h1_ru
+ * @property string $h1_uk
+ * @property string|null $code_1c
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereDescriptionRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereDescriptionUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereH1Ru($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereH1Uk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereKeywordsRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereKeywordsUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag wherePageName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereTitleRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereTitleUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereUpdatedAt($value)
+ * @mixin \Eloquent
+ * @property string $meta_title_ru
+ * @property string $meta_title_uk
+ * @property string $meta_description_ru
+ * @property string $meta_description_uk
+ * @property string $meta_keywords_ru
+ * @property string $meta_keywords_uk
+ * @property string $meta_h1_ru
+ * @property string $meta_h1_uk
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaDescriptionRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaDescriptionUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaH1Ru($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaH1Uk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaKeywordsRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaKeywordsUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaTitleRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\MetaTag whereMetaTitleUk($value)
+ */
+	class MetaTag extends \Eloquent {}
 }
 
 namespace App\DatabaseModels{
@@ -255,6 +397,39 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereUserId($value)
  * @mixin \Eloquent
  * @property-read \App\DatabaseModels\OrderStatus $status
+ * @property string|null $checkout_point
+ * @property string|null $np_delivery_type
+ * @property string|null $country
+ * @property string|null $np_city
+ * @property string|null $np_city_ref
+ * @property string|null $np_warehouse
+ * @property string|null $np_warehouse_ref
+ * @property string|null $a_street
+ * @property string|null $a_land
+ * @property string|null $a_city
+ * @property string|null $post_index
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereACity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereALand($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereAStreet($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCheckoutPoint($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCountry($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereNpCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereNpCityRef($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereNpDeliveryType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereNpWarehouse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereNpWarehouseRef($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order wherePostIndex($value)
+ * @property float|null $delivery_price
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereDeliveryPrice($value)
+ * @property int|null $checkout_point_id
+ * @property int|null $delivery_type_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCheckoutPointId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereDeliveryTypeId($value)
+ * @property string|null $country_name
+ * @property string|null $country_code
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCountryCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Order whereCountryName($value)
+ * @property-read \App\DatabaseModels\CheckoutPoint $checkoutPoint
  */
 	class Order extends \Eloquent {}
 }
@@ -336,6 +511,27 @@ namespace App\DatabaseModels{
 
 namespace App\DatabaseModels{
 /**
+ * App\DatabaseModels\PictureSize
+ *
+ * @property int $id
+ * @property int $category_id
+ * @property string|null $original
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PictureSize whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PictureSize whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PictureSize whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PictureSize whereOriginal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PictureSize whereUpdatedAt($value)
+ * @mixin \Eloquent
+ * @property string|null $image_size
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PictureSize whereImageSize($value)
+ */
+	class PictureSize extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
  * App\DatabaseModels\Product
  *
  * @property int $id
@@ -384,6 +580,27 @@ namespace App\DatabaseModels{
  * @property bool $is_visible
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereIsVisible($value)
  * @property-read \App\DatabaseModels\ProductCategory $product_category
+ * @property int|null $meta_tag_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaTagId($value)
+ * @property-read \App\DatabaseModels\MetaTag $meta_tag
+ * @property string|null $meta_title_ru
+ * @property string|null $meta_title_uk
+ * @property string|null $meta_description_ru
+ * @property string|null $meta_description_uk
+ * @property string|null $meta_keywords_ru
+ * @property string|null $meta_keywords_uk
+ * @property string|null $meta_h1_ru
+ * @property string|null $meta_h1_uk
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaDescriptionRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaDescriptionUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaH1Ru($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaH1Uk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaKeywordsRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaKeywordsUk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaTitleRu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product whereMetaTitleUk($value)
+ * @property string|null $picture_size
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Product wherePictureSize($value)
  */
 	class Product extends \Eloquent {}
 }
@@ -452,6 +669,33 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductImage wherePriority($value)
  */
 	class ProductImage extends \Eloquent {}
+}
+
+namespace App\DatabaseModels{
+/**
+ * App\DatabaseModels\ProductNotification
+ *
+ * @property int $id
+ * @property int $product_id
+ * @property int $size_id
+ * @property int $count
+ * @property string $email
+ * @property string|null $name
+ * @property string|null $code_1c
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductNotification whereCode1c($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductNotification whereCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductNotification whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductNotification whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductNotification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductNotification whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductNotification whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductNotification whereSizeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\ProductNotification whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	class ProductNotification extends \Eloquent {}
 }
 
 namespace App\DatabaseModels{
@@ -576,6 +820,33 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereUserId($value)
  * @mixin \Eloquent
+ * @property-read \App\DatabaseModels\Delivery $delivery
+ * @property int|null $checkout_point_id
+ * @property int|null $delivery_type_id
+ * @property string|null $country
+ * @property string|null $np_city
+ * @property string|null $np_city_ref
+ * @property string|null $np_warehouse
+ * @property string|null $np_warehouse_ref
+ * @property string|null $a_street
+ * @property string|null $a_land
+ * @property string|null $a_city
+ * @property string|null $post_index
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereACity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereALand($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereAStreet($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereCheckoutPointId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereCountry($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereDeliveryTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereNpCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereNpCityRef($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereNpWarehouse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereNpWarehouseRef($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile wherePostIndex($value)
+ * @property string|null $country_name
+ * @property string|null $country_code
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereCountryCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Profile whereCountryName($value)
  */
 	class Profile extends \Eloquent {}
 }
@@ -628,6 +899,8 @@ namespace App\DatabaseModels{
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\PropertyName[] $property_names
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\DatabaseModels\PropertyValue[] $property_values
+ * @property int $is_visible
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\Property whereIsVisible($value)
  */
 	class Property extends \Eloquent {}
 }
@@ -653,6 +926,8 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PropertyName whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PropertyName whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $is_visible
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PropertyName whereIsVisible($value)
  */
 	class PropertyName extends \Eloquent {}
 }
@@ -678,6 +953,8 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PropertyValue whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PropertyValue whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $is_visible
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\PropertyValue whereIsVisible($value)
  */
 	class PropertyValue extends \Eloquent {}
 }
@@ -818,6 +1095,8 @@ namespace App\DatabaseModels{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\UserType whereTypeUk($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\UserType whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property bool $is_default
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\DatabaseModels\UserType whereIsDefault($value)
  */
 	class UserType extends \Eloquent {}
 }

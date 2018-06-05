@@ -4516,6 +4516,10 @@ table {
     width: 350px!important;
 }
 
+#product-size.pop-up-messege .modal-dialog {
+    width: 600px!important;
+}
+
 .pop-up-messege .modal-header{
     padding: 20px;
     background-color: #000000;

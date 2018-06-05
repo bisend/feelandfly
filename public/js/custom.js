@@ -1332,7 +1332,10 @@ $(document).ready(function ()
             slideshow: 5000,
             autoplay_slideshow: false,
             social_tools:false,
-            deeplinking:false
+            deeplinking:false,
+            callback: function(){
+                fixPreviewToSquer();
+            }
         });
     }
 });
