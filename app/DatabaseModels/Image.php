@@ -32,4 +32,33 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     protected $table = 'images';
+
+//    private $noPhotos = [
+//        'small' => '/public/img/product/small/no-photo.jpg',
+//        'small-dev' => '/img/product/small/no-photo.jpg',
+//    ];
+//
+//    public function getSmallAttribute($value)
+//    {
+//        $filePath = $_SERVER['DOCUMENT_ROOT'] . $value;
+//        if (file_exists($filePath)) {
+//            return $value;
+//        }
+//
+//        return $this->getImage('small');
+//    }
+//
+//    /**
+//     * Returns image by the given size
+//     * @param $size
+//     * @return mixed
+//     */
+//    private function getImage($size)
+//    {
+//        if (strpos(url('/'), 'feelandfly.xyz') != false) {
+//            return $this->noPhotos["$size-dev"];
+//        }
+//
+//        return $this->noPhotos[$size];
+//    }
 }

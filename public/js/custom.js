@@ -880,12 +880,27 @@ $(document).ready(function () {
         }
     });
 
+    $('.prod-title').matchHeight();
+
+    var blockHeight = 0;
+
+    $(".prod-wrap-cont").each(function(i, el){
+        var block = $(".prod-wrap-cont > div"),
+            title = block.find(".prod-title"),
+            blockH = block.outerHeight();
+
+        if (blockH > blockHeight){
+            blockHeight = blockH;
+        }
+    });
+
+    $(".prod-wrap-cont").css("min-hegth", blockHeight);
 
 });
 
 $(window).load(function () {
     $(function() {
-        $('.prod-title').matchHeight();
+
         $('.topic').matchHeight();
     });
 

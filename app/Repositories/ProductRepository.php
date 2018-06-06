@@ -62,9 +62,9 @@ class ProductRepository
                         'sizes.slug',
                         'sizes.priority'
                     ])
-//                    ->leftJoin('product_stocks', 'product_sizes.id', '=', 'product_stocks.product_size_id')
-//                    ->where('product_stocks.user_type_id', '=', $userTypeId)
-//                    ->orderByRaw('sizes.priority DESC');
+                    ->leftJoin('product_stocks', 'product_sizes.id', '=', 'product_stocks.product_size_id')
+                    ->where('product_stocks.user_type_id', '=', $userTypeId)
+//                    ->orderByRaw('product_stocks.stock DESC');
                     ->orderByRaw('sizes.priority DESC');
             },
             'price' => function ($query) use ($language, $userTypeId) {
@@ -194,27 +194,13 @@ class ProductRepository
                     'html_code'
                 ]);
             },
-//            'sizes' => function ($query) use ($language) {
-//                $query->select([
-//                    'sizes.id',
-//                    "sizes.name_$language as name",
-//                    'sizes.slug',
-//                    'sizes.priority'
-//                ]) ->leftJoin('product_stocks', 'product_sizes.id', '=', 'product_stocks.product_size_id')
-//                    ->where('product_stocks.user_type_id', '=', $userTypeId)
-//                    ->orderByRaw('product_stocks.stock DESC');
-//            },
             'sizes' => function ($query) use ($language, $userTypeId) {
                 $query->select([
                     'sizes.id',
                     "sizes.name_$language as name",
                     'sizes.slug',
                     'sizes.priority'
-                ])
-                    ->leftJoin('product_stocks', 'product_sizes.id', '=', 'product_stocks.product_size_id')
-                    ->where('product_stocks.user_type_id', '=', $userTypeId)
-                    ->orderByRaw('product_stocks.stock DESC');
-//                    ->orderByRaw('sizes.priority DESC');
+                ])->orderByRaw('sizes.priority DESC');
             },
             'price' => function ($query) use ($language, $userTypeId) {
                 $query->select([
