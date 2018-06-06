@@ -350,8 +350,13 @@
                                                             <a class="img-hover"
                                                                href="{{ url_product($categoryProduct->slug, $model->language) }}">
                                                                 <div class="photo-cat_fit">
-                                                                    <img alt="{{ $categoryProduct->name }}"
-                                                                         src="{{ $categoryProduct->images[0]->medium }}">
+                                                                    @if($categoryProduct->images->count() > 0)
+                                                                        <img alt="{{ $categoryProduct->name }}" src="{{ $categoryProduct->images[0]->medium }}">
+                                                                    @else
+                                                                        <img alt="{{ $categoryProduct->name }}" src="/public/img/product/medium/no-photo.jpg">
+                                                                    @endif
+                                                                    {{--<img alt="{{ $categoryProduct->name }}"--}}
+                                                                         {{--src="{{ $categoryProduct->images[0]->medium }}">--}}
                                                                 </div>
 
                                                             </a>

@@ -64,6 +64,7 @@
                                            title="{{ $model->product->name }}"
                                            class="caption-link meta-icon">
                                             <i class="fa fa-search-plus"></i>
+                                            <span class="zoom-text">{{ trans('product.zoom_picture') }}</span>
                                         </a>
                                     </div>
                                 @endforeach
@@ -181,29 +182,36 @@
                                                 </a>
                                             @endif
                                         </div>
-                                        @php($counterSize = 0)
+                                        @php($isAnyProductSizeActive = false)
                                         @foreach($model->product->sizes as $size)
+                                            @php($isProductSizeActive = true)
+                                            @php($productSize = $model->product->product_sizes->where('size_id', $size->id)->first())
+                                            @if(!$productSize || $productSize->stocks->count() == 0 || $productSize->stocks->first()->stock == 0)
+                                                @php($isProductSizeActive = false)
+                                            @endif
                                             <li>
-                                                @if($counterSize != 0)
-                                                    <a href="#"
-                                                       v-on:click.prevent="changeSizeId('{{ $size->id }}')"
-                                                       :class="{active : singleProduct.sizeId == {{$size->id}}}">
-                                                        {{ $size->name }}
-                                                    </a>
-                                                @else
-                                                    <a href="#"
-                                                       v-on:click.prevent="changeSizeId('{{ $size->id }}')"
-                                                       :class="{active : singleProduct.sizeId == {{$size->id}}}">
-                                                        {{ $size->name }}
-                                                    </a>
-                                                @endif
+                                                <div>
+                                                    @if($isProductSizeActive && !$isAnyProductSizeActive)
+                                                        <a href="#"
+                                                           v-on:click.prevent="changeSizeId('{{ $size->id }}')"
+                                                           :class="{active : singleProduct.sizeId == {{$size->id}}}">
+                                                            {{ $size->name }}
+                                                        </a>
+                                                        @php($isAnyProductSizeActive = true)
+                                                    @else
+                                                        <a href="#"
+                                                           v-on:click.prevent="changeSizeId('{{ $size->id }}')"
+                                                           :class="{active : singleProduct.sizeId == {{$size->id}}}">
+                                                            {{ $size->name }}
+                                                        </a>
+                                                    @endif
+                                                </div>
                                             </li>
-                                            @php($counterSize++)
                                         @endforeach
                                     </ul>
                                     <div class="product-present">
                                         <span v-cloak v-for="productSize in singleProduct.product.product_sizes"
-                                              v-if="productSize.size_id == singleProduct.sizeId">
+                                                     v-if="productSize.size_id == singleProduct.sizeId">
                                             <span v-if="productSize.stocks[0].stock > 0" class="product-in-stock">
                                                 {{ trans('product.product_in_stock') }}
                                             </span>
@@ -474,7 +482,7 @@
         <div class="modal-dialog">
 
             <!-- Modal content-->
-            <div class="modal-content" style="min-width: 400px;">
+            <div class="modal-content">
                 <form >
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" data-notify-close>&times;</button>
