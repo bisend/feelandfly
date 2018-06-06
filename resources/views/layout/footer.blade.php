@@ -138,12 +138,10 @@
                                 </span>
                             </li>
                             <li class="general-leng">
-                                <div class="ather-lang">
-                                    <a href="{{ url_current('ru') }}" class="link">
-                                        <img src="/img/template/flags/ru.png" alt="">
-                                        <span>Русский</span>
-                                    </a>
-                                </div>
+                                <a href="{{ url_current('ru') }}" class="link">
+                                    <img src="/img/template/flags/ru.png" alt="">
+                                    <span>Русский</span>
+                                </a>
                             </li>
                         @endif
                     </ul>
