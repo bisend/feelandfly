@@ -273,13 +273,13 @@ if (document.getElementById('top-products'))
                                 $container.modal('hide');
                                 $container.on('hidden.bs.modal', function () {
                                     if (PRETTY_LOADED) {
-                                        $('body').addClass('modal-open').css('padding-right', '17px');
+                                        // $('body').addClass('modal-open').css('padding-right', '17px');
                                         PRETTY_LOADED = false;
                                     }
                                 });
                             },
                             callback: function () {
-                                $('body').removeClass('modal-open').css('padding-right', 0);
+                                // $('body').removeClass('modal-open').css('padding-right', 0);
                             }
                         });
                     }, 500);

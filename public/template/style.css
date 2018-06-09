@@ -6693,6 +6693,7 @@ a.btn_link,
     display: inline-block;
     width:  auto;
     color: #000;
+    line-height: 30px;
 }
 
 a.btn_link:hover,
@@ -6994,6 +6995,22 @@ footer .general-leng {
 
 .prod-wrap-cont .prod-wrap-absolute {
     /*position: relative;*/
+}
+
+#prod-slider-1 .owl-controls .owl-nav > div,
+#new-products .owl-controls .owl-nav > div,
+#similar-product .owl-controls .owl-nav > div {
+    border: 2px solid #000;
+    height: 30px;
+    line-height: 20px;
+    width: 30px;
+    text-align: center;
+}
+
+#prod-slider-1 .owl-controls .owl-nav > div:hover,
+#new-products .owl-controls .owl-nav > div:hover,
+#similar-product .owl-controls .owl-nav > div:hover {
+    background-color: #000;
 }
 
 
