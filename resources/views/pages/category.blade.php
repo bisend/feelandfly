@@ -44,6 +44,7 @@
                                                v-bind:title="categoryProductPreview.product.name"
                                                class="caption-link meta-icon">
                                                 <i class="fa fa-eye"></i>
+                                                <span class="zoom-text">{{ trans('product.zoom_picture') }}</span>
                                             </a>
                                         </div>
                                     </div>
@@ -476,15 +477,21 @@
                                                                     @endforeach
                                                                 </ul>
                                                                 <ul class="choose-size list-inline border-hover">
-                                                                    @php($counterSize = 0)
+                                                                    @php($isAnyProductSizeActive = false)
                                                                     @foreach($categoryProduct->sizes as $size)
+                                                                        @php($isProductSizeActive = true)
+                                                                        @php($productSize = $categoryProduct->product_sizes->where('size_id', $size->id)->first())
+                                                                        @if(!$productSize || $productSize->stocks->count() == 0 || $productSize->stocks->first()->stock == 0)
+                                                                            @php($isProductSizeActive = false)
+                                                                        @endif
                                                                         <li>
-                                                                            @if($counterSize == 0)
-                                                                                <a v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
-                                                                                   :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
-                                                                                   href="#">
+                                                                            @if($isProductSizeActive && !$isAnyProductSizeActive)
+                                                                                <a href="#"
+                                                                                   v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                                   :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}">
                                                                                     {{ $size->name }}
                                                                                 </a>
+                                                                                @php($isAnyProductSizeActive = true)
                                                                             @else
                                                                                 <a href="#"
                                                                                    v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
@@ -493,7 +500,6 @@
                                                                                 </a>
                                                                             @endif
                                                                         </li>
-                                                                        @php($counterSize++)
                                                                     @endforeach
                                                                 </ul>
                                                             </div>

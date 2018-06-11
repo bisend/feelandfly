@@ -123,8 +123,9 @@ if (document.getElementById('grid-view'))
     if (GLOBAL_DATA.categoryProducts && GLOBAL_DATA.categoryProducts.length > 0) {
         //init currentSizeId for categoryProducts
         GLOBAL_DATA.categoryProducts.forEach(function (item) {
-            item.currentSizeId = item.sizes[0].id;
-        
+            // item.currentSizeId = item.sizes[0].id;
+            item.currentSizeId = 5;
+
             item.product_sizes.forEach(function (el) {
                 if (el.size_id == item.currentSizeId) {
                     if (el.stocks[0].stock > 0) {
