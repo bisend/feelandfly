@@ -7195,3 +7195,13 @@ footer .general-leng {
         font-size: 13px;
     }
 }
+
+/*#main-slider:not(.owl-loaded) {
+    height: 493px !important;
+    overflow: hidden;
+}*/
+
+#main-slider:not(.owl-loaded) .item:not(:first-child) {
+    position: absolute;
+    opacity: 0;
+}
