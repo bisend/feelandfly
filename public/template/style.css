@@ -1372,6 +1372,9 @@ textarea:focus:-ms-input-placeholder {
     float: right;
     font-size: 16px;
 }
+.prod-price ins {
+    font-weight: 900;
+}
 .prod-price ins, .prod-price del {
     text-decoration: none;
 }
@@ -3743,7 +3746,7 @@ table {
 @media (min-width:992px) {
     /*-- Popup --*/    
     .modal-dialog {      
-        margin: 40px auto;
+        margin: 45px auto;
     }
     #login-popup .modal-dialog {   width: 770px; }
     /*-- / Popup --*/   
