@@ -50,6 +50,7 @@
                                                        v-bind:title="mainSliderPreview.product.name"
                                                        class="caption-link meta-icon">
                                                         <i class="fa fa-eye"></i>
+                                                        <span class="zoom-text">{{ trans('product.zoom_picture') }}</span>
                                                     </a>
                                                 </div>
                                             </div>
@@ -346,6 +347,7 @@
                                                    v-bind:title="saleProductPreview.product.name"
                                                    class="caption-link meta-icon">
                                                     <i class="fa fa-eye"></i>
+                                                    <span class="zoom-text">{{ trans('product.zoom_picture') }}</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -674,6 +676,7 @@
                                                                v-bind:title="topProductPreview.product.name"
                                                                class="caption-link meta-icon">
                                                                 <i class="fa fa-eye"></i>
+                                                                <span class="zoom-text">{{ trans('product.zoom_picture') }}</span>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -924,6 +927,7 @@
                                                                v-bind:title="newProductPreview.product.name"
                                                                class="caption-link meta-icon">
                                                                 <i class="fa fa-eye"></i>
+                                                                <span class="zoom-text">{{ trans('product.zoom_picture') }}</span>
                                                             </a>
                                                         </div>
                                                     </div>

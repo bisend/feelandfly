@@ -22,7 +22,14 @@ function closeNav(e) {
 
 }
 
+function fixedPositionBtnMenu(){
+    var parentLeft = $("[data-menu-open-link]").closest(".container").offset().left + 15;
+    $("[data-menu-open-link]").css("left", parentLeft);
+}
+
 $(document).ready(function () {
+    fixedPositionBtnMenu();
+
     var menuOpenLink = '[data-menu-open-link]',
         menuCloseLink = '[data-menu-close-link]',
         isMenuOpened = false;
@@ -100,7 +107,9 @@ $(window).load(function() {
 });
 /*--- SLICK  NAVBAR  END ----*/
 
-$( window ).resize(function() {
+$(window).resize(function() {
+    fixedPositionBtnMenu();
+
     if ($(window).width() <= 991)
     {
         SHOW_HEADER_TOP_BAR = false;

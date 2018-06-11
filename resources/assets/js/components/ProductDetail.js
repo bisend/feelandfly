@@ -211,7 +211,7 @@ if (document.getElementById('product-details'))
                         }
                     }
                 });
-                
+
                 //looping cartItems
                 GLOBAL_DATA.cartItems.forEach(function (item) {
                     //check if current active size id in cart
@@ -221,7 +221,6 @@ if (document.getElementById('product-details'))
                         GLOBAL_DATA.singleProduct.count = item.count;
                     }
                 });
-
             },
             //method handles add to cart
             addToCart: function (productId, sizeId, count) {
@@ -494,4 +493,12 @@ $(window).load(function(){
             $item.css("height", $itemW);
         })
     };
-})
+
+
+});
+
+$(document).ready(function () {
+    GLOBAL_DATA.singleProduct.sizeId = parseInt(5);
+    GLOBAL_DATA.notify.sizeId = parseInt(5);
+    GLOBAL_DATA.singleProduct.inStock = true;
+});

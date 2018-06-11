@@ -40,6 +40,7 @@
                                        v-bind:title="similarProductPreview.product.name"
                                        class="caption-link meta-icon">
                                         <i class="fa fa-eye"></i>
+                                        <span class="zoom-text">{{ trans('product.zoom_picture') }}</span>
                                     </a>
                                 </div>
                             </div>
