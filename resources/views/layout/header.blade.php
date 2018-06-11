@@ -3,7 +3,7 @@
     <div class="nav-sidebar-bg"></div>
     <div id="mySidenav" class="sidenav">
         <div class="nav-header">
-            <span>Меню</span>
+            <span>{{ trans('home.catalog') }}</span>
 
             <div class="closebtn" data-menu-close-link>
                 <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -11,7 +11,7 @@
             <!--  <a href="javascript:void(0);" class="closebtn" data-menu-close-link>&times;</a> -->
         </div>
         <div class="nav-slide-body">
-            <ul>
+            <ul style="margin-bottom: 0;">
                 <li class="sale-link">
                     <a href="{{ route('saleIndex', ['language' => $model->language == 'uk' ? $model->language : '']) }}">
                         {{ trans('home.sale') }}
@@ -84,6 +84,11 @@
                         @endif
                     </li>
                 @endforeach
+            </ul>
+            <div class="nav-header">
+                <span> {{ trans('home.information') }}</span>
+            </div>
+            <ul>
                 <li>
                     <a href="{{ url_about($model->language) }}">
                         {{ trans('header.about_us') }}
