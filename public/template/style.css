@@ -1229,7 +1229,8 @@ textarea:focus:-ms-input-placeholder {
     /* border-radius: 50%; */
     color: #ffffff;
     font-size: 14px;
-    font-weight: 900;
+    font-weight: 100;
+    letter-spacing: 1px;
     height: 34px;
     width: 120px;
     line-height: 32px;
