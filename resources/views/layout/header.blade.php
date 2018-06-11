@@ -254,6 +254,7 @@
                             <a class="open-drop-profile-nav" href="javascript:void(0);">
                                 <i class="fa fa-user" aria-hidden="true"></i>
                                 {{ auth()->user()->name }}
+                                <span class="caret"></span>
                             </a>
                         </li>
 
