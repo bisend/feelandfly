@@ -7043,14 +7043,14 @@ footer .general-leng {
 }
 
 .search-result-true .resuil-item-img {
-    width: 70px;
-    height: 70px;
+    width: 64px;
+    height: 64px;
     overflow: hidden;
 }
 
 .search-result-true .resuil-item-img img {
-    width: 70px;
-    height: 70px;
+    width: 64px;
+    height: 64px;
     object-fit: cover;
 }
 
