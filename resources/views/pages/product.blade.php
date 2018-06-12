@@ -189,23 +189,24 @@
                                             @if(!$productSize || $productSize->stocks->count() == 0 || $productSize->stocks->first()->stock == 0)
                                                 @php($isProductSizeActive = false)
                                             @endif
-                                            <li>
-                                                <div>
-                                                    @if($isProductSizeActive && !$isAnyProductSizeActive)
-                                                        <a href="#"
-                                                           v-on:click.prevent="changeSizeId('{{ $size->id }}')"
-                                                           :class="{active : singleProduct.sizeId == {{$size->id}}}">
-                                                            {{ $size->name }}
-                                                        </a>
-                                                        @php($isAnyProductSizeActive = true)
-                                                    @else
-                                                        <a href="#"
-                                                           v-on:click.prevent="changeSizeId('{{ $size->id }}')"
-                                                           :class="{active : singleProduct.sizeId == {{$size->id}}}">
-                                                            {{ $size->name }}
-                                                        </a>
-                                                    @endif
-                                                </div>
+                                            <li data-product-id="{{ $model->product->id }}">
+                                                @if($isProductSizeActive && !$isAnyProductSizeActive)
+                                                    <a href="#"
+                                                       style="background-color: red"
+                                                       data-product-size-active
+                                                       data-product-size-id="{{ $size->id }}"
+                                                       v-on:click.prevent="changeSizeId('{{ $size->id }}')"
+                                                       :class="{active : singleProduct.sizeId == {{$size->id}}}">
+                                                        {{ $size->name }}
+                                                    </a>
+                                                    @php($isAnyProductSizeActive = true)
+                                                @else
+                                                    <a href="#"
+                                                       v-on:click.prevent="changeSizeId('{{ $size->id }}')"
+                                                       :class="{active : singleProduct.sizeId == {{$size->id}}}">
+                                                        {{ $size->name }}
+                                                    </a>
+                                                @endif
                                             </li>
                                         @endforeach
                                     </ul>

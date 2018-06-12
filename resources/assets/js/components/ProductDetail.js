@@ -87,6 +87,16 @@ if (document.getElementById('product-details'))
     GLOBAL_DATA.singleProduct.sizeId = parseInt(window.FFShop.product.sizes[0].id);
 
     GLOBAL_DATA.singleProduct.product.product_sizes.forEach(function (item) {
+        var $product = $('[data-product-id="' + GLOBAL_DATA.singleProduct.productId + '"]'),
+            $productSizeActive = $product.find('[data-product-size-active]'),
+            productSizeActiveId = $productSizeActive.length ? $productSizeActive.attr('data-product-size-id') : -1;
+
+        if (productSizeActiveId !== -1) {
+            GLOBAL_DATA.singleProduct.sizeId = parseInt(productSizeActiveId);
+            GLOBAL_DATA.notify.sizeId = parseInt(productSizeActiveId);
+            GLOBAL_DATA.singleProduct.inStock = true;
+        }
+
         if (item.size_id == GLOBAL_DATA.singleProduct.sizeId) {
             if (item.stocks[0].stock > 0) {
                 GLOBAL_DATA.singleProduct.inStock = true;
@@ -495,10 +505,4 @@ $(window).load(function(){
     };
 
 
-});
-
-$(document).ready(function () {
-    GLOBAL_DATA.singleProduct.sizeId = parseInt(5);
-    GLOBAL_DATA.notify.sizeId = parseInt(5);
-    GLOBAL_DATA.singleProduct.inStock = true;
 });

@@ -133,6 +133,9 @@
                                                     </a>
                                                 </li>
                                             </ul>
+
+                                            {{--<button id="click" v-on:click.prevent="changeCurrentSizeId(1)"></button>--}}
+
                                             <ul class="prod-btns prod-meta">
                                                 <li>
                                                     <div class="quantity">
@@ -484,9 +487,12 @@
                                                                         @if(!$productSize || $productSize->stocks->count() == 0 || $productSize->stocks->first()->stock == 0)
                                                                             @php($isProductSizeActive = false)
                                                                         @endif
-                                                                        <li>
+                                                                        <li data-category-product-id="{{ $categoryProduct->id }}">
                                                                             @if($isProductSizeActive && !$isAnyProductSizeActive)
+                                                                                @php(\Debugbar::info($size->id))
                                                                                 <a href="#"
+                                                                                   data-product-size-active
+                                                                                   data-product-size-id="{{ $size->id }}"
                                                                                    v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
                                                                                    :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}">
                                                                                     {{ $size->name }}
@@ -519,7 +525,12 @@
                         </div>
                     </aside>
                     <!-- Product Details Ends -->
-
+                    <h2 class="section-title fsz-36" style="margin-bottom: 20px;">
+                        {{ $model->currentCategory->name }}
+                    </h2>
+                    @if($model->currentCategory->description)
+                        {!! $model->currentCategory->description !!}
+                    @endif
                 </div>
             </div>
             <!-- / Page Ends -->
