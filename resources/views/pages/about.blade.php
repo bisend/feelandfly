@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="about-block-description col-xs-12">
                     <div class="about-image-container">
-                        <img src="https://feelandfly.com/wp-content/uploads/2017/03/AboutBrand.png" alt="О бренде Feel and Fly">
+                        <img src="/img/AboutBrand.png" alt="О бренде Feel and Fly">
                     </div>
                     @if($model->language == 'ru')
                         <p><strong>Feel and Fly</strong> - это молодежный бренд одежды в стиле <em>Streetwear</em>. О бренде: FeelandFLy - это одежда для молодых, уверенных в себе людей, которые хотят выделиться из толпы. В первую очередь мы ставим перед собой задачу сделать максимально качественную, модную одежду за доступную для потребителя цену.</p>

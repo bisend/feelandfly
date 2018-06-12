@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="delivery-block-description col-xs-12">
                     <div class="delivery-image-container">
-                        <img src="https://feelandfly.com/wp-content/uploads/2017/03/ExchangeAndRefund.png" width="249" height="237" srcset="https://feelandfly.com/wp-content/uploads/2017/03/ExchangeAndRefund.png 249w, https://feelandfly.com/wp-content/uploads/2017/03/ExchangeAndRefund-235x224.png 235w" alt="Доставка и оплата">
+                        <img src="/img/ExchangeAndRefund.png" width="249" height="237" alt="Доставка и оплата">
                     </div>
                     @if($model->language == 'ru')
                         <h4><strong>Безналичный расчет</strong></h4>
