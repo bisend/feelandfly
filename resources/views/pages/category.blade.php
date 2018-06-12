@@ -158,11 +158,13 @@
                                                         </span>
                                                         <span v-cloak
                                                             v-else-if="!findWhere(cartItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})">
-                                                            {{ trans('layout.add_to_cart') }}
+                                                            @if($pageSize <= 600 && $pageSize >= 480)
+                                                                {{ trans('layout.add_to_cart_short') }}
+                                                            @else
+                                                                {{ trans('layout.add_to_cart') }}
+                                                            @endif
                                                         </span>
-                                                            <span v-cloak v-else>
-                                                            {{ trans('layout.in_cart') }}
-                                                        </span>
+                                                        <span v-cloak v-else>{{ trans('layout.in_cart') }}</span>
                                                     </a>
                                                 </li>
                                                 <li>
@@ -427,6 +429,7 @@
                                                             <ul class="prod-meta">
                                                                 <li>
                                                                     <a class="theme-btn btn-black"
+
                                                                        v-on:click.prevent="addToCart({{$categoryProduct->id}}, categoryProducts[{{$counter}}].currentSizeId, 1, {{$counter}})"
                                                                        href="#">
                                                                         <span v-cloak v-if=" ! categoryProducts[{{$counter}}].inStock">
@@ -434,11 +437,13 @@
                                                                         </span>
                                                                         <span v-cloak
                                                                             v-else-if="!findWhere(cartItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})">
-                                                                            {{ trans('layout.add_to_cart') }}
+                                                                            @if($pageSize <= 600 && $pageSize >= 480)
+                                                                                {{ trans('layout.add_to_cart_short') }}
+                                                                            @else
+                                                                                {{ trans('layout.add_to_cart') }}
+                                                                            @endif
                                                                         </span>
-                                                                            <span v-cloak v-else>
-                                                                            {{ trans('layout.in_cart') }}
-                                                                        </span>
+                                                                        <span v-cloak v-else>{{ trans('layout.in_cart') }}</span>
                                                                     </a>
                                                                 </li>
                                                                 <li>

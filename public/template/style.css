@@ -7055,6 +7055,31 @@ footer .general-leng {
 }
 
 
+/* change content for btn on some size BEGIN*/
+/*.theme-btn.btn-black {
+    position:  relative;
+}
+
+.theme-btn.btn-black span {
+    visibility: hidden;
+    position: relative;
+}
+
+html .theme-btn.btn-black:before {
+    content: "В КОРЗИНУ";
+    position:  absolute;
+    left:  0;
+    top:  0;
+    right:  0;
+    bottom: 0;
+}
+
+html[lang="ua"] .theme-btn.btn-black:before {
+    content: "В КОРЗИНУ";
+}*/
+/* change content for btn on some size END */
+
+
 
 
 

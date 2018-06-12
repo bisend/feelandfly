@@ -11,6 +11,7 @@ return [
     'message' => 'Повідомлення',
 
     'add_to_cart' => 'Додати в кошик',
+    'add_to_cart_short' => 'В кошик',
     'in_cart' => 'В кошику',
     
     'price' => 'Ціна',

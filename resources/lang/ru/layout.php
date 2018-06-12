@@ -11,6 +11,7 @@ return [
     'message' => 'Сообщение',
     
     'add_to_cart' => 'Добавить в корзину',
+    'add_to_cart_short' => 'В корзину',
     'in_cart' => 'В корзине',
     
     'price' => 'Цена',
