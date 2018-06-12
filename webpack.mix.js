@@ -11,12 +11,12 @@ let mix = require('laravel-mix');
  |
  */
 
-// mix.styles([
-//     'public/template/plugins/owl.carousel.2/assets/owl.carousel.css',
-//     'public/template/plugins/prettyphoto-master/css/prettyPhoto.css',
-//     'public/template/header.css',
-//     'public/template/style.css',
-// ], 'public/css/app.css').version();
+mix.styles([
+    'public/template/plugins/owl.carousel.2/assets/owl.carousel.css',
+    'public/template/plugins/prettyphoto-master/css/prettyPhoto.css',
+    'public/template/header.css',
+    'public/template/style.css',
+], 'public/css/app.css').version();
 
 mix.scripts([
     'public/template/js/jclient.validation.js',

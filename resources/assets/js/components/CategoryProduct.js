@@ -121,10 +121,15 @@ if (document.getElementById('grid-view'))
     GLOBAL_DATA.categoryProducts = window.FFShop.products;
 
     if (GLOBAL_DATA.categoryProducts && GLOBAL_DATA.categoryProducts.length > 0) {
-        //init currentSizeId for categoryProducts
+        // init currentSizeId for categoryProducts
         GLOBAL_DATA.categoryProducts.forEach(function (item) {
-            // item.currentSizeId = item.sizes[0].id;
-            item.currentSizeId = 5;
+            var $product = $('[data-category-product-id="' + item.id + '"]'),
+                $productSizeActive = $product.find('[data-product-size-active]'),
+                productSizeActiveId = $productSizeActive.length ? $productSizeActive.attr('data-product-size-id') : -1;
+
+            if (productSizeActiveId !== -1) {
+                item.currentSizeId = productSizeActiveId;
+            }
 
             item.product_sizes.forEach(function (el) {
                 if (el.size_id == item.currentSizeId) {
@@ -145,13 +150,12 @@ if (document.getElementById('grid-view'))
         GLOBAL_DATA.categoryProductPreview.rel = 'prettyPhoto[category-' + GLOBAL_DATA.categoryProducts[0].id + ']';
 
         //init category product preview currentSizeId
-        GLOBAL_DATA.categoryProductPreview.currentSizeId = GLOBAL_DATA.categoryProductPreview.product.sizes[0].id;
+        GLOBAL_DATA.categoryProductPreview.currentSizeId = GLOBAL_DATA.categoryProductPreview.product.sizes[0].id;;
 
         //init category product preview count
         GLOBAL_DATA.categoryProductPreview.count = 1;
 
         checkPreviewCategoryStock();
-
 
         new Vue({
             el: '#grid-view',
@@ -751,7 +755,30 @@ if (document.getElementById('grid-view'))
                             }, 400);
                         }
                     }
-                }
+                },
+
+                CurrentSizeId: function (sizeId) {
+                    GLOBAL_DATA.categoryProductPreview.currentSizeId = 5;
+
+                    checkPreviewCategoryStock ()
+
+                    if (this.findWhere(GLOBAL_DATA.cartItems, ({
+                        productId: GLOBAL_DATA.categoryProductPreview.product.id,
+                        sizeId: GLOBAL_DATA.categoryProductPreview.currentSizeId
+                    }))) {
+                        //looping cartItems
+                        GLOBAL_DATA.cartItems.forEach(function (item) {
+                            //check if current active size id in cart
+                            if (item.productId == GLOBAL_DATA.categoryProductPreview.product.id && item.sizeId == GLOBAL_DATA.categoryProductPreview.currentSizeId) {
+                                //then setting count
+                                GLOBAL_DATA.categoryProductPreview.count = item.count;
+                            }
+                        });
+                    }
+                    else {
+                        GLOBAL_DATA.categoryProductPreview.count = 1;
+                    }
+                },
             }
         });
     }

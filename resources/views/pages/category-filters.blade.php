@@ -515,15 +515,24 @@
                                                                     @endforeach
                                                                 </ul>
                                                                 <ul class="choose-size list-inline border-hover">
-                                                                    @php($counterSize = 0)
+                                                                    @php($isAnyProductSizeActive = false)
                                                                     @foreach($categoryProduct->sizes as $size)
-                                                                        <li>
-                                                                            @if($counterSize == 0)
-                                                                                <a v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
-                                                                                   :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}"
-                                                                                   href="#">
+                                                                        @php($isProductSizeActive = true)
+                                                                        @php($productSize = $categoryProduct->product_sizes->where('size_id', $size->id)->first())
+                                                                        @if(!$productSize || $productSize->stocks->count() == 0 || $productSize->stocks->first()->stock == 0)
+                                                                            @php($isProductSizeActive = false)
+                                                                        @endif
+                                                                        <li data-category-product-id="{{ $categoryProduct->id }}">
+                                                                            @if($isProductSizeActive && !$isAnyProductSizeActive)
+                                                                                @php(\Debugbar::info($size->id))
+                                                                                <a href="#"
+                                                                                   data-product-size-active
+                                                                                   data-product-size-id="{{ $size->id }}"
+                                                                                   v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
+                                                                                   :class="{active : categoryProducts[{{$counter}}].currentSizeId == {{$size->id}}}">
                                                                                     {{ $size->name }}
                                                                                 </a>
+                                                                                @php($isAnyProductSizeActive = true)
                                                                             @else
                                                                                 <a href="#"
                                                                                    v-on:click.prevent="changeCurrentSizeId({{$counter}}, {{$size->id}})"
@@ -532,7 +541,6 @@
                                                                                 </a>
                                                                             @endif
                                                                         </li>
-                                                                        @php($counterSize++)
                                                                     @endforeach
                                                                 </ul>
                                                             </div>
