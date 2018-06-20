@@ -67,7 +67,9 @@ class OrderController extends LayoutController
 
         $this->orderService->fill($model);
 
+
         $this->fillProfileDeliveriesFields($model);
+
 
         Javascript::put([
             'deliveries' => $model->deliveries,
@@ -85,7 +87,6 @@ class OrderController extends LayoutController
             'selectedCity' => $model->selectedCity,
             'selectedIndex' => $model->selectedIndex,
         ]);
-
         \Debugbar::info($model);
 
         return view('pages.order', compact('model'));

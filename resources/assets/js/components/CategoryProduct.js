@@ -129,6 +129,8 @@ if (document.getElementById('grid-view'))
 
             if (productSizeActiveId !== -1) {
                 item.currentSizeId = productSizeActiveId;
+            }else {
+                item.currentSizeId = item.sizes[0].id;
             }
 
             item.product_sizes.forEach(function (el) {
@@ -140,7 +142,6 @@ if (document.getElementById('grid-view'))
                     }
                 }
             });
-
         });
 
         //init category product preview (first product) from categoryProducts
@@ -182,7 +183,7 @@ if (document.getElementById('grid-view'))
                                 match = false;
                                 break;
                             }
-                            if (props[prop_k] === item[prop_k]) {
+                            if (props[prop_k] == item[prop_k]) {
                                 // We have a match…so far.
                                 match = true;
                             } else {
@@ -383,7 +384,7 @@ if (document.getElementById('grid-view'))
                             }
                         });
                     }, 400);
-                }
+                },
             }
         });
 

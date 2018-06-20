@@ -120,7 +120,7 @@ class ProductRepository
      */
     public function getProductProperties($productId, $language = Languages::DEFAULT_LANGUAGE)
     {
-        return Property::select([
+        $query = Property::select([
             'property_names.id as property_name_id',
             'property_names.slug as property_name_slug',
             'property_values.id as property_value_id',
@@ -134,6 +134,29 @@ class ProductRepository
             ->orderBy('name')
             ->where('properties.product_id', '=', $productId)
             ->get();
+
+        \Debugbar::info($query);
+
+        return $query;
+
+
+
+//        return Property::select([
+//            'property_names.id as property_name_id',
+//            'property_names.slug as property_name_slug',
+//            'property_values.id as property_value_id',
+//            'property_values.slug as property_value_slug',
+//            "property_names.name_$language as name",
+//            "property_values.name_$language as value"
+//        ])
+//            ->join('products', 'properties.product_id', '=', 'products.id')
+//            ->join('property_names', 'properties.property_name_id', '=', 'property_names.id')
+//            ->join('property_values', 'properties.property_value_id', '=', 'property_values.id')
+//            ->orderBy('name')
+//            ->where('properties.is_visible', '=', 1)
+//            ->where('properties.product_id', '=', $productId)
+//            ->where('products.is_visible', '=', 1)
+//            ->get();
     }
 
     /**

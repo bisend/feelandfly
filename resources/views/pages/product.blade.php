@@ -146,25 +146,28 @@
                                         <!-- <li>Артикул: {{ $model->product->vendor_code }}</li> -->
                                     </ul>
                                 </div>
+
                                 <div class="prod-attributes">
                                     <ul class="choose-clr list-inline border-hover">
                                         <div class="prod-color_title">
                                             {{ trans('email.color') }} : <span v-cloak>@{{ singleProduct.product.color.name }}</span>
                                         </div>
                                         @foreach($relatedProducts as $relatedProduct)
-                                            <li>
-                                                @if($model->product->color->id == $relatedProduct->color->id)
-                                                    <a class="active ttip"
-                                                       title="{{ $relatedProduct->color->name }}"
-                                                       href="{{ url_product($relatedProduct->slug, $model->language) }}"
-                                                       style="background-color: {{ $relatedProduct->color->html_code }}"></a>
-                                                @else
-                                                    <a href="{{ url_product($relatedProduct->slug, $model->language) }}"
-                                                       class="ttip"
-                                                       title="{{ $relatedProduct->color->name }}"
-                                                       style="background-color: {{ $relatedProduct->color->html_code }}"></a>
-                                                @endif
-                                            </li>
+                                            @if($relatedProduct->is_visible == 1)
+                                                <li>
+                                                    @if($model->product->color->id == $relatedProduct->color->id)
+                                                        <a class="active ttip"
+                                                           title="{{ $relatedProduct->color->name }}"
+                                                           href="{{ url_product($relatedProduct->slug, $model->language) }}"
+                                                           style="background-color: {{ $relatedProduct->color->html_code }}"></a>
+                                                    @else
+                                                        <a href="{{ url_product($relatedProduct->slug, $model->language) }}"
+                                                           class="ttip"
+                                                           title="{{ $relatedProduct->color->name }}"
+                                                           style="background-color: {{ $relatedProduct->color->html_code }}"></a>
+                                                    @endif
+                                                </li>
+                                            @endif
                                         @endforeach
                                     </ul>
                                     <ul class="choose-size list-inline border-hover">
@@ -192,7 +195,6 @@
                                             <li data-product-id="{{ $model->product->id }}">
                                                 @if($isProductSizeActive && !$isAnyProductSizeActive)
                                                     <a href="#"
-                                                       style="background-color: red"
                                                        data-product-size-active
                                                        data-product-size-id="{{ $size->id }}"
                                                        v-on:click.prevent="changeSizeId('{{ $size->id }}')"

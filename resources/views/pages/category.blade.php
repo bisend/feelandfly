@@ -158,11 +158,11 @@
                                                         </span>
                                                         <span v-cloak
                                                             v-else-if="!findWhere(cartItems, {'productId': categoryProductPreview.product.id, 'sizeId': categoryProductPreview.currentSizeId})">
-                                                            @if($pageSize <= 600 && $pageSize >= 480)
-                                                                {{ trans('layout.add_to_cart_short') }}
-                                                            @else
-                                                                {{ trans('layout.add_to_cart') }}
-                                                            @endif
+                                                            {{--@if($pageSize <= 600 && $pageSize >= 480)--}}
+                                                                {{--{{ trans('layout.add_to_cart_short') }}--}}
+                                                            {{--@else--}}
+                                                                {{--{{ trans('layout.add_to_cart') }}--}}
+                                                            {{--@endif--}}
                                                         </span>
                                                         <span v-cloak v-else>{{ trans('layout.in_cart') }}</span>
                                                     </a>
@@ -437,11 +437,7 @@
                                                                         </span>
                                                                         <span v-cloak
                                                                             v-else-if="!findWhere(cartItems, {'productId': {{$categoryProduct->id}}, 'sizeId': categoryProducts[{{$counter}}].currentSizeId})">
-                                                                            @if($pageSize <= 600 && $pageSize >= 480)
-                                                                                {{ trans('layout.add_to_cart_short') }}
-                                                                            @else
                                                                                 {{ trans('layout.add_to_cart') }}
-                                                                            @endif
                                                                         </span>
                                                                         <span v-cloak v-else>{{ trans('layout.in_cart') }}</span>
                                                                     </a>
@@ -470,6 +466,7 @@
                                                             <div class="prod-attributes absolute-pror-attr">
                                                                 <ul class="choose-clr list-inline border-hover">
                                                                     @foreach($relatedProducts as $relatedProduct)
+                                                                        @php(\Debugbar::info($relatedProduct->is_visible))
                                                                         <li>
                                                                             @if($categoryProduct->color->id == $relatedProduct->color->id)
                                                                                 <a class="active ttip" href="{{ url_product($relatedProduct->slug, $model->language) }}"
