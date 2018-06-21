@@ -17,9 +17,6 @@ class UpdateProductsAndCategoriesTable extends Migration
         Schema::table('products', function (Blueprint $table) {
             $table->string('picture_size')->nullable();
         });
-        Schema::table('categories', function (Blueprint $table) {
-            $table->dropColumn('picture_size');
-        });
     }
 
     /**

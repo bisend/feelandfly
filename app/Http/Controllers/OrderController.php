@@ -135,6 +135,8 @@ class OrderController extends LayoutController
 
             $this->orderService->createOrderProducts($model, $this->cartService);
 
+            \Debugbar::info($this->cartService);
+
             \Mail::to(request('email'))->send(new OrderReport($model, request('name'), $this->cartService));
 
             \Mail::to(config('mail.from.address'))->send(new OrderReportManager($model, request('name'), $this->cartService));

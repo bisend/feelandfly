@@ -28774,7 +28774,7 @@ new Vue({
                         match = false;
                         break;
                     }
-                    if (props[prop_k] == item[prop_k]) {
+                    if (props[prop_k] === item[prop_k]) {
                         // We have a match…so far.
                         match = true;
                     } else {
@@ -31809,6 +31809,8 @@ if (document.getElementById('order-confirm')) {
     GLOBAL_DATA.orderConfirm.checkoutPoint = window.FFShop.checkoutPoint == null ? null : window.FFShop.checkoutPoint;
     GLOBAL_DATA.orderConfirm.selectedCityRef = window.FFShop.selectedCityRef == null ? null : window.FFShop.selectedCityRef;
     GLOBAL_DATA.orderConfirm.selectedWarehouseRef = window.FFShop.selectedWarehouseRef == null ? null : window.FFShop.selectedWarehouseRef;
+
+    console.log(GLOBAL_DATA.orderConfirm.delivery);
 
     new Vue({
         el: '#order-confirm',

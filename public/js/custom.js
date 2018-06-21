@@ -857,8 +857,8 @@ var searchWasHidden = false;
 var searchBtnClicked = false;
 
 $(document).ready(function () {
-    var $to = $('#article2');
-    $('html, body').animate({ scrollTop: $to.offset().top, scrollLeft: $to.offset().left }, 500, 'swing');
+    // var $to = $('#article2');
+    // $('html, body').animate({ scrollTop: $to.offset().top, scrollLeft: $to.offset().left }, 500, 'swing');
 
     $('.open-search').click(function() {
         searchBtnClicked = true;

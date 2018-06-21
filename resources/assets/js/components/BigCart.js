@@ -17,7 +17,7 @@ new Vue({
                         match = false;
                         break;
                     }
-                    if (props[prop_k] == item[prop_k]) {
+                    if (props[prop_k] === item[prop_k]) {
                         // We have a match…so far.
                         match = true;
                     } else {
