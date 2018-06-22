@@ -1,0 +1,103 @@
+User-agent: Teleport
+Disallow: /
+
+User-agent: TeleportPro
+Disallow: /
+
+User-agent: EmailCollector
+Disallow: /
+
+User-agent: EmailSiphon
+Disallow: /
+
+User-agent: WebBandit
+Disallow: /
+
+User-agent: WebZIP
+Disallow: /
+
+User-agent: WebReaper
+Disallow: /
+
+User-agent: WebStripper
+Disallow: /
+
+User-agent: Web Downloader
+Disallow: /
+
+User-agent: WebCopier
+Disallow: /
+
+User-agent: Offline Explorer Pro
+Disallow: /
+
+User-agent: HTTrack Website Copier
+Disallow: /
+
+User-agent: Offline Commander
+Disallow: /
+
+User-agent: Leech
+Disallow: /
+
+User-agent: WebSnake
+Disallow: /
+
+User-agent: BlackWidow
+Disallow: /
+
+User-agent: HTTP Weazel
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: EasouSpider
+Disallow: /
+
+User-agent: Ezooms
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: SiteSucker
+Disallow: /
+
+User-agent: HTTrack
+Disallow: /
+
+User-agent: *
+
+Disallow: /generate-bootstrap-cache/
+Disallow: /auth/
+Disallow: */search/
+Disallow: */order/
+Disallow: */errors/
+Disallow: /product/get_view
+Disallow: /product/preview/
+Disallow: /search-box/
+Disallow: /launch/
+Disallow: /cart/
+Disallow: */profile/
+
+User-agent: YandexBot
+Host: https://knopka.shop
+
+Disallow: /generate-bootstrap-cache/
+Disallow: /auth/
+Disallow: */search/
+Disallow: */order/
+Disallow: */errors/
+Disallow: /product/get_view
+Disallow: /product/preview/
+Disallow: /search-box/
+Disallow: /launch/
+Disallow: /cart/
+Disallow: */profile/

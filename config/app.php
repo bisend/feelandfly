@@ -182,6 +182,8 @@ return [
         Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
 
         Laravelrus\LocalizedCarbon\LocalizedCarbonServiceProvider::class,
+
+        HTMLMin\HTMLMin\HTMLMinServiceProvider::class,
     ],
 
     /*
@@ -230,6 +232,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        'HTMLMin' => HTMLMin\HTMLMin\Facades\HTMLMin::class,
 
         'JavaScript' => Laracasts\Utilities\JavaScript\JavaScriptFacade::class,
         'LocalizedCarbon' => Laravelrus\LocalizedCarbon\LocalizedCarbon::class,

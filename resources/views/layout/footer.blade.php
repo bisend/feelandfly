@@ -42,7 +42,7 @@
                                 <li>
                                 Адреса:
                                 <span class="gray-clr">
-                                    г. Ровно, ул. Соборная 420 (ж)
+                                    м. Рівне, вул. Соборна 420 (ж)
                                 </span>
                             </li>
                             <li>
@@ -156,10 +156,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-6 gray-clr copy-right">
-                    © Feel and Fly 2017. Все права защищены.
+                    © Feel and Fly 2017. {{ trans('home.rights') }}
                 </div>
                 <div class="col-sm-6 goldfish">
-                    Разработка и сопровождение:
+                    {{ trans('home.development') }}:
                     <a href="http://goldfish-web.com/" target="_blank">
                         WEB-STUDIO GOLD FISH
                     </a>

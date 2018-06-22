@@ -9,6 +9,16 @@
     {{--HEAD CSS--}}
     @include('layout.head-css-js')
     {{--/HEAD CSS--}}
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120901958-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-120901958-1');
+    </script>
 </head>
 
 <body id="home" class="wide">

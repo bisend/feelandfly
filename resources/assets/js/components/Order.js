@@ -26,6 +26,8 @@ if (document.getElementById('order-confirm'))
     GLOBAL_DATA.orderConfirm.selectedCityRef = (window.FFShop.selectedCityRef == null ? null : window.FFShop.selectedCityRef);
     GLOBAL_DATA.orderConfirm.selectedWarehouseRef = (window.FFShop.selectedWarehouseRef == null ? null : window.FFShop.selectedWarehouseRef);
 
+    console.log(GLOBAL_DATA.orderConfirm.delivery);
+
     new Vue({
         el: '#order-confirm',
         data: GLOBAL_DATA,

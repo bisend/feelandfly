@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.5.40 on 2018-06-15 15:23:30.
+ * Generated for Laravel 5.5.40 on 2018-06-21 16:07:03.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -12278,6 +12278,106 @@ namespace Illuminate\Support\Facades {
  
 }
 
+namespace HTMLMin\HTMLMin\Facades { 
+
+    class HTMLMin {
+        
+        /**
+         * Get the minified blade.
+         *
+         * @param string $value
+         * @return string 
+         * @static 
+         */ 
+        public static function blade($value)
+        {
+            return \HTMLMin\HTMLMin\HTMLMin::blade($value);
+        }
+        
+        /**
+         * Get the minified css.
+         *
+         * @param string $value
+         * @return string 
+         * @static 
+         */ 
+        public static function css($value)
+        {
+            return \HTMLMin\HTMLMin\HTMLMin::css($value);
+        }
+        
+        /**
+         * Get the minified js.
+         *
+         * @param string $value
+         * @return string 
+         * @static 
+         */ 
+        public static function js($value)
+        {
+            return \HTMLMin\HTMLMin\HTMLMin::js($value);
+        }
+        
+        /**
+         * Get the minified html.
+         *
+         * @param string $value
+         * @return string 
+         * @static 
+         */ 
+        public static function html($value)
+        {
+            return \HTMLMin\HTMLMin\HTMLMin::html($value);
+        }
+        
+        /**
+         * Return the blade minifier instance.
+         *
+         * @return \HTMLMin\HTMLMin\Minifiers\BladeMinifier 
+         * @static 
+         */ 
+        public static function getBladeMinifier()
+        {
+            return \HTMLMin\HTMLMin\HTMLMin::getBladeMinifier();
+        }
+        
+        /**
+         * Return the css minifier instance.
+         *
+         * @return \HTMLMin\HTMLMin\Minifiers\CssMinifier 
+         * @static 
+         */ 
+        public static function getCssMinifier()
+        {
+            return \HTMLMin\HTMLMin\HTMLMin::getCssMinifier();
+        }
+        
+        /**
+         * Return the js minifier instance.
+         *
+         * @return \HTMLMin\HTMLMin\Minifiers\JsMinifier 
+         * @static 
+         */ 
+        public static function getJsMinifier()
+        {
+            return \HTMLMin\HTMLMin\HTMLMin::getJsMinifier();
+        }
+        
+        /**
+         * Return the html minifier instance.
+         *
+         * @return \HTMLMin\HTMLMin\Minifiers\HtmlMinifier 
+         * @static 
+         */ 
+        public static function getHtmlMinifier()
+        {
+            return \HTMLMin\HTMLMin\HTMLMin::getHtmlMinifier();
+        }
+         
+    }
+ 
+}
+
 namespace Laracasts\Utilities\JavaScript { 
 
     class JavaScriptFacade {
@@ -15132,6 +15232,8 @@ namespace  {
     class Validator extends \Illuminate\Support\Facades\Validator {}
 
     class View extends \Illuminate\Support\Facades\View {}
+
+    class HTMLMin extends \HTMLMin\HTMLMin\Facades\HTMLMin {}
 
     class JavaScript extends \Laracasts\Utilities\JavaScript\JavaScriptFacade {}
 

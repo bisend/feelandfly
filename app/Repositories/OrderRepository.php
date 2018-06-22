@@ -64,7 +64,6 @@ class OrderRepository
 
         if(auth()->check())
         {
-            \Debugbar::info("jrbfsvhevblkjd");
             $user = auth()->user();
 
             $profile = Profile::whereUserId($user->id)->first();
