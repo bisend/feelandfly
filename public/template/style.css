@@ -7184,7 +7184,7 @@ html[lang="ua"] .theme-btn.btn-black:before {
     background-color:  #000;
 }
 
-.category-slider-item,
+/*.category-slider-item,
 .img-slide-fit {
     position: relative;
 }
@@ -7202,7 +7202,7 @@ html[lang="ua"] .theme-btn.btn-black:before {
     background-repeat:  no-repeat;
     background-color: #fff;
     background-size: 50%;
-}
+}*/
 
 
 @media (min-width:1200px){
