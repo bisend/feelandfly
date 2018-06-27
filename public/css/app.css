@@ -14460,6 +14460,26 @@ html[lang="ua"] .theme-btn.btn-black:before {
     background-color:  #000;
 }
 
+.category-slider-item,
+.img-slide-fit {
+    position: relative;
+}
+
+.category-slider-item:after,
+.img-slide-fit:after{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height:  100%;
+    background-image: url("/img/spinner.gif");
+    background-position:  center;
+    background-repeat:  no-repeat;
+    background-color: #fff;
+    background-size: 50%;
+}
+
 
 @media (min-width:1200px){
     .category-slider-item .img,
